@@ -8,6 +8,9 @@ body {
 
 hr {
   margin-top: -7px;
+  color:  black;
+  background-color: green;
+  border: none;
 }
 
 h1 {
