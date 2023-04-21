@@ -1,4 +1,4 @@
-const bioText = "I'm a medical student and computer scientist interested in the applications of ML and quantum computing to healthcare. :)";
+const bioText = "medical student, computer scientist :)";
 const delay = 50;
 let i = 0;
 
