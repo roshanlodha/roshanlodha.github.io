@@ -3,7 +3,7 @@ body {
   padding: 0;
   background-color: #FFE5B4;
   color: #B4CEFF;
-  font-family: Georgia, serif;
+  font-family: 'Kids Handwriting', sans-serif;
 }
 
 .container {
@@ -37,7 +37,7 @@ li {
 
 h1 {
   margin: 0;
-  font-size: 2em;
+  font-size: 4em;
 }
 
 .profile-picture {
@@ -54,6 +54,8 @@ h1 {
 
 .bio {
   overflow: hidden;
+  text-align: center;
+  font-size: 2em;
 }
 
 img {
