@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NRMA Static Allocator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>NRMA Static Allocator</h1>
+        <p>Upload the preference CSV and run the bean-based optimizer directly in your browser.</p>
+      </div>
+    </header>
+    <main class="container">
+      <section class="card">
+        <h2>Upload preferences</h2>
+        <form id="preference-form">
+          <label class="file-input">
+            <span>Preference CSV</span>
+            <input type="file" id="file-input" accept=".csv" required />
+          </label>
+          <div class="form-grid">
+            <label>
+              Beans per student
+              <input type="number" id="beans-input" min="4" value="24" />
+            </label>
+            <label class="checkbox">
+              <input type="checkbox" id="shuffle-input" checked />
+              Shuffle student order
+            </label>
+            <label class="checkbox">
+              <input type="checkbox" id="drop-identifiers-input" checked />
+              Drop identifier columns 2 &amp; 3
+            </label>
+          </div>
+          <button type="submit">Generate assignments</button>
+          <div id="status" role="status"></div>
+        </form>
+      </section>
+      <section id="summary-card" class="card hidden">
+        <h2>Summary</h2>
+        <div class="stats-grid">
+          <div class="stat">
+            <span>Total Error</span>
+            <strong id="total-error">--</strong>
+          </div>
+          <div class="stat">
+            <span>Normalized Error (δ)</span>
+            <strong id="avg-error">--</strong>
+          </div>
+          <div class="stat">
+            <span>Avg Penalty (beans)</span>
+            <strong id="penalty">--</strong>
+          </div>
+          <div class="stat">
+            <span>First Choice</span>
+            <strong id="first-choice">--</strong>
+          </div>
+        </div>
+      </section>
+      <section id="results-card" class="card hidden">
+        <div class="card-header">
+          <h2>Assignment preview</h2>
+          <button type="button" id="download-btn">Download CSV</button>
+        </div>
+        <div class="table-wrapper">
+          <table id="results-table">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <footer>
+      Built for quick client-side runs. No server required.
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/munkres-js@1.2.2/munkres.min.js"></script>
+    <script src="nrma.js"></script>
+  </body>
+</html>
