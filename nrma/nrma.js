@@ -6,6 +6,9 @@ const ROTATION_TO_ORDER = {
   "Option 4": "TBC1 – TBC3 – TBC2 – LAB",
 };
 const ROTATION_ORDERS = Object.values(ROTATION_TO_ORDER);
+const DEFAULT_BEANS = 24;
+const FORCE_DROP_IDENTIFIERS = true;
+const FORCE_SHUFFLE = true;
 let currentPerformance = [];
 
 function $(selector) {
@@ -38,21 +41,18 @@ async function handleSubmit(event) {
   event.preventDefault();
   resetOutputs();
   const fileInput = $("#file-input");
-  const beansInput = $("#beans-input");
-  const shuffleInput = $("#shuffle-input");
-  const dropInput = $("#drop-identifiers-input");
   const file = fileInput.files[0];
   if (!file) {
     setStatus("Please choose a CSV file first.", true);
     return;
   }
-  const beans = Math.max(4, parseInt(beansInput.value, 10) || 24);
-  setStatus("Parsing CSV...");
+  const beans = DEFAULT_BEANS;
+  setStatus("Parsing CSV (dropping identifiers, shuffling cohort)...");
   try {
     const { rows, fields } = await parseCsv(file);
     const preferences = normalizePreferences(rows, fields, {
-      dropIdentifiers: dropInput.checked,
-      shuffle: shuffleInput.checked,
+      dropIdentifiers: FORCE_DROP_IDENTIFIERS,
+      shuffle: FORCE_SHUFFLE,
     });
     if (!preferences.length) {
       throw new Error("No valid student rows were found in the CSV.");
@@ -148,6 +148,7 @@ function assignRotations(preferences, nBeans) {
   const averageError = nStudents ? totalError / (nStudents * nBeans) : 0;
   const perStudentPenalty = nStudents ? totalError / nStudents : 0;
   const pctFirstChoice = computeFirstChoiceRate(performance, preferences);
+  const pctTopTwo = computeTopTwoRate(performance, preferences);
   return {
     performance,
     summary: {
@@ -155,6 +156,7 @@ function assignRotations(preferences, nBeans) {
       averageError,
       perStudentPenalty,
       pctFirstChoice,
+      pctTopTwo,
     },
   };
 }
@@ -204,11 +206,37 @@ function computeFirstChoiceRate(performance, preferences) {
   return matches / performance.length;
 }
 
+function computeTopTwoRate(performance, preferences) {
+  if (!performance.length) {
+    return 0;
+  }
+  let hits = 0;
+  performance.forEach((row, idx) => {
+    const beans = preferences[idx].beans || [];
+    const scored = beans
+      .map((value, orderIdx) => ({ value, orderIdx }))
+      .sort((a, b) => b.value - a.value);
+    const cutoffIdx = Math.min(1, scored.length - 1);
+    const cutoffValue = scored[cutoffIdx]?.value ?? 0;
+    const allowedOrders = new Set();
+    scored.forEach((entry, position) => {
+      if (position <= 1 || entry.value === cutoffValue) {
+        const rotationLabel = ROTATION_LABELS[entry.orderIdx];
+        allowedOrders.add(ROTATION_TO_ORDER[rotationLabel]);
+      }
+    });
+    if (allowedOrders.has(row.rotation_order)) {
+      hits += 1;
+    }
+  });
+  return hits / performance.length;
+}
+
 function renderSummary(summary) {
   $("#summary-card").classList.remove("hidden");
   $("#total-error").textContent = summary.totalError.toFixed(2);
   $("#avg-error").textContent = summary.averageError.toFixed(4);
-  $("#penalty").textContent = summary.perStudentPenalty.toFixed(2);
+  $("#top-two").textContent = `${(summary.pctTopTwo * 100).toFixed(1)}%`;
   $("#first-choice").textContent = `${(summary.pctFirstChoice * 100).toFixed(1)}%`;
 }
 
