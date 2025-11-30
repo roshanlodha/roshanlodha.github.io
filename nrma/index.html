@@ -1,72 +1,80 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NRMA Static Allocator</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <header>
-      <div class="container">
-        <h1>NRMA Static Allocator</h1>
-        <p>Upload the preference CSV and run the bean-based optimizer directly in your browser.</p>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NRMA Static Allocator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <h1>NRMA Static Allocator</h1>
+      <p>Upload the preference CSV and run the bean-based optimizer directly in your browser.</p>
+    </div>
+  </header>
+  <main class="container">
+    <section class="card">
+      <h2>Upload preferences</h2>
+      <form id="preference-form">
+        <label class="file-input">
+          <span>Preference CSV</span>
+          <input type="file" id="file-input" accept=".csv" required />
+        </label>
+        <p class="muted">
+          Runs with <strong>24 beans per student</strong>, shuffles the cohort, and automatically drops identifier
+          columns 2 &amp; 3.
+        </p>
+        <button type="submit">Generate assignments</button>
+        <div id="status" role="status"></div>
+      </form>
+    </section>
+    <section id="summary-card" class="card hidden">
+      <h2>Summary</h2>
+      <div class="stats-grid">
+        <div class="stat">
+          <span>Total Error</span>
+          <strong id="total-error">--</strong>
+        </div>
+        <div class="stat">
+          <span>Normalized Error (δ)</span>
+          <strong id="avg-error">--</strong>
+        </div>
+        <div class="stat">
+          <span>Top 2 Hit Rate</span>
+          <strong id="top-two">--</strong>
+        </div>
+        <div class="stat">
+          <span>First Choice</span>
+          <strong id="first-choice">--</strong>
+        </div>
       </div>
-    </header>
-    <main class="container">
-      <section class="card">
-        <h2>Upload preferences</h2>
-        <form id="preference-form">
-          <label class="file-input">
-            <span>Preference CSV</span>
-            <input type="file" id="file-input" accept=".csv" required />
-          </label>
-          <p class="muted">
-            Runs with <strong>24 beans per student</strong>, shuffles the cohort, and automatically drops identifier columns 2 &amp; 3.
-          </p>
-          <button type="submit">Generate assignments</button>
-          <div id="status" role="status"></div>
-        </form>
-      </section>
-      <section id="summary-card" class="card hidden">
-        <h2>Summary</h2>
-        <div class="stats-grid">
-          <div class="stat">
-            <span>Total Error</span>
-            <strong id="total-error">--</strong>
-          </div>
-          <div class="stat">
-            <span>Normalized Error (δ)</span>
-            <strong id="avg-error">--</strong>
-          </div>
-          <div class="stat">
-            <span>Top 2 Hit Rate</span>
-            <strong id="top-two">--</strong>
-          </div>
-          <div class="stat">
-            <span>First Choice</span>
-            <strong id="first-choice">--</strong>
-          </div>
-        </div>
-      </section>
-      <section id="results-card" class="card hidden">
-        <div class="card-header">
-          <h2>Assignment preview</h2>
-          <button type="button" id="download-btn">Download CSV</button>
-        </div>
-        <div class="table-wrapper">
-          <table id="results-table">
-            <thead></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
-    </main>
-    <footer>
-      Built for quick client-side runs. No server required.
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/munkres-js@1.2.2/munkres.min.js"></script>
-    <script src="nrma.js"></script>
-  </body>
+    </section>
+    <section id="results-card" class="card hidden">
+      <div class="card-header">
+        <h2>Assignment preview</h2>
+        <button type="button" id="download-btn">Download CSV</button>
+      </div>
+      <div class="table-wrapper">
+        <table id="results-table">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p class="muted" style="font-size: 0.9rem; margin-top: 0.5rem;">
+      This is a JavaScript conversion of the original algorithm implemented in Python.
+      <a href="https://github.com/roshanlodha/NRMA" target="_blank"
+        style="color: inherit; text-decoration: underline;">View original on GitHub</a>.
+    </p>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/munkres-js@1.2.2/munkres.min.js"></script>
+  <script src="nrma.js"></script>
+</body>
+
 </html>

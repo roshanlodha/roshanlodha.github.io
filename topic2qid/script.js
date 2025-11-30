@@ -208,3 +208,34 @@ function renderOutput(element, ids) {
 
 // Initialize
 renderFilters();
+
+// Copy to Clipboard Functionality
+function copyToClipboard(elementId, button) {
+    const element = document.getElementById(elementId);
+    const text = element.textContent;
+    
+    // Check if there is content to copy
+    if (text.includes('Select topics to view IDs') || text.trim() === '') {
+        alert('No IDs to copy!');
+        return;
+    }
+
+    navigator.clipboard.writeText(text).then(() => {
+        // Visual feedback
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.style.backgroundColor = '#e8f5e9';
+        button.style.borderColor = '#c8e6c9';
+        button.style.color = '#2e7d32';
+        
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.style.backgroundColor = '';
+            button.style.borderColor = '';
+            button.style.color = '';
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+        alert('Failed to copy to clipboard');
+    });
+}

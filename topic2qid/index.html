@@ -13,6 +13,9 @@
     <div class="container">
         <aside class="sidebar">
             <div class="sidebar-header">
+                <div class="logo-container">
+                    <img src="logo.png" alt="HyGuru Logo" class="logo">
+                </div>
                 <h2>Filters</h2>
             </div>
             <div id="filters-container" class="filters-container">
@@ -21,17 +24,24 @@
         </aside>
         <main class="main-content">
             <div class="main-header">
-                <h1>Question IDs by HyGuru Video</h1>
+                <h1>HyGuru USMLE Step 1 Pass Fail Course QIDs</h1>
+                <div class="info-text">Select the videos you want to study! [last updated 11/29/25]</div>
             </div>
             <div class="results-section">
-                <h3>UWorld IDs</h3>
+                <div class="section-header">
+                    <h3>UWorld IDs</h3>
+                    <button class="copy-btn" onclick="copyToClipboard('uworld-ids', this)">Copy</button>
+                </div>
                 <div class="id-box" id="uworld-ids">
                     <!-- IDs will appear here -->
                     <span class="placeholder">Select topics to view IDs</span>
                 </div>
             </div>
             <div class="results-section">
-                <h3>COMLEX IDs</h3>
+                <div class="section-header">
+                    <h3>COMLEX IDs</h3>
+                    <button class="copy-btn" onclick="copyToClipboard('comlex-ids', this)">Copy</button>
+                </div>
                 <div class="id-box" id="comlex-ids">
                     <!-- IDs will appear here -->
                     <span class="placeholder">Select topics to view IDs</span>
