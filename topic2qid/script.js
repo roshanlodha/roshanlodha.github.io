@@ -111,7 +111,9 @@ function renderFilters() {
         const subtopics = Object.keys(parsedData[topic]).sort();
 
         const topicGroup = document.createElement('div');
-        topicGroup.className = 'topic-group expanded'; // Default expanded
+        // Check if mobile (<= 768px)
+        const isMobile = window.innerWidth <= 768;
+        topicGroup.className = isMobile ? 'topic-group' : 'topic-group expanded';
 
         // Topic Header
         const header = document.createElement('div');
