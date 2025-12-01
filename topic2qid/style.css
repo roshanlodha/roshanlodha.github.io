@@ -1,5 +1,6 @@
 :root {
-    --primary-color: #D32F2F; /* Darker, more professional red */
+    --primary-color: #D32F2F;
+    /* Darker, more professional red */
     --text-color: #333333;
     --bg-color: #ffffff;
     --sidebar-bg: #f8f9fa;
@@ -30,7 +31,7 @@ body {
 
 /* Sidebar */
 .sidebar {
-    width: 320px;
+    width: 450px;
     background-color: var(--sidebar-bg);
     border-right: 1px solid var(--border-color);
     display: flex;
@@ -69,6 +70,26 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+}
+
+.search-container {
+    margin-bottom: 1rem;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-family: var(--font-family);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
 }
 
 /* Tree View */
@@ -267,7 +288,7 @@ body {
     color: #333;
     min-height: 100px;
     word-wrap: break-word;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 .placeholder {
@@ -324,7 +345,7 @@ body {
     .main-header h1 {
         font-size: 1.5rem;
     }
-    
+
     .logo {
         max-width: 100px;
     }

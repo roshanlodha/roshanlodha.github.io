@@ -1,41 +1,47 @@
-// Embedded CSV Data
-const CSV_DATA = `Topic,Subtopic,Uworld IDs,COMLEX IDs
-Biochemistry,Vitamins,"123, 145, 1234, 232","1231,3452,667, 867"
-Biochemistry,Metabolism,"153, 1412","17634, 344, 234"
-Cardiology,Arrhythmias,"151","1677, 272, 23,4523,42"`;
-
 // Data Parsing
 function parseCSV(csv) {
-    const lines = csv.trim().split('\n');
-    const headers = lines[0].split(',');
-    const data = {};
+    const rows = [];
+    let currentRow = [];
+    let currentField = '';
+    let inQuotes = false;
 
-    // Helper to parse CSV line handling quotes
-    const parseLine = (line) => {
-        const result = [];
-        let current = '';
-        let inQuotes = false;
-        
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"') {
-                inQuotes = !inQuotes;
-            } else if (char === ',' && !inQuotes) {
-                result.push(current.trim());
-                current = '';
+    for (let i = 0; i < csv.length; i++) {
+        const char = csv[i];
+        const nextChar = csv[i + 1];
+
+        if (char === '"') {
+            if (inQuotes && nextChar === '"') {
+                currentField += '"';
+                i++; // Skip next quote
             } else {
-                current += char;
+                inQuotes = !inQuotes;
             }
+        } else if (char === ',' && !inQuotes) {
+            currentRow.push(currentField.trim());
+            currentField = '';
+        } else if ((char === '\r' || char === '\n') && !inQuotes) {
+            if (char === '\r' && nextChar === '\n') i++; // Handle CRLF
+            currentRow.push(currentField.trim());
+            if (currentRow.length > 0) rows.push(currentRow);
+            currentRow = [];
+            currentField = '';
+        } else {
+            currentField += char;
         }
-        result.push(current.trim());
-        return result;
-    };
+    }
+    if (currentField || currentRow.length > 0) {
+        currentRow.push(currentField.trim());
+        rows.push(currentRow);
+    }
 
-    for (let i = 1; i < lines.length; i++) {
-        const cols = parseLine(lines[i]);
+    const data = {};
+    // Skip header (rows[0])
+    for (let i = 1; i < rows.length; i++) {
+        const cols = rows[i];
         if (cols.length < 4) continue;
 
-        const topic = cols[0];
+        // Clean up topic name (remove newlines and extra spaces)
+        const topic = cols[0].replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
         const subtopic = cols[1];
         const uworldIds = cols[2].split(',').map(id => id.trim()).filter(id => id);
         const comlexIds = cols[3].split(',').map(id => id.trim()).filter(id => id);
@@ -51,27 +57,66 @@ function parseCSV(csv) {
     return data;
 }
 
-const parsedData = parseCSV(CSV_DATA);
+let parsedData = {};
 const selectedSubtopics = new Set();
 
 // UI Generation
 const filtersContainer = document.getElementById('filters-container');
 const uworldOutput = document.getElementById('uworld-ids');
 const comlexOutput = document.getElementById('comlex-ids');
+const searchInput = document.getElementById('search-input');
+
+// Search Functionality
+searchInput.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase().trim();
+    const topicGroups = document.querySelectorAll('.topic-group');
+
+    topicGroups.forEach(group => {
+        const topicLabel = group.querySelector('.topic-header .checkbox-container').textContent.toLowerCase();
+        const subtopicItems = group.querySelectorAll('.subtopic-item');
+        let hasVisibleSubtopic = false;
+
+        // Check if topic itself matches
+        const topicMatches = topicLabel.includes(searchTerm);
+
+        subtopicItems.forEach(item => {
+            const subtopicLabel = item.querySelector('.checkbox-container').textContent.toLowerCase();
+            const subtopicMatches = subtopicLabel.includes(searchTerm);
+
+            if (topicMatches || subtopicMatches) {
+                item.style.display = ''; // Show
+                hasVisibleSubtopic = true;
+            } else {
+                item.style.display = 'none'; // Hide
+            }
+        });
+
+        if (topicMatches || hasVisibleSubtopic) {
+            group.style.display = '';
+            // If searching and not a direct topic match (meaning we found a subtopic), expand it
+            if (searchTerm !== '' && !topicMatches) {
+                group.classList.add('expanded');
+            }
+        } else {
+            group.style.display = 'none';
+        }
+    });
+});
 
 function renderFilters() {
+    filtersContainer.innerHTML = ''; // Clear existing content
     const topics = Object.keys(parsedData).sort();
 
     topics.forEach(topic => {
         const subtopics = Object.keys(parsedData[topic]).sort();
-        
+
         const topicGroup = document.createElement('div');
         topicGroup.className = 'topic-group expanded'; // Default expanded
 
         // Topic Header
         const header = document.createElement('div');
         header.className = 'topic-header';
-        
+
         const toggleIcon = document.createElement('span');
         toggleIcon.className = 'toggle-icon';
         toggleIcon.textContent = '▶';
@@ -79,15 +124,15 @@ function renderFilters() {
 
         const checkboxContainer = document.createElement('label');
         checkboxContainer.className = 'checkbox-container';
-        
+
         const topicCheckbox = document.createElement('input');
         topicCheckbox.type = 'checkbox';
         topicCheckbox.dataset.topic = topic;
-        
+
         checkboxContainer.appendChild(topicCheckbox);
         checkboxContainer.appendChild(document.createTextNode(topic));
         header.appendChild(checkboxContainer);
-        
+
         topicGroup.appendChild(header);
 
         // Subtopics List
@@ -97,15 +142,15 @@ function renderFilters() {
         subtopics.forEach(subtopic => {
             const item = document.createElement('div');
             item.className = 'subtopic-item';
-            
+
             const label = document.createElement('label');
             label.className = 'checkbox-container';
-            
+
             const subCheckbox = document.createElement('input');
             subCheckbox.type = 'checkbox';
             subCheckbox.dataset.topic = topic;
             subCheckbox.dataset.subtopic = subtopic;
-            
+
             label.appendChild(subCheckbox);
             label.appendChild(document.createTextNode(subtopic));
             item.appendChild(label);
@@ -131,7 +176,7 @@ function renderFilters() {
         topicCheckbox.addEventListener('change', (e) => {
             const isChecked = e.target.checked;
             const subCheckboxes = list.querySelectorAll('input[type="checkbox"]');
-            
+
             subCheckboxes.forEach(cb => {
                 cb.checked = isChecked;
                 const subtopic = cb.dataset.subtopic;
@@ -150,7 +195,7 @@ function renderFilters() {
             e.stopPropagation();
             topicGroup.classList.toggle('expanded');
         });
-        
+
         // Allow clicking header to toggle expand as well, but not when clicking checkbox
         header.addEventListener('click', (e) => {
             if (e.target !== topicCheckbox && e.target !== checkboxContainer) {
@@ -158,6 +203,11 @@ function renderFilters() {
             }
         });
     });
+
+    // Re-apply search if exists
+    if (searchInput.value.trim() !== '') {
+        searchInput.dispatchEvent(new Event('input'));
+    }
 }
 
 function updateTopicCheckboxState(group, topicCheckbox) {
@@ -206,14 +256,11 @@ function renderOutput(element, ids) {
     }
 }
 
-// Initialize
-renderFilters();
-
 // Copy to Clipboard Functionality
 function copyToClipboard(elementId, button) {
     const element = document.getElementById(elementId);
     const text = element.textContent;
-    
+
     // Check if there is content to copy
     if (text.includes('Select topics to view IDs') || text.trim() === '') {
         alert('No IDs to copy!');
@@ -227,7 +274,7 @@ function copyToClipboard(elementId, button) {
         button.style.backgroundColor = '#e8f5e9';
         button.style.borderColor = '#c8e6c9';
         button.style.color = '#2e7d32';
-        
+
         setTimeout(() => {
             button.textContent = originalText;
             button.style.backgroundColor = '';
@@ -239,3 +286,21 @@ function copyToClipboard(elementId, button) {
         alert('Failed to copy to clipboard');
     });
 }
+
+// Initialize
+async function init() {
+    try {
+        const response = await fetch('topic2qid.csv');
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const csvText = await response.text();
+        parsedData = parseCSV(csvText);
+        renderFilters();
+    } catch (error) {
+        console.error('Error loading CSV:', error);
+        if (filtersContainer) {
+            filtersContainer.innerHTML = '<div class="error">Error loading data. Please try refreshing the page.</div>';
+        }
+    }
+}
+
+init();

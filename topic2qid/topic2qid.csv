@@ -1,4 +1,314 @@
-﻿Topic,Subtopic,Uworld IDs,COMLEX IDs
-Biochemistry,Vitamins,"123, 145, 1234, 232","1231,3452,667, 867"
-Biochemistry,Metabolism,"153, 1412","17634, 344, 234"
-Cardiology,Arrhythmias,"151","1677, 272, 23,4523,42"
+﻿Topic,Subtopic,Uworld IDs,COMLEX IDs,Course
+"USMLE Step 1 General Pathology Active Recall Review [Pathoma Ch 1-3]
+","Cell Injury, Death, and Adaptations"," 181, 176, 177, 178, 405, 1041, 1753"," 23294, 23289, 23290, 23291, 23518, 24152, 24863",Step 1 Pass Fail
+"USMLE Step 1 General Pathology Active Recall Review [Pathoma Ch 1-3]
+• ",Necrosis,"19, 177, 178, 871","23133, 23290, 23291, 23983",Step 1 Pass Fail
+"USMLE Step 1 General Pathology Active Recall Review [Pathoma Ch 1-3]
+",Apoptosis,"313, 1863, 297","23426, 24972, 23410",Step 1 Pass Fail
+USMLE Step 1 General Pathology Active Recall Review [Pathoma Ch 1-3], Free Radical Injury and Amyloid,"314, 1426, 18929,94, 848, 1659, 7628, 592, 872","23427, 24537, 26855,23208, 23960, 24770, 25325, 23705, 23984",Step 1 Pass Fail
+USMLE Step 1 General Pathology Active Recall Review [Pathoma Ch 1-3],Acute Inflammation,"540, 1800, 8480, 8539","23653, 24909, 25404, 25417",Step 1 Pass Fail
+USMLE Step 1 General Pathology Active Recall Review [Pathoma Ch 1-3],Chronic Inflammation,"8334, 301, 797, 442, 11738","23414, 23555, 23909, 25385, 25632",Step 1 Pass Fail
+USMLE Step 1 General Pathology Active Recall Review [Pathoma Ch 1-3],Immunodeficiency,"112, 1141, 2078, 739","23226, 24252, 25187, 23851, 26221,",
+USMLE Step 1 General Pathology Active Recall Review [Pathoma Ch 1-3],  Neoplasia,"16895, 11858, 15659, 15012","26595, 25742, 26467, 26073",Step 1 Pass Fail
+USMLE Step 1 General Pathology Active Recall Review [Pathoma Ch 1-3],Grading vs. Staging,"11858, 423, 427, 15011, 336","25742, 23536, 23540, 23449, 26072",Step 1 Pass Fail
+Top USMLE Concepts in Immunology, Innate Immunity,"11913, 11955","11913, 11955",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Mucosal Immunity,"677, 560, 1596, 1467, 1130, 747","23789, 23673, 24707, 24578, 24241, 23859",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Respiratory Immunity,"14916, 802, 805, 807, 1514, 358, 803, 664, 1611","26009, 23914, 23917, 23919, 23915, 24625, 24722, 23776",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Salmonella Typhi (Micro Integration),"1138, 1137, 15205","24248, 24249, 26153",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Anatomic Barriers,"111, 109, 1463, 1929, 11765, 1958, 1397","23223, 23225, 24574, 25038, 25067, 25658, 24508",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,TLR & PAMPs,"1141, 1139, 1142, 15240, 1039, 2101, 13979","24252, 24250, 24253, 26180, 24150, 25210, 25876",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Phagocytes,"1222, 1219, 1223, 1221, 1226, 1217, 1218, 1225, 1308, 301, 1220, 1598, 1316, 1215, 1228, 1309, 1774","24333, 24330, 24334, 24332, 24337, 24328, 24329, 24336, 24419, 23414, 24331, 24709, 24427, 24326, 24339, 24420, 24884",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Tuberculosis (Micro Integration),"1222, 1219, 1223, 1221, 1226, 1217, 1218, 1225, 1308, 301, 1220, 1598, 1316, 1215, 1228, 1309, 1774","24333, 24330, 24334, 24332, 24337, 24328, 24329, 24336, 24331, 24419, 23414, 24709, 24326, 24339, 24420, 24427, 24884",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,NK Cells,"1597, 758, 1218, 1763","23870, 24329, 24708,24873",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,MHC & HLA,"746, 542, 546, 568, 1613","23655, 23659, 23681, 23858, 24724",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,✚➖ selection,559,23672,Step 1 Pass Fail
+Top USMLE Concepts in Immunology,MHC 1 vs. MHC 2,"542, 752, 393, 394, 395, 1116, 1117","23506, 23507, 23508, 23655, 23864, 24227, 24228",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Autoimmune Diseases,"1600, 752, 753","23864, 23865, 24711",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Addison’s & Aldosterone Escape,"924, 931, 17246, 608, 932","24036, 24043, 24044, 23720, 26615",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Pernicious Anemia,"124, 1848, 12068","23237, 24957, 25810",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Hashimoto’s Thyroiditis,"770, 983, 768, 769, 924","23880, 23881, 23882, 24036, 24095",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Systemic Autoimmune Conditions,"340, 828, 795","23453, 23907, 23940",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Organ System Specific Autoimmune Conditions,"361, 8, 73, 875, 742, 15619, 1505, 1253, 298","23122, 23187, 23411, 23474, 23854, 23987, 24364, 24616, 26448, 23411",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Acute Inflammation,"15339, 680, 8858, 727, 725, 677, 8334, 15361","23789, 23792, 23837, 23839, 25385, 26247, 26266",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Edema & Inflammation,"1881, 485, 1578, 531, 14922","23598, 23644, 24689, 24990, 26015",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Neutrophil Migration,8480,25404,Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Phagocytosis & ROS burst,"730, 1103, 1137, 677, 723","23789, 23835, 23842, 24214, 24248",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Summary of Inflammation,"637, 516, 11743, 2091","23629, 23749, 25200, 25637",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Complications of Acute Inflammation,"14898, 8710, 1885, 62, 11638, 532","23176, 23645, 24994, 25453, 25592, 26001",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Wound Healing,"8334, 11738, 1874, 874, 8711","23986, 24983, 25454, 25385, 25632",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Delayed Wound Healing,"548, 549, 1173","23661, 23662, 24284",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Spleen,"896, 964, 2084, 1855, 9989, 11817, 12198, 14983","24008, 24076, 25193, 24964, 25474, 25704, 25833, 26053",
+Top USMLE Concepts in Immunology,Splenomegaly,"278, 267, 103, 266, 1138, 1595, 11551, 1048, 782, 100, 1701, 7214, 1086, 889, 8559, 1757, 1406, 8540, 891, 1954","23391, 23380, 23214, 23217, 23379, 24249, 24706, 25548, 24159, 23894, 24001, 24197, 25263, 25425, 24867, 24517, 25063",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Asplenia,"889, 14983, 734","24001, 26053, 23846",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,BM & Thymus,"34, 543, 756, 1798, 749, 559","23148, 23656, 23672, 23861, 23868",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Lymph Node,"1375, 1594, 1595, 7643, 1757, 1630","24486, 24705, 24706, 24741, 24867, 25331",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Intro to Lymph Drainage,"11817, 11830, 14980, 1877","24986, 26052, 25704, 25716",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Palpable Lymph Nodes,"1757, 161, 1090, 351, 2000, 10930","23274, 23464, 24201, 24867, 25510",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Deep Lymph Nodes,"8326, 11817, 11830, 1631, 2021, 307","23420, 24742, 25130, 25378, 25704, 25716",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Adaptive Immune Response,"559, 534, 14870, 11662","23647, 23672, 25603, 25982",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,TSST Integration,"729, 11961, 644, 677, 676, 15509","23756, 23788, 23789, 23841, 25789, 26362",
+Top USMLE Concepts in Immunology,T cell Activation & Differentiation,"1314, 406, 1799, 301, 526","23414, 23519, 23639, 24425, 24908",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,B cell Activation & Ig,"872, 15467, 6530, 1054, 15133, 15134, 11584, 15466","23986, 24165, 25247, 25556, 26118, 26119, 26337",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Immunodeficiencies,"1134, 1436","24245, 24547",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Complement Disorders,"11869, 897, 739","23851, 24009, 25752",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Introduction to Transplant Immunology,"1613, 546","23659, 24724",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Hyperacute Transplant Rejection,546,23659,Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Chronic Transplant Rejection,"534, 11786, 744","3647, 23856, 25677",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Acute Transplant Rejection,"546, 568","23659, 23681",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Graft Versus Host Disease,"402, 1613","23515, 24724",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Cytokines for the USMLE,"1801, 1873, 14772, 1579, 14677, 1799, 15509, 1597","24690, 24908, 24910, 24982, 24908, 24708, 25917, 25926, 26362",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Eosinophilia,"665, 667, 508, 1864, 1626, 924","23621,23777, 23779, 24036, 24737, 24913",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Vaccines,"1649, 962, 734, 1853, 1102, 1465, 378, 968, 1467, 760, 1466","23491, 23846, 23872, 24074, 24080, 24213, 24576, 24577, 24578, 24760, 24962",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,MHC,"11674, 746, 542, 1218","23655, 23858, 24329, 25611",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,COVID & Live Vaccines,"1464, 15215, 1467","24575, 24578, 26162",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Immunoglobulins,"377, 379, 1596, 587","377, 379, 1596, 587",Step 1 Pass Fail
+Top USMLE Concepts in Immunology,Key Immunology Details,"1800, 677, 1137","23789, 24248, 24909",Step 1 Pass Fail
+HyGuru Immunology for the USMLE: Hypersensitivity,Type 1 Hypersensitivity,"1131, 61, 11740, 1130","23175, 24241, 24242, 25634",Step 1 Pass Fail
+HyGuru Immunology for the USMLE: Hypersensitivity,Asthma,"108, 665, 1925, 2100, 663, 523, 15155, 527, 15156, 2128, 171, 168, 169, 1523","23222,23281, 23282, 23284, 23640, 23775, 23777, 25209, 25237, 24634, 25034, 26122, 26123, 23640",Step 1 Pass Fail
+HyGuru Immunology for the USMLE: Hypersensitivity,Pharmacology Integration,"949, 1365, 948","24060, 24061, 24476",Step 1 Pass Fail
+HyGuru Immunology for the USMLE: Hypersensitivity,Shock Integration,61,23175,Step 1 Pass Fail
+HyGuru Immunology for the USMLE: Hypersensitivity,Type 2 Hypersensitivity,"756, 6554, 749, 848, 1012","23861, 23868, 23960, 24123, 25250",Step 1 Pass Fail
+HyGuru Immunology for the USMLE: Hypersensitivity,Endocrine Integration,"623, 924, 622, 637, 1945, 294, 124, 125","23735, 24036, 23734, 23749, 23237, 23238, 23407, 25054",Step 1 Pass Fail
+HyGuru Immunology for the USMLE: Hypersensitivity,Hematology Integration,"124, 1954, 8261","23237, 25063, 25359",Step 1 Pass Fail
+HyGuru Immunology for the USMLE: Hypersensitivity,Type 3 Hypersensitivity,"73, 875, 742, 15619, 1505, 460, 457","23187, 23570, 23573, 23854, 23987, 24616, 26448",Step 1 Pass Fail
+HyGuru Immunology for the USMLE: Hypersensitivity,Type 4 Hypersensitivity,"544, 720, 1219, 1314, 1115, 1133","23657, 23832, 24226, 24244, 24330, 24425",Step 1 Pass Fail
+HyGuru Immunology for the USMLE: Hypersensitivity,General Pathology Integration,"11064, 744, 546","23659, 23856",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Basics of Metabolism,"2016, 1119","25125, 24230",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Enzyme Terminology,"994, 1121","24106, 23232",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Transamination Reactions,1482,24593,Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Dehydrogenase Enzymes,"1019, 1066, 1888, 1807","24130, 24177, 24916, 24997",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Glycolysis,"1010, 1019, 1031, 1020","24121, 24130, 24131, 24142",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Gluconeogenesis,"989, 997, 1034","24101, 24109, 24145",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Metabolic Regulation of Pyruvate,"998, 1019, 1021, 996","24110, 24108, 24130, 24132",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Ethanol Metabolism,"1866, 21465, 370","23483, 24975, 27617",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Glycogen Storage Diseases,"1023, 1030,: 1032","24134, 24141, 24143",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,"Fructose, Galactose, Lactose","1070, 1068, 1071, 1072, 1069, 1073,  1067, 1071, 1074, 1728,  1072, 133, 134","24179, 24181, 24182, 24183, 24180, 24184, 24178,  24182, 24185, 24839, 23246, 23247, 24183",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Lipid Metabolism & Synthesis,"1888, 2064, 327","23440, 24997, 25173",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Fatty Acid Oxidation,"1889, 11918, 1328, 1886,  1888","24998, 24439, 25773, 24995, 24997",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Odd Chain FA Metabolism,"64, 1341, 1340, 788, 1332, 1383","23178, 24452, 24451, 23900, 24443, 24494",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,B12 Deficiency Integration,"12031, 1838, 1792, 1047, 788, 124, 1848, 12062, 65","25802, 24372, 24947, 24158, 23900, 23237, 24957, 25808, 23179",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Ketone Metabolism,"997, 1886, 1887, 11917, 1888","24109, 24995, 24996, 24997",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,DKA,"2014, 1889, 2073, 985, 600, 106, 107,  688","25123, 24998, 25182, 24097, 23713, 23220, 23221, 23800",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Amino Acid Metabolism,"8563, 1334, 1789, 1484, 1501, 1483, 1500, 1503, 1502","25426, 24445, 24898, 24594, 24595, 24611, 24612, 2461324614",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Urea Cycle,"1370, 1341, 1372, 1480, 8578","24481, 24452, 24483, 24591, 25432",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Collagen Synthesis,"1245, 1247, 1244, 947, 497, 1061, 1247, 311, 702","24356, 24358,  24355, 24059, 23610, 24172, 24358, 23424, 23814",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Energy Production,"997, 998, 1019, 1010, 1020, 1021","24109, 24110, 24121, 24130, 24131, 24132",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,TCA Cycle,"1369, 1022, 1807, 1119","24480, 24133, 24916, 24230",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Electron Transport Chain,"1807, 1019,  1415, 1545, 1240, ","24916, 24130,  24526, 24656, 24351",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review (1),Uncoupling Agents,"821, 714","23933, 23826",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Cholesterol & Lipid Metabolism,"2016, 2064, 447, 1108, 190","25125, 25173, 23560, 24219, 23303",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,VLDL,"11844, 327, 2064","25730,  23440, 25173",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,IDL,"782, 2064","23894, 25173",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,LDL & Atherosclerosis,"444, 191, 190, 160, 163, 11634, 165, 14988, 846, 1901, 711, 780, 781, 712, 1327, 1328","23557, 23304, 23303, 23273, 23276, 25589, 23278, 26058, 23958, 25010, 23823, 23892, 23893, 23824, 24438, 24439",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Lipid Disorders for the USMLE,"190, 782, 440, 625, 163, 166, 164, 11844","23303, 23894, 23553, 23737, 23276, 23279, 23277, 25730",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,HMP Shunt Pathway,"1035, 1036, 1037, 1119, 1066","24146, 24147, 24148, 24230, 24177",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Nucleotide Synthesis,"1580, 2090, 2066, 16287, 1890, 1892, 1894, 2067, 2028, 1475","24691, 25199, 25175, 26565, 24999, 25001, 25003, 25176, 25137, 24586",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Biochemistry of Nutrition,"324, 1111, 326","23437, 24222, 23439",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Fat Soluble Vitamins,"364, 7584, 808, 1581, 710, 1065, 1806, 671, 1564","23477, 25306, 23920, 24692, 23822, 24176, 24915, 23783, 24675",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Cystic Fibrosis,"14916, 802, 805, 807, 1514, 358, 803, 806","26009, 23914, 23917, 23919, 24625, 23471, 23915, 23918",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Water Soluble Vitamins,"1047, 1846, 1955, 2129, 1021, 1334, 1064, 12276, 1063","24158, 24955, 25064, 25238, 24132, 24445, 24175, 25843, 24174",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Approach to Pedigrees on the USMLE,1790,24899,Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Lysosomal Storage Diseases,"11930,  8524, 1989, 1990,  11864","25780, 25411, 25099, 25747",Step 1 Pass Fail
+USMLE Step 1 Biochemistry & Metabolism Review,Chromosome Abnormalities for the USMLE,"468, 1915, 1052, 701, 393, 395, 1690, 428, 8, 1822, 1823","23581, 25024, 24163, 23813, 23506, 23508, 24801, 23541, 23122, 24931, 24932",Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",Sites of Metabolism,"2039, 1473, 1417","24584, 26417",Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",DNA Rapid Review,"15299, 1894, 1436, 1718",25003,Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",HMP Shunt Nucleotide Synthesis,"1119, 1037, 1035, 1036","24230, 24148, 24146, 24147",Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",DNA Replication,"1418, 1437",24548,Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",Telomerase & Topoisomerase,"2033, 1438","25142, 24549",Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",DNA Polymera & Synthesis,"15169, 1438, 11912, 1434, 1435, 2017, 1471, 1644","24755, 24582,25126, 24546, 24545, 24549,",Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",Transcription,"2030, 2029, 2042, 12263","25151, 25138, 25139",Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",Steroid hormones,"2016, 11950",25125,Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1) (1)",  Lac Operon,"1479, 1485","24590, 24596",Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",Transcription revisited,"2030, 2029, 2042, 12263","25138, 25139",Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",Splicing and Post Transcriptional_Modifications,"2033, 11913, 2038, 2035, 8276","25144, 25147, 25142, ",Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",Spinal Muscular Atrophy Integration,2036,25145,Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",Translation,"11709, 2030, 2029, 2086, 757, 1428, 2037, 1417, 1000","25138, 25139, 25195, 23869, 24539, 25146, 24528, 24112",Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",tRNA structure significance,"2037, 1428, 1417","25146, 24539, 24528",Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",Prokaryotic vs Eukaryoti translation,"1437, 1435, 1488","24548, 24546, 24599",Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",Protein Elongation Virulence Factor Integration,"1093, 2029","25809, 25138",Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",Trnaslocation,"8, 1810, 2029, 1610, 312","23425, 23122, 24919, 25138, 24721",Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",Post Translational Modification,638,23750,Step 1 Pass Fail
+"DNA Synthesis, Transcription, Translation (USMLE Step 1)",I Cell disease Integration,11930,,Step 1 Pass Fail
+Genetic Principles & Hardy Weinberg,Variable Expressivity vs Pleiotropy,"1725, 1970","25079, 24836",Step 1 Pass Fail
+Genetic Principles & Hardy Weinberg,Co Dominance,8261,,Step 1 Pass Fail
+Genetic Principles & Hardy Weinberg,Genotype vs Phenotype,"293, 1915, 8283",25024,Step 1 Pass Fail
+Genetic Principles & Hardy Weinberg,Neurofibromatosis,"1307, 1534","24418, 24645",Step 1 Pass Fail
+Genetic Principles & Hardy Weinberg,Anticipation,"633, 1935","23745, 25044",Step 1 Pass Fail
+Genetic Principles & Hardy Weinberg,USMLE Trinucleotide Repeats, 633,23745,Step 1 Pass Fail
+Genetic Principles & Hardy Weinberg,Mosaicism,"1810, 12225",24919,Step 1 Pass Fail
+Genetic Principles & Hardy Weinberg,Imprinting Disorder,"1610, 7791","25351, 24721",Step 1 Pass Fail
+Genetic Principles & Hardy Weinberg,Linkage Disequilibrium,8283,,Step 1 Pass Fail
+Genetic Principles & Hardy Weinberg,Pedigrees,1790,24899,Step 1 Pass Fail
+USMLE Step 1 — Metabolic and Genetic Syndromes,Down's Syndrome Integration,"8, 1610, 1599, 312, 11803, 1824, 330, 331, 326, 15278, 1571, 590","23122, 24721, 24710, 23425, 24933, 23443, 23444, 23439, 24682, 23703",Step 1 Pass Fail
+USMLE Step 1 — Metabolic and Genetic Syndromes,Patau & Edwards Syndrome,"1822, 1823, 252","24931, 24932, 23365",Step 1 Pass Fail
+USMLE Step 1 — Metabolic and Genetic Syndromes,Imprinting Syndromes,7791,25351,Step 1 Pass Fail
+USMLE Step 1 — Metabolic and Genetic Syndromes,Homocystinuria,"788, 1332, 1504, 194","23900, 24443, 24615, 23307",Step 1 Pass Fail
+USMLE Step 1 — Metabolic and Genetic Syndromes,Marfanoid Habitus,"986, 1844, 988, 1504","24098, 24953, 24098, 24615",Step 1 Pass Fail
+USMLE Step 1 — Metabolic and Genetic Syndromes,Marfan’s Syndrome,"1250, 462, 473, 947, 15886, 986, 194","24361, 23575, 23586, 24059, 26530, 24098, 23307",Step 1 Pass Fail
+USMLE Step 1 — Metabolic and Genetic Syndromes,Ehler’s Danlos Syndrome,"1244, 1245, 947, 497","24059, 23610, 24355, 24356",Step 1 Pass Fail
+USMLE Step 1 — Metabolic and Genetic Syndromes,Lesch Nyhan Syndrome,"2067, 813, 1728","25176, 23925, 24839",Step 1 Pass Fail
+USMLE Step 1 — Metabolic and Genetic Syndromes,Kartagener’s Syndrome,"1611, 664, 820, 1922, 1548","24722, 23776, 23941, 25031, 24659",Step 1 Pass Fail
+USMLE Step 1 — Metabolic and Genetic Syndromes,Cystic Fibrosis,"14916, 802, 805, 807, 1514, 358, 803, 806","26009, 23914, 23917, 23919, 24625, 23471, 23915, 23918",Step 1 Pass Fail
+USMLE Step 1 — Metabolic and Genetic Syndromes,Neurocutaneous Syndromes,"1534, 1307, 1305,  6, 19187, 468, 587, 673, ","24645, 24318, 24416, 23120, 26950, 23581, 23700, 23785",Step 1 Pass Fail
+USMLE Step 1 — Metabolic and Genetic Syndromes,Lupus Integration,"875, 231, 742",,Step 1 Pass Fail
+High Yield Images & PE for the USMLE Step 1 (Introduction),Top Images You Will Encounter on the USMLE,"37, 43, 40, 14978, 193, 195, 2127, 1151, 21, 6, 591, 8385, 94, 592, ","23151, 23157, 23154, 26051, 23306, 23308, 25236, 24262, 23135, 23120, 23704, 25391, 23208, 23705",Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Cardiology),Cardiac Cycle,"945, 1530, 227","23340, 24057, 24641",Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Cardiology),Isovolumetric Ventricular Contraction,"1530, 92, 183","23206, 23296, 24641",Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Cardiology),Rapid Ventricular Ejection,"1624, 951, 1510","24063, 24621, 24735",Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Cardiology),Isovolumetric Ventricular Relaxation,"235, 1931, 1517","23348, 24628, 25040",Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Cardiology),Ventricular Filling,"183, 1652, 1591","23296, 24702, 24763",Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Cardiology),Atrial Systole,"2070, 244, 246","23357, 23359, 25179",Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Cardiology),Jugular Venous Tracing,"98, 96, 2070","23210, 23212, 25179",Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Cardiology),Pulsus Paradoxes,"1439, 2099, 2100","24550, 25208, 25209",Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Cardiology),Pressure Volume Loops,"1517, 1518, 1510","24628, 24629, 24621",Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Cardiology),Cardiac Action Potentials,"84, 901, 1380","23198, 24013, 24491",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Acute Inflammation for USMLE,1002,24114,Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Cardiac Microbiology,"1002, 733, 1003","24114, 23845, 24115",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Pathophysiology of Sub-Acute Bacterial Endocarditis,"1002, 733, 1003","24114, 23845, 24115",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Bacteria Biofilms,"8533, 14916","26009, 25415",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Viridans Streptococci,"733, 1002, 1003","23845, 24114, 24115",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Indications for Antimicrobial PPX for Endocarditis,"733, 1003",24115,Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Acute Bacterial Endocarditis,"733, 1002, 1003","24114, 24115",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,IV Drug Use and Endocarditis,"8710, 729, 646, 1007","25453, 23841, 23758, 106228",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Pathophysiology of Acute Rheumatic Fever," 240, 241, 239, 724","23353, 23354, 23352, 23836",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Group A Streptococcus,"1001, 15339, 8857, 646, 722, 724"," 24113, 26247, 25457, 23758, 23834, 23836",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Scarlet vs Rheumatic Fever,"8565, 724","25428, 23836",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Jones Criteria for USMLE,726,23838,Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Heart Block Lyme Disease,"15559, 1676, 1976, 15555","26404, 24787, 25085, 26400",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Mitral Stenosis,"1591, 232, 236","24702, 23345, 23349",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Diphtheria,"1389, 1093, 1390, 1092","24500, 24204, 24501, 24203",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Protein Synthesis Inhibition,"1098, 1373, 1093","24209, 24484, 24204",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Cardiology,Myocarditis,"15419, 1093, 1094, 1092, 95, 240, 232, 14789, 93, 96","24204, 24205, 24203, 23209, 23353, 23345, 25931, 23207, 23210",Step 1 Pass Fail
+NBME Top Concepts: Cardiology,DiGeorge Syndrome,"34, 204, 8532","23148, 23317, 25414",Step 1 Pass Fail
+NBME Top Concepts: Cardiology,Branchial Pouch Derivatives,"543, 756, 743","23656, 23868, 23855",Step 1 Pass Fail
+NBME Top Concepts: Cardiology,Lipid Lowering Drugs,"164, 165, 711,  161, 711, 778, 780, 781, 778, 11844, 166, 67, 163,  11634","23277, 23278, 23823, 23274, 23823, 23890, 23892, 23893, 23890, 25730, 23279, 23181, 23276,  25589",Step 1 Pass Fail
+NBME Top Concepts: Cardiology,Shock,"1493, 1625, 13979, 18535","24604, 24736, 25876, 26670",Step 1 Pass Fail
+NBME Top Concepts: Cardiology,Thermoregulation,"821, 19079, 19088, 19108","23933, 26918, 26929, 26925",Step 1 Pass Fail
+NBME Top Concepts: Cardiology,"S3, S4, HOCOM, DCM, murmurs","246, 32, 33, 72, 76, 85, 187, 76, 82, 83, 95, 15310, 1047, 92, 14993, 1014,  246, 93,   242, 939, 243, 2106, 227, 15198, 232, 233, 947, 200, 8294, 203.,32, 1751","23359, 23146, 23147, 23186, 23190, 23199, 23300,  23190, 23196, 23197, 23209, 26231, 24158, 23206, 26061, 24125, 23359, 23207, 23355, 24051, 23356, 25215, 23340, 26147, 23345, 23346, 24059, 23313, 25372, 23316, 23146, 24862",Step 1 Pass Fail
+NBME Top Concepts: Cardiology,Vasculitis,"1852, 39, 242, 442, 450, 451, 914, 450, 461, 452, 1852, 20774, 6445, 13,  667, 458, 1850, 758, 10","24961, 23153, 23355, 23555, 23563, 23564, 24026, 23563, 23574, 23565, 24961, 20774, 5244, 23127,23779, 23571, 24959, 23870, 23124",Step 1 Pass Fail
+NBME Top Concepts: Cardiology,Post MI Complications,"89, 40, 151868, 15188, 18840, 19012","23203, 23154, 26140, 26812, 26896",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Cardiology,Right Heart Failure vs. Left Heart Failure,"15526 , 7616, 15535, 1881, 1578, 15650, 1585","26376 , 25318, 26382, 24990, 24689, 26464, 24696",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Cardiology,Murmurs & Maneuvers,"85, 187, 947, 242, 1661, 1983, 232, 200, 943, 1557","23199, 23300, 24059, 23355, 24772, 25092, 23345, 23313, 24055, 24668",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Cardiology,Transudative vs. Exudative for the USMLE,"15430, 15420, 531, 1881","26311, 26303, 23644, 24990",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Cardiology,Mechanisms of Edema,"1578, 15420, 15193, 1537","24689, 26303, 26142, 24648",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Cardiology,Turner Syndrome,"30, 8292, 256, 339, 1810, 7489","23144, 23369, 23452, 24919, 25293, 25370",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Cardiology,Rapid Review Genetic Heart Lesions & Cardiac Anomalies,"8, 188, 204, 543, 636, 572","23122, 23301, 23317, 23656,  23748, 23685",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Cardiology,Genetic Conditions & Heart Lesions,"35, 202, 34, 1490","23149, 23315, 23148, 24601",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Cardiology,Pathophysiology of Tet Spells,204,23317,Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Cardiology,Endocarditis,"14898, 679, 729, 1002, 1003","26001, 23791, 23841, 24114, 24115",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Cardiology,Microbiology Integration,"1002, 733, 729, 1001","24113, 24114, 23841, 23845",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Cardiology,Infective Endocarditis on USMLE,"228, 72, 729","23341, 23186, 23841",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Cardiology,Rheumatic Fever,"239, 240, 241, 234","23352, 23353, 23354, 23347",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Cardiology,Erythema Marginatam,"1495, 1896","24606, 25005",Step 1 Pass Fail
+Mechanisms of Pharmacology (Cardiology),Atrial Fibrillation & Virchow’s Triad,"1, 11842, 1977, 2055, 14743, 14741, 1292","23115, 24403, 25086, 25728, 25920, 25922",Step 1 Pass Fail
+Mechanisms of Pharmacology (Cardiology),Amiodarone Systemic Toxicity,"899, 901, 1507, 645, 625","23737, 23757, 24011, 24013, 24618",Step 1 Pass Fail
+Mechanisms of Pharmacology (Cardiology),Cardiac Action Potentials,"91, 1509","23205, 24620",Step 1 Pass Fail
+Mechanisms of Pharmacology (Cardiology),Class 1 Anti-Arrhythmics,"159, 900, 1508, 1509, 8869","23272, 24012, 24619, 24620, 25460",Step 1 Pass Fail
+Mechanisms of Pharmacology (Cardiology),Drug Induced Lupus Integratio,1505,24616,Step 1 Pass Fail
+Mechanisms of Pharmacology (Cardiology),Class 2 Anti-Arrhythmics (Integrates MVO2),"2006, 8289","25115, 25367",Step 1 Pass Fail
+Mechanisms of Pharmacology (Cardiology),Calcium Channel Blockers,"145, 153, 154, 144, 1973","23257, 23258, 23266, 23267, 25082",Step 1 Pass Fail
+Mechanisms of Pharmacology (Cardiology),Acute Heart Failure Pharmacology,1652,24763,Step 1 Pass Fail
+Mechanisms of Pharmacology (Cardiology),Chronic Heart Failure Pharmacology,"149, 686, 693, 1944","23262, 23798, 25053",Step 1 Pass Fail
+Mechanisms of Pharmacology (Cardiology),Digoxin (Toxicity),"147, 148, 155, 156, 1780","23260, 23261, 23268, 23269, 24890",Step 1 Pass Fail
+Mechanisms of Pharmacology (Cardiology),Anti-Lipid Agents,"164, 165, 711, 161, 711, 778, 780, 781, 778, 11844, 166, 67, 163, 11634","23277, 23278, 23823, 23274, 23823, 23890, 23892, 23893, 23890, 25730, 23279, 23181, 23276, 25589",Step 1 Pass Fail
+Mechanisms of Pharmacology (Cardiology),"LDL, HDL, TAG, Niacin","2064, 191, 782, 160, 166","25173, 23304, 23894, 23273, 23279",Step 1 Pass Fail
+Mechanisms of Pharmacology (Cardiology),Fat Soluble Vitamins (integration),"981, 630, 1581, 671, 1048, 12047, 1062, 1581, 1048, 981, 1065, 671, 1806, 18686, 1926, 710","24093, 23742, 24692, 23783, 24159, 25805, 24173, 24692, 24159, 24093, 24176, 23783, 24915, 26750, 25035, 23822",Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Endocrine),Hormone Receptor Pathways,"994, 1121, 658, 14954",,Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Endocrine),Thyroid Synthesis and Regulation,"767, 686, 770","23798, 23879, 23882",Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Endocrine),Adrenal Cortex Zones,"610, 930, 955","23722, 24042, 24067",Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Endocrine),Calcium Homeostasis,"981, 1656, 11664","24093, 24767, 25605",Step 1 Pass Fail
+Foundations of Physiology for the USMLE (Endocrine),Estrogen and Progesterone,"1317, 1560, 1986","24671, 25095",Step 1 Pass Fail
+NBME Top Concepts: Endocrine,Hormone Signaling,"216, 1259, 1153, 1561","23329, 24264, 24370, 24672",Step 1 Pass Fail
+NBME Top Concepts: Endocrine,Thyroid Disorders,"983, 773","23885, 24095",Step 1 Pass Fail
+NBME Top Concepts: Endocrine,Hypothyroid,"1407, 590, 770, 1615, 983","23703, 23882, 24095, 24518, 24726",Step 1 Pass Fail
+NBME Top Concepts: Endocrine,Hyperthyroid,"623, 925, 15016, 791, 637, 622, 768","23735, 24037, 26077, 23903, 23749, 23734, 23880",Step 1 Pass Fail
+NBME Top Concepts: Endocrine,PTH and Calcium,"641, 992, 1065, 15270, 631","23743, 23753, 24104, 24176, 26201",Step 1 Pass Fail
+NBME Top Concepts: Endocrine,MEN Syndromes,"986, 1844, 988, 1845, 15105","24098, 24100, 24953, 24954, 26106",Step 1 Pass Fail
+NBME Top Concepts: Endocrine,Islet Cell Tumors,"1938, 8531, 585, 586","23698, 23699, 25047, 25413",Step 1 Pass Fail
+NBME Top Concepts: Endocrine,DKA vs. HHS,"106, 107, 2014, 2073, 985","23220, 23221, 25123, 25182, 24097",Step 1 Pass Fail
+NBME Top Concepts: Endocrine,Diabetes Pharmacology,"258, 656, 607, 599, 920, 11565, 606, 1655, 15308, 16324, 14136, 604, 15770, ","23371, 23768,, 107494, 23712, 24032, 25550, 23719, 24766, 26230, 26567, 25889, 23717, 26510",Step 1 Pass Fail
+NBME Top Concepts: Endocrine,Aldosterone Disorders,"2013, 454, 547, 929, 152, 956","23265, 23567, 23660, 24041, 24068, 25122",Step 1 Pass Fail
+Mechanisms of Pharmacology (Endocrine),GLUT Receptor Review,"1325, 1355, 847, 1121","24436, 24466, 23959, 24232",Step 1 Pass Fail
+Mechanisms of Pharmacology (Endocrine),Diabetes Pharmacology,"258, 656, 607, 599, 920, 11565, 606, 1655, 15308, 16324, 14136, 604, 15770, ","23371, 23768, 107494, 23712, 24032, 25550, 23719, 24766, 26230, 26567, 25889,  23717, 26510, ",Step 1 Pass Fail
+Mechanisms of Pharmacology (Endocrine),Insulin Preparations,"1768, 6803, 15308, 106, 107, 2014, 1889, 2073, 985, 600,  8330, 15876, 850,","24878, 25260, 26230, 23220, 23221, 25123, 24998, 25182, 24097, 23713, 25385, 26527, 23962",Step 1 Pass Fail
+Mechanisms of Pharmacology (ANS),USMLE Step 1 Pharmacology of the Autonomic Nervous System,"11708, 11841, 1363, 663, 1523, ","25623, 25727, 24474, 23775, 24634",Step 1 Pass Fail
+Foundations of USMLE Physiology (Renal),Organization of the Kidney,"1554, 1736, 1982","24665, 24847, 25091",Step 1 Pass Fail
+Foundations of USMLE Physiology (Renal),Glomerular Physiology,"1017, 1841, 696","23808, 24950, 24128",Step 1 Pass Fail
+Foundations of USMLE Physiology (Renal),GFR,"1555, 2010, 1617, 1618, 1354","24666, 25119, 24728, 24729, 24465",Step 1 Pass Fail
+Foundations of USMLE Physiology (Renal),RPF,"1556, 1016, 1555","24127, 24666",Step 1 Pass Fail
+Foundations of USMLE Physiology (Renal),RBF and Filtration Fraction,"1982, 1555, 1016","25091, 24666, 24127",Step 1 Pass Fail
+Foundations of USMLE Physiology (Renal),Practical USMLE Qs,"1559, 1617, 2011","24728, 25120",Step 1 Pass Fail
+Foundations of USMLE Physiology (Renal),Regional Aspects of Nephron,"2012, 2005, 15273","25121, 25114, 26203",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,Acute Cystitis,"1096, 18521, 1816","24207, 24925 ",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,Renal Physiology Integration,"1982, 1555, 1016","25091, 24666, 24127",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,Enterococcus for USMLE,"643, 733","23755,  23845",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,Acute Interstitial Nephritis,"888, 835, 15172","24000, 23947, 26580",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,Sterile Pyruia for USMLE,"20178, 20315, 15869",,Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,Pathophysiology of UTI,"15869, 15560, 11516",,Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,UTI Microbiology for USMLE,"1932, 15204, 22577, 1141, 1142","25041, 24252, 24253",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,Medications for UTI in Pregnancy," 11752, 1959, 20604",25068,Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,Pregnancy Physiology Integration,"14895, 11551, 14873, 19518",,Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,Staghorn Calculus & Kidney Stones," 816, 15270, 12081, 815, 15193, 813","23928,  23925, 23927",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal (1),Cystitis vs Pyelonephritis,"888, 106085, 1142, 1140,","24000,  24251, 24253",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,Micturition Autonomic Integration,"21589, 11820, 10962",25818,Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,Urinary Tract Histology Integration,"18523, 8541",25422,Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,Squamous Cell Carcinoma of Bladder,"18523, 336, 15186",23449,Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,Adenovirus for USMLE,1497,24608,Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Renal,Prostatitis for USMLE,15538,,Step 1 Pass Fail
+Top NBME Concepts: Renal,Renal Casts,"15218, 15217, 8458, 15225","26163, 26164, 25400, 26167",Step 1 Pass Fail
+Top NBME Concepts: Renal,Kidney Stones,"816, 1656, 815, 2003, 6739, 15259","23927, 23928, 24767, 25112, 25255, 26197",Step 1 Pass Fail
+Top NBME Concepts: Renal,Urea Cycle + Stones,"6739, 15259, 408, 12081, 817","25255, 26197, 23521, 25812, 23929",Step 1 Pass Fail
+Top NBME Concepts: Renal,Nephrotic Syndrome,"26, 383, 384, 15355, 385","23140, 23496, 23497, 23498, 26261,",Step 1 Pass Fail
+Top NBME Concepts: Renal,Nephritic Syndrome,"8, 27, 12, 567, 15353","23122, 23141, 23126, 23680, 26259",Step 1 Pass Fail
+Top NBME Concepts: Renal,Renal Failure,"7624, 1016, 15221, 15207, 15209, 15208","25322, 24127, 26166, 26155, 26156, 26157",Step 1 Pass Fail
+Top NBME Concepts: Renal,Diuretics,"684, 15172, 835, 956, 1425, 681","23796, 26130, 23947, 24068, 24536, 23793",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Renal,Rapid Review of Casts & Stones,"986, 12081, 817, 814, 815, 813, 861","24098, 25812, 23929, 23925, 23926, 23927, 23973",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Renal,Polycystic Kidneys,"1915, 1052, 3","25024, 24163, 23117",Step 1 Pass Fail
+High Yield USMLE Images & PE Findings: Renal,Tumors of the Urinary Tract,"2, 904, 818, 7227, 11806, 336, 7623","23116, 24016, 23930, 25270, 25695, 23449, 25321",Step 1 Pass Fail
+Mechanisms of Pharmacology (Renal),Renal Pharmacology,"682, 1363, 508,  12024, 1980, 6792, 684, 681, 685, 8884, 1557, 1881, 93, 200, 843, 1532, 1565, 1585, 2091, 2090, 1450, 167, 1168, 14967, 860, 861, 859, 858, 11749,   993, 683, 980, 11849, 150, 2002, 2003, 1537, 691, 1565, 2005, 656, 2095, 11657, 687, 152","23794, 24474, 23621, 25798, 25089, 25258, 23796, 23793, 23797, 25464, 24668, 24990, 23207, 23313, 23955, 24643, 24676, 24696, 25199, 25200 24561, 23280, 24279, 26049, 23972, 23973, 23971, 23970, 11749, 24105, 23795, 24092, 25735, 23263, 25112, 24648, 23803, 24676, 25114, 23768, 25598, 23799, 23265",Step 1 Pass Fail
+Mechanisms of Pharmacology (Renal),Medications which cause HyperK (integration),"692, 8351, 11841, 153, 2006, 1196, 1444, 1252, 1492, 949, 1532, 149, 1565, 1944, 151, 141, 693, 1148, 948, 1166, 6901, 841, 712, 12262, 694, 696147, 156, 1780, 155, 148, 149, 900, 2091, 1168, 860, 861, 850, 858, 89, 15018, 1778, 77921086, 15172, 1049, 15229, 835, 1828, 714, 718, 1212, 855, 11458","23804, 25387, 25727, 23266, 25115, 24307, 24555, 24363, 24603, 24061, 24643, 23262, 24676, 25053, 23264, 23254, 24259, 24060, 24277, 23802, 24950, 23824, 23806, 23808, 23260, 23268, 24890, 23268, 23261, 23262, 24012, 25200, 24279, 23972, 23973, 23962, 23970, 23203, 26078, 24888, 25352, 24197, 26130, 24160, 26171, 23947, 24937, 23826, 23830, 24323, 23967",Step 1 Pass Fail
+NBME Top Concepts: Acid Base,Compensation,"1357, 1979, 6792, 11939, 1340","24468, 25088, 25258, 25781, 24451",Step 1 Pass Fail
+NBME Top Concepts: Acid Base,Winter’s Formula,"1979, 2072, 1341","25088, 25181, 24452",Step 1 Pass Fail
+NBME Top Concepts: Acid Base,Davenport Diagram,"956, 1425, 11807, 528","24068, 24536, 25696, 23641",Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),Neonatal Infections," 999, 1140, 15578
+
+","24111, 24251, 26418",Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),Neonatal Sepsis,"1140, 15578","23692 ,26418",Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),TORCH infections,"1669, 1464, 1575, 11822, 1038, 1549, 12035","24149, 24686, 24660,25803, 24575, 25803",Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),CMV,"1576, 1592, 1593","24703, 24704, 24687",Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),Pathophysiology of Failure To Thrive,"1071, 1074, 1020, 1500, 358, 203","25742, 23471, 24131, 24182, 24185, 24611",Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),HPV,"1723, 483, 1015, 1992, 11858","25779, 24126, 24834, 25101, 25742",Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),Koliocytosis,"1992, 11858, 11929, 15228","25101, 25742, 25779, 25779",Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),Double Stranded DNA Viruses,1461,24572,Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),P53 Pathophysiology,"1970, 1660, , 1015,11929, 57, 420, 429","23171, 23533, 23542, 24126, 24771, 25079, 25779",Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),Sexually Transmitted Infections,"1827, 1096, 560","23673, 24207, 24936",Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),Cervicitis & Urethritis,"1008, 1912, 1895, 1026, 1949","24119, 24137, 25004, 25021, 25058",Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),Chlamydia Integration,"15560, 1154, 1600","24711, 24265, 24265",Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),Reactive Arthritis,1600,24711,Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),Sexually Transmitted Ulcers,"11927, 15565, 1593, 1154, 15069, 11604","25041, 24704, 25569, 25569, 26410",Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),PID Complications,"1932, 1027","24138, 25041",Step 1 Pass Fail
+Integrated Microbiology for the USMLE (Reproductive),Syphilis Manifestations,"12035, 1002, 1952, 1154, 1315, 1316, 651","25803, 25803, 25061, 24265, 24426, 24427, 23763",Step 1 Pass Fail
+Top NBME Concepts: Reproductive,Disorders of Sexual Development,"579, 1809, 582","23692, 24918, 23695",Step 1 Pass Fail
+Top NBME Concepts: Reproductive,Turner’s Syndrome integration,"30, 256, 339, 7489","23144, 23369, 23452, 25293",Step 1 Pass Fail
+Top NBME Concepts: Reproductive,Testosterone Disorders,"955, 14818, 658","24067, 25956, 23770",Step 1 Pass Fail
+Top NBME Concepts: Reproductive,Mullerian Agenesis vs. AIS,"1831, 1809",4918,Step 1 Pass Fail
+Top NBME Concepts: Reproductive,Polycystic Ovarian Syndrome,"258, 656, 2094, 2095","23371, 23768",Step 1 Pass Fail
+Top NBME Concepts: Reproductive,Ovarian Physiology,"208, 1902, 1839, 925","23321, 25011, 24037",Step 1 Pass Fail
+Top NBME Concepts: Reproductive,Ovarian Tumors,"1158, 11652, 127, 1158, 1837, 11652, 1928","24269, 23240, 24946, 25596",Step 1 Pass Fail
+Top NBME Concepts: Reproductive,Repro Ligaments,"1632, 8587, 11901","24743, 25434, 25764",Step 1 Pass Fail
+Top NBME Concepts: Reproductive,Uterine Disorders,"333, 2056, 2094, 581","23446, 25165, 23694",Step 1 Pass Fail
+Top NBME Concepts: Reproductive,Cervical Disorders,"1992, 1753, 869","25101, 24863, 23981",Step 1 Pass Fail
+Mechanisms of Pharmacology (Reproductive),Steroid Receptor Physiology,"807, 343, 217, 1449, 594, 258, 299, 1987, 334, 68, 215, 1899,  220, 1839, 877, 10930, 1773, 719, 454, 547, 610, 930","23919, 23456, 23330, 24560, 23707, 23371, 23412, 25096, 23182, 23328, 25008, 23333, 23989, 25510, 24883, 23831, 23567, 23660, 23722, 24042",Step 1 Pass Fail
+Mechanisms of Pharmacology (Reproductive),"Tamoxifen, Raloxifene, Clomiphene","1762, 581, 11657, 1795, 1194, 11731, 2095","24872, 23694, 25598, 24904, 24305, 25629",Step 1 Pass Fail
+Mechanisms of Pharmacology (Reproductive),Ovarian & Testicular Physiology [Integrated!],"584, 11585, 14818, 658, 8930, 1726, 657","23697, 25557, 25956, 23770, 25469, 24837, 23769",Step 1 Pass Fail
+Mechanisms of Pharmacology (Reproductive),Testosterone Agents,"691, 1565, 11657, 687, 656, 2095, 8351, 1819, 104, 161, 2000, 351, 1766","23803, 24676, 25598, 23799, 23768, 25387, 24928, 23218, 23274, 25109, 23464, 24876",Step 1 Pass Fail
+Foundations of USMLE Physiology (Gastrointestinal),Gastrointestinal Hormones,"1546, 601, 1319","24657, 23714, 24430",Step 1 Pass Fail
+Foundations of USMLE Physiology (Gastrointestinal),Regulation of Acid Secretion,"126, 124, 1918","23239, 23237, 25027",Step 1 Pass Fail
+Foundations of USMLE Physiology (Gastrointestinal),Digestion and Absorption,"99, 364, 601","23213, 23477, 23714",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Gastroenterology,Ulcers on the USMLE,"292, 291, 1603","23404, 23405, 24714",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Gastroenterology,Pathophysiology of H.Pylori,"1918, 1778, 161","25027, 24888, 23274",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Gastroenterology,Oncogenic Microbes,"2083, 1572, 1724, 1260, 15364, 1723","25192, 24683, 24835, 24371, 24834",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Gastroenterology,Diarrhea,"7642, 105601, 1138, 1422, 132, 960, 19407, 19356, 20189","25330, 24249, 24553, 23245, 24072,",Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Gastroenterology,Viral Diarrhea,"1498, 15215",24609,Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Gastroenterology,Protozoal Diarrhea,"105676, 7642",25330,Step 1 Pass Fail
+Integrated Microbiology for the USMLE | Gastroenterology,Guillain Barre Syndrome,"14883, 66",23180,Step 1 Pass Fail
