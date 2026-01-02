@@ -31,7 +31,7 @@ body {
 
 /* Sidebar */
 .sidebar {
-    width: 450px;
+    width: 520px;
     background-color: var(--sidebar-bg);
     border-right: 1px solid var(--border-color);
     display: flex;
@@ -192,6 +192,107 @@ body {
     display: flex;
 }
 
+.section-list {
+    margin-left: 28px;
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 6px;
+    padding-left: 8px;
+    border-left: 1px solid var(--border-color);
+}
+
+.topic-group.expanded .section-list {
+    display: flex;
+}
+
+.section-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+    user-select: none;
+    font-size: 0.92rem;
+    font-weight: 500;
+}
+
+.section-header:hover {
+    background-color: var(--accent-color);
+}
+
+.video-list {
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+    margin-left: 24px;
+    padding-left: 8px;
+    border-left: 1px solid var(--border-color);
+}
+
+.section-item.expanded .video-list {
+    display: flex;
+}
+
+.video-item {
+    padding: 4px 4px;
+    border-radius: 4px;
+}
+
+.video-item:hover {
+    background-color: var(--accent-color);
+}
+
+.warning {
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+    color: #b00020;
+    display: none;
+}
+
+.warning.visible {
+    display: block;
+}
+
+.id-count {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+    font-size: 0.82rem;
+    color: #666;
+}
+
+.sidebar-toggle {
+    margin-top: 0.75rem;
+    align-self: center;
+    padding: 6px 12px;
+    border: 1px solid var(--border-color);
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.sidebar-toggle:hover {
+    background-color: #f0f0f0;
+}
+
+.container.sidebar-collapsed .sidebar {
+    transform: translateX(-100%);
+}
+
+.container.sidebar-collapsed .main-content {
+    margin-left: 0;
+}
+
 .subtopic-item {
     display: flex;
     align-items: center;
@@ -289,6 +390,7 @@ body {
     min-height: 100px;
     word-wrap: break-word;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    position: relative;
 }
 
 .placeholder {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UWorld & COMLEX ID Tool</title>
+    <title>HyGuru USMLE Step 2 CK QIDs</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
@@ -12,9 +12,6 @@
 <body>
     <div class="container">
         <aside class="sidebar">
-            <!-- <div class="sidebar-header">
-                <h2>Filters</h2>
-            </div> -->
             <div class="search-container">
                 <input type="text" id="search-input" placeholder="Search topics..." class="search-input">
             </div>
@@ -27,8 +24,9 @@
                 <div class="logo-container">
                     <img src="logo.png" alt="HyGuru Logo" class="logo">
                 </div>
-                <h1>HyGuru USMLE Step 1 Pass Fail Course QIDs</h1>
-                <div class="info-text">Select the videos you want to study! [last updated 11/29/25]</div>
+                <h1>HyGuru USMLE Step 2 CK Rapid Review QIDs</h1>
+                <div class="info-text">Select the videos you want to study! [last updated 01/02/26]</div>
+                <button class="sidebar-toggle" id="sidebar-toggle">Hide filters</button>
             </div>
             <div class="results-section">
                 <div class="section-header">
@@ -36,9 +34,10 @@
                     <button class="copy-btn" onclick="copyToClipboard('uworld-ids', this)">Copy</button>
                 </div>
                 <div class="id-box" id="uworld-ids">
-                    <!-- IDs will appear here -->
-                    <span class="placeholder">Select topics to view IDs</span>
+                    <span class="id-text" id="uworld-ids-text"><span class="placeholder">Select topics to view IDs</span></span>
+                    <span class="id-count" id="uworld-count">0/40</span>
                 </div>
+                <div class="warning" id="uworld-warning"></div>
             </div>
             <div class="results-section">
                 <div class="section-header">
@@ -46,8 +45,8 @@
                     <button class="copy-btn" onclick="copyToClipboard('comlex-ids', this)">Copy</button>
                 </div>
                 <div class="id-box" id="comlex-ids">
-                    <!-- IDs will appear here -->
-                    <span class="placeholder">Select topics to view IDs</span>
+                    <span class="id-text" id="comlex-ids-text"><span class="placeholder">Select topics to view IDs</span></span>
+                    <span class="id-count" id="comlex-count">0</span>
                 </div>
             </div>
             <footer class="footer">
@@ -55,6 +54,14 @@
             </footer>
         </main>
     </div>
+    <script>
+        window.DATA_CONFIG = {
+            csvPath: 'step2.csv',
+            pageTitle: 'HyGuru USMLE Step 2 CK QIDs',
+            heading: 'HyGuru USMLE Step 2 CK Rapid Review QIDs',
+            infoText: 'Select the videos you want to study! [last updated 01/02/26]'
+        };
+    </script>
     <script src="script.js"></script>
 </body>
 

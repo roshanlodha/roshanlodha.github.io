@@ -1,4 +1,46 @@
-// Data Parsing
+const config = window.DATA_CONFIG || {};
+const CSV_PATH = config.csvPath || 'topic2qid.csv';
+
+const headingEl = document.querySelector('.main-header h1');
+const infoTextEl = document.querySelector('.info-text');
+const logoEl = document.querySelector('.logo');
+
+if (config.pageTitle) document.title = config.pageTitle;
+if (config.heading && headingEl) headingEl.textContent = config.heading;
+if (config.infoText && infoTextEl) infoTextEl.textContent = config.infoText;
+if (config.logo && logoEl) logoEl.src = config.logo;
+
+// Data state
+let parsedData = {};
+let hierarchyDepth = 2; // 2 = Section -> Video, 3 = Organ -> Section -> Video
+const selectedLeaves = new Set();
+
+// UI references
+const filtersContainer = document.getElementById('filters-container');
+const uworldOutput = document.getElementById('uworld-ids');
+const comlexOutput = document.getElementById('comlex-ids');
+const uworldText = document.getElementById('uworld-ids-text');
+const comlexText = document.getElementById('comlex-ids-text');
+const uworldCount = document.getElementById('uworld-count');
+const comlexCount = document.getElementById('comlex-count');
+const searchInput = document.getElementById('search-input');
+const uworldWarning = document.getElementById('uworld-warning');
+const container = document.querySelector('.container');
+const sidebar = document.querySelector('.sidebar');
+const sidebarToggle = document.getElementById('sidebar-toggle');
+
+const MAX_ORDER = Number.MAX_SAFE_INTEGER;
+
+function normalizeText(value) {
+    return (value || '').replace(/\u00a0/g, ' ').replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function splitIds(raw) {
+    if (!raw) return [];
+    return raw.split(',').map(id => normalizeText(id)).filter(Boolean);
+}
+
+// CSV parsing that preserves quoted fields
 function parseCSV(csv) {
     const rows = [];
     let currentRow = [];
@@ -12,16 +54,16 @@ function parseCSV(csv) {
         if (char === '"') {
             if (inQuotes && nextChar === '"') {
                 currentField += '"';
-                i++; // Skip next quote
+                i++;
             } else {
                 inQuotes = !inQuotes;
             }
         } else if (char === ',' && !inQuotes) {
-            currentRow.push(currentField.trim());
+            currentRow.push(currentField);
             currentField = '';
         } else if ((char === '\r' || char === '\n') && !inQuotes) {
-            if (char === '\r' && nextChar === '\n') i++; // Handle CRLF
-            currentRow.push(currentField.trim());
+            if (char === '\r' && nextChar === '\n') i++;
+            currentRow.push(currentField);
             if (currentRow.length > 0) rows.push(currentRow);
             currentRow = [];
             currentField = '';
@@ -30,45 +72,111 @@ function parseCSV(csv) {
         }
     }
     if (currentField || currentRow.length > 0) {
-        currentRow.push(currentField.trim());
+        currentRow.push(currentField);
         rows.push(currentRow);
     }
 
+    if (rows.length === 0) return {};
+
+    const headers = rows[0].map(normalizeText);
+    const findIndex = (labels) => {
+        const lowerHeaders = headers.map(h => h.toLowerCase());
+        for (const label of labels) {
+            const idx = lowerHeaders.indexOf(label.toLowerCase());
+            if (idx !== -1) return idx;
+        }
+        return null;
+    };
+
+    const organIdx = findIndex(['organ system']);
+    const sectionIdx = findIndex(['section']);
+    const videoIdx = findIndex(['video', 'topic']);
+    const uworldIdx = findIndex(['uworld qids', 'uworld ids', 'uworld']);
+    const comlexIdx = findIndex(['comlex qids', 'comlex ids', 'comlex']);
+    const orderIdx = findIndex(['order']);
+
+    hierarchyDepth = organIdx !== null && sectionIdx !== null && videoIdx !== null ? 3 : 2;
+
     const data = {};
-    // Skip header (rows[0])
+    let lastOrgan = 'Uncategorized';
+    let lastSection = 'Uncategorized';
+
     for (let i = 1; i < rows.length; i++) {
         const cols = rows[i];
-        if (cols.length < 4) continue;
+        if (hierarchyDepth === 3) {
+            const organ = normalizeText(cols[organIdx]) || lastOrgan;
+            const section = normalizeText(cols[sectionIdx]) || lastSection;
+            const video = normalizeText(cols[videoIdx]);
+            if (!organ || !section || !video) continue;
+            lastOrgan = organ;
+            lastSection = section;
 
-        // Clean up topic name (remove newlines and extra spaces)
-        const topic = cols[0].replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
-        const subtopic = cols[1];
-        const uworldIds = cols[2].split(',').map(id => id.trim()).filter(id => id);
-        const comlexIds = cols[3].split(',').map(id => id.trim()).filter(id => id);
+            const orderValue = orderIdx !== null ? parseInt(normalizeText(cols[orderIdx]), 10) : MAX_ORDER;
+            const order = Number.isFinite(orderValue) ? orderValue : MAX_ORDER;
+            const uworldIds = splitIds(cols[uworldIdx]);
+            const comlexIds = splitIds(cols[comlexIdx]);
 
-        if (!data[topic]) {
-            data[topic] = {};
+            if (!data[organ]) data[organ] = {};
+            if (!data[organ][section]) data[organ][section] = {};
+            data[organ][section][video] = { uworld: uworldIds, comlex: comlexIds, order };
+        } else {
+            const topic = normalizeText(cols[sectionIdx]);
+            const subtopic = normalizeText(cols[videoIdx]);
+            if (!topic || !subtopic) continue;
+
+            const uworldIds = splitIds(cols[uworldIdx]);
+            const comlexIds = splitIds(cols[comlexIdx]);
+
+            if (!data[topic]) data[topic] = {};
+            data[topic][subtopic] = { uworld: uworldIds, comlex: comlexIds };
         }
-        data[topic][subtopic] = {
-            uworld: uworldIds,
-            comlex: comlexIds
-        };
     }
+
     return data;
 }
 
-let parsedData = {};
-const selectedSubtopics = new Set();
-
-// UI Generation
-const filtersContainer = document.getElementById('filters-container');
-const uworldOutput = document.getElementById('uworld-ids');
-const comlexOutput = document.getElementById('comlex-ids');
-const searchInput = document.getElementById('search-input');
+function sortNumericAware(a, b) {
+    return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+}
 
 // Search Functionality
 searchInput.addEventListener('input', (e) => {
     const searchTerm = e.target.value.toLowerCase().trim();
+
+    if (hierarchyDepth === 3) {
+        const organGroups = document.querySelectorAll('.organ-group');
+        organGroups.forEach(group => {
+            const organLabel = (group.dataset.label || '').toLowerCase();
+            const sectionItems = group.querySelectorAll('.section-item');
+            const organMatches = organLabel.includes(searchTerm);
+            let hasVisibleSection = false;
+
+            sectionItems.forEach(sectionItem => {
+                const sectionLabel = (sectionItem.dataset.label || '').toLowerCase();
+                const videoItems = sectionItem.querySelectorAll('.video-item');
+                const sectionMatches = sectionLabel.includes(searchTerm);
+                let hasVisibleVideo = false;
+
+                videoItems.forEach(videoItem => {
+                    const videoLabel = (videoItem.dataset.label || '').toLowerCase();
+                    const visible = organMatches || sectionMatches || videoLabel.includes(searchTerm);
+                    videoItem.style.display = visible ? '' : 'none';
+                    if (visible) hasVisibleVideo = true;
+                });
+
+                const sectionVisible = organMatches || sectionMatches || hasVisibleVideo;
+                sectionItem.style.display = sectionVisible ? '' : 'none';
+                if (sectionVisible && searchTerm) sectionItem.classList.add('expanded');
+                hasVisibleSection = hasVisibleSection || sectionVisible;
+            });
+
+            const organVisible = organMatches || hasVisibleSection;
+            group.style.display = organVisible ? '' : 'none';
+            if (organVisible && searchTerm) group.classList.add('expanded');
+        });
+        return;
+    }
+
     const topicGroups = document.querySelectorAll('.topic-group');
 
     topicGroups.forEach(group => {
@@ -76,7 +184,6 @@ searchInput.addEventListener('input', (e) => {
         const subtopicItems = group.querySelectorAll('.subtopic-item');
         let hasVisibleSubtopic = false;
 
-        // Check if topic itself matches
         const topicMatches = topicLabel.includes(searchTerm);
 
         subtopicItems.forEach(item => {
@@ -84,16 +191,15 @@ searchInput.addEventListener('input', (e) => {
             const subtopicMatches = subtopicLabel.includes(searchTerm);
 
             if (topicMatches || subtopicMatches) {
-                item.style.display = ''; // Show
+                item.style.display = '';
                 hasVisibleSubtopic = true;
             } else {
-                item.style.display = 'none'; // Hide
+                item.style.display = 'none';
             }
         });
 
         if (topicMatches || hasVisibleSubtopic) {
             group.style.display = '';
-            // If searching and not a direct topic match (meaning we found a subtopic), expand it
             if (searchTerm !== '' && !topicMatches) {
                 group.classList.add('expanded');
             }
@@ -104,18 +210,191 @@ searchInput.addEventListener('input', (e) => {
 });
 
 function renderFilters() {
-    filtersContainer.innerHTML = ''; // Clear existing content
+    filtersContainer.innerHTML = '';
+    if (hierarchyDepth === 3) {
+        renderThreeLevel();
+    } else {
+        renderTwoLevel();
+    }
+
+    if (searchInput.value.trim() !== '') {
+        searchInput.dispatchEvent(new Event('input'));
+    }
+}
+
+function renderThreeLevel() {
+    const isMobile = window.innerWidth <= 768;
+    const organs = Object.keys(parsedData).sort((a, b) => organSort(a, b));
+
+    organs.forEach(organ => {
+        const organGroup = document.createElement('div');
+        organGroup.className = isMobile ? 'topic-group organ-group' : 'topic-group organ-group expanded';
+        organGroup.dataset.label = organ;
+
+        const header = document.createElement('div');
+        header.className = 'topic-header';
+
+        const toggleIcon = document.createElement('span');
+        toggleIcon.className = 'toggle-icon';
+        toggleIcon.textContent = '▶';
+        header.appendChild(toggleIcon);
+
+        const checkboxContainer = document.createElement('label');
+        checkboxContainer.className = 'checkbox-container';
+
+        const organCheckbox = document.createElement('input');
+        organCheckbox.type = 'checkbox';
+        organCheckbox.dataset.organ = organ;
+
+        checkboxContainer.appendChild(organCheckbox);
+        checkboxContainer.appendChild(document.createTextNode(organ));
+        header.appendChild(checkboxContainer);
+        organGroup.appendChild(header);
+
+        const sectionList = document.createElement('div');
+        sectionList.className = 'section-list';
+
+        const sections = Object.keys(parsedData[organ]).sort((a, b) => sectionSort(organ, a, b));
+        sections.forEach(section => {
+            const sectionItem = document.createElement('div');
+            sectionItem.className = isMobile ? 'section-item' : 'section-item expanded';
+            sectionItem.dataset.label = section;
+
+            const sectionHeader = document.createElement('div');
+            sectionHeader.className = 'section-header';
+
+            const sectionToggle = document.createElement('span');
+            sectionToggle.className = 'toggle-icon';
+            sectionToggle.textContent = '▶';
+
+            const sectionCheckboxContainer = document.createElement('label');
+            sectionCheckboxContainer.className = 'checkbox-container';
+
+            const sectionCheckbox = document.createElement('input');
+            sectionCheckbox.type = 'checkbox';
+            sectionCheckbox.dataset.organ = organ;
+            sectionCheckbox.dataset.section = section;
+
+            sectionCheckboxContainer.appendChild(sectionCheckbox);
+            sectionCheckboxContainer.appendChild(document.createTextNode(section));
+
+            sectionHeader.appendChild(sectionToggle);
+            sectionHeader.appendChild(sectionCheckboxContainer);
+            sectionItem.appendChild(sectionHeader);
+
+            const videoList = document.createElement('div');
+            videoList.className = 'video-list';
+
+            const videos = Object.entries(parsedData[organ][section]).sort((a, b) => videoSort(a, b));
+            videos.forEach(([video, payload]) => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'video-item';
+                videoItem.dataset.label = video;
+
+                const videoLabel = document.createElement('label');
+                videoLabel.className = 'checkbox-container';
+
+                const videoCheckbox = document.createElement('input');
+                videoCheckbox.type = 'checkbox';
+                videoCheckbox.dataset.organ = organ;
+                videoCheckbox.dataset.section = section;
+                videoCheckbox.dataset.video = video;
+
+                videoLabel.appendChild(videoCheckbox);
+                videoLabel.appendChild(document.createTextNode(video));
+                videoItem.appendChild(videoLabel);
+                videoList.appendChild(videoItem);
+
+                videoCheckbox.addEventListener('change', (evt) => {
+                    const key = `${organ}|${section}|${video}`;
+                    if (evt.target.checked) {
+                        selectedLeaves.add(key);
+                    } else {
+                        selectedLeaves.delete(key);
+                    }
+                    updateSectionCheckboxState(sectionItem, sectionCheckbox, organCheckbox);
+                    updateOutputs();
+                });
+            });
+
+            sectionItem.appendChild(videoList);
+            sectionList.appendChild(sectionItem);
+
+            sectionCheckbox.addEventListener('change', (evt) => {
+                const isChecked = evt.target.checked;
+                const videoCheckboxes = sectionItem.querySelectorAll('.video-list input[type="checkbox"]');
+                videoCheckboxes.forEach(cb => {
+                    cb.checked = isChecked;
+                    const video = cb.dataset.video;
+                    const key = `${organ}|${section}|${video}`;
+                    if (isChecked) {
+                        selectedLeaves.add(key);
+                    } else {
+                        selectedLeaves.delete(key);
+                    }
+                });
+                updateSectionCheckboxState(sectionItem, sectionCheckbox, organCheckbox);
+                updateOutputs();
+            });
+
+            sectionToggle.addEventListener('click', (evt) => {
+                evt.stopPropagation();
+                sectionItem.classList.toggle('expanded');
+            });
+
+            sectionHeader.addEventListener('click', (evt) => {
+                if (evt.target !== sectionCheckbox && evt.target !== sectionCheckboxContainer) {
+                    sectionItem.classList.toggle('expanded');
+                }
+            });
+        });
+
+        organGroup.appendChild(sectionList);
+        filtersContainer.appendChild(organGroup);
+
+        organCheckbox.addEventListener('change', (evt) => {
+            const isChecked = evt.target.checked;
+            const leafCheckboxes = organGroup.querySelectorAll('.video-list input[type="checkbox"]');
+            leafCheckboxes.forEach(cb => {
+                cb.checked = isChecked;
+                const key = `${cb.dataset.organ}|${cb.dataset.section}|${cb.dataset.video}`;
+                if (isChecked) {
+                    selectedLeaves.add(key);
+                } else {
+                    selectedLeaves.delete(key);
+                }
+            });
+            const sectionCheckboxes = organGroup.querySelectorAll('.section-header input[type="checkbox"]');
+            sectionCheckboxes.forEach(cb => {
+                cb.checked = isChecked;
+                cb.indeterminate = false;
+            });
+            updateOutputs();
+        });
+
+        toggleIcon.addEventListener('click', (evt) => {
+            evt.stopPropagation();
+            organGroup.classList.toggle('expanded');
+        });
+
+        header.addEventListener('click', (evt) => {
+            if (evt.target !== organCheckbox && evt.target !== checkboxContainer) {
+                organGroup.classList.toggle('expanded');
+            }
+        });
+    });
+}
+
+function renderTwoLevel() {
     const topics = Object.keys(parsedData).sort();
 
     topics.forEach(topic => {
         const subtopics = Object.keys(parsedData[topic]).sort();
 
         const topicGroup = document.createElement('div');
-        // Check if mobile (<= 768px)
         const isMobile = window.innerWidth <= 768;
         topicGroup.className = isMobile ? 'topic-group' : 'topic-group expanded';
 
-        // Topic Header
         const header = document.createElement('div');
         header.className = 'topic-header';
 
@@ -137,7 +416,6 @@ function renderFilters() {
 
         topicGroup.appendChild(header);
 
-        // Subtopics List
         const list = document.createElement('div');
         list.className = 'subtopics-list';
 
@@ -158,13 +436,12 @@ function renderFilters() {
             item.appendChild(label);
             list.appendChild(item);
 
-            // Event Listener for Subtopic
             subCheckbox.addEventListener('change', (e) => {
                 const key = `${topic}|${subtopic}`;
                 if (e.target.checked) {
-                    selectedSubtopics.add(key);
+                    selectedLeaves.add(key);
                 } else {
-                    selectedSubtopics.delete(key);
+                    selectedLeaves.delete(key);
                 }
                 updateTopicCheckboxState(topicGroup, topicCheckbox);
                 updateOutputs();
@@ -174,7 +451,6 @@ function renderFilters() {
         topicGroup.appendChild(list);
         filtersContainer.appendChild(topicGroup);
 
-        // Event Listener for Topic Checkbox (Select All)
         topicCheckbox.addEventListener('change', (e) => {
             const isChecked = e.target.checked;
             const subCheckboxes = list.querySelectorAll('input[type="checkbox"]');
@@ -184,31 +460,80 @@ function renderFilters() {
                 const subtopic = cb.dataset.subtopic;
                 const key = `${topic}|${subtopic}`;
                 if (isChecked) {
-                    selectedSubtopics.add(key);
+                    selectedLeaves.add(key);
                 } else {
-                    selectedSubtopics.delete(key);
+                    selectedLeaves.delete(key);
                 }
             });
             updateOutputs();
         });
 
-        // Event Listener for Toggle
         toggleIcon.addEventListener('click', (e) => {
             e.stopPropagation();
             topicGroup.classList.toggle('expanded');
         });
 
-        // Allow clicking header to toggle expand as well, but not when clicking checkbox
         header.addEventListener('click', (e) => {
             if (e.target !== topicCheckbox && e.target !== checkboxContainer) {
                 topicGroup.classList.toggle('expanded');
             }
         });
     });
+}
 
-    // Re-apply search if exists
-    if (searchInput.value.trim() !== '') {
-        searchInput.dispatchEvent(new Event('input'));
+function sectionSort(organ, sectionA, sectionB) {
+    const orderA = minOrder(parsedData[organ][sectionA]);
+    const orderB = minOrder(parsedData[organ][sectionB]);
+    if (orderA !== orderB) return orderA - orderB;
+    return sortNumericAware(sectionA, sectionB);
+}
+
+function organSort(organA, organB) {
+    const orderA = minOrderOrgan(parsedData[organA]);
+    const orderB = minOrderOrgan(parsedData[organB]);
+    if (orderA !== orderB) return orderA - orderB;
+    return sortNumericAware(organA, organB);
+}
+
+function videoSort([videoA, dataA], [videoB, dataB]) {
+    const orderA = Number.isFinite(dataA.order) ? dataA.order : MAX_ORDER;
+    const orderB = Number.isFinite(dataB.order) ? dataB.order : MAX_ORDER;
+    if (orderA !== orderB) return orderA - orderB;
+    return sortNumericAware(videoA, videoB);
+}
+
+function minOrder(sectionObj) {
+    const orders = Object.values(sectionObj)
+        .map(entry => entry.order)
+        .filter(num => Number.isFinite(num));
+    return orders.length ? Math.min(...orders) : MAX_ORDER;
+}
+
+function minOrderOrgan(organObj) {
+    const orders = [];
+    Object.values(organObj).forEach(sectionObj => {
+        Object.values(sectionObj).forEach(videoObj => {
+            if (Number.isFinite(videoObj.order)) orders.push(videoObj.order);
+        });
+    });
+    return orders.length ? Math.min(...orders) : MAX_ORDER;
+}
+
+function updateSectionCheckboxState(sectionItem, sectionCheckbox, organCheckbox) {
+    const videoCheckboxes = Array.from(sectionItem.querySelectorAll('.video-list input[type="checkbox"]'));
+    const allChecked = videoCheckboxes.every(cb => cb.checked);
+    const someChecked = videoCheckboxes.some(cb => cb.checked);
+
+    sectionCheckbox.checked = allChecked;
+    sectionCheckbox.indeterminate = !allChecked && someChecked;
+
+    const organGroup = sectionItem.closest('.organ-group');
+    if (organGroup) {
+        const sectionCheckboxes = Array.from(organGroup.querySelectorAll('.section-header input[type="checkbox"]'));
+        const organAll = sectionCheckboxes.every(cb => cb.checked);
+        const organSome = sectionCheckboxes.some(cb => cb.checked || cb.indeterminate);
+        organCheckbox.checked = organAll;
+        organCheckbox.indeterminate = !organAll && organSome;
     }
 }
 
@@ -217,60 +542,76 @@ function updateTopicCheckboxState(group, topicCheckbox) {
     const allChecked = subCheckboxes.every(cb => cb.checked);
     const someChecked = subCheckboxes.some(cb => cb.checked);
 
-    if (allChecked) {
-        topicCheckbox.checked = true;
-        topicCheckbox.indeterminate = false;
-    } else if (someChecked) {
-        topicCheckbox.checked = false;
-        topicCheckbox.indeterminate = true;
-    } else {
-        topicCheckbox.checked = false;
-        topicCheckbox.indeterminate = false;
-    }
+    topicCheckbox.checked = allChecked;
+    topicCheckbox.indeterminate = !allChecked && someChecked;
 }
 
 function updateOutputs() {
     let allUworld = [];
     let allComlex = [];
 
-    selectedSubtopics.forEach(key => {
-        const [topic, subtopic] = key.split('|');
-        if (parsedData[topic] && parsedData[topic][subtopic]) {
-            allUworld = allUworld.concat(parsedData[topic][subtopic].uworld);
-            allComlex = allComlex.concat(parsedData[topic][subtopic].comlex);
+    selectedLeaves.forEach(key => {
+        const parts = key.split('|');
+
+        if (hierarchyDepth === 3 && parts.length >= 3) {
+            const [organ, section, video] = parts;
+            const leaf = parsedData[organ]?.[section]?.[video];
+            if (leaf) {
+                allUworld = allUworld.concat(leaf.uworld);
+                allComlex = allComlex.concat(leaf.comlex);
+            }
+        } else if (hierarchyDepth === 2 && parts.length >= 2) {
+            const [topic, subtopic] = parts;
+            const leaf = parsedData[topic]?.[subtopic];
+            if (leaf) {
+                allUworld = allUworld.concat(leaf.uworld);
+                allComlex = allComlex.concat(leaf.comlex);
+            }
         }
     });
 
-    // Deduplicate and Sort
-    const uniqueUworld = [...new Set(allUworld)].sort((a, b) => parseInt(a) - parseInt(b));
-    const uniqueComlex = [...new Set(allComlex)].sort((a, b) => parseInt(a) - parseInt(b));
+    const uniqueUworld = [...new Set(allUworld)].sort(sortNumericAware);
+    const uniqueComlex = [...new Set(allComlex)].sort(sortNumericAware);
 
-    // Render
-    renderOutput(uworldOutput, uniqueUworld);
-    renderOutput(comlexOutput, uniqueComlex);
+    renderOutput(uworldOutput, uworldText, uworldCount, uniqueUworld, 40, uworldWarning);
+    renderOutput(comlexOutput, comlexText, comlexCount, uniqueComlex);
 }
 
-function renderOutput(element, ids) {
+function renderOutput(boxEl, textEl, countEl, ids, warnThreshold = null, warningEl = null) {
+    if (!textEl) return;
     if (ids.length === 0) {
-        element.innerHTML = '<span class="placeholder">Select topics to view IDs</span>';
+        textEl.innerHTML = '<span class="placeholder">Select topics to view IDs</span>';
     } else {
-        element.textContent = ids.join(', ');
+        textEl.textContent = ids.join(', ');
+    }
+
+    if (countEl) {
+        const max = warnThreshold || ids.length;
+        countEl.textContent = warnThreshold ? `${ids.length}/${warnThreshold}` : `${ids.length}`;
+    }
+
+    if (warningEl && warnThreshold !== null) {
+        if (ids.length > warnThreshold) {
+            warningEl.textContent = 'UWorlds allows up to 40 questions per block. Please unselect videos until this warning box goes away.';
+            warningEl.classList.add('visible');
+        } else {
+            warningEl.textContent = '';
+            warningEl.classList.remove('visible');
+        }
     }
 }
 
-// Copy to Clipboard Functionality
 function copyToClipboard(elementId, button) {
     const element = document.getElementById(elementId);
-    const text = element.textContent;
+    const textEl = element ? element.querySelector('.id-text') : null;
+    const text = textEl ? textEl.textContent : '';
 
-    // Check if there is content to copy
     if (text.includes('Select topics to view IDs') || text.trim() === '') {
         alert('No IDs to copy!');
         return;
     }
 
     navigator.clipboard.writeText(text).then(() => {
-        // Visual feedback
         const originalText = button.textContent;
         button.textContent = 'Copied!';
         button.style.backgroundColor = '#e8f5e9';
@@ -289,10 +630,9 @@ function copyToClipboard(elementId, button) {
     });
 }
 
-// Initialize
 async function init() {
     try {
-        const response = await fetch('topic2qid.csv');
+        const response = await fetch(CSV_PATH);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const csvText = await response.text();
         parsedData = parseCSV(csvText);
@@ -302,6 +642,13 @@ async function init() {
         if (filtersContainer) {
             filtersContainer.innerHTML = '<div class="error">Error loading data. Please try refreshing the page.</div>';
         }
+    }
+
+    if (sidebarToggle && container && sidebar) {
+        sidebarToggle.addEventListener('click', () => {
+            container.classList.toggle('sidebar-collapsed');
+            sidebarToggle.textContent = container.classList.contains('sidebar-collapsed') ? 'Show filters' : 'Hide filters';
+        });
     }
 }
 
