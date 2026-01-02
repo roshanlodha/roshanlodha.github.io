@@ -25,9 +25,6 @@ const uworldCount = document.getElementById('uworld-count');
 const comlexCount = document.getElementById('comlex-count');
 const searchInput = document.getElementById('search-input');
 const uworldWarning = document.getElementById('uworld-warning');
-const container = document.querySelector('.container');
-const sidebar = document.querySelector('.sidebar');
-const sidebarToggle = document.getElementById('sidebar-toggle');
 
 const MAX_ORDER = Number.MAX_SAFE_INTEGER;
 
@@ -223,12 +220,11 @@ function renderFilters() {
 }
 
 function renderThreeLevel() {
-    const isMobile = window.innerWidth <= 768;
     const organs = Object.keys(parsedData).sort((a, b) => organSort(a, b));
 
     organs.forEach(organ => {
         const organGroup = document.createElement('div');
-        organGroup.className = isMobile ? 'topic-group organ-group' : 'topic-group organ-group expanded';
+        organGroup.className = 'topic-group organ-group';
         organGroup.dataset.label = organ;
 
         const header = document.createElement('div');
@@ -257,7 +253,7 @@ function renderThreeLevel() {
         const sections = Object.keys(parsedData[organ]).sort((a, b) => sectionSort(organ, a, b));
         sections.forEach(section => {
             const sectionItem = document.createElement('div');
-            sectionItem.className = isMobile ? 'section-item' : 'section-item expanded';
+            sectionItem.className = 'section-item';
             sectionItem.dataset.label = section;
 
             const sectionHeader = document.createElement('div');
@@ -392,8 +388,7 @@ function renderTwoLevel() {
         const subtopics = Object.keys(parsedData[topic]).sort();
 
         const topicGroup = document.createElement('div');
-        const isMobile = window.innerWidth <= 768;
-        topicGroup.className = isMobile ? 'topic-group' : 'topic-group expanded';
+        topicGroup.className = 'topic-group';
 
         const header = document.createElement('div');
         header.className = 'topic-header';
@@ -644,12 +639,6 @@ async function init() {
         }
     }
 
-    if (sidebarToggle && container && sidebar) {
-        sidebarToggle.addEventListener('click', () => {
-            container.classList.toggle('sidebar-collapsed');
-            sidebarToggle.textContent = container.classList.contains('sidebar-collapsed') ? 'Show filters' : 'Hide filters';
-        });
-    }
 }
 
 init();
