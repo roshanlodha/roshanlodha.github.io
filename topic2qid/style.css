@@ -122,7 +122,11 @@ body {
     text-align: center;
 }
 
-.topic-group.expanded .toggle-icon {
+.topic-group.expanded > .topic-header .toggle-icon {
+    transform: rotate(90deg);
+}
+
+.section-item.expanded > .section-header .toggle-icon {
     transform: rotate(90deg);
 }
 
