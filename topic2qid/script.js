@@ -28,6 +28,18 @@ const uworldWarning = document.getElementById('uworld-warning');
 
 const MAX_ORDER = Number.MAX_SAFE_INTEGER;
 
+function makeKey(parts) {
+    return JSON.stringify(parts);
+}
+
+function parseKey(key) {
+    try {
+        return JSON.parse(key);
+    } catch (err) {
+        return [];
+    }
+}
+
 function normalizeText(value) {
     return (value || '').replace(/\u00a0/g, ' ').replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
 }
@@ -302,7 +314,7 @@ function renderThreeLevel() {
                 videoList.appendChild(videoItem);
 
                 videoCheckbox.addEventListener('change', (evt) => {
-                    const key = `${organ}|${section}|${video}`;
+                    const key = makeKey([organ, section, video]);
                     if (evt.target.checked) {
                         selectedLeaves.add(key);
                     } else {
@@ -322,7 +334,7 @@ function renderThreeLevel() {
                 videoCheckboxes.forEach(cb => {
                     cb.checked = isChecked;
                     const video = cb.dataset.video;
-                    const key = `${organ}|${section}|${video}`;
+                    const key = makeKey([organ, section, video]);
                     if (isChecked) {
                         selectedLeaves.add(key);
                     } else {
@@ -353,7 +365,7 @@ function renderThreeLevel() {
             const leafCheckboxes = organGroup.querySelectorAll('.video-list input[type="checkbox"]');
             leafCheckboxes.forEach(cb => {
                 cb.checked = isChecked;
-                const key = `${cb.dataset.organ}|${cb.dataset.section}|${cb.dataset.video}`;
+                const key = makeKey([cb.dataset.organ, cb.dataset.section, cb.dataset.video]);
                 if (isChecked) {
                     selectedLeaves.add(key);
                 } else {
@@ -432,7 +444,7 @@ function renderTwoLevel() {
             list.appendChild(item);
 
             subCheckbox.addEventListener('change', (e) => {
-                const key = `${topic}|${subtopic}`;
+                const key = makeKey([topic, subtopic]);
                 if (e.target.checked) {
                     selectedLeaves.add(key);
                 } else {
@@ -453,7 +465,7 @@ function renderTwoLevel() {
             subCheckboxes.forEach(cb => {
                 cb.checked = isChecked;
                 const subtopic = cb.dataset.subtopic;
-                const key = `${topic}|${subtopic}`;
+                const key = makeKey([topic, subtopic]);
                 if (isChecked) {
                     selectedLeaves.add(key);
                 } else {
@@ -546,7 +558,7 @@ function updateOutputs() {
     let allComlex = [];
 
     selectedLeaves.forEach(key => {
-        const parts = key.split('|');
+        const parts = parseKey(key);
 
         if (hierarchyDepth === 3 && parts.length >= 3) {
             const [organ, section, video] = parts;
