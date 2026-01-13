@@ -7,7 +7,6 @@ const ROTATION_TO_ORDER = {
 };
 const ROTATION_ORDERS = Object.values(ROTATION_TO_ORDER);
 const DEFAULT_BEANS = 24;
-const FORCE_DROP_IDENTIFIERS = true;
 const FORCE_SHUFFLE = true;
 let currentPerformance = [];
 
@@ -47,11 +46,10 @@ async function handleSubmit(event) {
     return;
   }
   const beans = DEFAULT_BEANS;
-  setStatus("Parsing CSV (dropping identifiers, shuffling cohort)...");
+  setStatus("Parsing CSV (shuffling cohort)...");
   try {
     const { rows, fields } = await parseCsv(file);
     const preferences = normalizePreferences(rows, fields, {
-      dropIdentifiers: FORCE_DROP_IDENTIFIERS,
       shuffle: FORCE_SHUFFLE,
     });
     if (!preferences.length) {
@@ -83,28 +81,30 @@ function parseCsv(file) {
 }
 
 function normalizePreferences(rows, fields, options) {
-  const dropIndices = options.dropIdentifiers ? new Set([1, 2]) : new Set();
-  const effectiveFields = fields.filter((_, idx) => !dropIndices.has(idx));
-  const requiredColumns = 1 + ROTATION_ORDERS.length;
-  if (effectiveFields.length < requiredColumns) {
-    throw new Error("Preference file is missing rotation columns.");
-  }
-  const usedFields = effectiveFields.slice(0, requiredColumns);
+  // 3rd column (index 2) is CaseID
+  // Last 4 columns are Bean counts
+  const idIndex = 2;
+  const beanIndices = [fields.length - 4, fields.length - 3, fields.length - 2, fields.length - 1];
+  
   const cleaned = rows
     .map((row, idx) => {
-      const ordered = usedFields.map((field) => row[field]);
-      const hasValues = ordered.some((value) => value !== undefined && `${value}`.trim() !== "");
-      if (!hasValues) {
-        return null;
-      }
-      const studentId = ordered[0] && `${ordered[0]}`.trim() !== "" ? `${ordered[0]}`.trim() : `student_${idx + 1}`;
-      const beans = ordered.slice(1).map((value) => {
-        const num = Number(value);
+      const studentId = fields[idIndex] && row[fields[idIndex]] && `${row[fields[idIndex]]}`.trim() !== "" 
+        ? `${row[fields[idIndex]]}`.trim() 
+        : `student_${idx + 1}`;
+      
+      const beans = beanIndices.map((i) => {
+        const val = fields[i] ? row[fields[i]] : 0;
+        const num = Number(val);
         return Number.isFinite(num) ? num : 0;
       });
+
+      // Simple validation: check if at least one bean is non-zero
+      if (beans.every(b => b === 0)) return null;
+
       return { studentId, beans };
     })
     .filter(Boolean);
+
   if (options.shuffle) {
     shuffleInPlace(cleaned);
   }

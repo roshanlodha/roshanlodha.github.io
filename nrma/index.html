@@ -1,80 +1,70 @@
 <!doctype html>
 <html lang="en">
-
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NRMA</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-
-<body>
-  <header>
-    <div class="container">
-      <h1>NRMA Static Allocator (CCLCM Internal Use)</h1>
-      <p>Upload the preference CSV and run the bean-based optimizer directly in your browser.</p>
-    </div>
-  </header>
-  <main class="container">
-    <section class="card">
-      <h2>Upload preferences</h2>
-      <form id="preference-form">
-        <label class="file-input">
-          <span>Preference CSV</span>
-          <input type="file" id="file-input" accept=".csv" required />
-        </label>
-        <p class="muted">
-          Runs with <strong>24 beans per student</strong>, shuffles the cohort, and automatically drops identifier
-          columns 2 &amp; 3.
-        </p>
-        <button type="submit">Generate assignments</button>
-        <div id="status" role="status"></div>
-      </form>
-    </section>
-    <section id="summary-card" class="card hidden">
-      <h2>Summary</h2>
-      <div class="stats-grid">
-        <div class="stat">
-          <span>Total Error</span>
-          <strong id="total-error">--</strong>
-        </div>
-        <div class="stat">
-          <span>Normalized Error (δ)</span>
-          <strong id="avg-error">--</strong>
-        </div>
-        <div class="stat">
-          <span>Top 2 Hit Rate</span>
-          <strong id="top-two">--</strong>
-        </div>
-        <div class="stat">
-          <span>First Choice</span>
-          <strong id="first-choice">--</strong>
-        </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NRMA Clerkship Matching</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>Non-random Rotation Matching Algorithm</h1>
       </div>
-    </section>
-    <section id="results-card" class="card hidden">
-      <div class="card-header">
-        <h2>Assignment preview</h2>
-        <button type="button" id="download-btn">Download CSV</button>
-      </div>
-      <div class="table-wrapper">
-        <table id="results-table">
-          <thead></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
-  </main>
-  <footer>
-    <p class="muted" style="font-size: 0.9rem; margin-top: 0.5rem;">
-      This is a JavaScript conversion of the original algorithm implemented in Python.
-      <a href="https://github.com/roshanlodha/NRMA" target="_blank"
-        style="color: inherit; text-decoration: underline;">View original on GitHub</a>.
-    </p>
-  </footer>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/munkres-js@1.2.2/munkres.min.js"></script>
-  <script src="nrma.js"></script>
-</body>
+    </header>
+    <main class="container">
+      <div class="two-column">
+        <section class="explanation">
+          <h2>How it works</h2>
+          <p>
+            The Non-random Rotation Matching Algorithm (NRMA) is designed to give you more control over your clerkship schedule. Instead of a random lottery, we use an optimization algorithm to match students based on their expressed preferences.
+          </p>
+          
+          <h3>The "Bean" System</h3>
+          <p>
+            You are given <strong>24 beans</strong> to distribute across the available rotation orders.
+          </p>
+          <ul>
+            <li><strong>Express Strength:</strong> Assign more beans to the options you prefer most.</li>
+            <li><strong>Flexibility:</strong> You can put all 24 beans on one option, or distribute them (e.g., 12, 6, 3, 3) if you are flexible.</li>
+            <li><strong>Optimal Outcome:</strong> The algorithm finds the assignment that maximizes the total "bean value" across the entire class, ensuring the fairest possible distribution.</li>
+          </ul>
 
+          <h3>The Rotations</h3>
+          <p>There are four rotation orders available. You will be assigned to one of these based on your preferences:</p>
+          <ul class="rotation-list">
+            <li><strong>Option 1:</strong> LAB &rarr; TBC2 &rarr; TBC3 &rarr; TBC1</li>
+            <li><strong>Option 2:</strong> TBC2 &rarr; LAB &rarr; TBC1 &rarr; TBC3</li>
+            <li><strong>Option 3:</strong> TBC3 &rarr; TBC1 &rarr; LAB &rarr; TBC2</li>
+            <li><strong>Option 4:</strong> TBC1 &rarr; TBC3 &rarr; TBC2 &rarr; LAB</li>
+          </ul>
+
+          <h3>Instructions</h3>
+          <ol>
+            <li>Review the rotation options listed in the form.</li>
+            <li>Allocate your 24 beans among the options.</li>
+            <li>Ensure your total adds up to <strong>exactly 24</strong>.</li>
+            <li>Submit the form before the deadline.</li>
+          </ol>
+        </section>
+
+        <section class="form-container">
+          <div class="embed-wrapper">
+            <iframe 
+              src="https://docs.google.com/forms/d/e/1FAIpQLSfxTMLq18S-v5kfmjG7feEcKnaDTi7KOl2GQD67wApf7JokqA/viewform?embedded=true" 
+              width="100%" 
+              height="900" 
+              frameborder="0" 
+              marginheight="0" 
+              marginwidth="0">
+              Loading…
+            </iframe>
+          </div>
+        </section>
+      </div>
+    </main>
+    <footer>
+      Built by <a href="https://roshanlodha.github.io" target="_blank" rel="noopener">Roshan Lodha</a>. Read the <a href="manuscript.html">manuscript</a>.
+    </footer>
+  </body>
 </html>
