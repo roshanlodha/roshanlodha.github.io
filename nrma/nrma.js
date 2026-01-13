@@ -8,7 +8,11 @@ const ROTATION_TO_ORDER = {
 const ROTATION_ORDERS = Object.values(ROTATION_TO_ORDER);
 const DEFAULT_BEANS = 24;
 const FORCE_SHUFFLE = true;
+const MIN_STUDENTS_PER_ROTATION = 20;
 let currentPerformance = [];
+let currentSourceFields = [];
+let currentCaseIdField = "";
+let currentSourceByCaseId = new Map();
 
 function $(selector) {
   return document.querySelector(selector);
@@ -27,6 +31,9 @@ function resetOutputs() {
   $("#results-table thead").innerHTML = "";
   $("#results-table tbody").innerHTML = "";
   currentPerformance = [];
+  currentSourceFields = [];
+  currentCaseIdField = "";
+  currentSourceByCaseId = new Map();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -49,18 +56,24 @@ async function handleSubmit(event) {
   setStatus("Parsing CSV (shuffling cohort)...");
   try {
     const { rows, fields } = await parseCsv(file);
-    const preferences = normalizePreferences(rows, fields, {
+    const { preferences, caseIdField, sourceFields, sourceByCaseId, duplicateCaseIds } = normalizePreferences(rows, fields, {
       shuffle: FORCE_SHUFFLE,
     });
+    currentSourceFields = sourceFields;
+    currentCaseIdField = caseIdField;
+    currentSourceByCaseId = sourceByCaseId;
     if (!preferences.length) {
       throw new Error("No valid student rows were found in the CSV.");
     }
-    setStatus("Running optimizer...");
-    const { performance, summary } = assignRotations(preferences, beans);
+    const duplicateWarning = duplicateCaseIds.length
+      ? ` (warning: ${duplicateCaseIds.length} duplicate ${caseIdField} values; download uses the first match)`
+      : "";
+    setStatus(`Running optimizer...${duplicateWarning}`);
+    const { performance, summary } = assignRotations(preferences, beans, { caseIdField });
     currentPerformance = performance;
     renderSummary(summary);
-    renderTable(performance);
-    setStatus(`Generated assignments for ${performance.length} students.`);
+    renderTable(performance, { caseIdField });
+    setStatus(`Generated assignments for ${performance.length} students.${duplicateWarning}`);
   } catch (error) {
     console.error(error);
     setStatus(error.message || "Unable to process this file.", true);
@@ -80,17 +93,46 @@ function parseCsv(file) {
   });
 }
 
+function getCaseId(row, caseIdField, fallbackId) {
+  const raw = caseIdField ? row?.[caseIdField] : undefined;
+  const trimmed = raw === null || raw === undefined ? "" : String(raw).trim();
+  return trimmed !== "" ? trimmed : fallbackId;
+}
+
+function normalizeCaseIdKey(value) {
+  return String(value ?? "").trim().toLowerCase();
+}
+
 function normalizePreferences(rows, fields, options) {
   // 3rd column (index 2) is CaseID
   // Last 4 columns are Bean counts
   const idIndex = 2;
+  const caseIdField = fields[idIndex];
+  if (!caseIdField) {
+    throw new Error("Unable to find CaseID column (expected 3rd column).");
+  }
   const beanIndices = [fields.length - 4, fields.length - 3, fields.length - 2, fields.length - 1];
-  
+
+  const sourceFields = fields.slice();
+  const sourceByCaseId = new Map();
+  const duplicateCaseIds = [];
+  rows.forEach((row, idx) => {
+    const caseId = getCaseId(row, caseIdField, `student_${idx + 1}`);
+    const caseIdKey = normalizeCaseIdKey(caseId);
+    const normalizedRow = { ...(row || {}) };
+    if (String(normalizedRow[caseIdField] ?? "").trim() === "") {
+      normalizedRow[caseIdField] = caseId;
+    }
+    if (sourceByCaseId.has(caseIdKey)) {
+      duplicateCaseIds.push(caseId);
+      return;
+    }
+    sourceByCaseId.set(caseIdKey, normalizedRow);
+  });
+
   const cleaned = rows
     .map((row, idx) => {
-      const studentId = fields[idIndex] && row[fields[idIndex]] && `${row[fields[idIndex]]}`.trim() !== "" 
-        ? `${row[fields[idIndex]]}`.trim() 
-        : `student_${idx + 1}`;
+      const caseId = getCaseId(row, caseIdField, `student_${idx + 1}`);
       
       const beans = beanIndices.map((i) => {
         const val = fields[i] ? row[fields[i]] : 0;
@@ -99,16 +141,16 @@ function normalizePreferences(rows, fields, options) {
       });
 
       // Simple validation: check if at least one bean is non-zero
-      if (beans.every(b => b === 0)) return null;
+      if (beans.every((b) => b === 0)) return null;
 
-      return { studentId, beans };
+      return { caseId, beans };
     })
     .filter(Boolean);
 
   if (options.shuffle) {
     shuffleInPlace(cleaned);
   }
-  return cleaned;
+  return { preferences: cleaned, caseIdField, sourceFields, sourceByCaseId, duplicateCaseIds };
 }
 
 function shuffleInPlace(arr) {
@@ -118,7 +160,7 @@ function shuffleInPlace(arr) {
   }
 }
 
-function assignRotations(preferences, nBeans) {
+function assignRotations(preferences, nBeans, { caseIdField }) {
   if (typeof Munkres === "undefined") {
     throw new Error("Munkres library failed to load. Please refresh and try again.");
   }
@@ -136,7 +178,7 @@ function assignRotations(preferences, nBeans) {
   const trimmedRotations = phantom ? rotations.slice(0, rotations.length - phantom) : rotations;
   const performance = trimmedRotations.map((rotation, idx) => {
     const pref = preferences[idx];
-    const baseRow = { studentID: pref.studentId };
+    const baseRow = { [caseIdField]: pref.caseId };
     ROTATION_ORDERS.forEach((orderName, orderIdx) => {
       baseRow[orderName] = pref.beans[orderIdx] ?? 0;
     });
@@ -168,13 +210,22 @@ function buildCostMatrix(preferences, nBeans) {
     const rowSum = normalized.reduce((sum, val) => sum + val, 0);
     return normalized.map((val) => rowSum - val);
   });
+
+  const nStudents = matrix.length;
+  const slotsPerRotation = Math.max(
+    Math.ceil(nStudents / ROTATION_LABELS.length),
+    MIN_STUDENTS_PER_ROTATION,
+  );
+  const totalSlots = slotsPerRotation * ROTATION_LABELS.length;
+
   const padded = matrix.map((row) => row.slice());
   let phantom = 0;
-  while (padded.length % ROTATION_LABELS.length !== 0) {
+  while (padded.length < totalSlots) {
     padded.push(new Array(ROTATION_LABELS.length).fill(nBeans));
     phantom += 1;
   }
-  const repeatFactor = padded.length / ROTATION_LABELS.length;
+
+  const repeatFactor = slotsPerRotation;
   const tiled = padded.map((row) => {
     const expanded = [];
     for (let i = 0; i < repeatFactor; i += 1) {
@@ -240,12 +291,12 @@ function renderSummary(summary) {
   $("#first-choice").textContent = `${(summary.pctFirstChoice * 100).toFixed(1)}%`;
 }
 
-function renderTable(performance) {
+function renderTable(performance, { caseIdField }) {
   if (!performance.length) {
     return;
   }
   $("#results-card").classList.remove("hidden");
-  const headers = ["studentID", ...ROTATION_ORDERS, "optimal_rotation", "rotation_order"];
+  const headers = [caseIdField, ...ROTATION_ORDERS, "optimal_rotation", "rotation_order"];
   const thead = $("#results-table thead");
   const tbody = $("#results-table tbody");
   thead.innerHTML = `<tr>${headers.map((header) => `<th>${header}</th>`).join("")}</tr>`;
@@ -272,9 +323,47 @@ function handleDownload() {
     setStatus("Run the optimizer before downloading.", true);
     return;
   }
-  const headers = ["studentID", ...ROTATION_ORDERS, "optimal_rotation", "rotation_order"];
-  const rows = currentPerformance.map((row) => headers.map((key) => toCsvValue(row[key])).join(","));
-  const csvContent = [headers.join(","), ...rows].join("\n");
+  if (!currentCaseIdField || !currentSourceFields.length || !currentSourceByCaseId.size) {
+    setStatus("Missing source table for join; re-run the optimizer with a CSV file.", true);
+    return;
+  }
+
+  const computedHeaders = [currentCaseIdField, ...ROTATION_ORDERS, "optimal_rotation", "rotation_order"];
+  const outputHeaders = [...currentSourceFields];
+
+  // Append computed columns that do not already exist in the original table.
+  computedHeaders.forEach((key) => {
+    if (!outputHeaders.includes(key)) {
+      outputHeaders.push(key);
+    }
+  });
+
+  let missingJoinCount = 0;
+  const joinedRows = currentPerformance.map((perfRow) => {
+    const caseId = getCaseId(perfRow, currentCaseIdField, "");
+    const caseIdKey = normalizeCaseIdKey(caseId);
+    const sourceRow = caseIdKey ? currentSourceByCaseId.get(caseIdKey) : undefined;
+    if (!sourceRow) {
+      missingJoinCount += 1;
+    }
+    const merged = { ...(sourceRow || {}) };
+    merged[currentCaseIdField] = caseId;
+    computedHeaders.forEach((key) => {
+      if (key === currentCaseIdField) return;
+      if (key in merged) {
+        merged[`nrma_${key}`] = perfRow[key];
+        if (!outputHeaders.includes(`nrma_${key}`)) {
+          outputHeaders.push(`nrma_${key}`);
+        }
+      } else {
+        merged[key] = perfRow[key];
+      }
+    });
+    return merged;
+  });
+
+  const rows = joinedRows.map((row) => outputHeaders.map((key) => toCsvValue(row[key])).join(","));
+  const csvContent = [outputHeaders.join(","), ...rows].join("\n");
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
@@ -284,6 +373,9 @@ function handleDownload() {
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+
+  const warning = missingJoinCount ? ` (${missingJoinCount} rows missing source join)` : "";
+  setStatus(`Downloaded assignment.csv${warning}.`);
 }
 
 function toCsvValue(value) {
