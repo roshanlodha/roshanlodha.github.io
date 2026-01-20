@@ -453,9 +453,9 @@ const sketchyData = [
 
 const practiceExamCatalog = [
   { id: "nbme25", label: "NBME 25", mandatory: false, defaultChecked: false, kind: "nbme", order: 25, group: "practice" },
-  { id: "uwsa1", label: "UWSA 1", mandatory: false, defaultChecked: false, kind: "uwsa", order: 1, group: "practice" },
-  { id: "uwsa2", label: "UWSA 2", mandatory: false, defaultChecked: false, kind: "uwsa", order: 2, group: "practice" },
-  { id: "uwsa3", label: "UWSA 3", mandatory: false, defaultChecked: false, kind: "uwsa", order: 3, group: "practice" },
+  { id: "uwsa1", label: "UWSA 1", mandatory: false, defaultChecked: true, kind: "uwsa", order: 1, group: "practice" },
+  { id: "uwsa2", label: "UWSA 2", mandatory: false, defaultChecked: true, kind: "uwsa", order: 2, group: "practice" },
+  { id: "uwsa3", label: "UWSA 3", mandatory: false, defaultChecked: true, kind: "uwsa", order: 3, group: "practice" },
   { id: "nbme26", label: "NBME 26", mandatory: true, defaultChecked: true, kind: "nbme", order: 26, group: "testing" },
   { id: "nbme27", label: "NBME 27", mandatory: true, defaultChecked: true, kind: "nbme", order: 27, group: "testing" },
   { id: "nbme28", label: "NBME 28", mandatory: true, defaultChecked: true, kind: "nbme", order: 28, group: "testing" },
@@ -471,8 +471,6 @@ const els = {
   generateBtn: document.getElementById("generateBtn"),
   errorBox: document.getElementById("errorBox"),
   overview: document.getElementById("overviewStats"),
-  feasibilityChip: document.getElementById("feasibilityChip"),
-  quickFill: document.getElementById("quickFill"),
   breakBoxes: Array.from(document.querySelectorAll('.break-grid input[type="checkbox"][data-dow]')),
   weeklyCalendar: document.getElementById("weeklyCalendar"),
   calPrev: document.getElementById("calPrev"),
@@ -484,6 +482,10 @@ const els = {
   practiceGroup: document.getElementById("practiceGroup"),
   testingGroup: document.getElementById("testingGroup"),
   dayDetail: document.getElementById("dayDetail"),
+  dayPrev: document.getElementById("dayPrev"),
+  dayNext: document.getElementById("dayNext"),
+  dayLabel: document.getElementById("dayLabel"),
+  dayNav: document.getElementById("dayNav"),
   pathomaToggle: null,
   bnbToggle: null,
   sketchyToggle: null,
@@ -635,6 +637,7 @@ function resetError(msg = "") {
 }
 
 function setFeasibility(status, tone) {
+  if (!els.feasibilityChip) return;
   els.feasibilityChip.textContent = status;
   els.feasibilityChip.style.color = tone === "bad" ? "#ffd7d7" : "#c8ffe0";
   els.feasibilityChip.style.borderColor = tone === "bad" ? "#ff6b6b" : "#58d68d";
@@ -660,6 +663,45 @@ function buildChipTooltip(task) {
 
 function hasExam(day) {
   return day.tasks.some(t => t.type === "exam");
+}
+
+function getSortedDayKeys(dayMap) {
+  return Array.from(dayMap.keys()).sort((a, b) => new Date(a) - new Date(b));
+}
+
+function renderDayNav(dayMap) {
+  if (!els.dayNav || !els.dayLabel || !els.dayPrev || !els.dayNext) return;
+  if (!dayMap || dayMap.size === 0) {
+    els.dayLabel.textContent = "Select dates to start";
+    els.dayPrev.disabled = true;
+    els.dayNext.disabled = true;
+    return;
+  }
+
+  const keys = getSortedDayKeys(dayMap);
+  if (!selectedDayKey || !dayMap.has(selectedDayKey)) {
+    selectedDayKey = keys[0];
+  }
+  const idx = keys.indexOf(selectedDayKey);
+  const day = dayMap.get(selectedDayKey);
+  els.dayLabel.textContent = day ? formatDateLabel(day.date) : "";
+  els.dayPrev.disabled = idx <= 0;
+  els.dayNext.disabled = idx === -1 || idx >= keys.length - 1;
+}
+
+function moveSelectedDay(dayMap, delta) {
+  if (!dayMap || dayMap.size === 0) return;
+  const keys = getSortedDayKeys(dayMap);
+  if (!selectedDayKey || !dayMap.has(selectedDayKey)) {
+    selectedDayKey = keys[0];
+  }
+  const idx = keys.indexOf(selectedDayKey);
+  const nextIdx = idx + delta;
+  if (nextIdx < 0 || nextIdx >= keys.length) return;
+  selectedDayKey = keys[nextIdx];
+  renderDayDetail(dayMap);
+  renderCalendar(dayMap);
+  renderDayNav(dayMap);
 }
 
 function buildDayMap(start, end, breakSet) {
@@ -925,7 +967,6 @@ function renderCalendar(dayMap) {
   parts.push('<div class="calendar-day-grid">');
 
   const todayKey = formatDateKey(new Date());
-  const MAX_CHIPS = 3;
   for (let i = 0; i < 7; i++) {
     const date = addDays(weekStart, i);
     const key = formatDateKey(date);
@@ -940,17 +981,31 @@ function renderCalendar(dayMap) {
     if (day) {
       const tasks = day.tasks || [];
       if (day.isBreak) chips.push('<span class="calendar-chip buffer">Break</span>');
-      for (let j = 0; j < tasks.length && j < MAX_CHIPS; j++) {
-        const t = tasks[j];
-        const type = t.type || "learning";
-        const chipLabel = escapeHtml(t.calendarLabel || t.label);
-        const tooltip = buildChipTooltip(t);
+
+      const groupMap = new Map();
+      for (const t of tasks) {
+        const keyPart = `${t.type || "learning"}|${t.calendarLabel || t.label}`;
+        if (!groupMap.has(keyPart)) {
+          groupMap.set(keyPart, { type: t.type || "learning", label: t.calendarLabel || t.label, entries: [] });
+        }
+        groupMap.get(keyPart).entries.push(t);
+      }
+
+      const grouped = Array.from(groupMap.values());
+      for (const g of grouped) {
+        const tooltipLines = g.entries.map(entry => {
+          const parts = [entry.label];
+          if (entry.detail) parts.push(entry.detail);
+          if (entry.videos && entry.videos.length) parts.push(entry.videos.join(", "));
+          if (entry.durationMinutes) parts.push(minutesToHuman(entry.durationMinutes));
+          return parts.filter(Boolean).join(" — ");
+        });
+        const tooltip = tooltipLines.join("\n");
+        const countSuffix = g.entries.length > 1 ? ` ×${g.entries.length}` : "";
         const titleAttr = tooltip ? ` title="${escapeHtml(tooltip)}"` : "";
-        chips.push(`<span class="calendar-chip ${type}"${titleAttr}>${chipLabel}</span>`);
+        chips.push(`<span class="calendar-chip ${g.type}"${titleAttr}>${escapeHtml(g.label + countSuffix)}</span>`);
       }
-      if (tasks.length > MAX_CHIPS) {
-        chips.push(`<span class="calendar-chip more">+${tasks.length - MAX_CHIPS} more</span>`);
-      }
+
       if (chips.length === 0) chips.push('<span class="calendar-chip more">No tasks</span>');
     } else {
       chips.push('<span class="calendar-chip more">No tasks</span>');
@@ -975,6 +1030,7 @@ function renderCalendar(dayMap) {
       selectedDayKey = key;
       renderDayDetail(dayMap);
       renderCalendar(dayMap);
+      renderDayNav(dayMap);
     });
   });
 }
@@ -1289,26 +1345,11 @@ function generatePlan() {
   calendarWeekStart = calendarWeekStart || startOfWeekSunday(start);
   renderDayDetail(dayMap);
   renderCalendar(dayMap);
-}
-
-function quickFillExample() {
-  const today = new Date();
-  const start = formatDateKey(today);
-  const exam = formatDateKey(addDays(today, 84));
-  els.startDate.value = start;
-  els.examDate.value = exam;
-  renderResourceToggles();
-  els.pathomaToggle.checked = true;
-  els.bnbToggle.checked = false;
-  els.sketchyToggle.checked = false;
-  els.ankiToggle.checked = true;
-  els.uworldToggle.checked = true;
-  generatePlan();
+  renderDayNav(dayMap);
 }
 
 renderResourceToggles();
 els.generateBtn.addEventListener("click", generatePlan);
-els.quickFill.addEventListener("click", quickFillExample);
 if (els.downloadIcs) els.downloadIcs.addEventListener("click", downloadIcsFile);
 if (els.calPrev) els.calPrev.addEventListener("click", () => {
   if (!calendarWeekStart) calendarWeekStart = startOfWeekSunday(new Date());
@@ -1324,6 +1365,8 @@ if (els.calToday) els.calToday.addEventListener("click", () => {
   calendarWeekStart = startOfWeekSunday(new Date());
   renderCalendar(currentPlan?.dayMap);
 });
+if (els.dayPrev) els.dayPrev.addEventListener("click", () => moveSelectedDay(currentPlan?.dayMap, -1));
+if (els.dayNext) els.dayNext.addEventListener("click", () => moveSelectedDay(currentPlan?.dayMap, 1));
 for (const cb of els.breakBoxes) {
   cb.addEventListener("change", () => generatePlan());
 }
@@ -1336,3 +1379,4 @@ if (!els.startDate.value) {
 
 renderDayDetail(new Map());
 renderCalendar(new Map());
+renderDayNav(new Map());

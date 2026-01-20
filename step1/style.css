@@ -272,7 +272,7 @@ body {
 .calendar-dow-grid,
 .calendar-day-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
 
-.calendar-day-grid { grid-auto-rows: 1fr; }
+.calendar-day-grid { grid-auto-rows: minmax(140px, auto); align-items: start; }
 
 .calendar-dow {
   background: #f7f8fb;
@@ -321,6 +321,20 @@ body {
 .calendar-chip.buffer { background: rgba(139,151,170,0.14); border-color: rgba(139,151,170,0.35); color: #2d3646; }
 .calendar-chip.more { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.12); color: var(--muted); }
 
+.day-nav {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.day-nav-label {
+  flex: 1;
+  text-align: center;
+  font-weight: 700;
+  color: var(--text);
+}
+
 .day-detail {
   margin-top: 14px;
   border: 1px solid var(--border);
@@ -357,4 +371,9 @@ body {
   .legend { flex-wrap: wrap; }
   .calendar-controls { width: 100%; }
   .calendar-month { width: 100%; text-align: left; }
+  .calendar { display: none; }
+  .calendar-controls .ghost { display: none; }
+  .day-nav { display: flex; flex-wrap: wrap; }
+  .day-nav .ghost { flex: 0 0 auto; }
+  .day-nav-label { width: 100%; text-align: left; }
 }
