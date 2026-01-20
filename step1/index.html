@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>USMLE Step 1 Study Planner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Systems-Based Scheduler</p>
+        <h1>USMLE Step 1 Planner</h1>
+        <p class="lede">Build a feasible, systems-first plan that pairs Pathoma with UWorld and anchored practice exams.</p>
+      </div>
+      <div class="meta-chip" id="feasibilityChip">Awaiting input</div>
+    </header>
+
+    <section class="card" aria-labelledby="inputs-title">
+      <div class="card-header">
+        <div>
+          <p class="eyebrow">Setup</p>
+          <h2 id="inputs-title">Plan Settings</h2>
+        </div>
+        <button class="ghost" type="button" id="quickFill">Use 10-week example</button>
+      </div>
+      <div class="inputs-grid">
+        <label class="field">
+          <span>Start date</span>
+          <input type="date" id="startDate" />
+        </label>
+        <label class="field">
+          <span>Exam date</span>
+          <input type="date" id="examDate" />
+        </label>
+        <div class="field field-group">
+          <span>Resources</span>
+          <label class="checkbox">
+            <input type="checkbox" id="pathomaToggle" checked />
+            <span>Pathoma (videos)</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" id="uworldToggle" checked />
+            <span>UWorld (4000 Qs)</span>
+          </label>
+        </div>
+        <div class="field field-group">
+          <span>Practice tests</span>
+          <div class="pill-group" id="examToggleGroup"></div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="primary" type="button" id="generateBtn">Generate schedule</button>
+        <div class="hint" id="errorBox" role="status"></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="overview-title">
+      <div class="card-header">
+        <div>
+          <p class="eyebrow">Snapshot</p>
+          <h2 id="overview-title">Feasibility + Allocation</h2>
+        </div>
+      </div>
+      <div class="stats" id="overviewStats"></div>
+    </section>
+
+    <section class="card" aria-labelledby="schedule-title">
+      <div class="card-header">
+        <div>
+          <p class="eyebrow">Calendar</p>
+          <h2 id="schedule-title">Day-by-day plan</h2>
+        </div>
+        <div class="legend" aria-label="Color legend">
+          <span class="legend-dot learning"></span> Learning
+          <span class="legend-dot practice"></span> Practice
+          <span class="legend-dot exam"></span> Mock exam
+          <span class="legend-dot buffer"></span> Buffer/Rest
+        </div>
+      </div>
+      <div id="schedule" class="schedule"></div>
+    </section>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
