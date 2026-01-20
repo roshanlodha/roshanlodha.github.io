@@ -669,9 +669,9 @@ function setFeasibility(status, tone) {
   els.feasibilityChip.style.borderColor = tone === "bad" ? "#ff6b6b" : "#58d68d";
 }
 
-function pickLeastLoadedDay(slots, durationMinutes, bufferStart) {
+function pickLeastLoadedDay(slots, durationMinutes, windowEnd) {
   const candidates = slots
-    .filter(d => d.date < bufferStart && (LIMIT_MINUTES_PER_DAY - d.usedMinutes) >= durationMinutes)
+    .filter(d => d.date < windowEnd && (LIMIT_MINUTES_PER_DAY - d.usedMinutes) >= durationMinutes)
     .sort((a, b) => {
       if (a.usedMinutes !== b.usedMinutes) return a.usedMinutes - b.usedMinutes;
       return a.date - b.date;
@@ -1167,12 +1167,6 @@ function generatePlan() {
     resetError("Exam date must be on or after the start date.");
     return;
   }
-  const bufferStart = addDays(exam, -14);
-  if (bufferStart <= start) {
-    setFeasibility("Not feasible (<14 days)", "bad");
-    resetError("Plan not feasible. Please allow at least 14 days so we can keep a 2-week buffer before test day.");
-    return;
-  }
   const flags = {
     pathoma: els.pathomaToggle?.checked ?? true,
     bnb: els.bnbToggle?.checked ?? false,
@@ -1182,6 +1176,14 @@ function generatePlan() {
     amboss: els.ambossToggle?.checked ?? false
   };
   const examSelections = getExamSelections();
+  const hasPracticeBanks = flags.uworld || flags.amboss;
+  const hasTesting = examSelections.length > 0;
+  const hasLearningResources = flags.pathoma || flags.bnb || flags.sketchy || flags.anki;
+  const isLearningOnly = hasLearningResources && !hasPracticeBanks && !hasTesting;
+
+  const preferredBufferStart = addDays(exam, -14);
+  const practiceWindowEnd = preferredBufferStart > start ? preferredBufferStart : exam;
+  const learningWindowEnd = isLearningOnly ? exam : practiceWindowEnd;
 
   const totalDays = Math.floor((exam - start) / (24 * 60 * 60 * 1000)) + 1;
   const breakSet = getBreakDowSet();
@@ -1191,9 +1193,13 @@ function generatePlan() {
     if (day.isBreak) addTask(day, { type: "buffer", label: "Buffer / Rest (Break Day)", durationMinutes: 0, detail: "Keep this day open for recovery." });
   }
 
+  const breakDaysPreProtect = Array.from(dayMap.values()).filter(d => d.isBreak).length;
+  const studyDayCountPreProtect = totalDays - breakDaysPreProtect;
+
   const dayBeforeExamKey = formatDateKey(addDays(exam, -1));
   const dayBeforeExam = dayMap.get(dayBeforeExamKey);
-  if (dayBeforeExam) {
+  const shouldProtectDayBefore = dayBeforeExam && studyDayCountPreProtect > 1;
+  if (shouldProtectDayBefore) {
     dayBeforeExam.tasks = [];
     dayBeforeExam.usedMinutes = 0;
     dayBeforeExam.isBreak = true;
@@ -1209,19 +1215,20 @@ function generatePlan() {
 
   // Capture exam selections (placement occurs after learning is scheduled)
   const free120Date = addDays(exam, -3);
-  const uwsa2Date = addDays(exam, -7);
+  const uwsa2Date = addDays(exam, -10);
+  const nbme32Date = addDays(exam, -7);
   const selected = [...examSelections];
   const uwsa1Exam = selected.find(e => e.id === "uwsa1");
   const selectedNonUwsa1 = selected.filter(e => e.id !== "uwsa1");
-  const fixedDateExams = selectedNonUwsa1.filter(e => e.id === "free120" || e.id === "uwsa2");
+  const fixedDateExams = selectedNonUwsa1.filter(e => e.id === "free120" || e.id === "uwsa2" || e.id === "nbme32");
   const remainingExams = selectedNonUwsa1.filter(e => !fixedDateExams.includes(e));
 
-  const studySlots = getStudyDays(dayMap).filter(d => d.date < bufferStart);
+  const studySlots = getStudyDays(dayMap).filter(d => d.date < learningWindowEnd);
   const studyWindowDays = studySlots.length + examSelections.length;
 
   if (studySlots.length === 0) {
     setFeasibility("Not feasible (no study days)", "bad");
-    resetError("No available study days before the 2-week buffer. Extend your dates or relax break days.");
+    resetError("No available study days in the selected window. Extend your dates or relax break days.");
     return;
   }
 
@@ -1264,40 +1271,23 @@ function generatePlan() {
 
   const learningDays = [...studySlots]; // already sorted chronologically
 
+  // Sequentially place learning in order; do not rebalance across days
   let dayIdx = 0;
   while (learningQueue.length > 0 && dayIdx < learningDays.length) {
     const day = learningDays[dayIdx];
     let remaining = LIMIT_MINUTES_PER_DAY - day.usedMinutes;
-    let learningMinutes = day.tasks
-      .filter(t => (t.type || "learning") === "learning")
-      .reduce((s, t) => s + (t.durationMinutes || 0), 0);
 
-    // Front-load: ensure at least MIN_LEARNING_MINUTES per day while learning queue remains
-    while (learningQueue.length > 0 && remaining > 0 && learningMinutes < MIN_LEARNING_MINUTES) {
+    while (learningQueue.length > 0) {
       const next = learningQueue[0];
       if (next.durationMinutes <= remaining) {
         addTask(day, next);
         remaining -= next.durationMinutes;
-        learningMinutes += next.durationMinutes;
         learningQueue.shift();
       } else {
-        break; // move to next day if the next item cannot fit
+        break; // move to the next day to keep order intact
       }
     }
-    dayIdx++;
-  }
 
-  // Place any leftover learning sequentially if capacity remains
-  dayIdx = 0;
-  while (learningQueue.length > 0 && dayIdx < learningDays.length) {
-    const day = learningDays[dayIdx];
-    const remaining = LIMIT_MINUTES_PER_DAY - day.usedMinutes;
-    const next = learningQueue[0];
-    if (next.durationMinutes <= remaining) {
-      addTask(day, next);
-      learningQueue.shift();
-      continue;
-    }
     dayIdx++;
   }
 
@@ -1327,12 +1317,12 @@ function generatePlan() {
     let candidates = windowKeys
       .map(k => dayMap.get(k))
       .filter(Boolean)
-      .filter(d => d.date < bufferStart && !d.isBreak && !hasExam(d));
+      .filter(d => d.date < practiceWindowEnd && !d.isBreak && !hasExam(d));
 
     let target = candidates.find(d => d.date.getDay() === 6) || candidates[0];
     if (!target) {
       candidates = Array.from(dayMap.values())
-        .filter(d => d.date < bufferStart && !d.isBreak && !hasExam(d))
+        .filter(d => d.date < practiceWindowEnd && !d.isBreak && !hasExam(d))
         .sort((a, b) => a.date - b.date);
       target = candidates.find(d => d.date >= windowStart) || candidates[0];
     }
@@ -1362,7 +1352,8 @@ function generatePlan() {
 
   for (const exam of fixedDateExams) {
     if (exam.id === "free120") placeExamOnOrAfter(free120Date, "Free 120 – 3 days out");
-    else if (exam.id === "uwsa2") placeExamOnOrAfter(uwsa2Date, "UWSA 2 – 1 week out");
+    else if (exam.id === "uwsa2") placeExamOnOrAfter(uwsa2Date, "UWSA 2 – 10 days out");
+    else if (exam.id === "nbme32") placeExamOnOrAfter(nbme32Date, "NBME 32 – 7 days out");
   }
 
   const candidateDays = buildRange(earliestExamDate, examEndLimit)
@@ -1426,11 +1417,11 @@ function generatePlan() {
       addTask(day, { type: "practice", ...block });
     }
 
-    const practiceSlots = getStudyDays(dayMap).filter(d => d.date < bufferStart);
+    const practiceSlots = getStudyDays(dayMap).filter(d => d.date < practiceWindowEnd);
     while (practiceBlocksRemaining() > 0) {
       const pool = practicePools.find(p => p.blocks > 0);
       if (!pool) break;
-      const targetDay = pickLeastLoadedDay(practiceSlots, pool.duration, bufferStart);
+      const targetDay = pickLeastLoadedDay(practiceSlots, pool.duration, practiceWindowEnd);
       if (!targetDay) {
         setFeasibility("Not feasible (practice overflow)", "bad");
         resetError("Ran out of study days for practice blocks. Extend your dates or deselect a practice bank.");
