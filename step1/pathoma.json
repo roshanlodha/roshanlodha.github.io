@@ -1,0 +1,829 @@
+[
+  {
+    "system": "Fundamentals",
+    "chapters": [
+      {
+        "id": 1,
+        "title": "Growth Adaptations, Cell Injury",
+        "videos": [
+          {
+            "id": "1.1",
+            "title": "Growth Adaptations",
+            "duration": 29
+          },
+          {
+            "id": "1.2",
+            "title": "Cellular Injury",
+            "duration": 45
+          },
+          {
+            "id": "1.3",
+            "title": "Cell Death",
+            "duration": 39
+          },
+          {
+            "id": "1.4",
+            "title": "Free Radical Injury",
+            "duration": 22
+          },
+          {
+            "id": "1.5",
+            "title": "Amyloid",
+            "duration": 20
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Inflammation & Healing",
+        "videos": [
+          {
+            "id": "2.1a",
+            "title": "Acute Inflammation (Part 1)",
+            "duration": 36
+          },
+          {
+            "id": "2.1b",
+            "title": "Acute Inflammation (Part 2)",
+            "duration": 27
+          },
+          {
+            "id": "2.1c",
+            "title": "Acute Inflammation (Part 3)",
+            "duration": 19
+          },
+          {
+            "id": "2.2",
+            "title": "Chronic Inflammation",
+            "duration": 26
+          },
+          {
+            "id": "2.3",
+            "title": "Primary Immunodeficiency",
+            "duration": 17
+          },
+          {
+            "id": "2.4a",
+            "title": "Autoimmune Disorders (Part 1)",
+            "duration": 30
+          },
+          {
+            "id": "2.4b",
+            "title": "Autoimmune Disorders (Part 2)",
+            "duration": 45
+          },
+          {
+            "id": "2.5",
+            "title": "Wound Healing",
+            "duration": 25
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Neoplasia",
+        "videos": [
+          {
+            "id": "3.1",
+            "title": "Neoplasia",
+            "duration": 38
+          },
+          {
+            "id": "3.2a",
+            "title": "Carcinogenesis (Part 1)",
+            "duration": 21
+          },
+          {
+            "id": "3.2b",
+            "title": "Carcinogenesis (Part 2)",
+            "duration": 29
+          },
+          {
+            "id": "3.2c",
+            "title": "Carcinogenesis (Part 3)",
+            "duration": 20
+          },
+          {
+            "id": "3.3",
+            "title": "Tumor Progression",
+            "duration": 9
+          },
+          {
+            "id": "3.4",
+            "title": "Clinical Characteristics",
+            "duration": 21
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "system": "Hematology",
+    "chapters": [
+      {
+        "id": 4,
+        "title": "Hemostasis & Related Disorders",
+        "videos": [
+          {
+            "id": "4.1",
+            "title": "Primary Hemostasis & Related Disorders",
+            "duration": 43
+          },
+          {
+            "id": "4.2",
+            "title": "Secondary Hemostasis and Related Disorders",
+            "duration": 21
+          },
+          {
+            "id": "4.3",
+            "title": "Other Disorders of Hemostasis",
+            "duration": 13
+          },
+          {
+            "id": "4.4",
+            "title": "Thrombosis",
+            "duration": 22
+          },
+          {
+            "id": "4.5",
+            "title": "Embolism",
+            "duration": 12
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Red Blood Cell Disorders",
+        "videos": [
+          {
+            "id": "5.1",
+            "title": "Anemia",
+            "duration": 7
+          },
+          {
+            "id": "5.2a",
+            "title": "Microcytic Anemias (Part 1)",
+            "duration": 28
+          },
+          {
+            "id": "5.2b",
+            "title": "Microcytic Anemias (Part 2)",
+            "duration": 19
+          },
+          {
+            "id": "5.2c",
+            "title": "Microcytic Anemias (Part 3)",
+            "duration": 19
+          },
+          {
+            "id": "5.3",
+            "title": "Macrocytic Anemia",
+            "duration": 22
+          },
+          {
+            "id": "5.4",
+            "title": "Normocytic Anemia",
+            "duration": 15
+          },
+          {
+            "id": "5.5",
+            "title": "Normocytic Anemias w/ Extravascular Hemolysis",
+            "duration": 26
+          },
+          {
+            "id": "5.6",
+            "title": "Normocytic Anemias w/ Intravascular Hemolysis",
+            "duration": 14
+          },
+          {
+            "id": "5.7",
+            "title": "Anemia due to Underproduction",
+            "duration": 13
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "White Blood Cell Disorders",
+        "videos": [
+          {
+            "id": "6.1",
+            "title": "Leukopenia & Leukocytosis",
+            "duration": 21
+          },
+          {
+            "id": "6.2",
+            "title": "Acute Leukemia",
+            "duration": 19
+          },
+          {
+            "id": "6.3",
+            "title": "Chronic Leukemia",
+            "duration": 11
+          },
+          {
+            "id": "6.4",
+            "title": "Myeloproliferative Disorders",
+            "duration": 22
+          },
+          {
+            "id": "6.5",
+            "title": "Lymphadenopathy",
+            "duration": 11
+          },
+          {
+            "id": "6.6",
+            "title": "Lymphoma",
+            "duration": 10
+          },
+          {
+            "id": "6.7",
+            "title": "Hodgkin Lymphoma",
+            "duration": 10
+          },
+          {
+            "id": "6.8",
+            "title": "Plasma Cell Disorders (Dyscrasias)",
+            "duration": 8
+          },
+          {
+            "id": "6.9",
+            "title": "Langerhans Cell Histiocytosis",
+            "duration": 7
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "system": "Cardiovascular",
+    "chapters": [
+      {
+        "id": 7,
+        "title": "Vascular Pathology",
+        "videos": [
+          {
+            "id": "7.1",
+            "title": "Vasculitis",
+            "duration": 27
+          },
+          {
+            "id": "7.2",
+            "title": "Hypertension",
+            "duration": 7
+          },
+          {
+            "id": "7.3",
+            "title": "Arteriosclerosis",
+            "duration": 18
+          },
+          {
+            "id": "7.4",
+            "title": "Aortic Dissection and Aneurysm",
+            "duration": 13
+          },
+          {
+            "id": "7.5",
+            "title": "Vascular Tumors",
+            "duration": 5
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Cardiac Pathology",
+        "videos": [
+          {
+            "id": "8.1",
+            "title": "Ischemic Heart Disease",
+            "duration": 30
+          },
+          {
+            "id": "8.2",
+            "title": "Congestive Heart Failure",
+            "duration": 6
+          },
+          {
+            "id": "8.3",
+            "title": "Congenital Defects",
+            "duration": 17
+          },
+          {
+            "id": "8.4",
+            "title": "Valvular Disorders",
+            "duration": 25
+          },
+          {
+            "id": "8.5",
+            "title": "Endocarditis",
+            "duration": 7
+          },
+          {
+            "id": "8.6",
+            "title": "Cardiomyopathy",
+            "duration": 4
+          },
+          {
+            "id": "8.7",
+            "title": "Cardiac Tumors",
+            "duration": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "system": "Respiratory",
+    "chapters": [
+      {
+        "id": 9,
+        "title": "Respiratory Tract Pathology",
+        "videos": [
+          {
+            "id": "9.1",
+            "title": "Nasopharynx",
+            "duration": 4
+          },
+          {
+            "id": "9.2",
+            "title": "Larynx",
+            "duration": 4
+          },
+          {
+            "id": "9.3",
+            "title": "Pulmonary Infections",
+            "duration": 20
+          },
+          {
+            "id": "9.4",
+            "title": "COPD",
+            "duration": 50
+          },
+          {
+            "id": "9.5",
+            "title": "Restrictive Diseases",
+            "duration": 22
+          },
+          {
+            "id": "9.6",
+            "title": "Pulmonary Hypertension",
+            "duration": 8
+          },
+          {
+            "id": "9.7",
+            "title": "Respiratory Distress Syndromes",
+            "duration": 7
+          },
+          {
+            "id": "9.8",
+            "title": "Lung Cancer",
+            "duration": 18
+          },
+          {
+            "id": "9.9",
+            "title": "Pleura",
+            "duration": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "system": "Renal",
+    "chapters": [
+      {
+        "id": 12,
+        "title": "Kidney & Urinary Tract Pathology",
+        "videos": [
+          {
+            "id": "12.1",
+            "title": "Congenital",
+            "duration": 12
+          },
+          {
+            "id": "12.2",
+            "title": "Acute Renal Failure",
+            "duration": 15
+          },
+          {
+            "id": "12.3",
+            "title": "Nephrotic Syndrome",
+            "duration": 27
+          },
+          {
+            "id": "12.4",
+            "title": "Nephritic Syndrome",
+            "duration": 12
+          },
+          {
+            "id": "12.5",
+            "title": "Urinary Tract Infection",
+            "duration": 6
+          },
+          {
+            "id": "12.6",
+            "title": "Nephrolithiasis",
+            "duration": 5
+          },
+          {
+            "id": "12.7",
+            "title": "Chronic Renal Failure",
+            "duration": 5
+          },
+          {
+            "id": "12.8",
+            "title": "Renal Neoplasia",
+            "duration": 6
+          },
+          {
+            "id": "12.9",
+            "title": "Lower Urinary Tract Carcinoma",
+            "duration": 7
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "system": "Gastrointestinal",
+    "chapters": [
+      {
+        "id": 10,
+        "title": "Gastrointestinal Pathology",
+        "videos": [
+          {
+            "id": "10.1",
+            "title": "Oral Cavity",
+            "duration": 6
+          },
+          {
+            "id": "10.2",
+            "title": "Salivary Gland",
+            "duration": 7
+          },
+          {
+            "id": "10.3",
+            "title": "Esophagus",
+            "duration": 28
+          },
+          {
+            "id": "10.4",
+            "title": "Stomach",
+            "duration": 35
+          },
+          {
+            "id": "10.5",
+            "title": "Small Bowel",
+            "duration": 31
+          },
+          {
+            "id": "10.6",
+            "title": "Appendix",
+            "duration": 10
+          },
+          {
+            "id": "10.7",
+            "title": "Inflammatory Bowel Disease",
+            "duration": 9
+          },
+          {
+            "id": "10.8a",
+            "title": "Colon (Part 1)",
+            "duration": 22
+          },
+          {
+            "id": "10.8b",
+            "title": "Colon: Colorectal Carcinoma (Part 2)",
+            "duration": 9
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Exocrine Pancreas, Gallbladder, Liver",
+        "videos": [
+          {
+            "id": "11.1",
+            "title": "Exocrine Pancreas",
+            "duration": 13
+          },
+          {
+            "id": "11.2",
+            "title": "Gallbladder",
+            "duration": 11
+          },
+          {
+            "id": "11.3a",
+            "title": "Liver: Jaundice (Part 1)",
+            "duration": 12
+          },
+          {
+            "id": "11.3b",
+            "title": "Liver: Hepatitis (Part 2)",
+            "duration": 8
+          },
+          {
+            "id": "11.3c",
+            "title": "Liver: Cirrhosis & Tumors (Part 3)",
+            "duration": 21
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "system": "Reproductive",
+    "chapters": [
+      {
+        "id": 13,
+        "title": "Female Genital System",
+        "videos": [
+          {
+            "id": "13.1",
+            "title": "Vulva",
+            "duration": 22
+          },
+          {
+            "id": "13.2",
+            "title": "Vagina",
+            "duration": 14
+          },
+          {
+            "id": "13.3",
+            "title": "Cervix",
+            "duration": 20
+          },
+          {
+            "id": "13.4",
+            "title": "Endometrium and Myometrium",
+            "duration": 31
+          },
+          {
+            "id": "13.5",
+            "title": "Ovary",
+            "duration": 9
+          },
+          {
+            "id": "13.6",
+            "title": "Ovarian Tumors",
+            "duration": 33
+          },
+          {
+            "id": "13.7",
+            "title": "Gestational Pathology",
+            "duration": 24
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "Male Genital System Pathology",
+        "videos": [
+          {
+            "id": "14.1",
+            "title": "Penis",
+            "duration": 7
+          },
+          {
+            "id": "14.2",
+            "title": "Testicle",
+            "duration": 9
+          },
+          {
+            "id": "14.3",
+            "title": "Testicular Tumors",
+            "duration": 13
+          },
+          {
+            "id": "14.4",
+            "title": "Prostate",
+            "duration": 12
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "title": "Breast Pathology",
+        "videos": [
+          {
+            "id": "16.1",
+            "title": "Introduction",
+            "duration": 7
+          },
+          {
+            "id": "16.2",
+            "title": "Inflammatory Conditions",
+            "duration": 9
+          },
+          {
+            "id": "16.3",
+            "title": "Benign Tumors and Fibrocystic Changes",
+            "duration": 15
+          },
+          {
+            "id": "16.4",
+            "title": "Breast Cancer",
+            "duration": 29
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "system": "Endocrine",
+    "chapters": [
+      {
+        "id": 15,
+        "title": "Endocrine Pathology",
+        "videos": [
+          {
+            "id": "15.1",
+            "title": "Anterior Pituitary Gland",
+            "duration": 7
+          },
+          {
+            "id": "15.2",
+            "title": "Posterior Pituitary Gland",
+            "duration": 7
+          },
+          {
+            "id": "15.3",
+            "title": "Thyroid Gland",
+            "duration": 6
+          },
+          {
+            "id": "15.4",
+            "title": "Hyperthyroidism",
+            "duration": 5
+          },
+          {
+            "id": "15.5",
+            "title": "Hypothyroidism",
+            "duration": 5
+          },
+          {
+            "id": "15.6",
+            "title": "Thyroiditis",
+            "duration": 5
+          },
+          {
+            "id": "15.7",
+            "title": "Thyroid Neoplasia",
+            "duration": 5
+          },
+          {
+            "id": "15.8",
+            "title": "Parathyroid Gland",
+            "duration": 11
+          },
+          {
+            "id": "15.9",
+            "title": "Endocrine Pancreas",
+            "duration": 15
+          },
+          {
+            "id": "15.10",
+            "title": "Adrenal Cortex",
+            "duration": 13
+          },
+          {
+            "id": "15.11",
+            "title": "Adrenal Medulla",
+            "duration": 12
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "system": "Neurology",
+    "chapters": [
+      {
+        "id": 17,
+        "title": "CNS Pathology",
+        "videos": [
+          {
+            "id": "17.1",
+            "title": "Developmental Anomalies",
+            "duration": 5
+          },
+          {
+            "id": "17.2",
+            "title": "Spinal Cord Lesions",
+            "duration": 9
+          },
+          {
+            "id": "17.3",
+            "title": "Meningitis",
+            "duration": 6
+          },
+          {
+            "id": "17.4",
+            "title": "Cerebrovascular Disease",
+            "duration": 16
+          },
+          {
+            "id": "17.5",
+            "title": "Trauma",
+            "duration": 7
+          },
+          {
+            "id": "17.6",
+            "title": "Demyelinating Disorders",
+            "duration": 6
+          },
+          {
+            "id": "17.7",
+            "title": "Dementia and Degenerative Disorders",
+            "duration": 35
+          },
+          {
+            "id": "17.8",
+            "title": "CNS Tumors",
+            "duration": 12
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "system": "Musculoskeletal/Derm",
+    "chapters": [
+      {
+        "id": 18,
+        "title": "MSK Pathology",
+        "videos": [
+          {
+            "id": "18.1",
+            "title": "Skeletal System",
+            "duration": 25
+          },
+          {
+            "id": "18.2",
+            "title": "Bone Tumors",
+            "duration": 15
+          },
+          {
+            "id": "18.3",
+            "title": "Joint",
+            "duration": 21
+          },
+          {
+            "id": "18.4",
+            "title": "Skeletal Muscle",
+            "duration": 6
+          },
+          {
+            "id": "18.5",
+            "title": "Neuromuscular Junction",
+            "duration": 5
+          },
+          {
+            "id": "18.6",
+            "title": "Soft Tissue Tumors",
+            "duration": 5
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "title": "Skin Pathology",
+        "videos": [
+          {
+            "id": "19.1",
+            "title": "Inflammatory Diseases",
+            "duration": 15
+          },
+          {
+            "id": "19.2",
+            "title": "Blistering Dermatoses",
+            "duration": 9
+          },
+          {
+            "id": "19.3",
+            "title": "Epithelial Tumors",
+            "duration": 8
+          },
+          {
+            "id": "19.4",
+            "title": "Disorders of Pigmentation and Melanocytes",
+            "duration": 12
+          },
+          {
+            "id": "19.5",
+            "title": "Infectious Disorders",
+            "duration": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "system": "Psychiatry",
+    "chapters": []
+  },
+  {
+    "system": "Public Health/Ethics",
+    "chapters": []
+  }
+]

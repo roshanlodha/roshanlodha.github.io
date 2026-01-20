@@ -338,7 +338,7 @@ details[open] .chevron { transform: rotate(-135deg); }
 .calendar-dow-grid,
 .calendar-day-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
 
-.calendar-day-grid { grid-auto-rows: minmax(140px, auto); align-items: start; }
+.calendar-day-grid { grid-auto-rows: minmax(190px, auto); align-items: start; }
 
 .calendar-dow {
   background: #f7f8fb;
@@ -350,7 +350,7 @@ details[open] .chevron { transform: rotate(-135deg); }
 }
 
 .calendar-cell {
-  min-height: 116px;
+  min-height: 180px;
   padding: 0.55rem 0.65rem;
   border-bottom: 1px solid var(--border);
   border-right: 1px solid var(--border);
