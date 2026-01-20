@@ -35,18 +35,6 @@
           <span>Exam date</span>
           <input type="date" id="examDate" />
         </label>
-        <fieldset class="field breaks-field" aria-label="Break days">
-          <legend>Break day(s)</legend>
-          <div class="break-grid">
-            <label class="checkbox break"><input type="checkbox" data-dow="0" checked /> Sun</label>
-            <label class="checkbox break"><input type="checkbox" data-dow="1" /> Mon</label>
-            <label class="checkbox break"><input type="checkbox" data-dow="2" /> Tue</label>
-            <label class="checkbox break"><input type="checkbox" data-dow="3" /> Wed</label>
-            <label class="checkbox break"><input type="checkbox" data-dow="4" /> Thu</label>
-            <label class="checkbox break"><input type="checkbox" data-dow="5" /> Fri</label>
-            <label class="checkbox break"><input type="checkbox" data-dow="6" /> Sat</label>
-          </div>
-        </fieldset>
         <div class="field field-group">
           <span>Learning</span>
           <div class="pill-group" id="learningGroup"></div>
@@ -73,6 +61,34 @@
           <h2 id="overview-title">Feasibility</h2>
         </div>
       </div>
+      <details class="collapsible plan-methodology" aria-labelledby="methodology-title">
+        <summary class="collapsible-summary">
+          <h3 id="methodology-title">Methodology & Sources</h3>
+          <span class="chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="collapsible-body">
+          <div class="methodology-grid">
+            <div class="method-block">
+              <p class="method-heading">Three phases</p>
+              <ol class="phase-list">
+                <li><strong>Phase 1 — Systems learning</strong>: Front-load Pathoma + BnB + Sketchy Micro runtimes by system before heavy practice.</li>
+                <li><strong>Phase 2 — Mixed review</strong>: Short video touchups plus daily spaced recall and steady practice blocks.</li>
+                <li><strong>Phase 3 — Testing & taper</strong>: Place mocks near the exam window, keep buffer days, and lighten load.</li>
+              </ol>
+            </div>
+
+            <div class="method-block">
+              <p class="method-heading">What is factored</p>
+              <p class="method-paragraph">Start/exam dates, per-system runtimes (Pathoma, Boards &amp; Beyond, Sketchy Micro), task type coloring (learning, practice, testing), and buffers around long systems and mocks.</p>
+            </div>
+
+            <div class="method-block">
+              <p class="method-heading">Sources</p>
+              <p class="method-paragraph"><a href="https://docs.google.com/document/d/1wnyVLA1mBJwzo7jGOrRBJLEYH-72I70JAhg9sfkO_s4/edit?tab=t.0" target="_blank" rel="noopener">Pathoma Data</a> · <a href="https://drive.google.com/drive/folders/1Fp2Gwh1vOaxLkUTHSsJrDS5cEulgEK5F" target="_blank" rel="noopener">BnB Data</a> · <a href="https://usmle-notes.tumblr.com/post/166512104328/sketchy-micro-to-do-list-01-gram-positive" target="_blank" rel="noopener">Sketchy Micro Data</a></p>
+            </div>
+          </div>
+        </div>
+      </details>
       <div class="stats" id="overviewStats"></div>
     </section>
 
@@ -87,7 +103,7 @@
           <div class="calendar-month" id="calRange"></div>
           <button class="ghost" type="button" id="calNext">Next</button>
           <button class="ghost" type="button" id="calToday">Today</button>
-          <button class="primary" type="button" id="downloadIcs">Download .ics</button>
+          <button class="primary" type="button" id="downloadIcs">Add to calendar</button>
         </div>
       </div>
       <div class="day-nav" id="dayNav" aria-label="Day navigation">
@@ -99,7 +115,7 @@
       <div class="legend" aria-label="Color legend">
         <span class="legend-dot learning"></span> Learning
         <span class="legend-dot practice"></span> Practice
-        <span class="legend-dot exam"></span> Mock exam
+        <span class="legend-dot exam"></span> Test
         <span class="legend-dot buffer"></span> Buffer/Rest
       </div>
       <div id="dayDetail" class="day-detail"></div>
