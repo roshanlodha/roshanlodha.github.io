@@ -20,73 +20,296 @@ const pathomaData = [
   {
     system: "Fundamentals",
     chapters: [
-      { id: 1, title: "Growth Adaptations", duration: 29, videos: ["1.1 Growth Adaptations", "1.2 Cellular Injury", "1.3 Cell Death", "1.4 Free Radical Injury", "1.5 Apoptosis"] },
-      { id: 2, title: "Inflammation", duration: 45, videos: ["2.1 Acute Inflammation", "2.2 Chronic Inflammation", "2.3 Wound Healing"] },
-      { id: 3, title: "Neoplasia", duration: 39, videos: ["3.1 Neoplasia Basics", "3.2 Carcinogenesis", "3.3 Tumor Progression"] }
+      {
+        id: 1,
+        title: "Growth Adaptations, Cell Injury",
+        videos: [
+          { id: "1.1", title: "Growth Adaptations", duration: 29 },
+          { id: "1.2", title: "Cellular Injury", duration: 45 },
+          { id: "1.3", title: "Cell Death", duration: 39 },
+          { id: "1.4", title: "Free Radical Injury", duration: 22 },
+          { id: "1.5", title: "Amyloid", duration: 20 }
+        ]
+      },
+      {
+        id: 2,
+        title: "Inflammation & Healing",
+        videos: [
+          { id: "2.1a", title: "Acute Inflammation (Part 1)", duration: 36 },
+          { id: "2.1b", title: "Acute Inflammation (Part 2)", duration: 27 },
+          { id: "2.1c", title: "Acute Inflammation (Part 3)", duration: 19 },
+          { id: "2.2", title: "Chronic Inflammation", duration: 26 },
+          { id: "2.3", title: "Primary Immunodeficiency", duration: 17 },
+          { id: "2.4a", title: "Autoimmune Disorders (Part 1)", duration: 30 },
+          { id: "2.4b", title: "Autoimmune Disorders (Part 2)", duration: 45 },
+          { id: "2.5", title: "Wound Healing", duration: 25 }
+        ]
+      },
+      {
+        id: 3,
+        title: "Neoplasia",
+        videos: [
+          { id: "3.1", title: "Neoplasia", duration: 38 },
+          { id: "3.2a", title: "Carcinogenesis (Part 1)", duration: 21 },
+          { id: "3.2b", title: "Carcinogenesis (Part 2)", duration: 29 },
+          { id: "3.2c", title: "Carcinogenesis (Part 3)", duration: 20 },
+          { id: "3.3", title: "Tumor Progression", duration: 9 },
+          { id: "3.4", title: "Clinical Characteristics", duration: 21 }
+        ]
+      }
     ]
   },
-  { system: "Biochemistry/Genetics", chapters: [] },
-  { system: "Immunology", chapters: [] },
-  { system: "Microbiology", chapters: [] },
   {
     system: "Hematology",
     chapters: [
-      { id: 4, title: "Hemostasis", duration: 30, videos: ["4.1 Primary Hemostasis", "4.2 Secondary Hemostasis"] },
-      { id: 5, title: "Red Blood Cell Disorders", duration: 55, videos: ["5.1 Anemia Basics", "5.2 Microcytic Anemias", "5.3 Macrocytic Anemias", "5.4 Normocytic Anemias"] },
-      { id: 6, title: "White Blood Cell Disorders", duration: 40, videos: ["6.1 Leukopenia", "6.2 Leukocytosis", "6.3 Acute Leukemia"] }
+      {
+        id: 4,
+        title: "Hemostasis & Related Disorders",
+        videos: [
+          { id: "4.1", title: "Primary Hemostasis & Related Disorders", duration: 43 },
+          { id: "4.2", title: "Secondary Hemostasis and Related Disorders", duration: 21 },
+          { id: "4.3", title: "Other Disorders of Hemostasis", duration: 13 },
+          { id: "4.4", title: "Thrombosis", duration: 22 },
+          { id: "4.5", title: "Embolism", duration: 12 }
+        ]
+      },
+      {
+        id: 5,
+        title: "Red Blood Cell Disorders",
+        videos: [
+          { id: "5.1", title: "Anemia", duration: 7 },
+          { id: "5.2a", title: "Microcytic Anemias (Part 1)", duration: 28 },
+          { id: "5.2b", title: "Microcytic Anemias (Part 2)", duration: 19 },
+          { id: "5.2c", title: "Microcytic Anemias (Part 3)", duration: 19 },
+          { id: "5.3", title: "Macrocytic Anemia", duration: 22 },
+          { id: "5.4", title: "Normocytic Anemia", duration: 15 },
+          { id: "5.5", title: "Normocytic Anemias w/ Extravascular Hemolysis", duration: 26 },
+          { id: "5.6", title: "Normocytic Anemias w/ Intravascular Hemolysis", duration: 14 },
+          { id: "5.7", title: "Anemia due to Underproduction", duration: 13 }
+        ]
+      },
+      {
+        id: 6,
+        title: "White Blood Cell Disorders",
+        videos: [
+          { id: "6.1", title: "Leukopenia & Leukocytosis", duration: 21 },
+          { id: "6.2", title: "Acute Leukemia", duration: 19 },
+          { id: "6.3", title: "Chronic Leukemia", duration: 11 },
+          { id: "6.4", title: "Myeloproliferative Disorders", duration: 22 },
+          { id: "6.5", title: "Lymphadenopathy", duration: 11 },
+          { id: "6.6", title: "Lymphoma", duration: 10 },
+          { id: "6.7", title: "Hodgkin Lymphoma", duration: 10 },
+          { id: "6.8", title: "Plasma Cell Disorders (Dyscrasias)", duration: 8 },
+          { id: "6.9", title: "Langerhans Cell Histiocytosis", duration: 7 }
+        ]
+      }
     ]
   },
   {
     system: "Cardiovascular",
     chapters: [
-      { id: 7, title: "Vascular Pathology", duration: 35, videos: ["7.1 Vasculitis", "7.2 Hypertension", "7.3 Arteriosclerosis"] },
-      { id: 8, title: "Cardiac Pathology", duration: 50, videos: ["8.1 Ischemic Heart Disease", "8.2 Congestive Heart Failure", "8.3 Valvular Disorders"] }
+      {
+        id: 7,
+        title: "Vascular Pathology",
+        videos: [
+          { id: "7.1", title: "Vasculitis", duration: 27 },
+          { id: "7.2", title: "Hypertension", duration: 7 },
+          { id: "7.3", title: "Arteriosclerosis", duration: 18 },
+          { id: "7.4", title: "Aortic Dissection and Aneurysm", duration: 13 },
+          { id: "7.5", title: "Vascular Tumors", duration: 5 }
+        ]
+      },
+      {
+        id: 8,
+        title: "Cardiac Pathology",
+        videos: [
+          { id: "8.1", title: "Ischemic Heart Disease", duration: 30 },
+          { id: "8.2", title: "Congestive Heart Failure", duration: 6 },
+          { id: "8.3", title: "Congenital Defects", duration: 17 },
+          { id: "8.4", title: "Valvular Disorders", duration: 25 },
+          { id: "8.5", title: "Endocarditis", duration: 7 },
+          { id: "8.6", title: "Cardiomyopathy", duration: 4 },
+          { id: "8.7", title: "Cardiac Tumors", duration: 4 }
+        ]
+      }
     ]
   },
   {
     system: "Respiratory",
     chapters: [
-      { id: 9, title: "Respiratory Pathology", duration: 45, videos: ["9.1 Nasopharynx", "9.2 Larynx", "9.3 Pneumonia", "9.4 COPD", "9.5 Restrictive Lung Disease"] }
+      {
+        id: 9,
+        title: "Respiratory Tract Pathology",
+        videos: [
+          { id: "9.1", title: "Nasopharynx", duration: 4 },
+          { id: "9.2", title: "Larynx", duration: 4 },
+          { id: "9.3", title: "Pulmonary Infections", duration: 20 },
+          { id: "9.4", title: "COPD", duration: 50 },
+          { id: "9.5", title: "Restrictive Diseases", duration: 22 },
+          { id: "9.6", title: "Pulmonary Hypertension", duration: 8 },
+          { id: "9.7", title: "Respiratory Distress Syndromes", duration: 7 },
+          { id: "9.8", title: "Lung Cancer", duration: 18 },
+          { id: "9.9", title: "Pleura", duration: 3 }
+        ]
+      }
     ]
   },
   {
     system: "Renal",
     chapters: [
-      { id: 12, title: "Renal Pathology", duration: 50, videos: ["12.1 Acute Renal Failure", "12.2 Nephrotic Syndrome", "12.3 Nephritic Syndrome"] }
+      {
+        id: 12,
+        title: "Kidney & Urinary Tract Pathology",
+        videos: [
+          { id: "12.1", title: "Congenital", duration: 12 },
+          { id: "12.2", title: "Acute Renal Failure", duration: 15 },
+          { id: "12.3", title: "Nephrotic Syndrome", duration: 27 },
+          { id: "12.4", title: "Nephritic Syndrome", duration: 12 },
+          { id: "12.5", title: "Urinary Tract Infection", duration: 6 },
+          { id: "12.6", title: "Nephrolithiasis", duration: 5 },
+          { id: "12.7", title: "Chronic Renal Failure", duration: 5 },
+          { id: "12.8", title: "Renal Neoplasia", duration: 6 },
+          { id: "12.9", title: "Lower Urinary Tract Carcinoma", duration: 7 }
+        ]
+      }
     ]
   },
   {
     system: "Gastrointestinal",
     chapters: [
-      { id: 10, title: "GI Pathology", duration: 60, videos: ["10.1 Oral Cavity", "10.2 Esophagus", "10.3 Stomach", "10.4 Small Bowel"] },
-      { id: 11, title: "Exocrine Pancreas, Gallbladder, Liver", duration: 55, videos: ["11.1 Pancreas", "11.2 Gallbladder", "11.3 Liver Hepatitis"] }
+      {
+        id: 10,
+        title: "Gastrointestinal Pathology",
+        videos: [
+          { id: "10.1", title: "Oral Cavity", duration: 6 },
+          { id: "10.2", title: "Salivary Gland", duration: 7 },
+          { id: "10.3", title: "Esophagus", duration: 28 },
+          { id: "10.4", title: "Stomach", duration: 35 },
+          { id: "10.5", title: "Small Bowel", duration: 31 },
+          { id: "10.6", title: "Appendix", duration: 10 },
+          { id: "10.7", title: "Inflammatory Bowel Disease", duration: 9 },
+          { id: "10.8a", title: "Colon (Part 1)", duration: 22 },
+          { id: "10.8b", title: "Colon: Colorectal Carcinoma (Part 2)", duration: 9 }
+        ]
+      },
+      {
+        id: 11,
+        title: "Exocrine Pancreas, Gallbladder, Liver",
+        videos: [
+          { id: "11.1", title: "Exocrine Pancreas", duration: 13 },
+          { id: "11.2", title: "Gallbladder", duration: 11 },
+          { id: "11.3a", title: "Liver: Jaundice (Part 1)", duration: 12 },
+          { id: "11.3b", title: "Liver: Hepatitis (Part 2)", duration: 8 },
+          { id: "11.3c", title: "Liver: Cirrhosis & Tumors (Part 3)", duration: 21 }
+        ]
+      }
     ]
   },
   {
     system: "Reproductive",
     chapters: [
-      { id: 13, title: "Female Genital System", duration: 45, videos: ["13.1 Vulva/Vagina", "13.2 Cervix", "13.3 Uterus"] },
-      { id: 14, title: "Male Genital System", duration: 30, videos: ["14.1 Penis", "14.2 Testicle", "14.3 Prostate"] },
-      { id: 16, title: "Breast", duration: 25, videos: ["16.1 Breast Imaging", "16.2 Inflammatory Conditions", "16.3 Carcinoma"] }
+      {
+        id: 13,
+        title: "Female Genital System",
+        videos: [
+          { id: "13.1", title: "Vulva", duration: 22 },
+          { id: "13.2", title: "Vagina", duration: 14 },
+          { id: "13.3", title: "Cervix", duration: 20 },
+          { id: "13.4", title: "Endometrium and Myometrium", duration: 31 },
+          { id: "13.5", title: "Ovary", duration: 9 },
+          { id: "13.6", title: "Ovarian Tumors", duration: 33 },
+          { id: "13.7", title: "Gestational Pathology", duration: 24 }
+        ]
+      },
+      {
+        id: 14,
+        title: "Male Genital System Pathology",
+        videos: [
+          { id: "14.1", title: "Penis", duration: 7 },
+          { id: "14.2", title: "Testicle", duration: 9 },
+          { id: "14.3", title: "Testicular Tumors", duration: 13 },
+          { id: "14.4", title: "Prostate", duration: 12 }
+        ]
+      },
+      {
+        id: 16,
+        title: "Breast Pathology",
+        videos: [
+          { id: "16.1", title: "Introduction", duration: 7 },
+          { id: "16.2", title: "Inflammatory Conditions", duration: 9 },
+          { id: "16.3", title: "Benign Tumors and Fibrocystic Changes", duration: 15 },
+          { id: "16.4", title: "Breast Cancer", duration: 29 }
+        ]
+      }
     ]
   },
   {
     system: "Endocrine",
     chapters: [
-      { id: 15, title: "Endocrine Pathology", duration: 40, videos: ["15.1 Pituitary", "15.2 Thyroid", "15.3 Adrenal Cortex"] }
+      {
+        id: 15,
+        title: "Endocrine Pathology",
+        videos: [
+          { id: "15.1", title: "Anterior Pituitary Gland", duration: 7 },
+          { id: "15.2", title: "Posterior Pituitary Gland", duration: 7 },
+          { id: "15.3", title: "Thyroid Gland", duration: 6 },
+          { id: "15.4", title: "Hyperthyroidism", duration: 5 },
+          { id: "15.5", title: "Hypothyroidism", duration: 5 },
+          { id: "15.6", title: "Thyroiditis", duration: 5 },
+          { id: "15.7", title: "Thyroid Neoplasia", duration: 5 },
+          { id: "15.8", title: "Parathyroid Gland", duration: 11 },
+          { id: "15.9", title: "Endocrine Pancreas", duration: 15 },
+          { id: "15.10", title: "Adrenal Cortex", duration: 13 },
+          { id: "15.11", title: "Adrenal Medulla", duration: 12 }
+        ]
+      }
     ]
   },
   {
     system: "Neurology",
     chapters: [
-      { id: 17, title: "CNS Pathology", duration: 50, videos: ["17.1 Developmental Anomalies", "17.2 Trauma", "17.3 Cerebrovascular Disease"] }
+      {
+        id: 17,
+        title: "CNS Pathology",
+        videos: [
+          { id: "17.1", title: "Developmental Anomalies", duration: 5 },
+          { id: "17.2", title: "Spinal Cord Lesions", duration: 9 },
+          { id: "17.3", title: "Meningitis", duration: 6 },
+          { id: "17.4", title: "Cerebrovascular Disease", duration: 16 },
+          { id: "17.5", title: "Trauma", duration: 7 },
+          { id: "17.6", title: "Demyelinating Disorders", duration: 6 },
+          { id: "17.7", title: "Dementia and Degenerative Disorders", duration: 35 },
+          { id: "17.8", title: "CNS Tumors", duration: 12 }
+        ]
+      }
     ]
   },
   {
     system: "Musculoskeletal/Derm",
     chapters: [
-      { id: 18, title: "Musculoskeletal Pathology", duration: 35, videos: ["18.1 Skeletal Muscle", "18.2 Bone Structure", "18.3 Bone Tumors"] },
-      { id: 19, title: "Dermatopathology", duration: 30, videos: ["19.1 Skin Inflammatory", "19.2 Blistering Disorders", "19.3 Skin Tumors"] }
+      {
+        id: 18,
+        title: "MSK Pathology",
+        videos: [
+          { id: "18.1", title: "Skeletal System", duration: 25 },
+          { id: "18.2", title: "Bone Tumors", duration: 15 },
+          { id: "18.3", title: "Joint", duration: 21 },
+          { id: "18.4", title: "Skeletal Muscle", duration: 6 },
+          { id: "18.5", title: "Neuromuscular Junction", duration: 5 },
+          { id: "18.6", title: "Soft Tissue Tumors", duration: 5 }
+        ]
+      },
+      {
+        id: 19,
+        title: "Skin Pathology",
+        videos: [
+          { id: "19.1", title: "Inflammatory Diseases", duration: 15 },
+          { id: "19.2", title: "Blistering Dermatoses", duration: 9 },
+          { id: "19.3", title: "Epithelial Tumors", duration: 8 },
+          { id: "19.4", title: "Disorders of Pigmentation and Melanocytes", duration: 12 },
+          { id: "19.5", title: "Infectious Disorders", duration: 4 }
+        ]
+      }
     ]
   },
   { system: "Psychiatry", chapters: [] },
@@ -227,6 +450,7 @@ const sketchyData = [
   }
 ];
 
+
 const practiceExamCatalog = [
   { id: "nbme25", label: "NBME 25", mandatory: false, defaultChecked: false, kind: "nbme", order: 25, group: "practice" },
   { id: "uwsa1", label: "UWSA 1", mandatory: false, defaultChecked: false, kind: "uwsa", order: 1, group: "practice" },
@@ -269,9 +493,13 @@ const els = {
 
 const LIMIT_MINUTES_PER_DAY = 12 * 60;
 const UWORLD_TOTAL_Q = 4000;
-const UWORLD_MIN_PER_Q = (200 * 60) / UWORLD_TOTAL_Q; // 3 minutes per question
-const EXAM_MINUTES = 8 * 60;
+const UWORLD_BLOCK_Q = 40;
+const UWORLD_BLOCK_MINUTES = 120; // 40 questions per block, includes review
+const UWORLD_TOTAL_BLOCKS = Math.ceil(UWORLD_TOTAL_Q / UWORLD_BLOCK_Q);
+const UWORLD_TOTAL_MINUTES = UWORLD_TOTAL_BLOCKS * UWORLD_BLOCK_MINUTES;
+const EXAM_MINUTES = 12 * 60;
 const ANKI_MINUTES = 60;
+const MIN_LEARNING_MINUTES = 180; // Minimum daily learning (Anki + videos) until videos are done
 
 let calendarWeekStart = null;
 let currentPlan = null; // { dayMap, start, exam }
@@ -412,6 +640,24 @@ function setFeasibility(status, tone) {
   els.feasibilityChip.style.borderColor = tone === "bad" ? "#ff6b6b" : "#58d68d";
 }
 
+function pickLeastLoadedDay(slots, durationMinutes, bufferStart) {
+  const candidates = slots
+    .filter(d => d.date < bufferStart && (LIMIT_MINUTES_PER_DAY - d.usedMinutes) >= durationMinutes)
+    .sort((a, b) => {
+      if (a.usedMinutes !== b.usedMinutes) return a.usedMinutes - b.usedMinutes;
+      return a.date - b.date;
+    });
+  return candidates[0] || null;
+}
+
+function buildChipTooltip(task) {
+  const bits = [];
+  if (task.label) bits.push(task.label);
+  if (task.detail) bits.push(task.detail);
+  if (task.videos && task.videos.length) bits.push(task.videos.join(", "));
+  return bits.join(" — ");
+}
+
 function hasExam(day) {
   return day.tasks.some(t => t.type === "exam");
 }
@@ -432,18 +678,27 @@ function buildDayMap(start, end, breakSet) {
 }
 
 function addTask(day, task) {
-  day.tasks.push(task);
-  day.usedMinutes += task.durationMinutes || 0;
+  const hydrated = { videos: [], ...task };
+  hydrated.calendarLabel = hydrated.calendarLabel || hydrated.label;
+  day.tasks.push(hydrated);
+  day.usedMinutes += hydrated.durationMinutes || 0;
 }
 
 function addExamTask(day, label) {
-  addTask(day, { type: "exam", label, durationMinutes: EXAM_MINUTES, detail: "Full-length practice exam" });
+  const short = label.includes("–") ? label.split("–")[0].trim() : label;
+  addTask(day, {
+    type: "exam",
+    label,
+    calendarLabel: short,
+    durationMinutes: EXAM_MINUTES,
+    detail: "Full-length practice exam with same-day review"
+  });
 }
 
 function totalMinutesForResource(resource) {
   return resource.reduce((sum, entry) => {
     if (entry.chapters) {
-      return sum + entry.chapters.reduce((s, ch) => s + ch.duration, 0);
+      return sum + entry.chapters.reduce((s, ch) => s + (ch.videos || []).reduce((sv, v) => sv + (v.duration || 0), 0), 0);
     }
     if (entry.sections) {
       return sum + entry.sections.reduce((s, sec) => s + sec.duration, 0);
@@ -462,13 +717,17 @@ function buildSystemQueue(systemName, flags) {
     const sys = findSystemBlock(pathomaData, systemName);
     if (sys) {
       for (const ch of sys.chapters || []) {
-        queue.push({
-          type: "learning",
-          label: `Pathoma – ${ch.title}`,
-          durationMinutes: ch.duration,
-          detail: `${systemName} • ${ch.videos.join(", ")}`,
-          system: systemName
-        });
+        for (const v of ch.videos || []) {
+          queue.push({
+            type: "learning",
+            label: `Pathoma – ${v.title}`,
+            calendarLabel: "Pathoma",
+            durationMinutes: v.duration,
+            detail: `${ch.title} (${v.id})`,
+            videos: [`${v.id} ${v.title}`],
+            system: systemName
+          });
+        }
       }
     }
   }
@@ -479,8 +738,10 @@ function buildSystemQueue(systemName, flags) {
         queue.push({
           type: "learning",
           label: `Boards & Beyond – ${sec.name}`,
+          calendarLabel: "BnB",
           durationMinutes: sec.duration,
-          detail: `${systemName} • ${sec.videos.join(", ")}`,
+          detail: `${systemName} • ${sec.name}`,
+          videos: sec.videos,
           system: systemName
         });
       }
@@ -493,8 +754,10 @@ function buildSystemQueue(systemName, flags) {
         queue.push({
           type: "learning",
           label: `Sketchy – ${sec.name}`,
+          calendarLabel: "Sketchy",
           durationMinutes: sec.duration,
-          detail: `${systemName} • ${sec.videos.join(", ")}`,
+          detail: `${systemName} • ${sec.name}`,
+          videos: sec.videos,
           system: systemName
         });
       }
@@ -563,7 +826,37 @@ function renderDayDetail(dayMap) {
 
   if (!selectedDayKey) selectedDayKey = formatDateKey(day.date);
 
-  if (!day.tasks || day.tasks.length === 0) {
+  const isExamDay = hasExam(day);
+  const orderedTasks = isExamDay
+    ? day.tasks.filter(t => t.type === "exam")
+    : (() => {
+        const learning = [];
+        const practice = [];
+        const buffer = [];
+        const other = [];
+        for (const t of day.tasks) {
+          const type = t.type || "learning";
+          if (type === "exam") continue;
+          if (type === "learning") learning.push(t);
+          else if (type === "practice") practice.push(t);
+          else if (type === "buffer") buffer.push(t);
+          else other.push(t);
+        }
+
+        const byLabel = (a, b) => (a.calendarLabel || a.label || "").localeCompare(b.calendarLabel || b.label || "");
+        learning.sort((a, b) => {
+          const aAnki = (a.label || "").toLowerCase().startsWith("anki");
+          const bAnki = (b.label || "").toLowerCase().startsWith("anki");
+          if (aAnki !== bAnki) return aAnki ? -1 : 1;
+          return byLabel(a, b);
+        });
+        practice.sort(byLabel);
+        buffer.sort(byLabel);
+        other.sort(byLabel);
+        return [...learning, ...practice, ...buffer, ...other];
+      })();
+
+  if (!orderedTasks || orderedTasks.length === 0) {
     els.dayDetail.innerHTML = `
       <div class="day-detail-header">
         <div class="day-detail-title">${escapeHtml(dateLabel)}</div>
@@ -574,10 +867,21 @@ function renderDayDetail(dayMap) {
     return;
   }
 
-  const items = day.tasks.map(t => {
+  const items = orderedTasks.map(t => {
     const duration = t.durationMinutes ? minutesToHuman(t.durationMinutes) : "";
+    const tagLabel = t.type === "exam" ? "Exam" : t.type === "practice" ? "Practice" : t.type === "buffer" ? "Buffer" : "Learning";
+    const tag = `<span class="tag ${t.type || "learning"}">${escapeHtml(tagLabel)}</span>`;
+    const note = t.detail ? `<div class="day-detail-note">${escapeHtml(t.detail)}</div>` : "";
+    const videos = t.videos && t.videos.length
+      ? `<ul class="day-detail-videos">${t.videos.map(v => `<li>${escapeHtml(v)}</li>`).join("")}</ul>`
+      : "";
+
     return `<li class="day-detail-item">
-      <span class="day-detail-name">${escapeHtml(t.label)}</span>
+      <div class="day-detail-info">
+        <div class="day-detail-title-row">${tag}<span class="day-detail-name">${escapeHtml(t.label)}</span></div>
+        ${note}
+        ${videos}
+      </div>
       <span class="day-detail-minutes">${escapeHtml(duration)}</span>
     </li>`;
   }).join("");
@@ -639,15 +943,17 @@ function renderCalendar(dayMap) {
       for (let j = 0; j < tasks.length && j < MAX_CHIPS; j++) {
         const t = tasks[j];
         const type = t.type || "learning";
-        const chipLabel = escapeHtml(t.label);
-        chips.push(`<span class="calendar-chip ${type}">${chipLabel}</span>`);
+        const chipLabel = escapeHtml(t.calendarLabel || t.label);
+        const tooltip = buildChipTooltip(t);
+        const titleAttr = tooltip ? ` title="${escapeHtml(tooltip)}"` : "";
+        chips.push(`<span class="calendar-chip ${type}"${titleAttr}>${chipLabel}</span>`);
       }
       if (tasks.length > MAX_CHIPS) {
         chips.push(`<span class="calendar-chip more">+${tasks.length - MAX_CHIPS} more</span>`);
       }
       if (chips.length === 0) chips.push('<span class="calendar-chip more">No tasks</span>');
     } else {
-      chips.push('<span class="calendar-chip more">Out of range</span>');
+      chips.push('<span class="calendar-chip more">No tasks</span>');
     }
 
     parts.push(`<div class="${cls.join(" ")}" data-day-key="${key}">`);
@@ -776,6 +1082,12 @@ function generatePlan() {
     resetError("Exam date must be on or after the start date.");
     return;
   }
+  const bufferStart = addDays(exam, -14);
+  if (bufferStart <= start) {
+    setFeasibility("Not feasible (<14 days)", "bad");
+    resetError("Plan not feasible. Please allow at least 14 days so we can keep a 2-week buffer before test day.");
+    return;
+  }
   const flags = {
     pathoma: els.pathomaToggle?.checked ?? true,
     bnb: els.bnbToggle?.checked ?? false,
@@ -808,25 +1120,6 @@ function generatePlan() {
     resetError("All days are breaks. Please select at least one study day.");
     return;
   }
-
-  const resourceMinutes = (flags.pathoma ? totalMinutesForResource(pathomaData) : 0)
-    + (flags.bnb ? totalMinutesForResource(bnbData) : 0)
-    + (flags.sketchy ? totalMinutesForResource(sketchyData) : 0);
-  const ankiDayCount = Math.max(0, studyDayCount - examSelections.length);
-  const ankiMinutesTotal = flags.anki ? ankiDayCount * ANKI_MINUTES : 0;
-  const uworldMinutesTotal = flags.uworld ? UWORLD_TOTAL_Q * UWORLD_MIN_PER_Q : 0;
-  const examMinutesTotal = examSelections.length * EXAM_MINUTES;
-  const totalHours = (resourceMinutes + ankiMinutesTotal + uworldMinutesTotal + examMinutesTotal) / 60;
-  const avgPerDay = totalHours / studyDayCount;
-
-  renderStats({ totalDays, studyDays: studyDayCount, totalHours, avgPerDay });
-
-  if (avgPerDay > 12) {
-    setFeasibility("Not feasible (>12h/day)", "bad");
-    resetError("Plan not feasible (>12h/day). Try unchecking 'Boards & Beyond' or extending your date.");
-    return;
-  }
-  setFeasibility("Feasible", "good");
 
   // Practice exam placement
   const free120Date = addDays(exam, -3);
@@ -873,74 +1166,123 @@ function generatePlan() {
     ptr = addDays(ptr, -7);
   }
 
-  // Study slots after exam placement
-  const studySlots = getStudyDays(dayMap);
+  const studySlots = getStudyDays(dayMap).filter(d => d.date < bufferStart);
+  const examDayCount = Array.from(dayMap.values()).filter(d => hasExam(d)).length;
+  const studyWindowDays = studySlots.length + examDayCount;
+
+  if (studySlots.length === 0) {
+    setFeasibility("Not feasible (no study days)", "bad");
+    resetError("No available study days before the 2-week buffer. Extend your dates or relax break days.");
+    return;
+  }
+
+  const resourceMinutes = (flags.pathoma ? totalMinutesForResource(pathomaData) : 0)
+    + (flags.bnb ? totalMinutesForResource(bnbData) : 0)
+    + (flags.sketchy ? totalMinutesForResource(sketchyData) : 0);
+  const ankiMinutesTotal = flags.anki ? studySlots.length * ANKI_MINUTES : 0;
+  const uworldMinutesTotal = flags.uworld ? UWORLD_TOTAL_MINUTES : 0;
+  const examMinutesTotal = examSelections.length * EXAM_MINUTES;
+  const totalHours = (resourceMinutes + ankiMinutesTotal + uworldMinutesTotal + examMinutesTotal) / 60;
+  const avgPerDay = totalHours / studyWindowDays;
+
+  renderStats({ totalDays, studyDays: studyWindowDays, totalHours, avgPerDay });
+
+  if (avgPerDay > 12) {
+    setFeasibility("Not feasible (>12h/day)", "bad");
+    resetError("Plan not feasible (>12h/day). Try unchecking 'Boards & Beyond', 'Sketchy', or extending your date range.");
+    return;
+  }
+  setFeasibility("Feasible", "good");
 
   if (flags.anki) {
     for (const day of studySlots) {
-      addTask(day, { type: "practice", label: "Anki Reviews (Daily Maintenance)", durationMinutes: ANKI_MINUTES, detail: "Keep reviews tight and active recall." });
+      addTask(day, {
+        type: "learning",
+        label: "Anki",
+        calendarLabel: "Anki",
+        durationMinutes: ANKI_MINUTES,
+        detail: "Spaced repetition (user-selected decks)"
+      });
     }
   }
 
-  let slotIndex = 0;
-  let uworldMinutesRemaining = flags.uworld ? uworldMinutesTotal : 0;
-
+  const learningQueue = [];
   for (const systemName of SYSTEM_ORDER) {
     const queue = buildSystemQueue(systemName, flags);
-    if (queue.length === 0) continue;
+    for (const item of queue) learningQueue.push(item);
+  }
 
-    while (queue.length > 0) {
-      if (slotIndex >= studySlots.length) {
-        resetError(`Ran out of study days while scheduling ${systemName}. Extend your dates or deselect a resource.`);
-        currentPlan = { dayMap, start, exam };
-        renderDayDetail(dayMap);
-        renderCalendar(dayMap);
-        return;
-      }
-      const day = studySlots[slotIndex];
-      let remaining = LIMIT_MINUTES_PER_DAY - day.usedMinutes;
-      if (remaining <= 0) {
-        slotIndex++;
-        continue;
-      }
+  const learningDays = [...studySlots]; // already sorted chronologically
 
-      const next = queue[0];
+  let dayIdx = 0;
+  while (learningQueue.length > 0 && dayIdx < learningDays.length) {
+    const day = learningDays[dayIdx];
+    let remaining = LIMIT_MINUTES_PER_DAY - day.usedMinutes;
+    let learningMinutes = day.tasks
+      .filter(t => (t.type || "learning") === "learning")
+      .reduce((s, t) => s + (t.durationMinutes || 0), 0);
+
+    // Front-load: ensure at least MIN_LEARNING_MINUTES per day while learning queue remains
+    while (learningQueue.length > 0 && remaining > 0 && learningMinutes < MIN_LEARNING_MINUTES) {
+      const next = learningQueue[0];
       if (next.durationMinutes <= remaining) {
         addTask(day, next);
         remaining -= next.durationMinutes;
-        queue.shift();
+        learningMinutes += next.durationMinutes;
+        learningQueue.shift();
       } else {
-        slotIndex++;
-        continue;
+        break; // move to next day if the next item cannot fit
       }
-
-      if (remaining > 30 && flags.uworld && uworldMinutesRemaining > 0) {
-        const block = Math.min(uworldMinutesRemaining, Math.min(180, remaining));
-        if (block >= 45) {
-          addTask(day, { type: "practice", label: `UWorld: Subject - ${systemName}`, durationMinutes: block, detail: `Focus on ${systemName}` });
-          uworldMinutesRemaining -= block;
-          remaining -= block;
-        }
-      }
-
-      if (remaining < 30) slotIndex++;
     }
-
-    if (slotIndex < studySlots.length && studySlots[slotIndex].usedMinutes >= LIMIT_MINUTES_PER_DAY - 30) {
-      slotIndex++;
-    }
+    dayIdx++;
   }
 
-  // Fill remaining UWorld time with mixed blocks
-  for (let i = slotIndex; i < studySlots.length && uworldMinutesRemaining > 0; i++) {
-    const day = studySlots[i];
-    let remaining = LIMIT_MINUTES_PER_DAY - day.usedMinutes;
-    if (remaining <= 0) continue;
-    const block = Math.min(uworldMinutesRemaining, Math.min(180, remaining));
-    if (block >= 45) {
-      addTask(day, { type: "practice", label: "UWorld: Mixed Blocks", durationMinutes: block, detail: "Finish QBank and review explanations." });
-      uworldMinutesRemaining -= block;
+  // Place any leftover learning sequentially if capacity remains
+  dayIdx = 0;
+  while (learningQueue.length > 0 && dayIdx < learningDays.length) {
+    const day = learningDays[dayIdx];
+    const remaining = LIMIT_MINUTES_PER_DAY - day.usedMinutes;
+    const next = learningQueue[0];
+    if (next.durationMinutes <= remaining) {
+      addTask(day, next);
+      learningQueue.shift();
+      continue;
     }
+    dayIdx++;
+  }
+
+  if (learningQueue.length > 0) {
+    setFeasibility("Not feasible (no space)", "bad");
+    resetError("Ran out of study days while scheduling learning. Extend your dates or deselect a resource.");
+    currentPlan = { dayMap, start, exam };
+    renderDayDetail(dayMap);
+    renderCalendar(dayMap);
+    return;
+  }
+
+  let uworldBlocksRemaining = flags.uworld ? UWORLD_TOTAL_BLOCKS : 0;
+  const uworldBlockCountByDay = new Map();
+  while (uworldBlocksRemaining > 0) {
+    const targetDay = pickLeastLoadedDay(studySlots, UWORLD_BLOCK_MINUTES, bufferStart);
+    if (!targetDay) {
+      setFeasibility("Not feasible (UWorld overflow)", "bad");
+      resetError("Ran out of study days for UWorld blocks. Extend your dates or uncheck UWorld.");
+      currentPlan = { dayMap, start, exam };
+      renderDayDetail(dayMap);
+      renderCalendar(dayMap);
+      return;
+    }
+    const key = formatDateKey(targetDay.date);
+    const nextNumber = (uworldBlockCountByDay.get(key) || 0) + 1;
+    uworldBlockCountByDay.set(key, nextNumber);
+    addTask(targetDay, {
+      type: "practice",
+      label: `UWorld Block ${nextNumber}`,
+      calendarLabel: "UWorld",
+      durationMinutes: UWORLD_BLOCK_MINUTES,
+      detail: "40 questions with full review; choose your topic"
+    });
+    uworldBlocksRemaining--;
   }
 
   currentPlan = { dayMap, start, exam };

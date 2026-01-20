@@ -270,7 +270,9 @@ body {
 }
 
 .calendar-dow-grid,
-.calendar-day-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.calendar-day-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+
+.calendar-day-grid { grid-auto-rows: 1fr; }
 
 .calendar-dow {
   background: #f7f8fb;
@@ -309,9 +311,9 @@ body {
   font-size: 0.8rem;
   font-weight: 700;
   max-width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.25;
+  cursor: default;
 }
 .calendar-chip.learning { background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.35); color: #0f3b8c; }
 .calendar-chip.practice { background: rgba(46,175,114,0.14); border-color: rgba(46,175,114,0.35); color: #0c6b3e; }
@@ -339,9 +341,14 @@ body {
 .day-detail-title { font-weight: 800; color: var(--text); }
 .day-detail-meta { color: var(--muted); font-size: 14px; }
 .day-detail-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
-.day-detail-item { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; padding: 6px 8px; border-radius: 8px; background: #f8fafc; border: 1px solid var(--border); }
+.day-detail-item { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; padding: 6px 8px; border-radius: 8px; background: #f8fafc; border: 1px solid var(--border); }
+.day-detail-info { display: flex; flex-direction: column; gap: 4px; }
+.day-detail-title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .day-detail-name { color: var(--text); font-weight: 600; }
 .day-detail-minutes { color: var(--muted); font-size: 13px; white-space: nowrap; }
+.day-detail-note { color: var(--muted); font-size: 13px; line-height: 1.4; }
+.day-detail-videos { margin: 2px 0 0 16px; padding: 0; list-style: disc; color: var(--muted); font-size: 13px; line-height: 1.4; }
+.day-detail-videos li { margin: 0; }
 .day-detail-empty { color: var(--muted); font-style: italic; }
 
 @media (max-width: 640px) {
