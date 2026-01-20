@@ -8,12 +8,25 @@ const els = {
     recalcBtn: document.getElementById('recalcBtn'),
     downloadBtn: document.getElementById('downloadBtn'),
     output: document.getElementById('output'),
+    calendar: document.getElementById('calendar'),
+    calMonthLabel: document.getElementById('calMonthLabel'),
+    calPrev: document.getElementById('calPrev'),
+    calNext: document.getElementById('calNext'),
+    calToday: document.getElementById('calToday'),
     summary: document.getElementById('summary'),
     error: document.getElementById('error'),
     lastUpdated: document.getElementById('lastUpdated'),
     sourceLink: document.getElementById('sourceLink'),
     breaks: Array.from(document.querySelectorAll('.planner-breaks input[type="checkbox"][data-dow]'))
 };
+
+/** @type {ReturnType<typeof buildPlanModel> | null} */
+let currentPlanModel = null;
+/** @type {Date | null} */
+let calendarWeekStart = null; // Sunday of the currently viewed week
+
+/** @type {HTMLDivElement | null} */
+let calendarTooltipEl = null;
 
 // Embedded static data so the planner works as a standalone file.
 // Source link is shown in the header/footer for attribution.
@@ -301,6 +314,13 @@ function addDays(date, offsetDays) {
     return d;
 }
 
+function startOfWeekSunday(date) {
+    const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() - d.getDay());
+    return d;
+}
+
 function formatDateLabel(date) {
     // e.g. Mon, Jan 20, 2026
     return date.toLocaleDateString(undefined, {
@@ -345,6 +365,124 @@ function buildStudyDates(startDate, endDate, breakDows) {
         cur.setDate(cur.getDate() + 1);
     }
     return dates;
+}
+
+function formatWeekRangeLabel(start, end) {
+    const sameMonth = start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear();
+    if (sameMonth) {
+        const monthYear = start.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+        return `${monthYear} — ${start.getDate()}–${end.getDate()}`;
+    }
+
+    const startLabel = start.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    const endLabel = end.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    return `${startLabel} – ${endLabel}`;
+}
+
+function ensureCalendarTooltip() {
+    if (calendarTooltipEl) return calendarTooltipEl;
+    const el = document.createElement('div');
+    el.className = 'calendar-tooltip';
+    el.style.display = 'none';
+    document.body.appendChild(el);
+    calendarTooltipEl = el;
+    return el;
+}
+
+function showCalendarTooltip(text, x, y) {
+    const el = ensureCalendarTooltip();
+    el.textContent = text;
+    el.style.display = 'block';
+    // Offset from cursor; clamp to viewport
+    const padding = 12;
+    const maxX = window.innerWidth - padding;
+    const maxY = window.innerHeight - padding;
+    const left = Math.min(x + 12, maxX);
+    const top = Math.min(y + 14, maxY);
+    el.style.left = `${left}px`;
+    el.style.top = `${top}px`;
+}
+
+function hideCalendarTooltip() {
+    if (!calendarTooltipEl) return;
+    calendarTooltipEl.style.display = 'none';
+}
+
+function renderCalendar(model) {
+    if (!els.calendar) return;
+
+    if (!model) {
+        els.calendar.innerHTML = '<div class="planner-placeholder">Set dates to see the calendar.</div>';
+        if (els.calMonthLabel) els.calMonthLabel.textContent = '';
+        return;
+    }
+
+    const weekStart = calendarWeekStart || startOfWeekSunday(model.startDate);
+    calendarWeekStart = startOfWeekSunday(weekStart);
+    const weekEnd = addDays(calendarWeekStart, 6);
+
+    if (els.calMonthLabel) {
+        els.calMonthLabel.textContent = formatWeekRangeLabel(calendarWeekStart, weekEnd);
+    }
+
+    const planByKey = new Map();
+    for (let i = 0; i < model.studyDates.length; i++) {
+        const key = formatDateInputValue(model.studyDates[i]);
+        planByKey.set(key, model.plan[i]);
+    }
+
+    const todayKey = formatDateInputValue(new Date());
+
+    const dowLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const parts = [];
+    parts.push('<div class="calendar-dow-grid">');
+    for (const label of dowLabels) {
+        parts.push(`<div class="calendar-dow">${escapeHtml(label)}</div>`);
+    }
+    parts.push('</div>');
+
+    parts.push('<div class="calendar-day-grid">');
+
+    const breakDows = getBreakDowSet();
+    const MAX_CHIPS = 18;
+    for (let i = 0; i < 7; i++) {
+        const date = addDays(calendarWeekStart, i);
+        const key = formatDateInputValue(date);
+        const isToday = key === todayKey;
+        const isBreak = breakDows.has(date.getDay());
+
+        const planDay = planByKey.get(key);
+        const chips = [];
+        if (planDay && planDay.items && planDay.items.length > 0) {
+            const toShow = planDay.items.slice(0, MAX_CHIPS);
+            for (const item of toShow) {
+                const tip = `${item.id} ${item.title} (${item.minutes} mins)`;
+                chips.push(`<span class="calendar-chip" data-tip="${escapeHtml(tip)}">${escapeHtml(item.id)}</span>`);
+            }
+            if (planDay.items.length > MAX_CHIPS) {
+                const remaining = planDay.items.slice(MAX_CHIPS);
+                const moreTip = remaining.map(v => `${v.id} ${v.title} (${v.minutes} mins)`).join('\n');
+                chips.push(`<span class="calendar-chip more" data-tip="${escapeHtml(moreTip)}">+${remaining.length}</span>`);
+            }
+        }
+
+        const cls = ['calendar-cell'];
+        if (isToday) cls.push('today');
+        if (isBreak) cls.push('break');
+
+        const dateLabel = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        parts.push(`<div class="${cls.join(' ')}" data-date="${escapeHtml(key)}">`);
+        parts.push(`<div class="calendar-date">${escapeHtml(dateLabel)}</div>`);
+        if (chips.length > 0) {
+            parts.push(`<div class="calendar-events">${chips.join('')}</div>`);
+        } else if (isBreak) {
+            parts.push('<div class="calendar-break">Break</div>');
+        }
+        parts.push('</div>');
+    }
+
+    parts.push('</div>');
+    els.calendar.innerHTML = parts.join('');
 }
 
 function buildPlanSequentialEqualTime(items, days) {
@@ -555,6 +693,16 @@ function recalculate() {
     }
 
     const { plan, totalMinutes } = buildPlanSequentialEqualTime(videos, studyDates.length);
+    const model = { plan, totalMinutes, studyDates, calendarDays, startDate, endDate };
+    currentPlanModel = model;
+
+    const startWeek = startOfWeekSunday(startDate);
+    const endWeek = startOfWeekSunday(endDate);
+    if (!calendarWeekStart || calendarWeekStart < startWeek || calendarWeekStart > endWeek) {
+        calendarWeekStart = startWeek;
+    }
+
+    renderCalendar(model);
     renderPlan({ plan, totalMinutes, studyDates, calendarDays });
 }
 
@@ -695,6 +843,8 @@ function init() {
     if (!els.startDate.value) els.startDate.value = startDefault;
     if (!els.endDate.value) els.endDate.value = endDefault;
 
+    calendarWeekStart = startOfWeekSunday(parseDateInputValue(els.startDate.value) || today);
+
     recalculate();
 }
 
@@ -705,5 +855,46 @@ els.showChapters.addEventListener('change', () => recalculate());
 for (const cb of els.breaks) cb.addEventListener('change', () => recalculate());
 
 els.downloadBtn.addEventListener('click', () => downloadIcs());
+
+if (els.calPrev) {
+    els.calPrev.addEventListener('click', () => {
+        const base = calendarWeekStart || startOfWeekSunday(new Date());
+        calendarWeekStart = addDays(base, -7);
+        renderCalendar(currentPlanModel);
+    });
+}
+if (els.calNext) {
+    els.calNext.addEventListener('click', () => {
+        const base = calendarWeekStart || startOfWeekSunday(new Date());
+        calendarWeekStart = addDays(base, 7);
+        renderCalendar(currentPlanModel);
+    });
+}
+if (els.calToday) {
+    els.calToday.addEventListener('click', () => {
+        calendarWeekStart = startOfWeekSunday(new Date());
+        renderCalendar(currentPlanModel);
+    });
+}
+
+// Tooltip handling for chips
+if (els.calendar) {
+    els.calendar.addEventListener('mousemove', (e) => {
+        const target = /** @type {HTMLElement | null} */ (e.target instanceof HTMLElement ? e.target : null);
+        if (!target) return;
+        const chip = target.closest('.calendar-chip');
+        if (!chip) {
+            hideCalendarTooltip();
+            return;
+        }
+        const tip = chip.getAttribute('data-tip');
+        if (!tip) {
+            hideCalendarTooltip();
+            return;
+        }
+        showCalendarTooltip(tip, e.clientX, e.clientY);
+    });
+    els.calendar.addEventListener('mouseleave', () => hideCalendarTooltip());
+}
 
 init();

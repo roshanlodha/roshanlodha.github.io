@@ -343,6 +343,127 @@ body.planner-body {
     text-decoration: underline;
 }
 
+/* Calendar */
+
+.calendar-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.calendar-month {
+    font-weight: 800;
+    color: #333;
+    min-width: 10.5rem;
+    text-align: center;
+}
+
+.calendar {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.calendar-dow-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-day-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-dow {
+    background: #f8f9fa;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.65rem 0.75rem;
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 700;
+    text-align: left;
+}
+
+.calendar-cell {
+    min-height: 108px;
+    padding: 0.6rem 0.65rem;
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    background: #fff;
+    position: relative;
+}
+
+.calendar-day-grid .calendar-cell:nth-child(7n) {
+    border-right: none;
+}
+
+.calendar-date {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #333;
+    margin-bottom: 0.35rem;
+}
+
+.calendar-cell.break {
+    background: #fcfcfc;
+}
+
+.calendar-break {
+    font-size: 0.85rem;
+    color: #888;
+    font-weight: 650;
+}
+
+.calendar-cell.today {
+    outline: 2px solid rgba(211, 47, 47, 0.25);
+    outline-offset: -2px;
+}
+
+.calendar-events {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.calendar-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.4rem;
+    border-radius: 999px;
+    background: rgba(211, 47, 47, 0.08);
+    border: 1px solid rgba(211, 47, 47, 0.18);
+    color: #7c0f0f;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: help;
+    white-space: nowrap;
+}
+
+.calendar-chip.more {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.12);
+    color: #444;
+}
+
+.calendar-tooltip {
+    position: fixed;
+    z-index: 9999;
+    max-width: min(560px, calc(100vw - 24px));
+    padding: 0.6rem 0.75rem;
+    border-radius: 12px;
+    border: 1px solid rgba(15, 23, 42, 0.18);
+    background: rgba(15, 23, 42, 0.92);
+    color: rgba(255, 255, 255, 0.96);
+    font-size: 0.82rem;
+    line-height: 1.35;
+    white-space: pre-wrap;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.25);
+    pointer-events: none;
+}
+
 @media (max-width: 720px) {
     .planner-grid {
         grid-template-columns: 1fr;
@@ -355,5 +476,11 @@ body.planner-body {
 
     .planner-btn {
         width: 100%;
+    }
+
+    .calendar-month {
+        min-width: auto;
+        width: 100%;
+        text-align: left;
     }
 }

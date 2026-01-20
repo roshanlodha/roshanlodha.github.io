@@ -65,6 +65,20 @@
 
         </section>
 
+        <section class="planner-card" aria-labelledby="planner-calendar-title">
+            <div class="planner-card-header">
+                <h2 id="planner-calendar-title">Video Calendar</h2>
+                <div class="calendar-controls" aria-label="Calendar navigation">
+                    <button class="planner-btn planner-btn-secondary calendar-btn" id="calPrev" type="button">Prev</button>
+                    <div class="calendar-month" id="calMonthLabel" aria-live="polite"></div>
+                    <button class="planner-btn planner-btn-secondary calendar-btn" id="calNext" type="button">Next</button>
+                    <button class="planner-btn planner-btn-secondary calendar-btn" id="calToday" type="button">Today</button>
+                </div>
+            </div>
+
+            <div id="calendar" class="calendar"></div>
+        </section>
+
         <section class="planner-card" aria-labelledby="planner-output-title">
             <div class="planner-card-header">
                 <h2 id="planner-output-title">Day-by-day plan</h2>
