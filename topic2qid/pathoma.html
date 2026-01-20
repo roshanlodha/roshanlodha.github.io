@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pathoma Planner</title>
+    <link rel="stylesheet" href="pathoma.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="planner-body">
+    <main class="planner-page">
+        <div class="planner-header">
+            <h1>Pathoma Study Planner</h1>
+            <!-- <div class="planner-subtitle">Pick an end date — get a sequential, roughly equal-time daily plan.</div> -->
+            <div class="planner-meta">
+                <span>Last updated: <span id="lastUpdated">2026-01-20</span></span>
+                <span class="planner-meta-sep">•</span>
+                <a id="sourceLink" href="https://docs.google.com/document/d/1wnyVLA1mBJwzo7jGOrRBJLEYH-72I70JAhg9sfkO_s4/edit?tab=t.0" target="_blank" rel="noopener noreferrer">Source</a>
+            </div>
+        </div>
+
+        <section class="planner-card" aria-labelledby="planner-controls-title">
+            <div class="planner-card-header">
+                <h2 id="planner-controls-title">Plan settings</h2>
+                <div class="planner-status" id="status">Loading Pathoma list…</div>
+            </div>
+
+            <div class="planner-grid">
+                <label class="planner-field">
+                    <span class="planner-label">Start date</span>
+                    <input class="planner-input" type="date" id="startDate" />
+                </label>
+
+                <label class="planner-field">
+                    <span class="planner-label">End date</span>
+                    <input class="planner-input" type="date" id="endDate" />
+                </label>
+
+                <fieldset class="planner-field planner-breaks">
+                    <legend class="planner-label">Break day(s)</legend>
+                    <label class="planner-break"><input type="checkbox" data-dow="0" checked /> Sun</label>
+                    <label class="planner-break"><input type="checkbox" data-dow="1" /> Mon</label>
+                    <label class="planner-break"><input type="checkbox" data-dow="2" /> Tue</label>
+                    <label class="planner-break"><input type="checkbox" data-dow="3" /> Wed</label>
+                    <label class="planner-break"><input type="checkbox" data-dow="4" /> Thu</label>
+                    <label class="planner-break"><input type="checkbox" data-dow="5" /> Fri</label>
+                    <label class="planner-break"><input type="checkbox" data-dow="6" /> Sat</label>
+                </fieldset>
+
+                <label class="planner-field planner-checkbox">
+                    <input type="checkbox" id="showChapters" checked />
+                    <span>Show chapter headings inside each day</span>
+                </label>
+
+                <div class="planner-actions">
+                    <button class="planner-btn" id="downloadBtn" type="button">Download plan</button>
+                    <button class="planner-btn planner-btn-secondary" id="recalcBtn" type="button">Recalculate</button>
+                </div>
+            </div>
+
+            <div class="planner-summary" id="summary" hidden></div>
+            <div class="planner-error" id="error" hidden></div>
+
+        </section>
+
+        <section class="planner-card" aria-labelledby="planner-output-title">
+            <div class="planner-card-header">
+                <h2 id="planner-output-title">Day-by-day plan</h2>
+            </div>
+            <div id="output" class="planner-output">
+                <div class="planner-placeholder">Loading…</div>
+            </div>
+        </section>
+
+        <footer class="planner-footer">
+            <a href="https://roshanlodha.github.io" target="_blank" rel="noopener noreferrer">Created by Roshan Lodha</a>
+            <span class="planner-meta-sep">•</span>
+            Data source: <a href="https://docs.google.com/document/d/1wnyVLA1mBJwzo7jGOrRBJLEYH-72I70JAhg9sfkO_s4/edit?tab=t.0" target="_blank" rel="noopener noreferrer">Google Doc</a>
+        </footer>
+    </main>
+
+    <script src="pathoma.js"></script>
+</body>
+
+</html>

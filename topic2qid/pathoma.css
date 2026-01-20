@@ -1,0 +1,359 @@
+:root {
+    --primary-color: #D32F2F;
+    --text-color: #333333;
+    --bg-color: #ffffff;
+    --border-color: #e9ecef;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    line-height: 1.5;
+}
+
+code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.95em;
+}
+
+/* ------------------------------
+   Pathoma Planner (pathoma.html)
+   ------------------------------ */
+
+body.planner-body {
+    overflow: auto;
+    height: auto;
+}
+
+.planner-page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+}
+
+.planner-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+}
+
+.planner-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+}
+
+.planner-subtitle {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.planner-meta {
+    margin-top: 0.6rem;
+    color: #777;
+    font-size: 0.85rem;
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.planner-meta a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 650;
+}
+
+.planner-meta a:hover {
+    text-decoration: underline;
+}
+
+.planner-meta-sep {
+    opacity: 0.7;
+}
+
+.planner-card {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    margin-bottom: 1.25rem;
+}
+
+.planner-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.planner-card h2 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.planner-status {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.planner-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem 1rem;
+    align-items: end;
+}
+
+.planner-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.planner-label {
+    font-size: 0.85rem;
+    color: #555;
+    font-weight: 600;
+}
+
+.planner-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: var(--font-family);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.planner-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.10);
+}
+
+.planner-checkbox {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.6rem;
+    color: #444;
+    font-size: 0.95rem;
+}
+
+.planner-breaks {
+    grid-column: 1 / -1;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.75rem 0.85rem 0.85rem;
+    display: grid;
+    grid-template-columns: repeat(7, max-content);
+    column-gap: 1rem;
+    row-gap: 0.35rem;
+    align-items: center;
+    justify-content: space-between;
+    overflow-x: auto;
+}
+
+.planner-breaks legend {
+    padding: 0 0.25rem;
+    grid-column: 1 / -1;
+}
+
+.planner-break {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0;
+    font-size: 0.95rem;
+    color: #444;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.planner-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 0.6rem;
+    justify-content: flex-end;
+}
+
+.planner-btn {
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    color: white;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: filter 0.15s, transform 0.05s;
+    font-weight: 650;
+}
+
+.planner-btn:hover {
+    filter: brightness(0.95);
+}
+
+.planner-btn:active {
+    transform: translateY(1px);
+}
+
+.planner-btn-secondary {
+    background: white;
+    color: #444;
+    border-color: var(--border-color);
+}
+
+.planner-btn-secondary:hover {
+    background: #f8f9fa;
+}
+
+.planner-summary {
+    margin-top: 0.9rem;
+    background: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.85rem 0.9rem;
+}
+
+.planner-summary-row {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    color: #444;
+    font-size: 0.95rem;
+}
+
+.planner-error {
+    margin-top: 0.9rem;
+    background: rgba(176, 0, 32, 0.06);
+    border: 1px solid rgba(176, 0, 32, 0.18);
+    color: #8b001a;
+    border-radius: 10px;
+    padding: 0.85rem 0.9rem;
+    font-size: 0.92rem;
+}
+
+
+.planner-output {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.planner-placeholder {
+    color: #777;
+    font-style: italic;
+}
+
+.planner-day {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0.95rem;
+    background: #fcfcfc;
+}
+
+.planner-day-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+    margin-bottom: 0.7rem;
+}
+
+.planner-day-title {
+    font-weight: 800;
+    color: #333;
+}
+
+.planner-day-meta {
+    color: #666;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.planner-day-empty {
+    color: #777;
+    font-style: italic;
+}
+
+.planner-list {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.planner-chapter {
+    margin-top: 0.35rem;
+    padding-top: 0.45rem;
+    border-top: 1px dashed var(--border-color);
+    color: #555;
+    font-weight: 700;
+}
+
+.planner-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.2rem 0;
+}
+
+.planner-item-title {
+    color: #333;
+}
+
+.planner-item-minutes {
+    color: #777;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.planner-footer {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.planner-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 650;
+}
+
+.planner-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 720px) {
+    .planner-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .planner-actions {
+        justify-content: stretch;
+        flex-direction: column;
+    }
+
+    .planner-btn {
+        width: 100%;
+    }
+}
