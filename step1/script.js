@@ -1,3 +1,21 @@
+const SYSTEM_ORDER = [
+  "Fundamentals",
+  "Biochemistry/Genetics",
+  "Immunology",
+  "Microbiology",
+  "Hematology",
+  "Cardiovascular",
+  "Respiratory",
+  "Renal",
+  "Gastrointestinal",
+  "Reproductive",
+  "Endocrine",
+  "Neurology",
+  "Musculoskeletal/Derm",
+  "Psychiatry",
+  "Public Health/Ethics"
+];
+
 const pathomaData = [
   {
     system: "Fundamentals",
@@ -7,6 +25,9 @@ const pathomaData = [
       { id: 3, title: "Neoplasia", duration: 39, videos: ["3.1 Neoplasia Basics", "3.2 Carcinogenesis", "3.3 Tumor Progression"] }
     ]
   },
+  { system: "Biochemistry/Genetics", chapters: [] },
+  { system: "Immunology", chapters: [] },
+  { system: "Microbiology", chapters: [] },
   {
     system: "Hematology",
     chapters: [
@@ -29,16 +50,16 @@ const pathomaData = [
     ]
   },
   {
+    system: "Renal",
+    chapters: [
+      { id: 12, title: "Renal Pathology", duration: 50, videos: ["12.1 Acute Renal Failure", "12.2 Nephrotic Syndrome", "12.3 Nephritic Syndrome"] }
+    ]
+  },
+  {
     system: "Gastrointestinal",
     chapters: [
       { id: 10, title: "GI Pathology", duration: 60, videos: ["10.1 Oral Cavity", "10.2 Esophagus", "10.3 Stomach", "10.4 Small Bowel"] },
       { id: 11, title: "Exocrine Pancreas, Gallbladder, Liver", duration: 55, videos: ["11.1 Pancreas", "11.2 Gallbladder", "11.3 Liver Hepatitis"] }
-    ]
-  },
-  {
-    system: "Renal",
-    chapters: [
-      { id: 12, title: "Renal Pathology", duration: 50, videos: ["12.1 Acute Renal Failure", "12.2 Nephrotic Syndrome", "12.3 Nephritic Syndrome"] }
     ]
   },
   {
@@ -67,11 +88,147 @@ const pathomaData = [
       { id: 18, title: "Musculoskeletal Pathology", duration: 35, videos: ["18.1 Skeletal Muscle", "18.2 Bone Structure", "18.3 Bone Tumors"] },
       { id: 19, title: "Dermatopathology", duration: 30, videos: ["19.1 Skin Inflammatory", "19.2 Blistering Disorders", "19.3 Skin Tumors"] }
     ]
+  },
+  { system: "Psychiatry", chapters: [] },
+  { system: "Public Health/Ethics", chapters: [] }
+];
+
+const bnbData = [
+  {
+    system: "Fundamentals",
+    sections: [
+      { name: "Basic Pharmacology", duration: 86, videos: ["Enzymes (14m)", "Enzyme Inhibitors (8m)", "Dose-Response (21m)", "Drug Elimination (17m)", "Pharmacokinetics (27m)"] },
+      { name: "Pathology - General", duration: 182, videos: ["Cellular Adaptations (18m)", "Cell Injury (11m)", "Free Radicals (18m)", "Apoptosis (16m)", "Necrosis (12m)", "Inflammation Principles (25m)", "Wound Healing (24m)", "Neoplasia (25m)"] }
+    ]
+  },
+  {
+    system: "Biochemistry/Genetics",
+    sections: [
+      { name: "Molecular Biochem", duration: 54, videos: ["DNA Structure (13m)", "Purine Metabolism (19m)", "Pyrimidines (22m)"] },
+      { name: "Metabolism", duration: 252, videos: ["Glycolysis (31m)", "Gluconeogenesis (17m)", "TCA Cycle (14m)", "ETC (21m)", "Fatty Acids (27m)"] },
+      { name: "Genetics", duration: 146, videos: ["Genetic Principles (24m)", "Hardy-Weinberg (12m)", "Pedigrees (18m)", "Down Syndrome (14m)"] },
+      { name: "Cell Biology", duration: 200, videos: ["DNA Replication (17m)", "Transcription (23m)", "Translation (20m)", "Cell Cycle (14m)"] }
+    ]
+  },
+  {
+    system: "Cardiovascular",
+    sections: [
+      { name: "Anatomy/Physio", duration: 136, videos: ["Cardiac Phys (19m)", "PV Loops (16m)", "Wiggers (9m)", "Starling Curve (16m)"] },
+      { name: "Pathology", duration: 380, videos: ["Ischemia (30m)", "STEMI (12m)", "Heart Failure Basics (22m)", "Cardiomyopathy (12m)", "Hypertension (12m)", "Valve Disease (26m)", "Shock (21m)"] }
+    ]
+  },
+  {
+    system: "Endocrine",
+    sections: [
+      { name: "Thyroid/Adrenal", duration: 145, videos: ["Thyroid Gland (28m)", "Thyroid Disorders (34m)", "Adrenal Glands (22m)", "Cushing Syndrome (33m)"] },
+      { name: "Pancreas/Diabetes", duration: 87, videos: ["Diabetes (33m)", "Insulin (9m)", "Treatment (22m)"] }
+    ]
+  },
+  {
+    system: "Gastrointestinal",
+    sections: [
+      { name: "Anatomy/Physio", duration: 217, videos: ["GI Hormones (24m)", "Bilirubin (29m)", "Exocrine Pancreas (15m)"] },
+      { name: "Pathology", duration: 314, videos: ["Esophageal Disorders (23m)", "Cirrhosis (23m)", "Gallstones (20m)", "IBD (20m)", "Colon Cancer (24m)"] }
+    ]
+  },
+  {
+    system: "Hematology",
+    sections: [
+      { name: "Red Blood Cells", duration: 168, videos: ["Microcytic Anemia (33m)", "Thalassemia (21m)", "Sickle Cell (23m)"] },
+      { name: "White Blood Cells & Coag", duration: 251, videos: ["Coagulation (29m)", "Platelet Disorders (24m)", "Leukemia (18m)", "Lymphoma (9m)"] }
+    ]
+  },
+  {
+    system: "Immunology",
+    sections: [
+      { name: "Basic & Clinical", duration: 317, videos: ["Innate Immunity (36m)", "T-Cells (30m)", "Hypersensitivity (21m)", "Immune Deficiency (36m)", "SLE & RA (32m)"] }
+    ]
+  },
+  {
+    system: "Microbiology",
+    sections: [
+      { name: "Bacteriology", duration: 300, videos: ["Staph (18m)", "Strep (21m)", "Gram Negatives (30m)", "Mycobacteria (11m)"] },
+      { name: "Virology/Fungi/Parasites", duration: 336, videos: ["DNA Viruses (18m)", "RNA Viruses (43m)", "HIV (19m)", "Fungal Pneumonias (16m)", "Malaria (14m)"] }
+    ]
+  },
+  {
+    system: "Musculoskeletal/Derm",
+    sections: [
+      { name: "Dermatology", duration: 151, videos: ["Skin Disorders (20m)", "Skin Cancer (18m)"] },
+      { name: "Musculoskeletal", duration: 339, videos: ["Knee/Shoulder Anatomy (32m)", "Bone Tumors (24m)", "Osteoarthritis/Gout (29m)"] }
+    ]
+  },
+  {
+    system: "Neurology",
+    sections: [
+      { name: "Neurology", duration: 678, videos: ["Stroke Syndromes (19m)", "Cranial Nerves (18m)", "Parkinson's (20m)", "Seizures (22m)", "The Eye (14m)"] }
+    ]
+  },
+  {
+    system: "Psychiatry",
+    sections: [
+      { name: "Psych", duration: 286, videos: ["Mood Disorders (21m)", "Anxiety (15m)", "Substance Abuse (52m)", "Antidepressants (20m)"] }
+    ]
+  },
+  {
+    system: "Respiratory",
+    sections: [
+      { name: "Pulmonary", duration: 413, videos: ["Pulmonary Phys (32m)", "V/Q Mismatch (30m)", "COPD (26m)", "Pneumonia (26m)", "PE (14m)"] }
+    ]
+  },
+  {
+    system: "Renal",
+    sections: [
+      { name: "Physiology", duration: 267, videos: ["Nephron Phys (38m)", "Acid-Base (30m)", "Electrolytes (23m)"] },
+      { name: "Pathology", duration: 165, videos: ["Nephritic Syndrome (21m)", "Nephrotic Syndrome (18m)", "Renal Failure (21m)"] }
+    ]
+  },
+  {
+    system: "Reproductive",
+    sections: [
+      { name: "Repro", duration: 437, videos: ["Pregnancy (14m)", "PCOS/Endometriosis (22m)", "Breast Cancer (17m)", "Testicular Cancer (14m)"] }
+    ]
+  },
+  {
+    system: "Public Health/Ethics",
+    sections: [
+      { name: "Epi/Biostats", duration: 186, videos: ["Study Designs (17m)", "Bias (19m)", "Sensitivity/Specificity (22m)"] },
+      { name: "Ethics", duration: 130, videos: ["Informed Consent (17m)", "Quality & Safety (30m)"] }
+    ]
+  }
+];
+
+const sketchyData = [
+  {
+    system: "Microbiology",
+    sections: [
+      { name: "Gram Positive Cocci", duration: 51, videos: ["Staph Aureus (11m)", "Staph Epidermidis (7m)", "Strep Pyogenes (15m)", "Strep Agalactiae (5m)", "Strep Pneumo (9m)", "Enterococcus (4m)"] },
+      { name: "Gram Positive Bacilli", duration: 50, videos: ["Bacillus (10m)", "C. Tetani (7m)", "C. Botulinum (8m)", "C. Difficile (8m)", "C. Perfringens (6m)", "Corynebacterium (7m)", "Listeria (4m)"] },
+      { name: "Gram-Pos Branching", duration: 10, videos: ["Actinomyces (3m)", "Nocardia (7m)"] },
+      { name: "Gram Negative Cocci", duration: 22, videos: ["Neisseria Overview (5m)", "N. Meningitidis (9m)", "N. Gonorrheae (8m)"] },
+      { name: "Gram Negative Bacilli (Enteric)", duration: 67, videos: ["Klebsiella/Enterobacter (8m)", "Proteus (3m)", "Salmonella (6m)", "Shigella (6m)", "E. Coli (9m)", "Yersinia (8m)", "Campylobacter (6m)", "Vibrio (6m)", "Helicobacter (5m)", "Pseudomonas (10m)"] },
+      { name: "Gram Negative Bacilli (Respiratory)", duration: 24, videos: ["Bordatella (8m)", "Haemophilus (9m)", "Legionella (7m)"] },
+      { name: "Gram Negative Zoonotics", duration: 17, videos: ["Bartonella (4m)", "Brucella (5m)", "Francisella (4m)", "Pasteurella (4m)"] },
+      { name: "Mycobacteria", duration: 26, videos: ["M. Tuberculosis (17m)", "M. Leprae (9m)"] },
+      { name: "Spirochetes", duration: 25, videos: ["Borrelia (8m)", "Leptospirosis (4m)", "Treponema (13m)"] },
+      { name: "Gram-Indeterminate", duration: 44, videos: ["Chlamydia (15m)", "Coxiella (5m)", "Gardnerella (6m)", "Mycoplasma (6m)", "Rickettsia Overview (4m)", "R. Prowazekii (4m)", "R. Rickettsii (4m)"] },
+      { name: "Fungi - Systemic", duration: 28, videos: ["Histoplasmosis (10m)", "Blastomycosis (6m)", "Coccidioidomycosis (7m)", "Paracoccidioidomycosis (5m)"] },
+      { name: "Fungi - Cutaneous", duration: 15, videos: ["Malassezia (5m)", "Dermatophytes (6m)", "Sporothrix (4m)"] },
+      { name: "Fungi - Opportunistic", duration: 45, videos: ["Candida (13m)", "Aspergillus (11m)", "Cryptococcus (9m)", "Mucormycosis (6m)", "Pneumocystis (6m)"] },
+      { name: "Parasites - Intestinal", duration: 18, videos: ["Giardia (5m)", "Entamoeba (8m)", "Cryptosporidium (5m)"] },
+      { name: "Parasites - CNS", duration: 21, videos: ["Toxoplasmosis (10m)", "Trypanosoma Brucei (5m)", "Naegleria (6m)"] },
+      { name: "Parasites - Blood", duration: 33, videos: ["Trypanosoma Cruzi (6m)", "Babesia (7m)", "Plasmodium (14m)", "Leishmaniasis (6m)"] },
+      { name: "Parasites - Other", duration: 6, videos: ["Trichomoniasis (6m)"] },
+      { name: "Helminths", duration: 45, videos: ["Nematodes Intestinal (13m)", "Nematodes Tissue (11m)", "Cestodes (10m)", "Trematodes (11m)"] },
+      { name: "RNA Viruses (+)", duration: 89, videos: ["Picorna Overview (11m)", "Polio (7m)", "Coxsackie (5m)", "Rhino (5m)", "Hep A (7m)", "Calici (5m)", "Flavi (8m)", "Hep C (10m)", "Toga (11m)", "Corona (4m)", "HIV (16m)"] },
+      { name: "RNA Viruses (-)", duration: 66, videos: ["Orthomyxo (18m)", "Paramyxo (16m)", "Rhabdo (9m)", "Filo (5m)", "Bunya (6m)", "Arena (5m)", "Reo (7m)"] },
+      { name: "DNA Viruses", duration: 120, videos: ["HSV 1&2 (11m)", "Adeno (5m)", "Pox (8m)", "Hep B (19m)", "EBV (13m)", "CMV (12m)", "VZV (12m)", "HHV-6 (5m)", "HHV-8 (7m)", "Polyoma (7m)", "Papilloma (14m)", "Parvo (7m)"] }
+    ]
   }
 ];
 
 const practiceExamCatalog = [
-  { id: "nbme25", label: "NBME 25", mandatory: false, defaultChecked: true, kind: "nbme", order: 25, group: "practice" },
+  { id: "nbme25", label: "NBME 25", mandatory: false, defaultChecked: false, kind: "nbme", order: 25, group: "practice" },
   { id: "uwsa1", label: "UWSA 1", mandatory: false, defaultChecked: false, kind: "uwsa", order: 1, group: "practice" },
   { id: "uwsa2", label: "UWSA 2", mandatory: false, defaultChecked: false, kind: "uwsa", order: 2, group: "practice" },
   { id: "uwsa3", label: "UWSA 3", mandatory: false, defaultChecked: false, kind: "uwsa", order: 3, group: "practice" },
@@ -104,6 +261,9 @@ const els = {
   testingGroup: document.getElementById("testingGroup"),
   dayDetail: document.getElementById("dayDetail"),
   pathomaToggle: null,
+  bnbToggle: null,
+  sketchyToggle: null,
+  ankiToggle: null,
   uworldToggle: null
 };
 
@@ -111,7 +271,7 @@ const LIMIT_MINUTES_PER_DAY = 12 * 60;
 const UWORLD_TOTAL_Q = 4000;
 const UWORLD_MIN_PER_Q = (200 * 60) / UWORLD_TOTAL_Q; // 3 minutes per question
 const EXAM_MINUTES = 8 * 60;
-const PATHOMA_TOTAL_HOURS = 35;
+const ANKI_MINUTES = 60;
 
 let calendarWeekStart = null;
 let currentPlan = null; // { dayMap, start, exam }
@@ -176,9 +336,17 @@ function escapeHtml(s) {
     .replace(/'/g, "&#39;");
 }
 
-function renderExamToggles() {
+function renderResourceToggles() {
   const { learningGroup, practiceGroup, testingGroup } = els;
   if (!learningGroup || !practiceGroup || !testingGroup) return;
+
+  const previous = {
+    pathoma: els.pathomaToggle?.checked ?? true,
+    bnb: els.bnbToggle?.checked ?? false,
+    sketchy: els.sketchyToggle?.checked ?? false,
+    anki: els.ankiToggle?.checked ?? true,
+    uworld: els.uworldToggle?.checked ?? true
+  };
 
   learningGroup.innerHTML = "";
   practiceGroup.innerHTML = "";
@@ -200,12 +368,13 @@ function renderExamToggles() {
   };
 
   // Learning
-  const pathomaPill = makePill("pathomaToggle", "Pathoma", true, false);
-  learningGroup.appendChild(pathomaPill);
+  learningGroup.appendChild(makePill("pathomaToggle", "Pathoma", previous.pathoma));
+  learningGroup.appendChild(makePill("bnbToggle", "Boards & Beyond", previous.bnb));
+  learningGroup.appendChild(makePill("sketchyToggle", "Sketchy Micro", previous.sketchy));
+  learningGroup.appendChild(makePill("ankiToggle", "Anki (daily)", previous.anki));
 
   // Practice
-  const uworldPill = makePill("uworldToggle", "UWorld Qbank", true, false);
-  practiceGroup.appendChild(uworldPill);
+  practiceGroup.appendChild(makePill("uworldToggle", "UWorld Qbank", previous.uworld));
   for (const exam of practiceExamCatalog.filter(e => e.group === "practice")) {
     const pill = makePill(`exam-${exam.id}`, exam.label, exam.defaultChecked, false);
     practiceGroup.appendChild(pill);
@@ -218,6 +387,9 @@ function renderExamToggles() {
   }
 
   els.pathomaToggle = document.getElementById("pathomaToggle");
+  els.bnbToggle = document.getElementById("bnbToggle");
+  els.sketchyToggle = document.getElementById("sketchyToggle");
+  els.ankiToggle = document.getElementById("ankiToggle");
   els.uworldToggle = document.getElementById("uworldToggle");
 }
 
@@ -268,6 +440,75 @@ function addExamTask(day, label) {
   addTask(day, { type: "exam", label, durationMinutes: EXAM_MINUTES, detail: "Full-length practice exam" });
 }
 
+function totalMinutesForResource(resource) {
+  return resource.reduce((sum, entry) => {
+    if (entry.chapters) {
+      return sum + entry.chapters.reduce((s, ch) => s + ch.duration, 0);
+    }
+    if (entry.sections) {
+      return sum + entry.sections.reduce((s, sec) => s + sec.duration, 0);
+    }
+    return sum;
+  }, 0);
+}
+
+function findSystemBlock(data, systemName) {
+  return data.find(s => s.system === systemName);
+}
+
+function buildSystemQueue(systemName, flags) {
+  const queue = [];
+  if (flags.pathoma) {
+    const sys = findSystemBlock(pathomaData, systemName);
+    if (sys) {
+      for (const ch of sys.chapters || []) {
+        queue.push({
+          type: "learning",
+          label: `Pathoma – ${ch.title}`,
+          durationMinutes: ch.duration,
+          detail: `${systemName} • ${ch.videos.join(", ")}`,
+          system: systemName
+        });
+      }
+    }
+  }
+  if (flags.bnb) {
+    const sys = findSystemBlock(bnbData, systemName);
+    if (sys) {
+      for (const sec of sys.sections || []) {
+        queue.push({
+          type: "learning",
+          label: `Boards & Beyond – ${sec.name}`,
+          durationMinutes: sec.duration,
+          detail: `${systemName} • ${sec.videos.join(", ")}`,
+          system: systemName
+        });
+      }
+    }
+  }
+  if (flags.sketchy) {
+    const sys = findSystemBlock(sketchyData, systemName);
+    if (sys) {
+      for (const sec of sys.sections || []) {
+        queue.push({
+          type: "learning",
+          label: `Sketchy – ${sec.name}`,
+          durationMinutes: sec.duration,
+          detail: `${systemName} • ${sec.videos.join(", ")}`,
+          system: systemName
+        });
+      }
+    }
+  }
+  return queue;
+}
+
+function getStudyDays(dayMap) {
+  return Array.from(dayMap.values())
+    .filter(d => !d.isBreak && !hasExam(d))
+    .sort((a, b) => a.date - b.date);
+}
+
 function nextSaturdayOnOrAfter(date) {
   const d = new Date(date);
   const offset = (6 - d.getDay() + 7) % 7;
@@ -280,61 +521,6 @@ function saturdayOnOrBefore(date) {
   const offset = (d.getDay() + 7 - 6) % 7;
   d.setDate(d.getDate() - offset);
   return d;
-}
-
-function collectPathomaQueue() {
-  const queue = [];
-  for (const system of pathomaData) {
-    for (const ch of system.chapters) {
-      queue.push({ system: system.system, title: ch.title, minutes: ch.duration, videos: ch.videos });
-    }
-  }
-  return queue;
-}
-
-function distributePathomaAcrossFirstWeeks(dayMap, queue, start, horizonDays = 21) {
-  const horizonEnd = addDays(start, horizonDays - 1);
-  const candidates = Array.from(dayMap.values())
-    .filter(d => d.date >= start && d.date <= horizonEnd && !d.isBreak && !hasExam(d))
-    .sort((a, b) => a.date - b.date);
-  if (candidates.length === 0 || queue.length === 0) return queue;
-
-  let idx = 0;
-  let safety = 0;
-  const maxAttempts = queue.length * candidates.length * 3;
-  while (queue.length > 0 && safety < maxAttempts) {
-    const day = candidates[idx % candidates.length];
-    const remaining = LIMIT_MINUTES_PER_DAY - day.usedMinutes;
-    const next = queue[0];
-    if (next.minutes <= remaining) {
-      addTask(day, {
-        type: "learning",
-        label: `Pathoma – ${next.title}`,
-        durationMinutes: next.minutes,
-        detail: `${next.system} • ${next.videos.join(", ")}`,
-        system: next.system
-      });
-      queue.shift();
-    }
-    idx++;
-    safety++;
-  }
-  return queue;
-}
-
-function countAvailableStudyDays(days, until) {
-  let count = 0;
-  for (const d of days) {
-    if (d.date > until) continue;
-    if (d.isBreak || hasExam(d)) continue;
-    count++;
-  }
-  return count;
-}
-
-function ensureCapacity(beforeDeadlineDays, systemMinutesNeeded) {
-  const minutesAvailable = beforeDeadlineDays * LIMIT_MINUTES_PER_DAY;
-  return minutesAvailable >= systemMinutesNeeded;
 }
 
 function getBreakDowSet() {
@@ -590,47 +776,61 @@ function generatePlan() {
     resetError("Exam date must be on or after the start date.");
     return;
   }
-
-  const pathomaEnabled = els.pathomaToggle.checked;
-  const uworldEnabled = els.uworldToggle.checked;
+  const flags = {
+    pathoma: els.pathomaToggle?.checked ?? true,
+    bnb: els.bnbToggle?.checked ?? false,
+    sketchy: els.sketchyToggle?.checked ?? false,
+    anki: els.ankiToggle?.checked ?? true,
+    uworld: els.uworldToggle?.checked ?? true
+  };
   const examSelections = getExamSelections();
 
   const totalDays = Math.floor((exam - start) / (24 * 60 * 60 * 1000)) + 1;
-  const totalHours = (pathomaEnabled ? PATHOMA_TOTAL_HOURS : 0) + (uworldEnabled ? 200 : 0) + (examSelections.length * 8);
-  const avgPerDay = totalHours / totalDays;
-  if (pathomaEnabled && totalDays < 21) {
-    setFeasibility("Not feasible (<3 weeks)", "bad");
-    resetError("A schedule could not be feasibly created. We recommend extending your study period or reducing the number of resources.");
-    return;
-  }
-  if (avgPerDay > 12) {
-    setFeasibility("Not feasible (>12h/day)", "bad");
-    resetError("A schedule could not be feasibly created. We recommend extending your study period.");
-    return;
-  }
-  setFeasibility("Feasible", "good");
-
   const breakSet = getBreakDowSet();
   const dayMap = buildDayMap(start, exam, breakSet);
+
   for (const day of dayMap.values()) {
     if (day.isBreak) addTask(day, { type: "buffer", label: "Buffer / Rest (Break Day)", durationMinutes: 0, detail: "Keep this day open for recovery." });
   }
+
+  const dayBeforeExamKey = formatDateKey(addDays(exam, -1));
+  const dayBeforeExam = dayMap.get(dayBeforeExamKey);
+  if (dayBeforeExam) {
+    dayBeforeExam.tasks = [];
+    dayBeforeExam.usedMinutes = 0;
+    dayBeforeExam.isBreak = true;
+    addTask(dayBeforeExam, { type: "buffer", label: "Buffer / Rest (Break Day)", durationMinutes: 0, detail: "Protect the day before your exam." });
+  }
+
   const breakDays = Array.from(dayMap.values()).filter(d => d.isBreak).length;
-  const studyDays = totalDays - breakDays;
-  renderStats({ totalDays, studyDays, totalHours, avgPerDay });
-  if (studyDays <= 0 && totalHours > 0) {
+  const studyDayCount = totalDays - breakDays;
+  if (studyDayCount <= 0) {
     resetError("All days are breaks. Please select at least one study day.");
     return;
   }
 
-  let pathomaQueue = pathomaEnabled ? collectPathomaQueue() : [];
-  pathomaQueue = distributePathomaAcrossFirstWeeks(dayMap, pathomaQueue, start, 21);
+  const resourceMinutes = (flags.pathoma ? totalMinutesForResource(pathomaData) : 0)
+    + (flags.bnb ? totalMinutesForResource(bnbData) : 0)
+    + (flags.sketchy ? totalMinutesForResource(sketchyData) : 0);
+  const ankiDayCount = Math.max(0, studyDayCount - examSelections.length);
+  const ankiMinutesTotal = flags.anki ? ankiDayCount * ANKI_MINUTES : 0;
+  const uworldMinutesTotal = flags.uworld ? UWORLD_TOTAL_Q * UWORLD_MIN_PER_Q : 0;
+  const examMinutesTotal = examSelections.length * EXAM_MINUTES;
+  const totalHours = (resourceMinutes + ankiMinutesTotal + uworldMinutesTotal + examMinutesTotal) / 60;
+  const avgPerDay = totalHours / studyDayCount;
 
-  // Anchors
-  const qbDeadline = addDays(exam, -14) < start ? start : addDays(exam, -14);
-  const free120 = addDays(exam, -3);
+  renderStats({ totalDays, studyDays: studyDayCount, totalHours, avgPerDay });
+
+  if (avgPerDay > 12) {
+    setFeasibility("Not feasible (>12h/day)", "bad");
+    resetError("Plan not feasible (>12h/day). Try unchecking 'Boards & Beyond' or extending your date.");
+    return;
+  }
+  setFeasibility("Feasible", "good");
+
+  // Practice exam placement
+  const free120Date = addDays(exam, -3);
   const uwsa2Date = addDays(exam, -7);
-
   const selected = [...examSelections];
   const nbmeList = selected.filter(e => e.kind === "nbme").sort((a, b) => a.order - b.order);
   const baselineExam = nbmeList[0];
@@ -639,40 +839,33 @@ function generatePlan() {
     let baselineDate = nextSaturdayOnOrAfter(start);
     if (baselineDate > weekEnd) baselineDate = weekEnd;
     const baseDay = dayMap.get(formatDateKey(baselineDate));
-    if (baseDay) addExamTask(baseDay, `${baselineExam.label} – Baseline`);
+    if (baseDay && !baseDay.isBreak) addExamTask(baseDay, `${baselineExam.label} – Baseline`);
   }
 
   const usedExamIds = new Set();
   if (baselineExam) usedExamIds.add(baselineExam.id);
-
-  for (const examItem of selected) {
-    const isFree = examItem.id === "free120";
-    const isUwsa2 = examItem.id === "uwsa2";
-    if (isFree) usedExamIds.add(examItem.id);
-    if (isUwsa2) usedExamIds.add(examItem.id);
-  }
+  if (selected.some(e => e.id === "free120")) usedExamIds.add("free120");
+  if (selected.some(e => e.id === "uwsa2")) usedExamIds.add("uwsa2");
 
   if (selected.some(e => e.id === "free120")) {
-    const d = dayMap.get(formatDateKey(free120));
-    if (d) addExamTask(d, "Free 120 – 3 days out");
+    const d = dayMap.get(formatDateKey(free120Date));
+    if (d && !d.isBreak) addExamTask(d, "Free 120 – 3 days out");
   }
 
   if (selected.some(e => e.id === "uwsa2")) {
     const d = dayMap.get(formatDateKey(uwsa2Date));
-    if (d) addExamTask(d, "UWSA 2 – 1 week out");
+    if (d && !d.isBreak) addExamTask(d, "UWSA 2 – 1 week out");
   }
 
   const remainingExams = selected.filter(e => !usedExamIds.has(e.id));
-  let ptr = qbDeadline;
-  const placedIds = new Set();
+  let ptr = addDays(exam, -14) < start ? start : addDays(exam, -14);
   for (let i = remainingExams.length - 1; i >= 0; i--) {
     let target = saturdayOnOrBefore(ptr);
     while (target >= start) {
       const key = formatDateKey(target);
       const day = dayMap.get(key);
-      if (day && !hasExam(day)) {
+      if (day && !hasExam(day) && !day.isBreak) {
         addExamTask(day, `${remainingExams[i].label} – Weekend assessment`);
-        placedIds.add(remainingExams[i].id);
         break;
       }
       target = addDays(target, -7);
@@ -680,122 +873,74 @@ function generatePlan() {
     ptr = addDays(ptr, -7);
   }
 
-  const systemDays = Array.from(dayMap.values()).filter(d => d.date <= qbDeadline);
-  const dedicatedDays = Array.from(dayMap.values()).filter(d => d.date > qbDeadline);
+  // Study slots after exam placement
+  const studySlots = getStudyDays(dayMap);
 
-  // Systems block
-  let systemQuestionsRemaining = uworldEnabled ? Math.round(UWORLD_TOTAL_Q * 0.6) : 0;
-  const systemMinutesNeeded = (pathomaQueue.reduce((acc, c) => acc + c.minutes, 0) * (pathomaEnabled ? 1 : 0)) + (systemQuestionsRemaining * UWORLD_MIN_PER_Q);
-  const studyDaysBeforeDeadline = countAvailableStudyDays(systemDays, qbDeadline);
-  if (!ensureCapacity(studyDaysBeforeDeadline, systemMinutesNeeded)) {
-    resetError("Not enough capacity before the UWorld deadline. Extend the runway or uncheck resources.");
-  }
-
-  for (const day of systemDays) {
-    if (day.isBreak || hasExam(day)) continue;
-    let remaining = LIMIT_MINUTES_PER_DAY - day.usedMinutes;
-    if (remaining <= 0) continue;
-
-    let daySystem = pathomaQueue[0]?.system || null;
-    while (pathomaQueue.length > 0) {
-      const chapter = pathomaQueue[0];
-      if (chapter.minutes > remaining) break;
-      addTask(day, {
-        type: "learning",
-        label: `Pathoma – ${chapter.title}`,
-        durationMinutes: chapter.minutes,
-        detail: `${chapter.system} • ${chapter.videos.join(", ")}`,
-        system: chapter.system
-      });
-      daySystem = chapter.system;
-      remaining -= chapter.minutes;
-      pathomaQueue.shift();
-    }
-
-    if (uworldEnabled && systemQuestionsRemaining > 0 && remaining > 0) {
-      const daysLeft = countAvailableStudyDays(systemDays.filter(d => d.date >= day.date), qbDeadline);
-      let qTarget = Math.ceil(systemQuestionsRemaining / Math.max(1, daysLeft));
-      qTarget = Math.max(80, qTarget);
-      const cardioMode = daySystem === "Cardiovascular" || (pathomaQueue[0]?.system === "Cardiovascular");
-      const minutesNeeded = qTarget * UWORLD_MIN_PER_Q;
-      if (minutesNeeded > remaining) {
-        qTarget = Math.floor(remaining / UWORLD_MIN_PER_Q);
-      }
-      if (qTarget > 0) {
-        const label = cardioMode
-          ? "UWorld: 2 Blocks (80 Qs) – Cardiovascular only (Tutor Mode)"
-          : `UWorld: ${qTarget} Qs – System-focused (Tutor Mode)`;
-        addTask(day, { type: "practice", label, durationMinutes: qTarget * UWORLD_MIN_PER_Q, detail: cardioMode ? "Stay within cardio question pool." : "Target the current system." });
-        systemQuestionsRemaining -= qTarget;
-        remaining -= qTarget * UWORLD_MIN_PER_Q;
-      }
+  if (flags.anki) {
+    for (const day of studySlots) {
+      addTask(day, { type: "practice", label: "Anki Reviews (Daily Maintenance)", durationMinutes: ANKI_MINUTES, detail: "Keep reviews tight and active recall." });
     }
   }
 
-  // Catch any leftover Pathoma chapters inside the dedicated block
-  if (pathomaQueue.length > 0) {
-    for (const day of dedicatedDays) {
-      if (day.isBreak || hasExam(day)) continue;
+  let slotIndex = 0;
+  let uworldMinutesRemaining = flags.uworld ? uworldMinutesTotal : 0;
+
+  for (const systemName of SYSTEM_ORDER) {
+    const queue = buildSystemQueue(systemName, flags);
+    if (queue.length === 0) continue;
+
+    while (queue.length > 0) {
+      if (slotIndex >= studySlots.length) {
+        resetError(`Ran out of study days while scheduling ${systemName}. Extend your dates or deselect a resource.`);
+        currentPlan = { dayMap, start, exam };
+        renderDayDetail(dayMap);
+        renderCalendar(dayMap);
+        return;
+      }
+      const day = studySlots[slotIndex];
       let remaining = LIMIT_MINUTES_PER_DAY - day.usedMinutes;
-      if (remaining <= 0) continue;
-      while (pathomaQueue.length > 0 && pathomaQueue[0].minutes <= remaining) {
-        const chapter = pathomaQueue.shift();
-        addTask(day, {
-          type: "learning",
-          label: `Pathoma – ${chapter.title}`,
-          durationMinutes: chapter.minutes,
-          detail: `${chapter.system} • ${chapter.videos.join(", ")}`,
-          system: chapter.system
-        });
-        remaining -= chapter.minutes;
+      if (remaining <= 0) {
+        slotIndex++;
+        continue;
       }
-      if (pathomaQueue.length === 0) break;
+
+      const next = queue[0];
+      if (next.durationMinutes <= remaining) {
+        addTask(day, next);
+        remaining -= next.durationMinutes;
+        queue.shift();
+      } else {
+        slotIndex++;
+        continue;
+      }
+
+      if (remaining > 30 && flags.uworld && uworldMinutesRemaining > 0) {
+        const block = Math.min(uworldMinutesRemaining, Math.min(180, remaining));
+        if (block >= 45) {
+          addTask(day, { type: "practice", label: `UWorld: Subject - ${systemName}`, durationMinutes: block, detail: `Focus on ${systemName}` });
+          uworldMinutesRemaining -= block;
+          remaining -= block;
+        }
+      }
+
+      if (remaining < 30) slotIndex++;
+    }
+
+    if (slotIndex < studySlots.length && studySlots[slotIndex].usedMinutes >= LIMIT_MINUTES_PER_DAY - 30) {
+      slotIndex++;
     }
   }
 
-  // Dedicated block
-  const systemTarget = uworldEnabled ? Math.round(UWORLD_TOTAL_Q * 0.6) : 0;
-  const systemCompleted = Math.max(0, systemTarget - systemQuestionsRemaining);
-  let dedicatedQuestionsRemaining = uworldEnabled ? UWORLD_TOTAL_Q - systemCompleted : 0;
-  for (const day of dedicatedDays) {
-    if (day.isBreak || hasExam(day)) continue;
+  // Fill remaining UWorld time with mixed blocks
+  for (let i = slotIndex; i < studySlots.length && uworldMinutesRemaining > 0; i++) {
+    const day = studySlots[i];
     let remaining = LIMIT_MINUTES_PER_DAY - day.usedMinutes;
     if (remaining <= 0) continue;
-
-    if (uworldEnabled && dedicatedQuestionsRemaining > 0) {
-      const daysLeft = countAvailableStudyDays(dedicatedDays.filter(d => d.date >= day.date), exam);
-      let qTarget = Math.max(80, Math.ceil(dedicatedQuestionsRemaining / Math.max(1, daysLeft)));
-      qTarget = Math.min(dedicatedQuestionsRemaining, qTarget);
-      const minutesNeeded = qTarget * UWORLD_MIN_PER_Q;
-      if (minutesNeeded > remaining) {
-        qTarget = Math.floor(remaining / UWORLD_MIN_PER_Q);
-      }
-      if (qTarget > 0) {
-        addTask(day, { type: "practice", label: `UWorld: Random, Timed Mode (${qTarget} Qs)`, durationMinutes: qTarget * UWORLD_MIN_PER_Q, detail: "Prioritize weak topics and pacing." });
-        dedicatedQuestionsRemaining -= qTarget;
-        remaining -= qTarget * UWORLD_MIN_PER_Q;
-      }
+    const block = Math.min(uworldMinutesRemaining, Math.min(180, remaining));
+    if (block >= 45) {
+      addTask(day, { type: "practice", label: "UWorld: Mixed Blocks", durationMinutes: block, detail: "Finish QBank and review explanations." });
+      uworldMinutesRemaining -= block;
     }
-  }
-
-  // Final Pathoma review (last four available days before exam)
-  const reviewChapters = pathomaData[0].chapters.slice(0, 3); // Fundamentals 1-3
-  const reviewTasks = reviewChapters.map(ch => ({
-    label: `Pathoma quick review – ${ch.title} (2x speed)`,
-    minutes: Math.ceil(ch.duration / 2),
-    detail: ch.videos.join(", ")
-  }));
-  reviewTasks.push({ label: "Integration drills – sketchy notes + flashcards", minutes: 30, detail: "Keep it light and active recall." });
-
-  const candidateReviewDays = Array.from(dayMap.values())
-    .filter(d => d.date < exam && !d.isBreak && !hasExam(d))
-    .sort((a, b) => b.date - a.date)
-    .slice(0, 4);
-
-  for (let i = 0; i < candidateReviewDays.length && i < reviewTasks.length; i++) {
-    const day = candidateReviewDays[i];
-    if (day.usedMinutes + reviewTasks[i].minutes > LIMIT_MINUTES_PER_DAY) continue;
-    addTask(day, { type: "learning", label: reviewTasks[i].label, durationMinutes: reviewTasks[i].minutes, detail: reviewTasks[i].detail });
   }
 
   currentPlan = { dayMap, start, exam };
@@ -807,16 +952,19 @@ function generatePlan() {
 function quickFillExample() {
   const today = new Date();
   const start = formatDateKey(today);
-  const exam = formatDateKey(addDays(today, 70));
+  const exam = formatDateKey(addDays(today, 84));
   els.startDate.value = start;
   els.examDate.value = exam;
+  renderResourceToggles();
   els.pathomaToggle.checked = true;
+  els.bnbToggle.checked = false;
+  els.sketchyToggle.checked = false;
+  els.ankiToggle.checked = true;
   els.uworldToggle.checked = true;
-  renderExamToggles();
   generatePlan();
 }
 
-renderExamToggles();
+renderResourceToggles();
 els.generateBtn.addEventListener("click", generatePlan);
 els.quickFill.addEventListener("click", quickFillExample);
 if (els.downloadIcs) els.downloadIcs.addEventListener("click", downloadIcsFile);
@@ -841,7 +989,7 @@ for (const cb of els.breakBoxes) {
 if (!els.startDate.value) {
   const today = new Date();
   els.startDate.value = formatDateKey(today);
-  els.examDate.value = formatDateKey(addDays(today, 60));
+  els.examDate.value = "";
 }
 
 renderDayDetail(new Map());

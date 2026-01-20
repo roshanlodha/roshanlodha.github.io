@@ -15,7 +15,7 @@
       <div>
         <p class="eyebrow">Systems-Based Scheduler</p>
         <h1>USMLE Step 1 Planner</h1>
-        <p class="lede">Build a feasible, systems-first plan that pairs Pathoma with UWorld and anchored practice exams.</p>
+        <p class="lede">Build a feasible, systems-first plan that weaves Pathoma, BnB, Sketchy Micro, Anki, UWorld, and your practice exams.</p>
       </div>
     </header>
 
@@ -25,7 +25,7 @@
           <p class="eyebrow">Setup</p>
           <h2 id="inputs-title">Plan Settings</h2>
         </div>
-        <button class="ghost" type="button" id="quickFill">Use 10-week example</button>
+        <button class="ghost" type="button" id="quickFill">Use 12-week default</button>
       </div>
       <div class="inputs-grid">
         <label class="field">
@@ -84,12 +84,6 @@
           <p class="eyebrow">Calendar</p>
           <h2 id="calendar-title">Calendar</h2>
         </div>
-        <div class="legend" aria-label="Color legend">
-          <span class="legend-dot learning"></span> Learning
-          <span class="legend-dot practice"></span> Practice
-          <span class="legend-dot exam"></span> Mock exam
-          <span class="legend-dot buffer"></span> Buffer/Rest
-        </div>
         <div class="calendar-controls" aria-label="Calendar navigation">
           <button class="ghost" type="button" id="calPrev">Prev</button>
           <div class="calendar-month" id="calRange"></div>
@@ -99,6 +93,12 @@
         </div>
       </div>
       <div id="weeklyCalendar" class="calendar"></div>
+      <div class="legend" aria-label="Color legend">
+        <span class="legend-dot learning"></span> Learning
+        <span class="legend-dot practice"></span> Practice
+        <span class="legend-dot exam"></span> Mock exam
+        <span class="legend-dot buffer"></span> Buffer/Rest
+      </div>
       <div id="dayDetail" class="day-detail"></div>
     </section>
   </div>
