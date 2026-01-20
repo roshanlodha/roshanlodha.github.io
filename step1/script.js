@@ -589,6 +589,7 @@ function renderResourceToggles() {
   learningGroup.innerHTML = "";
   practiceGroup.innerHTML = "";
   testingGroup.innerHTML = "";
+  testingGroup.classList.add("testing-group");
 
   const makePill = (id, label, checked, disabled = false) => {
     const lab = document.createElement("label");
@@ -625,23 +626,20 @@ function renderResourceToggles() {
 
   const testingByKind = (kind) => practiceExamCatalog.filter(e => e.group === "testing" && e.kind === kind);
 
-  testingGroup.appendChild(addHeading("UWSA"));
-  for (const exam of testingByKind("uwsa")) {
-    const pill = makePill(`exam-${exam.id}`, exam.label, exam.defaultChecked, false);
-    testingGroup.appendChild(pill);
-  }
+  const addRow = (title, exams) => {
+    const row = document.createElement("div");
+    row.className = "pill-row";
+    row.appendChild(addHeading(title));
+    for (const exam of exams) {
+      const pill = makePill(`exam-${exam.id}`, exam.label, exam.defaultChecked, false);
+      row.appendChild(pill);
+    }
+    testingGroup.appendChild(row);
+  };
 
-  testingGroup.appendChild(addHeading("NBME"));
-  for (const exam of testingByKind("nbme")) {
-    const pill = makePill(`exam-${exam.id}`, exam.label, exam.defaultChecked, false);
-    testingGroup.appendChild(pill);
-  }
-
-  testingGroup.appendChild(addHeading("Free120"));
-  for (const exam of testingByKind("free")) {
-    const pill = makePill(`exam-${exam.id}`, exam.label, exam.defaultChecked, false);
-    testingGroup.appendChild(pill);
-  }
+  addRow("UWSA", testingByKind("uwsa"));
+  addRow("NBME", testingByKind("nbme"));
+  addRow("Free120", testingByKind("free"));
 
   els.pathomaToggle = document.getElementById("pathomaToggle");
   els.bnbToggle = document.getElementById("bnbToggle");
@@ -1008,7 +1006,6 @@ function renderCalendar(dayMap) {
     const chips = [];
     if (day) {
       const tasks = day.tasks || [];
-      if (day.isBreak) chips.push('<span class="calendar-chip buffer">Break</span>');
 
       const groupMap = new Map();
       for (const t of tasks) {
@@ -1034,7 +1031,11 @@ function renderCalendar(dayMap) {
         chips.push(`<span class="calendar-chip ${g.type}"${titleAttr}>${escapeHtml(g.label + countSuffix)}</span>`);
       }
 
-      if (chips.length === 0) chips.push('<span class="calendar-chip more">No tasks</span>');
+      if (chips.length === 0) {
+        const fallbackLabel = day.isBreak ? "Buffer / Rest" : "No tasks";
+        const fallbackClass = day.isBreak ? "buffer" : "more";
+        chips.push(`<span class="calendar-chip ${fallbackClass}">${escapeHtml(fallbackLabel)}</span>`);
+      }
     } else {
       chips.push('<span class="calendar-chip more">No tasks</span>');
     }
@@ -1375,7 +1376,14 @@ function generatePlan() {
       return a.date - b.date;
     });
 
-  for (const exam of remainingExams) {
+  const remainingExamsSorted = [...remainingExams].sort((a, b) => {
+    if (a.kind === "nbme" && b.kind === "nbme") return b.order - a.order; // later NBME numbers later
+    if (a.kind === "nbme") return 1;
+    if (b.kind === "nbme") return -1;
+    return a.order - b.order;
+  });
+
+  for (const exam of remainingExamsSorted) {
     const target = candidateDays.shift();
     if (target) {
       target.tasks = [];

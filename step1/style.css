@@ -124,6 +124,23 @@ body {
   gap: 8px;
 }
 
+.pill-group.testing-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pill-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill-group.testing-group .pill-heading {
+  margin: 0;
+}
+
 .pill {
   display: inline-flex;
   align-items: center;
@@ -138,8 +155,12 @@ body {
 .pill-heading {
   border: none;
   background: transparent;
-  padding-left: 0;
+  padding: 0;
+  margin: 4px 0 2px;
   font-weight: 800;
+  color: var(--text);
+  cursor: default;
+  display: block;
 }
 
 .pill input { accent-color: var(--primary); }
@@ -380,6 +401,8 @@ body {
   .calendar-month { width: 100%; text-align: left; }
   .calendar { display: none; }
   .calendar-controls .ghost { display: none; }
+  .calendar-month { display: none; }
+  .legend { display: none; }
   .day-nav { display: flex; flex-wrap: wrap; }
   .day-nav .ghost { flex: 0 0 auto; }
   .day-nav-label { width: 100%; text-align: left; }
