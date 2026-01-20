@@ -452,17 +452,18 @@ const sketchyData = [
 
 
 const practiceExamCatalog = [
-  { id: "nbme25", label: "NBME 25", mandatory: false, defaultChecked: false, kind: "nbme", order: 25, group: "practice" },
-  { id: "uwsa1", label: "UWSA 1", mandatory: false, defaultChecked: true, kind: "uwsa", order: 1, group: "practice" },
-  { id: "uwsa2", label: "UWSA 2", mandatory: false, defaultChecked: true, kind: "uwsa", order: 2, group: "practice" },
-  { id: "uwsa3", label: "UWSA 3", mandatory: false, defaultChecked: true, kind: "uwsa", order: 3, group: "practice" },
-  { id: "nbme26", label: "NBME 26", mandatory: true, defaultChecked: true, kind: "nbme", order: 26, group: "testing" },
-  { id: "nbme27", label: "NBME 27", mandatory: true, defaultChecked: true, kind: "nbme", order: 27, group: "testing" },
-  { id: "nbme28", label: "NBME 28", mandatory: true, defaultChecked: true, kind: "nbme", order: 28, group: "testing" },
-  { id: "nbme29", label: "NBME 29", mandatory: true, defaultChecked: true, kind: "nbme", order: 29, group: "testing" },
-  { id: "nbme30", label: "NBME 30", mandatory: true, defaultChecked: true, kind: "nbme", order: 30, group: "testing" },
-  { id: "nbme31", label: "NBME 31", mandatory: true, defaultChecked: true, kind: "nbme", order: 31, group: "testing" },
-  { id: "free120", label: "Free 120", mandatory: true, defaultChecked: true, kind: "free", order: 120, group: "testing" }
+  { id: "uwsa1", label: "UWSA 1", mandatory: false, defaultChecked: true, kind: "uwsa", order: 1, group: "testing" },
+  { id: "uwsa2", label: "UWSA 2", mandatory: false, defaultChecked: true, kind: "uwsa", order: 2, group: "testing" },
+  { id: "uwsa3", label: "UWSA 3", mandatory: false, defaultChecked: true, kind: "uwsa", order: 3, group: "testing" },
+  { id: "nbme26", label: "NBME 26", mandatory: false, defaultChecked: true, kind: "nbme", order: 26, group: "testing" },
+  { id: "nbme27", label: "NBME 27", mandatory: false, defaultChecked: true, kind: "nbme", order: 27, group: "testing" },
+  { id: "nbme28", label: "NBME 28", mandatory: false, defaultChecked: true, kind: "nbme", order: 28, group: "testing" },
+  { id: "nbme29", label: "NBME 29", mandatory: false, defaultChecked: true, kind: "nbme", order: 29, group: "testing" },
+  { id: "nbme30", label: "NBME 30", mandatory: false, defaultChecked: true, kind: "nbme", order: 30, group: "testing" },
+  { id: "nbme31", label: "NBME 31", mandatory: false, defaultChecked: true, kind: "nbme", order: 31, group: "testing" },
+  { id: "nbme32", label: "NBME 32", mandatory: false, defaultChecked: true, kind: "nbme", order: 32, group: "testing" },
+  { id: "free120old", label: "Free 120 (Old)", mandatory: false, defaultChecked: true, kind: "free", order: 120, group: "testing" },
+  { id: "free120", label: "Free 120 (New)", mandatory: true, defaultChecked: true, kind: "free", order: 120, group: "testing" }
 ];
 
 const els = {
@@ -490,7 +491,8 @@ const els = {
   bnbToggle: null,
   sketchyToggle: null,
   ankiToggle: null,
-  uworldToggle: null
+  uworldToggle: null,
+  ambossToggle: null
 };
 
 const LIMIT_MINUTES_PER_DAY = 12 * 60;
@@ -499,6 +501,11 @@ const UWORLD_BLOCK_Q = 40;
 const UWORLD_BLOCK_MINUTES = 120; // 40 questions per block, includes review
 const UWORLD_TOTAL_BLOCKS = Math.ceil(UWORLD_TOTAL_Q / UWORLD_BLOCK_Q);
 const UWORLD_TOTAL_MINUTES = UWORLD_TOTAL_BLOCKS * UWORLD_BLOCK_MINUTES;
+const AMBOSS_TOTAL_Q = 2800;
+const AMBOSS_BLOCK_Q = 40;
+const AMBOSS_BLOCK_MINUTES = 120;
+const AMBOSS_TOTAL_BLOCKS = Math.ceil(AMBOSS_TOTAL_Q / AMBOSS_BLOCK_Q);
+const AMBOSS_TOTAL_MINUTES = AMBOSS_TOTAL_BLOCKS * AMBOSS_BLOCK_MINUTES;
 const EXAM_MINUTES = 12 * 60;
 const ANKI_MINUTES = 60;
 const MIN_LEARNING_MINUTES = 180; // Minimum daily learning (Anki + videos) until videos are done
@@ -575,7 +582,8 @@ function renderResourceToggles() {
     bnb: els.bnbToggle?.checked ?? false,
     sketchy: els.sketchyToggle?.checked ?? false,
     anki: els.ankiToggle?.checked ?? true,
-    uworld: els.uworldToggle?.checked ?? true
+    uworld: els.uworldToggle?.checked ?? true,
+    amboss: els.ambossToggle?.checked ?? false
   };
 
   learningGroup.innerHTML = "";
@@ -605,13 +613,32 @@ function renderResourceToggles() {
 
   // Practice
   practiceGroup.appendChild(makePill("uworldToggle", "UWorld Qbank", previous.uworld));
-  for (const exam of practiceExamCatalog.filter(e => e.group === "practice")) {
-    const pill = makePill(`exam-${exam.id}`, exam.label, exam.defaultChecked, false);
-    practiceGroup.appendChild(pill);
-  }
+  practiceGroup.appendChild(makePill("ambossToggle", "Amboss Qbank", previous.amboss));
 
   // Testing
-  for (const exam of practiceExamCatalog.filter(e => e.group === "testing")) {
+  const addHeading = (text) => {
+    const h = document.createElement("div");
+    h.className = "pill pill-heading";
+    h.textContent = text;
+    return h;
+  };
+
+  const testingByKind = (kind) => practiceExamCatalog.filter(e => e.group === "testing" && e.kind === kind);
+
+  testingGroup.appendChild(addHeading("UWSA"));
+  for (const exam of testingByKind("uwsa")) {
+    const pill = makePill(`exam-${exam.id}`, exam.label, exam.defaultChecked, false);
+    testingGroup.appendChild(pill);
+  }
+
+  testingGroup.appendChild(addHeading("NBME"));
+  for (const exam of testingByKind("nbme")) {
+    const pill = makePill(`exam-${exam.id}`, exam.label, exam.defaultChecked, false);
+    testingGroup.appendChild(pill);
+  }
+
+  testingGroup.appendChild(addHeading("Free120"));
+  for (const exam of testingByKind("free")) {
     const pill = makePill(`exam-${exam.id}`, exam.label, exam.defaultChecked, false);
     testingGroup.appendChild(pill);
   }
@@ -621,6 +648,7 @@ function renderResourceToggles() {
   els.sketchyToggle = document.getElementById("sketchyToggle");
   els.ankiToggle = document.getElementById("ankiToggle");
   els.uworldToggle = document.getElementById("uworldToggle");
+  els.ambossToggle = document.getElementById("ambossToggle");
 }
 
 function getExamSelections() {
@@ -1149,7 +1177,8 @@ function generatePlan() {
     bnb: els.bnbToggle?.checked ?? false,
     sketchy: els.sketchyToggle?.checked ?? false,
     anki: els.ankiToggle?.checked ?? true,
-    uworld: els.uworldToggle?.checked ?? true
+    uworld: els.uworldToggle?.checked ?? true,
+    amboss: els.ambossToggle?.checked ?? false
   };
   const examSelections = getExamSelections();
 
@@ -1177,54 +1206,17 @@ function generatePlan() {
     return;
   }
 
-  // Practice exam placement
+  // Capture exam selections (placement occurs after learning is scheduled)
   const free120Date = addDays(exam, -3);
   const uwsa2Date = addDays(exam, -7);
   const selected = [...examSelections];
-  const nbmeList = selected.filter(e => e.kind === "nbme").sort((a, b) => a.order - b.order);
-  const baselineExam = nbmeList[0];
-  if (baselineExam) {
-    const weekEnd = addDays(start, 6);
-    let baselineDate = nextSaturdayOnOrAfter(start);
-    if (baselineDate > weekEnd) baselineDate = weekEnd;
-    const baseDay = dayMap.get(formatDateKey(baselineDate));
-    if (baseDay && !baseDay.isBreak) addExamTask(baseDay, `${baselineExam.label} – Baseline`);
-  }
-
-  const usedExamIds = new Set();
-  if (baselineExam) usedExamIds.add(baselineExam.id);
-  if (selected.some(e => e.id === "free120")) usedExamIds.add("free120");
-  if (selected.some(e => e.id === "uwsa2")) usedExamIds.add("uwsa2");
-
-  if (selected.some(e => e.id === "free120")) {
-    const d = dayMap.get(formatDateKey(free120Date));
-    if (d && !d.isBreak) addExamTask(d, "Free 120 – 3 days out");
-  }
-
-  if (selected.some(e => e.id === "uwsa2")) {
-    const d = dayMap.get(formatDateKey(uwsa2Date));
-    if (d && !d.isBreak) addExamTask(d, "UWSA 2 – 1 week out");
-  }
-
-  const remainingExams = selected.filter(e => !usedExamIds.has(e.id));
-  let ptr = addDays(exam, -14) < start ? start : addDays(exam, -14);
-  for (let i = remainingExams.length - 1; i >= 0; i--) {
-    let target = saturdayOnOrBefore(ptr);
-    while (target >= start) {
-      const key = formatDateKey(target);
-      const day = dayMap.get(key);
-      if (day && !hasExam(day) && !day.isBreak) {
-        addExamTask(day, `${remainingExams[i].label} – Weekend assessment`);
-        break;
-      }
-      target = addDays(target, -7);
-    }
-    ptr = addDays(ptr, -7);
-  }
+  const uwsa1Exam = selected.find(e => e.id === "uwsa1");
+  const selectedNonUwsa1 = selected.filter(e => e.id !== "uwsa1");
+  const fixedDateExams = selectedNonUwsa1.filter(e => e.id === "free120" || e.id === "uwsa2");
+  const remainingExams = selectedNonUwsa1.filter(e => !fixedDateExams.includes(e));
 
   const studySlots = getStudyDays(dayMap).filter(d => d.date < bufferStart);
-  const examDayCount = Array.from(dayMap.values()).filter(d => hasExam(d)).length;
-  const studyWindowDays = studySlots.length + examDayCount;
+  const studyWindowDays = studySlots.length + examSelections.length;
 
   if (studySlots.length === 0) {
     setFeasibility("Not feasible (no study days)", "bad");
@@ -1237,8 +1229,9 @@ function generatePlan() {
     + (flags.sketchy ? totalMinutesForResource(sketchyData) : 0);
   const ankiMinutesTotal = flags.anki ? studySlots.length * ANKI_MINUTES : 0;
   const uworldMinutesTotal = flags.uworld ? UWORLD_TOTAL_MINUTES : 0;
+  const ambossMinutesTotal = flags.amboss ? AMBOSS_TOTAL_MINUTES : 0;
   const examMinutesTotal = examSelections.length * EXAM_MINUTES;
-  const totalHours = (resourceMinutes + ankiMinutesTotal + uworldMinutesTotal + examMinutesTotal) / 60;
+  const totalHours = (resourceMinutes + ankiMinutesTotal + uworldMinutesTotal + ambossMinutesTotal + examMinutesTotal) / 60;
   const avgPerDay = totalHours / studyWindowDays;
 
   renderStats({ totalDays, studyDays: studyWindowDays, totalHours, avgPerDay });
@@ -1316,29 +1309,133 @@ function generatePlan() {
     return;
   }
 
-  let uworldBlocksRemaining = flags.uworld ? UWORLD_TOTAL_BLOCKS : 0;
-  const uworldBlockCountByDay = new Map();
-  while (uworldBlocksRemaining > 0) {
-    const targetDay = pickLeastLoadedDay(studySlots, UWORLD_BLOCK_MINUTES, bufferStart);
-    if (!targetDay) {
-      setFeasibility("Not feasible (UWorld overflow)", "bad");
-      resetError("Ran out of study days for UWorld blocks. Extend your dates or uncheck UWorld.");
-      currentPlan = { dayMap, start, exam };
-      renderDayDetail(dayMap);
-      renderCalendar(dayMap);
-      return;
+  const daysChrono = Array.from(dayMap.values()).sort((a, b) => a.date - b.date);
+  const lastVideoLearningDay = [...daysChrono]
+    .reverse()
+    .find(d => d.tasks.some(t => {
+      const type = t.type || "learning";
+      const label = (t.label || "").toLowerCase();
+      return type === "learning" && !label.startsWith("anki");
+    }));
+  const earliestExamDate = lastVideoLearningDay ? addDays(lastVideoLearningDay.date, 1) : start;
+
+  if (uwsa1Exam) {
+    const windowStart = earliestExamDate;
+    const windowEnd = addDays(earliestExamDate, 6);
+    const windowKeys = buildRange(windowStart, windowEnd).map(d => formatDateKey(d));
+    let candidates = windowKeys
+      .map(k => dayMap.get(k))
+      .filter(Boolean)
+      .filter(d => d.date < bufferStart && !d.isBreak && !hasExam(d));
+
+    let target = candidates.find(d => d.date.getDay() === 6) || candidates[0];
+    if (!target) {
+      candidates = Array.from(dayMap.values())
+        .filter(d => d.date < bufferStart && !d.isBreak && !hasExam(d))
+        .sort((a, b) => a.date - b.date);
+      target = candidates.find(d => d.date >= windowStart) || candidates[0];
     }
-    const key = formatDateKey(targetDay.date);
-    const nextNumber = (uworldBlockCountByDay.get(key) || 0) + 1;
-    uworldBlockCountByDay.set(key, nextNumber);
-    addTask(targetDay, {
-      type: "practice",
-      label: `UWorld Block ${nextNumber}`,
-      calendarLabel: "UWorld",
-      durationMinutes: UWORLD_BLOCK_MINUTES,
-      detail: "40 questions with full review; choose your topic"
+
+    if (target) {
+      target.tasks = [];
+      target.usedMinutes = 0;
+      addExamTask(target, "UWSA 1 – Checkpoint after videos");
+    }
+  }
+
+  const examEndLimit = addDays(exam, -1);
+  const placeExamOnOrAfter = (desiredDate, label) => {
+    let cur = desiredDate < earliestExamDate ? earliestExamDate : desiredDate;
+    while (cur <= examEndLimit) {
+      const day = dayMap.get(formatDateKey(cur));
+      if (day && !day.isBreak && !hasExam(day)) {
+        day.tasks = [];
+        day.usedMinutes = 0;
+        addExamTask(day, label);
+        return true;
+      }
+      cur = addDays(cur, 1);
+    }
+    return false;
+  };
+
+  for (const exam of fixedDateExams) {
+    if (exam.id === "free120") placeExamOnOrAfter(free120Date, "Free 120 – 3 days out");
+    else if (exam.id === "uwsa2") placeExamOnOrAfter(uwsa2Date, "UWSA 2 – 1 week out");
+  }
+
+  const candidateDays = buildRange(earliestExamDate, examEndLimit)
+    .map(d => dayMap.get(formatDateKey(d)))
+    .filter(Boolean)
+    .filter(d => !d.isBreak && !hasExam(d))
+    .sort((a, b) => {
+      const aSat = a.date.getDay() === 6 ? 0 : 1;
+      const bSat = b.date.getDay() === 6 ? 0 : 1;
+      if (aSat !== bSat) return aSat - bSat;
+      return a.date - b.date;
     });
-    uworldBlocksRemaining--;
+
+  for (const exam of remainingExams) {
+    const target = candidateDays.shift();
+    if (target) {
+      target.tasks = [];
+      target.usedMinutes = 0;
+      addExamTask(target, `${exam.label} – Weekend assessment`);
+    }
+  }
+
+  const practicePools = [];
+  if (flags.uworld) {
+    practicePools.push({ id: "uworld", label: "UWorld Block", calendarLabel: "UWorld", duration: UWORLD_BLOCK_MINUTES, blocks: UWORLD_TOTAL_BLOCKS, total: UWORLD_TOTAL_BLOCKS, detail: "40 questions with full review; choose your topic" });
+  }
+  if (flags.amboss) {
+    practicePools.push({ id: "amboss", label: "Amboss Block", calendarLabel: "Amboss", duration: AMBOSS_BLOCK_MINUTES, blocks: AMBOSS_TOTAL_BLOCKS, total: AMBOSS_TOTAL_BLOCKS, detail: "40 questions with full review; choose your topic" });
+  }
+
+  const takePracticeBlock = () => {
+    const pool = practicePools.find(p => p.blocks > 0);
+    if (!pool) return null;
+    pool.blocks -= 1;
+    const used = pool.total - pool.blocks;
+    return {
+      label: `${pool.label} ${used}`,
+      calendarLabel: pool.calendarLabel,
+      durationMinutes: pool.duration,
+      detail: pool.detail,
+      sourceId: pool.id
+    };
+  };
+
+  const practiceBlocksRemaining = () => practicePools.reduce((s, p) => s + p.blocks, 0);
+
+  if (practicePools.length > 0) {
+    for (const day of learningDays) {
+      const hasVideoLearning = day.tasks.some(t => (t.type || "learning") === "learning" && !(t.label || "").toLowerCase().startsWith("anki"));
+      if (!hasVideoLearning) continue;
+      if (practiceBlocksRemaining() <= 0) break;
+      const block = takePracticeBlock();
+      if (!block) break;
+      addTask(day, { type: "practice", ...block });
+    }
+
+    const practiceSlots = getStudyDays(dayMap).filter(d => d.date < bufferStart);
+    while (practiceBlocksRemaining() > 0) {
+      const pool = practicePools.find(p => p.blocks > 0);
+      if (!pool) break;
+      const targetDay = pickLeastLoadedDay(practiceSlots, pool.duration, bufferStart);
+      if (!targetDay) {
+        setFeasibility("Not feasible (practice overflow)", "bad");
+        resetError("Ran out of study days for practice blocks. Extend your dates or deselect a practice bank.");
+        currentPlan = { dayMap, start, exam };
+        renderDayDetail(dayMap);
+        renderCalendar(dayMap);
+        renderDayNav(dayMap);
+        return;
+      }
+      const block = takePracticeBlock();
+      if (!block) break;
+      addTask(targetDay, { type: "practice", ...block });
+    }
   }
 
   currentPlan = { dayMap, start, exam };

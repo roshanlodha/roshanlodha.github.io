@@ -135,6 +135,13 @@ body {
   font-size: 14px;
 }
 
+.pill-heading {
+  border: none;
+  background: transparent;
+  padding-left: 0;
+  font-weight: 800;
+}
+
 .pill input { accent-color: var(--primary); }
 
 .breaks-field { gap: 8px; grid-column: 1 / -1; }
