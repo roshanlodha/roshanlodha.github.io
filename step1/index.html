@@ -17,7 +17,6 @@
         <h1>USMLE Step 1 Planner</h1>
         <p class="lede">Build a feasible, systems-first plan that pairs Pathoma with UWorld and anchored practice exams.</p>
       </div>
-      <div class="meta-chip" id="feasibilityChip">Awaiting input</div>
     </header>
 
     <section class="card" aria-labelledby="inputs-title">
@@ -37,20 +36,29 @@
           <span>Exam date</span>
           <input type="date" id="examDate" />
         </label>
+        <fieldset class="field breaks-field" aria-label="Break days">
+          <legend>Break day(s)</legend>
+          <div class="break-grid">
+            <label class="checkbox break"><input type="checkbox" data-dow="0" checked /> Sun</label>
+            <label class="checkbox break"><input type="checkbox" data-dow="1" /> Mon</label>
+            <label class="checkbox break"><input type="checkbox" data-dow="2" /> Tue</label>
+            <label class="checkbox break"><input type="checkbox" data-dow="3" /> Wed</label>
+            <label class="checkbox break"><input type="checkbox" data-dow="4" /> Thu</label>
+            <label class="checkbox break"><input type="checkbox" data-dow="5" /> Fri</label>
+            <label class="checkbox break"><input type="checkbox" data-dow="6" /> Sat</label>
+          </div>
+        </fieldset>
         <div class="field field-group">
-          <span>Resources</span>
-          <label class="checkbox">
-            <input type="checkbox" id="pathomaToggle" checked />
-            <span>Pathoma (videos)</span>
-          </label>
-          <label class="checkbox">
-            <input type="checkbox" id="uworldToggle" checked />
-            <span>UWorld (4000 Qs)</span>
-          </label>
+          <span>Learning</span>
+          <div class="pill-group" id="learningGroup"></div>
         </div>
         <div class="field field-group">
-          <span>Practice tests</span>
-          <div class="pill-group" id="examToggleGroup"></div>
+          <span>Practice</span>
+          <div class="pill-group" id="practiceGroup"></div>
+        </div>
+        <div class="field field-group">
+          <span>Testing</span>
+          <div class="pill-group" id="testingGroup"></div>
         </div>
       </div>
       <div class="actions">
@@ -63,17 +71,18 @@
       <div class="card-header">
         <div>
           <p class="eyebrow">Snapshot</p>
-          <h2 id="overview-title">Feasibility + Allocation</h2>
+          <h2 id="overview-title">Feasibility</h2>
         </div>
+        <div class="meta-chip" id="feasibilityChip">Awaiting input</div>
       </div>
       <div class="stats" id="overviewStats"></div>
     </section>
 
-    <section class="card" aria-labelledby="schedule-title">
+    <section class="card" aria-labelledby="calendar-title">
       <div class="card-header">
         <div>
           <p class="eyebrow">Calendar</p>
-          <h2 id="schedule-title">Day-by-day plan</h2>
+          <h2 id="calendar-title">Calendar</h2>
         </div>
         <div class="legend" aria-label="Color legend">
           <span class="legend-dot learning"></span> Learning
@@ -81,8 +90,16 @@
           <span class="legend-dot exam"></span> Mock exam
           <span class="legend-dot buffer"></span> Buffer/Rest
         </div>
+        <div class="calendar-controls" aria-label="Calendar navigation">
+          <button class="ghost" type="button" id="calPrev">Prev</button>
+          <div class="calendar-month" id="calRange"></div>
+          <button class="ghost" type="button" id="calNext">Next</button>
+          <button class="ghost" type="button" id="calToday">Today</button>
+          <button class="primary" type="button" id="downloadIcs">Download .ics</button>
+        </div>
       </div>
-      <div id="schedule" class="schedule"></div>
+      <div id="weeklyCalendar" class="calendar"></div>
+      <div id="dayDetail" class="day-detail"></div>
     </section>
   </div>
   <script src="script.js"></script>

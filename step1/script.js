@@ -71,30 +71,40 @@ const pathomaData = [
 ];
 
 const practiceExamCatalog = [
-  { id: "nbme26", label: "NBME 26", mandatory: true, defaultChecked: true, kind: "nbme", order: 26 },
-  { id: "nbme27", label: "NBME 27", mandatory: true, defaultChecked: true, kind: "nbme", order: 27 },
-  { id: "nbme28", label: "NBME 28", mandatory: true, defaultChecked: true, kind: "nbme", order: 28 },
-  { id: "nbme29", label: "NBME 29", mandatory: true, defaultChecked: true, kind: "nbme", order: 29 },
-  { id: "nbme30", label: "NBME 30", mandatory: true, defaultChecked: true, kind: "nbme", order: 30 },
-  { id: "nbme31", label: "NBME 31", mandatory: true, defaultChecked: true, kind: "nbme", order: 31 },
-  { id: "uwsa1", label: "UWSA 1", mandatory: false, defaultChecked: false, kind: "uwsa", order: 1 },
-  { id: "uwsa2", label: "UWSA 2", mandatory: false, defaultChecked: false, kind: "uwsa", order: 2 },
-  { id: "uwsa3", label: "UWSA 3", mandatory: false, defaultChecked: false, kind: "uwsa", order: 3 },
-  { id: "free120", label: "Free 120", mandatory: true, defaultChecked: true, kind: "free", order: 120 }
+  { id: "nbme25", label: "NBME 25", mandatory: false, defaultChecked: true, kind: "nbme", order: 25, group: "practice" },
+  { id: "uwsa1", label: "UWSA 1", mandatory: false, defaultChecked: false, kind: "uwsa", order: 1, group: "practice" },
+  { id: "uwsa2", label: "UWSA 2", mandatory: false, defaultChecked: false, kind: "uwsa", order: 2, group: "practice" },
+  { id: "uwsa3", label: "UWSA 3", mandatory: false, defaultChecked: false, kind: "uwsa", order: 3, group: "practice" },
+  { id: "nbme26", label: "NBME 26", mandatory: true, defaultChecked: true, kind: "nbme", order: 26, group: "testing" },
+  { id: "nbme27", label: "NBME 27", mandatory: true, defaultChecked: true, kind: "nbme", order: 27, group: "testing" },
+  { id: "nbme28", label: "NBME 28", mandatory: true, defaultChecked: true, kind: "nbme", order: 28, group: "testing" },
+  { id: "nbme29", label: "NBME 29", mandatory: true, defaultChecked: true, kind: "nbme", order: 29, group: "testing" },
+  { id: "nbme30", label: "NBME 30", mandatory: true, defaultChecked: true, kind: "nbme", order: 30, group: "testing" },
+  { id: "nbme31", label: "NBME 31", mandatory: true, defaultChecked: true, kind: "nbme", order: 31, group: "testing" },
+  { id: "free120", label: "Free 120", mandatory: true, defaultChecked: true, kind: "free", order: 120, group: "testing" }
 ];
 
 const els = {
   startDate: document.getElementById("startDate"),
   examDate: document.getElementById("examDate"),
-  pathomaToggle: document.getElementById("pathomaToggle"),
-  uworldToggle: document.getElementById("uworldToggle"),
-  examToggleGroup: document.getElementById("examToggleGroup"),
   generateBtn: document.getElementById("generateBtn"),
   errorBox: document.getElementById("errorBox"),
-  schedule: document.getElementById("schedule"),
   overview: document.getElementById("overviewStats"),
   feasibilityChip: document.getElementById("feasibilityChip"),
-  quickFill: document.getElementById("quickFill")
+  quickFill: document.getElementById("quickFill"),
+  breakBoxes: Array.from(document.querySelectorAll('.break-grid input[type="checkbox"][data-dow]')),
+  weeklyCalendar: document.getElementById("weeklyCalendar"),
+  calPrev: document.getElementById("calPrev"),
+  calNext: document.getElementById("calNext"),
+  calToday: document.getElementById("calToday"),
+  calRange: document.getElementById("calRange"),
+  downloadIcs: document.getElementById("downloadIcs"),
+  learningGroup: document.getElementById("learningGroup"),
+  practiceGroup: document.getElementById("practiceGroup"),
+  testingGroup: document.getElementById("testingGroup"),
+  dayDetail: document.getElementById("dayDetail"),
+  pathomaToggle: null,
+  uworldToggle: null
 };
 
 const LIMIT_MINUTES_PER_DAY = 12 * 60;
@@ -103,12 +113,34 @@ const UWORLD_MIN_PER_Q = (200 * 60) / UWORLD_TOTAL_Q; // 3 minutes per question
 const EXAM_MINUTES = 8 * 60;
 const PATHOMA_TOTAL_HOURS = 35;
 
+let calendarWeekStart = null;
+let currentPlan = null; // { dayMap, start, exam }
+let selectedDayKey = null;
+
 function formatDateLabel(date) {
   return date.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric", year: "numeric" });
 }
 
 function formatDateKey(date) {
   return date.toISOString().slice(0, 10);
+}
+
+function startOfWeekSunday(date) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() - d.getDay());
+  return d;
+}
+
+function formatWeekRangeLabel(start, end) {
+  const sameMonth = start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear();
+  if (sameMonth) {
+    const monthYear = start.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+    return `${monthYear} — ${start.getDate()}–${end.getDate()}`;
+  }
+  const startLabel = start.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  const endLabel = end.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  return `${startLabel} – ${endLabel}`;
 }
 
 function addDays(date, days) {
@@ -135,23 +167,58 @@ function minutesToHuman(min) {
   return `${h}h ${m}m`;
 }
 
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function renderExamToggles() {
-  els.examToggleGroup.innerHTML = "";
-  for (const exam of practiceExamCatalog) {
-    const id = `exam-${exam.id}`;
-    const label = document.createElement("label");
-    label.className = "pill";
+  const { learningGroup, practiceGroup, testingGroup } = els;
+  if (!learningGroup || !practiceGroup || !testingGroup) return;
+
+  learningGroup.innerHTML = "";
+  practiceGroup.innerHTML = "";
+  testingGroup.innerHTML = "";
+
+  const makePill = (id, label, checked, disabled = false) => {
+    const lab = document.createElement("label");
+    lab.className = "pill";
     const input = document.createElement("input");
     input.type = "checkbox";
     input.id = id;
-    input.checked = exam.defaultChecked;
-    if (exam.mandatory) input.disabled = true;
-    label.appendChild(input);
+    input.checked = checked;
+    if (disabled) input.disabled = true;
+    lab.appendChild(input);
     const span = document.createElement("span");
-    span.textContent = exam.label + (exam.mandatory ? " (required)" : "");
-    label.appendChild(span);
-    els.examToggleGroup.appendChild(label);
+    span.textContent = label;
+    lab.appendChild(span);
+    return lab;
+  };
+
+  // Learning
+  const pathomaPill = makePill("pathomaToggle", "Pathoma", true, false);
+  learningGroup.appendChild(pathomaPill);
+
+  // Practice
+  const uworldPill = makePill("uworldToggle", "UWorld Qbank", true, false);
+  practiceGroup.appendChild(uworldPill);
+  for (const exam of practiceExamCatalog.filter(e => e.group === "practice")) {
+    const pill = makePill(`exam-${exam.id}`, exam.label, exam.defaultChecked, false);
+    practiceGroup.appendChild(pill);
   }
+
+  // Testing
+  for (const exam of practiceExamCatalog.filter(e => e.group === "testing")) {
+    const pill = makePill(`exam-${exam.id}`, exam.label, exam.defaultChecked, false);
+    testingGroup.appendChild(pill);
+  }
+
+  els.pathomaToggle = document.getElementById("pathomaToggle");
+  els.uworldToggle = document.getElementById("uworldToggle");
 }
 
 function getExamSelections() {
@@ -177,15 +244,16 @@ function hasExam(day) {
   return day.tasks.some(t => t.type === "exam");
 }
 
-function buildDayMap(start, end) {
+function buildDayMap(start, end, breakSet) {
   const map = new Map();
   for (const d of buildRange(start, end)) {
     const key = formatDateKey(d);
+    const isBreak = breakSet.has(d.getDay());
     map.set(key, {
       date: d,
       tasks: [],
       usedMinutes: 0,
-      isSunday: d.getDay() === 0
+      isBreak
     });
   }
   return map;
@@ -224,11 +292,41 @@ function collectPathomaQueue() {
   return queue;
 }
 
+function distributePathomaAcrossFirstWeeks(dayMap, queue, start, horizonDays = 21) {
+  const horizonEnd = addDays(start, horizonDays - 1);
+  const candidates = Array.from(dayMap.values())
+    .filter(d => d.date >= start && d.date <= horizonEnd && !d.isBreak && !hasExam(d))
+    .sort((a, b) => a.date - b.date);
+  if (candidates.length === 0 || queue.length === 0) return queue;
+
+  let idx = 0;
+  let safety = 0;
+  const maxAttempts = queue.length * candidates.length * 3;
+  while (queue.length > 0 && safety < maxAttempts) {
+    const day = candidates[idx % candidates.length];
+    const remaining = LIMIT_MINUTES_PER_DAY - day.usedMinutes;
+    const next = queue[0];
+    if (next.minutes <= remaining) {
+      addTask(day, {
+        type: "learning",
+        label: `Pathoma – ${next.title}`,
+        durationMinutes: next.minutes,
+        detail: `${next.system} • ${next.videos.join(", ")}`,
+        system: next.system
+      });
+      queue.shift();
+    }
+    idx++;
+    safety++;
+  }
+  return queue;
+}
+
 function countAvailableStudyDays(days, until) {
   let count = 0;
   for (const d of days) {
     if (d.date > until) continue;
-    if (d.isSunday || hasExam(d)) continue;
+    if (d.isBreak || hasExam(d)) continue;
     count++;
   }
   return count;
@@ -237,6 +335,15 @@ function countAvailableStudyDays(days, until) {
 function ensureCapacity(beforeDeadlineDays, systemMinutesNeeded) {
   const minutesAvailable = beforeDeadlineDays * LIMIT_MINUTES_PER_DAY;
   return minutesAvailable >= systemMinutesNeeded;
+}
+
+function getBreakDowSet() {
+  const set = new Set();
+  for (const cb of els.breakBoxes) {
+    const dow = Number.parseInt(cb.dataset.dow || "", 10);
+    if (cb.checked && Number.isFinite(dow)) set.add(dow);
+  }
+  return set;
 }
 
 function renderStats(stats) {
@@ -251,34 +358,222 @@ function renderStats(stats) {
     .join("");
 }
 
-function renderSchedule(dayMap) {
-  const days = Array.from(dayMap.values()).sort((a, b) => a.date - b.date);
-  if (days.length === 0) {
-    els.schedule.innerHTML = '<div class="schedule-empty">Add dates to generate a plan.</div>';
+function renderDayDetail(dayMap) {
+  if (!els.dayDetail) return;
+  if (!dayMap || dayMap.size === 0) {
+    els.dayDetail.innerHTML = '<div class="schedule-empty">Generate a plan to view a day.</div>';
     return;
   }
-  const html = days.map(day => {
-    const dateLabel = formatDateLabel(day.date);
-    const meta = [];
-    if (day.isSunday) meta.push("Buffer/Rest");
-    const minutes = day.usedMinutes;
-    if (minutes > 0) meta.push(minutesToHuman(minutes));
-    const tasksHtml = day.tasks.length === 0
-      ? '<div class="task"><p class="task-detail">No tasks assigned.</p></div>'
-      : day.tasks.map(t => {
-          const detail = t.detail ? `<p class="task-detail">${t.detail}</p>` : "";
-          return `<div class="task">
-            <span class="tag ${t.type}">${t.type === "buffer" ? "Buffer" : t.type === "exam" ? "Mock" : t.type === "practice" ? "Practice" : "Learning"}</span>
-            <p class="task-title">${t.label}</p>
-            ${detail}
-          </div>`;
-        }).join("");
-    return `<div class="day-card">
-      <div class="day-header"><strong>${dateLabel}</strong><span class="day-meta">${meta.join(" • ")}</span></div>
-      ${tasksHtml}
-    </div>`;
+  const day = dayMap.get(selectedDayKey || Array.from(dayMap.keys())[0]);
+  if (!day) {
+    els.dayDetail.innerHTML = '<div class="schedule-empty">Select a day from the calendar.</div>';
+    return;
+  }
+  const dateLabel = formatDateLabel(day.date);
+  const metaParts = [];
+  if (day.isBreak) metaParts.push("Break day");
+  if (day.usedMinutes > 0) metaParts.push(minutesToHuman(day.usedMinutes));
+  const meta = metaParts.join(" • ");
+
+  if (!selectedDayKey) selectedDayKey = formatDateKey(day.date);
+
+  if (!day.tasks || day.tasks.length === 0) {
+    els.dayDetail.innerHTML = `
+      <div class="day-detail-header">
+        <div class="day-detail-title">${escapeHtml(dateLabel)}</div>
+        <div class="day-detail-meta">${escapeHtml(meta || "No tasks")}</div>
+      </div>
+      <div class="day-detail-empty">No tasks assigned.</div>
+    `;
+    return;
+  }
+
+  const items = day.tasks.map(t => {
+    const duration = t.durationMinutes ? minutesToHuman(t.durationMinutes) : "";
+    return `<li class="day-detail-item">
+      <span class="day-detail-name">${escapeHtml(t.label)}</span>
+      <span class="day-detail-minutes">${escapeHtml(duration)}</span>
+    </li>`;
   }).join("");
-  els.schedule.innerHTML = html;
+
+  els.dayDetail.innerHTML = `
+    <div class="day-detail-header">
+      <div class="day-detail-title">${escapeHtml(dateLabel)}</div>
+      <div class="day-detail-meta">${escapeHtml(meta || "")}</div>
+    </div>
+    <ul class="day-detail-list">${items}</ul>
+  `;
+}
+
+function renderCalendar(dayMap) {
+  if (!els.weeklyCalendar) return;
+  if (!dayMap || dayMap.size === 0) {
+    els.weeklyCalendar.innerHTML = '<div class="schedule-empty">Generate a plan to see the weekly calendar.</div>';
+    if (els.calRange) els.calRange.textContent = "";
+    return;
+  }
+
+  const days = Array.from(dayMap.values()).sort((a, b) => a.date - b.date);
+  const planStart = days[0].date;
+  const planEnd = days[days.length - 1].date;
+  if (!selectedDayKey || !dayMap.has(selectedDayKey)) {
+    selectedDayKey = formatDateKey(planStart);
+  }
+  if (!calendarWeekStart || calendarWeekStart < startOfWeekSunday(planStart) || calendarWeekStart > startOfWeekSunday(planEnd)) {
+    calendarWeekStart = startOfWeekSunday(planStart);
+  }
+
+  const weekStart = calendarWeekStart;
+  const weekEnd = addDays(weekStart, 6);
+  if (els.calRange) els.calRange.textContent = formatWeekRangeLabel(weekStart, weekEnd);
+
+  const dowLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const parts = [];
+  parts.push('<div class="calendar-dow-grid">');
+  for (const label of dowLabels) parts.push(`<div class="calendar-dow">${escapeHtml(label)}</div>`);
+  parts.push('</div>');
+  parts.push('<div class="calendar-day-grid">');
+
+  const todayKey = formatDateKey(new Date());
+  const MAX_CHIPS = 3;
+  for (let i = 0; i < 7; i++) {
+    const date = addDays(weekStart, i);
+    const key = formatDateKey(date);
+    const day = dayMap.get(key);
+    const cls = ["calendar-cell"];
+    if (key === todayKey) cls.push("today");
+    if (day?.isBreak) cls.push("break");
+    if (key === selectedDayKey) cls.push("selected");
+
+    const dateLabel = date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    const chips = [];
+    if (day) {
+      const tasks = day.tasks || [];
+      if (day.isBreak) chips.push('<span class="calendar-chip buffer">Break</span>');
+      for (let j = 0; j < tasks.length && j < MAX_CHIPS; j++) {
+        const t = tasks[j];
+        const type = t.type || "learning";
+        const chipLabel = escapeHtml(t.label);
+        chips.push(`<span class="calendar-chip ${type}">${chipLabel}</span>`);
+      }
+      if (tasks.length > MAX_CHIPS) {
+        chips.push(`<span class="calendar-chip more">+${tasks.length - MAX_CHIPS} more</span>`);
+      }
+      if (chips.length === 0) chips.push('<span class="calendar-chip more">No tasks</span>');
+    } else {
+      chips.push('<span class="calendar-chip more">Out of range</span>');
+    }
+
+    parts.push(`<div class="${cls.join(" ")}" data-day-key="${key}">`);
+    parts.push(`<div class="calendar-date">${escapeHtml(dateLabel)}</div>`);
+    parts.push('<div class="calendar-events">');
+    parts.push(chips.join(""));
+    parts.push('</div>');
+    parts.push('</div>');
+  }
+
+  parts.push('</div>');
+  els.weeklyCalendar.innerHTML = parts.join("");
+
+  const cells = els.weeklyCalendar.querySelectorAll('[data-day-key]');
+  cells.forEach(cell => {
+    cell.addEventListener("click", () => {
+      const key = cell.getAttribute("data-day-key");
+      if (!key) return;
+      selectedDayKey = key;
+      renderDayDetail(dayMap);
+      renderCalendar(dayMap);
+    });
+  });
+}
+
+function pad2(n) {
+  return String(n).padStart(2, "0");
+}
+
+function formatIcsDate(date) {
+  return `${date.getFullYear()}${pad2(date.getMonth() + 1)}${pad2(date.getDate())}`;
+}
+
+function formatIcsTimestamp(now) {
+  return `${now.getUTCFullYear()}${pad2(now.getUTCMonth() + 1)}${pad2(now.getUTCDate())}T${pad2(now.getUTCHours())}${pad2(now.getUTCMinutes())}${pad2(now.getUTCSeconds())}Z`;
+}
+
+function icsEscape(value) {
+  return String(value)
+    .replace(/\\/g, "\\\\")
+    .replace(/\n/g, "\\n")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,");
+}
+
+function buildIcs(dayMap) {
+  if (!dayMap || dayMap.size === 0) return "";
+  const now = new Date();
+  const dtstamp = formatIcsTimestamp(now);
+  const lines = [];
+
+  lines.push("BEGIN:VCALENDAR");
+  lines.push("VERSION:2.0");
+  lines.push("PRODID:-//Step1 Planner//EN");
+  lines.push("CALSCALE:GREGORIAN");
+  lines.push("METHOD:PUBLISH");
+  lines.push("X-WR-CALNAME:Step 1 Study Plan");
+
+  const sorted = Array.from(dayMap.values()).sort((a, b) => a.date - b.date);
+  sorted.forEach((day, idx) => {
+    const dtstart = formatIcsDate(day.date);
+    const dtend = formatIcsDate(addDays(day.date, 1));
+    const uid = `step1-${dtstart}-${idx}@planner`;
+    const summary = day.isBreak
+      ? "Break / Buffer"
+      : (day.tasks.length > 0 ? `Study – ${day.tasks.length} task${day.tasks.length === 1 ? "" : "s"}` : "Study placeholder");
+
+    const descLines = [];
+    if (day.tasks.length > 0) {
+      for (const t of day.tasks) {
+        const detail = t.detail ? `: ${t.detail}` : "";
+        descLines.push(`- ${t.label}${detail}`);
+      }
+    } else if (day.isBreak) {
+      descLines.push("Buffer / Rest day");
+    } else {
+      descLines.push("No tasks scheduled");
+    }
+
+    lines.push("BEGIN:VEVENT");
+    lines.push(`UID:${icsEscape(uid)}`);
+    lines.push(`DTSTAMP:${dtstamp}`);
+    lines.push(`DTSTART;VALUE=DATE:${dtstart}`);
+    lines.push(`DTEND;VALUE=DATE:${dtend}`);
+    lines.push(`SUMMARY:${icsEscape(summary)}`);
+    if (descLines.length > 0) lines.push(`DESCRIPTION:${icsEscape(descLines.join("\n"))}`);
+    lines.push("END:VEVENT");
+  });
+
+  lines.push("END:VCALENDAR");
+  return lines.join("\r\n");
+}
+
+function downloadIcsFile() {
+  if (!currentPlan || !currentPlan.dayMap || currentPlan.dayMap.size === 0) {
+    resetError("Generate a schedule before downloading the calendar.");
+    return;
+  }
+  const ics = buildIcs(currentPlan.dayMap);
+  if (!ics) {
+    resetError("Nothing to export. Generate a schedule first.");
+    return;
+  }
+  const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "step1-study-plan.ics";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
 
 function generatePlan() {
@@ -303,20 +598,33 @@ function generatePlan() {
   const totalDays = Math.floor((exam - start) / (24 * 60 * 60 * 1000)) + 1;
   const totalHours = (pathomaEnabled ? PATHOMA_TOTAL_HOURS : 0) + (uworldEnabled ? 200 : 0) + (examSelections.length * 8);
   const avgPerDay = totalHours / totalDays;
-
-  renderStats({ totalDays, studyDays: totalDays, totalHours, avgPerDay });
+  if (pathomaEnabled && totalDays < 21) {
+    setFeasibility("Not feasible (<3 weeks)", "bad");
+    resetError("A schedule could not be feasibly created. We recommend extending your study period or reducing the number of resources.");
+    return;
+  }
   if (avgPerDay > 12) {
     setFeasibility("Not feasible (>12h/day)", "bad");
     resetError("A schedule could not be feasibly created. We recommend extending your study period.");
-    els.schedule.innerHTML = '<div class="schedule-empty">Adjust dates to lower the load.</div>';
     return;
   }
   setFeasibility("Feasible", "good");
 
-  const dayMap = buildDayMap(start, exam);
+  const breakSet = getBreakDowSet();
+  const dayMap = buildDayMap(start, exam, breakSet);
   for (const day of dayMap.values()) {
-    if (day.isSunday) addTask(day, { type: "buffer", label: "Buffer / Rest (Sunday)", durationMinutes: 0, detail: "Keep this day open for recovery." });
+    if (day.isBreak) addTask(day, { type: "buffer", label: "Buffer / Rest (Break Day)", durationMinutes: 0, detail: "Keep this day open for recovery." });
   }
+  const breakDays = Array.from(dayMap.values()).filter(d => d.isBreak).length;
+  const studyDays = totalDays - breakDays;
+  renderStats({ totalDays, studyDays, totalHours, avgPerDay });
+  if (studyDays <= 0 && totalHours > 0) {
+    resetError("All days are breaks. Please select at least one study day.");
+    return;
+  }
+
+  let pathomaQueue = pathomaEnabled ? collectPathomaQueue() : [];
+  pathomaQueue = distributePathomaAcrossFirstWeeks(dayMap, pathomaQueue, start, 21);
 
   // Anchors
   const qbDeadline = addDays(exam, -14) < start ? start : addDays(exam, -14);
@@ -376,7 +684,6 @@ function generatePlan() {
   const dedicatedDays = Array.from(dayMap.values()).filter(d => d.date > qbDeadline);
 
   // Systems block
-  const pathomaQueue = pathomaEnabled ? collectPathomaQueue() : [];
   let systemQuestionsRemaining = uworldEnabled ? Math.round(UWORLD_TOTAL_Q * 0.6) : 0;
   const systemMinutesNeeded = (pathomaQueue.reduce((acc, c) => acc + c.minutes, 0) * (pathomaEnabled ? 1 : 0)) + (systemQuestionsRemaining * UWORLD_MIN_PER_Q);
   const studyDaysBeforeDeadline = countAvailableStudyDays(systemDays, qbDeadline);
@@ -385,7 +692,7 @@ function generatePlan() {
   }
 
   for (const day of systemDays) {
-    if (day.isSunday || hasExam(day)) continue;
+    if (day.isBreak || hasExam(day)) continue;
     let remaining = LIMIT_MINUTES_PER_DAY - day.usedMinutes;
     if (remaining <= 0) continue;
 
@@ -428,7 +735,7 @@ function generatePlan() {
   // Catch any leftover Pathoma chapters inside the dedicated block
   if (pathomaQueue.length > 0) {
     for (const day of dedicatedDays) {
-      if (day.isSunday || hasExam(day)) continue;
+      if (day.isBreak || hasExam(day)) continue;
       let remaining = LIMIT_MINUTES_PER_DAY - day.usedMinutes;
       if (remaining <= 0) continue;
       while (pathomaQueue.length > 0 && pathomaQueue[0].minutes <= remaining) {
@@ -451,7 +758,7 @@ function generatePlan() {
   const systemCompleted = Math.max(0, systemTarget - systemQuestionsRemaining);
   let dedicatedQuestionsRemaining = uworldEnabled ? UWORLD_TOTAL_Q - systemCompleted : 0;
   for (const day of dedicatedDays) {
-    if (day.isSunday || hasExam(day)) continue;
+    if (day.isBreak || hasExam(day)) continue;
     let remaining = LIMIT_MINUTES_PER_DAY - day.usedMinutes;
     if (remaining <= 0) continue;
 
@@ -481,7 +788,7 @@ function generatePlan() {
   reviewTasks.push({ label: "Integration drills – sketchy notes + flashcards", minutes: 30, detail: "Keep it light and active recall." });
 
   const candidateReviewDays = Array.from(dayMap.values())
-    .filter(d => d.date < exam && !d.isSunday && !hasExam(d))
+    .filter(d => d.date < exam && !d.isBreak && !hasExam(d))
     .sort((a, b) => b.date - a.date)
     .slice(0, 4);
 
@@ -491,7 +798,10 @@ function generatePlan() {
     addTask(day, { type: "learning", label: reviewTasks[i].label, durationMinutes: reviewTasks[i].minutes, detail: reviewTasks[i].detail });
   }
 
-  renderSchedule(dayMap);
+  currentPlan = { dayMap, start, exam };
+  calendarWeekStart = calendarWeekStart || startOfWeekSunday(start);
+  renderDayDetail(dayMap);
+  renderCalendar(dayMap);
 }
 
 function quickFillExample() {
@@ -509,6 +819,24 @@ function quickFillExample() {
 renderExamToggles();
 els.generateBtn.addEventListener("click", generatePlan);
 els.quickFill.addEventListener("click", quickFillExample);
+if (els.downloadIcs) els.downloadIcs.addEventListener("click", downloadIcsFile);
+if (els.calPrev) els.calPrev.addEventListener("click", () => {
+  if (!calendarWeekStart) calendarWeekStart = startOfWeekSunday(new Date());
+  calendarWeekStart = addDays(calendarWeekStart, -7);
+  renderCalendar(currentPlan?.dayMap);
+});
+if (els.calNext) els.calNext.addEventListener("click", () => {
+  if (!calendarWeekStart) calendarWeekStart = startOfWeekSunday(new Date());
+  calendarWeekStart = addDays(calendarWeekStart, 7);
+  renderCalendar(currentPlan?.dayMap);
+});
+if (els.calToday) els.calToday.addEventListener("click", () => {
+  calendarWeekStart = startOfWeekSunday(new Date());
+  renderCalendar(currentPlan?.dayMap);
+});
+for (const cb of els.breakBoxes) {
+  cb.addEventListener("change", () => generatePlan());
+}
 
 if (!els.startDate.value) {
   const today = new Date();
@@ -516,4 +844,5 @@ if (!els.startDate.value) {
   els.examDate.value = formatDateKey(addDays(today, 60));
 }
 
-renderSchedule(new Map());
+renderDayDetail(new Map());
+renderCalendar(new Map());
