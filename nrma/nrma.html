@@ -21,10 +21,31 @@
             <span>Preference CSV</span>
             <input type="file" id="file-input" accept=".csv" required />
           </label>
-          <p class="muted">
-            Runs with <strong>24 beans per student</strong>, shuffles the cohort, and extracts the <strong>CaseID</strong> (3rd column) and <strong>Bean counts</strong> (last 4 columns).
-            The downloadable CSV is joined back to the original table by <strong>CaseID</strong>, so it includes every original column plus the assignment output.
-          </p>
+          <div id="column-mapping" class="mapping-panel hidden">
+            <p class="muted">Map your CSV columns before generating assignments.</p>
+            <div class="mapping-grid">
+              <label class="mapping-field">
+                <span>Student identifier</span>
+                <select id="map-id"></select>
+              </label>
+              <label class="mapping-field">
+                <span>Beans assigned to option 1</span>
+                <select id="map-opt-1"></select>
+              </label>
+              <label class="mapping-field">
+                <span>Beans assigned to option 2</span>
+                <select id="map-opt-2"></select>
+              </label>
+              <label class="mapping-field">
+                <span>Beans assigned to option 3</span>
+                <select id="map-opt-3"></select>
+              </label>
+              <label class="mapping-field">
+                <span>Beans assigned to option 4</span>
+                <select id="map-opt-4"></select>
+              </label>
+            </div>
+          </div>
           <button type="submit">Generate assignments</button>
           <div id="status" role="status"></div>
         </form>
@@ -64,7 +85,7 @@
       </section>
     </main>
     <footer>
-      Built by <a href="https://roshanlodha.github.io" target="_blank" rel="noopener">Roshan Lodha</a>. Back to <a href="index.html">Student Page</a>.
+      Read the <a href="manuscript.html">manuscript</a>. Back to <a href="index.html">Student Page</a>.
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/munkres-js@1.2.2/munkres.min.js"></script>

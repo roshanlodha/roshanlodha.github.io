@@ -13,6 +13,8 @@ let currentPerformance = [];
 let currentSourceFields = [];
 let currentCaseIdField = "";
 let currentSourceByCaseId = new Map();
+let uploadedRows = [];
+let uploadedFields = [];
 
 function $(selector) {
   return document.querySelector(selector);
@@ -39,9 +41,37 @@ function resetOutputs() {
 document.addEventListener("DOMContentLoaded", () => {
   const form = $("#preference-form");
   const downloadBtn = $("#download-btn");
+  const fileInput = $("#file-input");
   form.addEventListener("submit", handleSubmit);
   downloadBtn.addEventListener("click", handleDownload);
+  fileInput.addEventListener("change", handleFileSelected);
 });
+
+async function handleFileSelected(event) {
+  const file = event?.target?.files?.[0];
+  resetOutputs();
+  hideColumnMapping();
+  uploadedRows = [];
+  uploadedFields = [];
+  if (!file) {
+    setStatus("Please choose a CSV file first.", true);
+    return;
+  }
+  setStatus("Reading CSV headers...");
+  try {
+    const { rows, fields } = await parseCsv(file);
+    if (!fields.length) {
+      throw new Error("Could not detect CSV headers. Please upload a CSV with a header row.");
+    }
+    uploadedRows = rows;
+    uploadedFields = fields;
+    renderColumnMapping(fields);
+    setStatus(`Detected ${fields.length} columns. Confirm the mapping and generate assignments.`);
+  } catch (error) {
+    console.error(error);
+    setStatus(error.message || "Unable to read this file.", true);
+  }
+}
 
 async function handleSubmit(event) {
   event.preventDefault();
@@ -52,13 +82,20 @@ async function handleSubmit(event) {
     setStatus("Please choose a CSV file first.", true);
     return;
   }
+  if (!uploadedFields.length) {
+    setStatus("Please wait for the file to finish loading, then map columns.", true);
+    return;
+  }
+  const mapping = getSelectedMapping();
+  if (!mapping) {
+    return;
+  }
   const beans = DEFAULT_BEANS;
-  setStatus("Parsing CSV (shuffling cohort)...");
+  setStatus("Running optimizer (shuffling cohort)...");
   try {
-    const { rows, fields } = await parseCsv(file);
-    const { preferences, caseIdField, sourceFields, sourceByCaseId, duplicateCaseIds } = normalizePreferences(rows, fields, {
+    const { preferences, caseIdField, sourceFields, sourceByCaseId, duplicateCaseIds } = normalizePreferences(uploadedRows, uploadedFields, {
       shuffle: FORCE_SHUFFLE,
-    });
+    }, mapping);
     currentSourceFields = sourceFields;
     currentCaseIdField = caseIdField;
     currentSourceByCaseId = sourceByCaseId;
@@ -93,6 +130,70 @@ function parseCsv(file) {
   });
 }
 
+function hideColumnMapping() {
+  $("#column-mapping")?.classList.add("hidden");
+  const selects = ["#map-id", "#map-opt-1", "#map-opt-2", "#map-opt-3", "#map-opt-4"];
+  selects.forEach((selector) => {
+    const el = $(selector);
+    if (!el) return;
+    el.innerHTML = "";
+  });
+}
+
+function renderColumnMapping(fields) {
+  const mappingPanel = $("#column-mapping");
+  if (!mappingPanel) return;
+  const selects = ["#map-id", "#map-opt-1", "#map-opt-2", "#map-opt-3", "#map-opt-4"];
+  selects.forEach((selector) => {
+    const el = $(selector);
+    if (!el) return;
+    el.innerHTML = "";
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Select column...";
+    el.appendChild(placeholder);
+    fields.forEach((field) => {
+      const option = document.createElement("option");
+      option.value = field;
+      option.textContent = field;
+      el.appendChild(option);
+    });
+  });
+
+  // Helpful defaults based on previous assumptions.
+  if (fields[2]) {
+    $("#map-id").value = fields[2];
+  }
+  const optDefaults = [fields[fields.length - 4], fields[fields.length - 3], fields[fields.length - 2], fields[fields.length - 1]];
+  ["#map-opt-1", "#map-opt-2", "#map-opt-3", "#map-opt-4"].forEach((selector, idx) => {
+    if (optDefaults[idx]) {
+      $(selector).value = optDefaults[idx];
+    }
+  });
+  mappingPanel.classList.remove("hidden");
+}
+
+function getSelectedMapping() {
+  const caseIdField = $("#map-id")?.value?.trim();
+  const beanFields = [
+    $("#map-opt-1")?.value?.trim(),
+    $("#map-opt-2")?.value?.trim(),
+    $("#map-opt-3")?.value?.trim(),
+    $("#map-opt-4")?.value?.trim(),
+  ];
+  if (!caseIdField || beanFields.some((value) => !value)) {
+    setStatus("Please map all required columns before generating assignments.", true);
+    return null;
+  }
+  const selected = [caseIdField, ...beanFields];
+  const uniqueCount = new Set(selected).size;
+  if (uniqueCount !== selected.length) {
+    setStatus("Please select different columns for identifier and each option.", true);
+    return null;
+  }
+  return { caseIdField, beanFields };
+}
+
 function getCaseId(row, caseIdField, fallbackId) {
   const raw = caseIdField ? row?.[caseIdField] : undefined;
   const trimmed = raw === null || raw === undefined ? "" : String(raw).trim();
@@ -103,15 +204,18 @@ function normalizeCaseIdKey(value) {
   return String(value ?? "").trim().toLowerCase();
 }
 
-function normalizePreferences(rows, fields, options) {
-  // 3rd column (index 2) is CaseID
-  // Last 4 columns are Bean counts
-  const idIndex = 2;
-  const caseIdField = fields[idIndex];
+function normalizePreferences(rows, fields, options, mapping) {
+  const caseIdField = mapping?.caseIdField;
+  const beanFields = mapping?.beanFields || [];
   if (!caseIdField) {
-    throw new Error("Unable to find CaseID column (expected 3rd column).");
+    throw new Error("Please select the student identifier column.");
   }
-  const beanIndices = [fields.length - 4, fields.length - 3, fields.length - 2, fields.length - 1];
+  if (!beanFields.length || beanFields.length !== 4) {
+    throw new Error("Please map all 4 option columns.");
+  }
+  if (!fields.includes(caseIdField) || beanFields.some((field) => !fields.includes(field))) {
+    throw new Error("Selected columns were not found in the uploaded CSV. Please remap and try again.");
+  }
 
   const sourceFields = fields.slice();
   const sourceByCaseId = new Map();
@@ -134,8 +238,8 @@ function normalizePreferences(rows, fields, options) {
     .map((row, idx) => {
       const caseId = getCaseId(row, caseIdField, `student_${idx + 1}`);
       
-      const beans = beanIndices.map((i) => {
-        const val = fields[i] ? row[fields[i]] : 0;
+      const beans = beanFields.map((field) => {
+        const val = field ? row[field] : 0;
         const num = Number(val);
         return Number.isFinite(num) ? num : 0;
       });
