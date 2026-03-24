@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HAEMR Residency Financial & Budget Calculator</title>
+  <style>
+    :root {
+      --bg-gradient: none;
+      --panel-grad: none;
+      --bg: #ffffff;
+      --panel: #ffffff;
+      --panel-2: #f7f7f7;
+      --text: #111111;
+      --muted: #5a5a5a;
+      --label: #1f1f1f;
+      --accent: #000000;
+      --accent-2: #000000;
+      --danger: #444444;
+      --warn: #333333;
+      --border: #d8d8d8;
+      --input-bg: #ffffff;
+      --input-border: #bdbdbd;
+      --line-bg: #f7f7f7;
+      --line-total-bg: #f1f1f1;
+      --pill-bg: #f6f6f6;
+      --table-head: #111111;
+      --table-text: #1a1a1a;
+      --kpi-small: #444444;
+      --shadow: none;
+      --radius: 10px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-gradient: none;
+        --panel-grad: none;
+        --bg: #0f0f0f;
+        --panel: #151515;
+        --panel-2: #1d1d1d;
+        --text: #f5f5f5;
+        --muted: #b0b0b0;
+        --label: #eeeeee;
+        --accent: #ffffff;
+        --accent-2: #ffffff;
+        --danger: #d0d0d0;
+        --warn: #c4c4c4;
+        --border: #313131;
+        --input-bg: #0f0f0f;
+        --input-border: #4a4a4a;
+        --line-bg: #1a1a1a;
+        --line-total-bg: #202020;
+        --pill-bg: #1d1d1d;
+        --table-head: #ffffff;
+        --table-text: #f2f2f2;
+        --kpi-small: #cfcfcf;
+        --shadow: none;
+      }
+    }
+
+    :root[data-theme="light"] {
+      --bg-gradient: none;
+      --panel-grad: none;
+      --bg: #ffffff;
+      --panel: #ffffff;
+      --panel-2: #f7f7f7;
+      --text: #111111;
+      --muted: #5a5a5a;
+      --label: #1f1f1f;
+      --accent: #000000;
+      --accent-2: #000000;
+      --danger: #444444;
+      --warn: #333333;
+      --border: #d8d8d8;
+      --input-bg: #ffffff;
+      --input-border: #bdbdbd;
+      --line-bg: #f7f7f7;
+      --line-total-bg: #f1f1f1;
+      --pill-bg: #f6f6f6;
+      --table-head: #111111;
+      --table-text: #1a1a1a;
+      --kpi-small: #444444;
+      --shadow: none;
+    }
+
+    :root[data-theme="dark"] {
+      --bg-gradient: none;
+      --panel-grad: none;
+      --bg: #0f0f0f;
+      --panel: #151515;
+      --panel-2: #1d1d1d;
+      --text: #f5f5f5;
+      --muted: #b0b0b0;
+      --label: #eeeeee;
+      --accent: #ffffff;
+      --accent-2: #ffffff;
+      --danger: #d0d0d0;
+      --warn: #c4c4c4;
+      --border: #313131;
+      --input-bg: #0f0f0f;
+      --input-border: #4a4a4a;
+      --line-bg: #1a1a1a;
+      --line-total-bg: #202020;
+      --pill-bg: #1d1d1d;
+      --table-head: #ffffff;
+      --table-text: #f2f2f2;
+      --kpi-small: #cfcfcf;
+      --shadow: none;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px 0;
+      font-size: clamp(1.8rem, 2vw + 1rem, 3rem);
+      line-height: 1.1;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 980px;
+      line-height: 1.55;
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+      align-items: center;
+    }
+
+    .theme-status {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+
+    .layout {
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      background: var(--panel-grad);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-inner { padding: 20px; }
+
+    .input-launcher {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .input-launcher button {
+      width: 100%;
+    }
+
+    h2, h3, h4 {
+      margin: 0 0 12px 0;
+      line-height: 1.2;
+    }
+
+    h2 { font-size: 1.35rem; }
+    h3 { font-size: 1.08rem; color: var(--text); }
+    h4 { font-size: 0.95rem; color: var(--text); text-transform: uppercase; letter-spacing: 0.04em; }
+
+    .subtle {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .section + .section {
+      border-top: 1px solid var(--border);
+      margin-top: 18px;
+      padding-top: 18px;
+    }
+
+    .grid-2, .grid-3 {
+      display: grid;
+      gap: 12px;
+    }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--label);
+      margin-bottom: 6px;
+    }
+
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      background: var(--input-bg);
+      color: var(--text);
+      padding: 11px 12px;
+      font: inherit;
+      outline: none;
+    }
+
+    input:focus, textarea:focus {
+      border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    button {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      background: var(--panel);
+      color: var(--text);
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: color-mix(in srgb, var(--panel-2) 80%, transparent);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .report {
+      display: grid;
+      gap: 18px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .kpi {
+      padding: 16px;
+      border-radius: 16px;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+    }
+
+    .kpi .label {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+
+    .kpi .value {
+      font-size: 1.55rem;
+      font-weight: 750;
+      line-height: 1.1;
+    }
+
+    .kpi .small {
+      margin-top: 6px;
+      color: var(--kpi-small);
+      font-size: 0.88rem;
+    }
+
+    .report-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .report-card .head {
+      padding: 16px 18px;
+      background: var(--panel-2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .report-card .body {
+      padding: 18px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .mini-table, table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th { color: var(--table-head); font-size: 0.92rem; }
+    td { color: var(--table-text); }
+    tr:last-child td, tr:last-child th { border-bottom: none; }
+
+    .math {
+      display: grid;
+      gap: 8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.92rem;
+    }
+
+    .math .line {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: var(--line-bg);
+    }
+
+    .math .line.total {
+      background: var(--line-total-bg);
+      border: 1px solid var(--border);
+      font-weight: 700;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      margin-right: 8px;
+      margin-bottom: 8px;
+      background: var(--pill-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .good { color: var(--accent-2); }
+    .bad { color: var(--danger); }
+    .warn { color: var(--warn); }
+    .muted { color: var(--muted); }
+
+    .info-box {
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 1000;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      width: min(920px, 100%);
+      max-height: 85vh;
+      overflow: auto;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--panel);
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .footnote {
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1180px) {
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .two-col { grid-template-columns: 1fr; }
+      .input-launcher { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 760px) {
+      .wrap { padding: 14px; }
+      .hero { flex-direction: column; }
+      .grid-2, .grid-3, .kpi-grid { grid-template-columns: 1fr; }
+      .input-launcher { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>HAEMR Residency Financial &amp; Budget Calculator</h1>
+        <p>
+          Adjust inputs from the buttons below.
+        </p>
+        <div class="action-row">
+          <button id="openIncomeBtn" class="secondary" type="button">Income Inputs</button>
+          <button id="openRetirementBtn" class="secondary" type="button">Retirement &amp; Payroll Inputs</button>
+          <button id="openTaxBtn" class="secondary" type="button">Tax Inputs</button>
+          <button id="openExpensesBtn" class="secondary" type="button">Expense Inputs</button>
+          <button id="openBenefitsBtn" class="secondary" type="button">Benefits Inputs</button>
+          <button id="openAssumptionsBtn" class="secondary" type="button">Assumptions</button>
+          <button id="resetBtn" type="button">Reset</button>
+          <button id="printBtn" class="secondary" type="button">Print</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <main class="report">
+        <section class="kpi-grid">
+          <div class="kpi">
+            <div class="label">2026 amortized monthly cash flow</div>
+            <div class="value" id="kpiY1Cash">$0</div>
+            <div class="small" id="kpiY1Surplus">Surplus: $0</div>
+          </div>
+          <div class="kpi">
+            <div class="label">2027 amortized monthly cash flow</div>
+            <div class="value" id="kpiY2Cash">$0</div>
+            <div class="small" id="kpiY2Surplus">Surplus: $0</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Monthly Boston budget</div>
+            <div class="value" id="kpiBudget">$0</div>
+            <div class="small" id="kpiAnnualBudget">Annualized: $0</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Annual retirement savings</div>
+            <div class="value" id="kpiRetirement">$0</div>
+            <div class="small" id="kpiMatch">Employer match + Roth: $0</div>
+          </div>
+        </section>
+
+        <section class="report-card">
+          <div class="head"><h2>1. Income Overview (Gross)</h2></div>
+          <div class="body two-col">
+            <div>
+              <h3>2026 partial year</h3>
+              <div class="math" id="incomeY1"></div>
+            </div>
+            <div>
+              <h3>2027 full year</h3>
+              <div class="math" id="incomeY2"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="report-card">
+          <div class="head"><h2>2. Retirement</h2></div>
+          <div class="body two-col">
+            <div>
+              <div class="math" id="retirementMath"></div>
+            </div>
+            <div>
+              <p class="subtle" id="retirementNarrative"></p>
+              <div>
+                <span class="pill">403(b) + employer match</span>
+                <span class="pill">Schedule C assumed</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="report-card">
+          <div class="head"><h2>3. MGB Benefits, Stipends &amp; Food Perks</h2></div>
+          <div class="body">
+            <div class="two-col">
+              <div>
+                <table class="mini-table">
+                  <tbody id="benefitsTable"></tbody>
+                </table>
+              </div>
+              <div>
+                <p class="subtle">Planning benefits only.</p>
+                <div id="benefitPills"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="report-card">
+          <div class="head"><h2>4. Tax Breakdown &amp; Amortized Take Home Pay (Independent Single Filer)</h2></div>
+          <div class="body two-col">
+            <div>
+              <h3>2026 tax math</h3>
+              <div class="math" id="taxY1"></div>
+            </div>
+            <div>
+              <h3>2027 tax math</h3>
+              <div class="math" id="taxY2"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="report-card">
+          <div class="head"><h2>5. Cleveland vs. Boston Expense Projection &amp; Strict Budget</h2></div>
+          <div class="body">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Cleveland historical</th>
+                  <th>Boston projection</th>
+                  <th>Monthly change</th>
+                </tr>
+              </thead>
+              <tbody id="expenseTable"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="report-card">
+          <div class="head"><h2>6. Final Margin Analysis</h2></div>
+          <div class="body two-col">
+            <div><div class="math" id="marginY1"></div></div>
+            <div><div class="math" id="marginY2"></div></div>
+          </div>
+        </section>
+
+        <section class="report-card">
+          <div class="head"><h2>7. Schedule C</h2></div>
+          <div class="body">
+            <p class="subtle" id="scheduleCText"></p>
+            <div style="margin-top:14px;">
+              <h3>Assumed path: Schedule C net profit</h3>
+              <div class="math" id="scheduleCMath"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div id="incomeModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="incomeTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="incomeTitle">Employment and Income Inputs</h2>
+          <p class="subtle" style="margin:0;">Update values.</p>
+        </div>
+        <button class="secondary close-modal" type="button" data-close-modal="incomeModal">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid-2">
+          <div>
+            <label for="pgy1">PGY-1 base salary</label>
+            <input id="pgy1" type="number" step="0.01" value="84579" />
+          </div>
+          <div>
+            <label for="pgy2">PGY-2 base salary</label>
+            <input id="pgy2" type="number" step="0.01" value="88843" />
+          </div>
+          <div>
+            <label for="stipend">Annual housing/trainee stipend</label>
+            <input id="stipend" type="number" step="0.01" value="10500" />
+          </div>
+          <div>
+            <label for="sideIncome">Annual Schedule C revenue</label>
+            <input id="sideIncome" type="number" step="0.01" value="5000" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="retirementModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="retirementTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="retirementTitle">Retirement and Payroll Inputs</h2>
+          <p class="subtle" style="margin:0;">Update values.</p>
+        </div>
+        <button class="secondary close-modal" type="button" data-close-modal="retirementModal">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid-2">
+          <div>
+            <label for="retRate">403(b) employee contribution rate</label>
+            <input id="retRate" type="number" step="0.01" value="15" />
+          </div>
+          <div>
+            <label for="matchRate">MGB match rate</label>
+            <input id="matchRate" type="number" step="0.01" value="2" />
+          </div>
+          <div>
+            <label for="ssRate">Social Security rate</label>
+            <input id="ssRate" type="number" step="0.01" value="6.2" />
+          </div>
+          <div>
+            <label for="medicareRate">Medicare rate</label>
+            <input id="medicareRate" type="number" step="0.01" value="1.45" />
+          </div>
+        </div>
+        <div class="info-box">
+          Schedule C net profit is assumed.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="taxModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="taxTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="taxTitle">Income Tax Assumptions</h2>
+          <p class="subtle" style="margin:0;">Update values.</p>
+        </div>
+        <button class="secondary close-modal" type="button" data-close-modal="taxModal">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid-2">
+          <div>
+            <label for="stdDeduction">Federal standard deduction</label>
+            <input id="stdDeduction" type="number" step="0.01" value="16100" />
+          </div>
+          <div>
+            <label for="stateRate">Massachusetts state tax rate</label>
+            <input id="stateRate" type="number" step="0.01" value="5" />
+          </div>
+        </div>
+        <label for="federalBrackets" style="margin-top:12px;">Federal brackets JSON</label>
+        <textarea id="federalBrackets">[
+  {"upTo": 11925, "rate": 10},
+  {"upTo": 48475, "rate": 12},
+  {"upTo": 103350, "rate": 22},
+  {"upTo": 197300, "rate": 24},
+  {"upTo": 250525, "rate": 32},
+  {"upTo": 626350, "rate": 35},
+  {"upTo": null, "rate": 37}
+]</textarea>
+        <p class="footnote">Each bracket uses <code>upTo</code> and <code>rate</code>. Set <code>upTo</code> to null for the top bracket.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="expensesModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="expensesTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="expensesTitle">Monthly Expense Inputs</h2>
+          <p class="subtle" style="margin:0;">Update values.</p>
+        </div>
+        <button class="secondary close-modal" type="button" data-close-modal="expensesModal">Close</button>
+      </div>
+      <div class="modal-body">
+        <h3>Personal monthly expenses</h3>
+        <div class="grid-2">
+          <div><label for="rent">Rent &amp; utilities</label><input id="rent" type="number" step="0.01" value="3100" /></div>
+          <div><label for="food">Food (dining)</label><input id="food" type="number" step="0.01" value="554.45" /></div>
+          <div><label for="groceries">Groceries</label><input id="groceries" type="number" step="0.01" value="291.66" /></div>
+          <div><label for="travel">Travel</label><input id="travel" type="number" step="0.01" value="381.12" /></div>
+          <div><label for="transport">Transportation</label><input id="transport" type="number" step="0.01" value="45" /></div>
+          <div><label for="clothes">Clothes &amp; hair</label><input id="clothes" type="number" step="0.01" value="75.71" /></div>
+          <div><label for="business">Business</label><input id="business" type="number" step="0.01" value="50" /></div>
+          <div><label for="other">Other</label><input id="other" type="number" step="0.01" value="50" /></div>
+          <div><label for="coffee">Coffee</label><input id="coffee" type="number" step="0.01" value="50" /></div>
+          <div><label for="education">Education</label><input id="education" type="number" step="0.01" value="0" /></div>
+        </div>
+        <div class="section">
+          <h3>Schedule C expenses</h3>
+          <div class="grid-2">
+            <div>
+              <label for="scheduleCExpenses">Annual Schedule C deductible expenses</label>
+              <input id="scheduleCExpenses" type="number" step="0.01" value="0" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="benefitsModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="benefitsTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="benefitsTitle">Benefits and Tools Inputs</h2>
+          <p class="subtle" style="margin:0;">Update values.</p>
+        </div>
+        <button class="secondary close-modal" type="button" data-close-modal="benefitsModal">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid-2">
+          <div><label for="educationFund">Annual education fund</label><input id="educationFund" type="number" step="0.01" value="5250" /></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="assumptionsModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="assumptionsTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="assumptionsTitle">Hard Coded Assumptions</h2>
+          <p class="subtle" style="margin:0;">Fixed values.</p>
+        </div>
+        <button id="closeAssumptionsBtn" class="secondary" type="button">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="two-col">
+          <div>
+            <table class="mini-table">
+              <tbody>
+                <tr><th>Days in year</th><td>365</td></tr>
+                <tr><th>2026 employed days</th><td>204</td></tr>
+                <tr><th>2027 PGY-1 days</th><td>161</td></tr>
+                <tr><th>2027 PGY-2 days</th><td>204</td></tr>
+                <tr><th>2026 amortization months</th><td>6.6</td></tr>
+                <tr><th>2027 amortization months</th><td>12</td></tr>
+                <tr><th>2026 side income treatment</th><td>Assumed Schedule C net profit</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <div class="info-box" style="margin-top:0;">
+              Lease guaranty excluded.
+            </div>
+            <div class="info-box">
+              Schedule C includes estimated self-employment tax.
+            </div>
+            <div class="info-box">
+              Amortization months are fixed.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const HARD_CODED = {
+      daysInYear: 365,
+      daysY1: 204,
+      daysPgy1Y2: 161,
+      daysPgy2Y2: 204,
+      amortMonthsY1: 6.6,
+      amortMonthsY2: 12
+    };
+
+    const defaults = {
+      pgy1: 84579,
+      pgy2: 88843,
+      stipend: 10500,
+      sideIncome: 5000,
+      scheduleCExpenses: 0,
+      retRate: 15,
+      matchRate: 2,
+      ssRate: 6.2,
+      medicareRate: 1.45,
+      stdDeduction: 16100,
+      stateRate: 5,
+      federalBrackets: `[
+  {"upTo": 11925, "rate": 10},
+  {"upTo": 48475, "rate": 12},
+  {"upTo": 103350, "rate": 22},
+  {"upTo": 197300, "rate": 24},
+  {"upTo": 250525, "rate": 32},
+  {"upTo": 626350, "rate": 35},
+  {"upTo": null, "rate": 37}
+]`,
+      rent: 3100,
+      food: 554.45,
+      groceries: 291.66,
+      travel: 381.12,
+      transport: 45,
+      clothes: 75.71,
+      business: 50,
+      other: 50,
+      coffee: 50,
+      education: 0,
+      educationFund: 5250
+    };
+
+    const cleveland = {
+      rent: 1720,
+      food: 369.63,
+      groceries: 194.44,
+      travel: 381.12,
+      transport: 361.51,
+      clothes: 151.42,
+      business: 54.66,
+      other: 52.75,
+      coffee: 30.74,
+      education: 806.15
+    };
+
+    const expenseLabels = {
+      rent: 'Rent & utilities',
+      food: 'Food (Dining)',
+      groceries: 'Groceries',
+      travel: 'Travel',
+      transport: 'Transportation',
+      clothes: 'Clothes & hair',
+      business: 'Business',
+      other: 'Other',
+      coffee: 'Coffee',
+      education: 'Education'
+    };
+
+    const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
+    const pct = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
+
+    function val(id) {
+      return parseFloat(document.getElementById(id).value) || 0;
+    }
+
+    function fmt(v) {
+      return currency.format(v || 0);
+    }
+
+    function setHTML(id, html) {
+      document.getElementById(id).innerHTML = html;
+    }
+
+    function line(label, value, total = false) {
+      return `<div class="line ${total ? 'total' : ''}"><span>${label}</span><span>${value}</span></div>`;
+    }
+
+    function parseBrackets() {
+      try {
+        const brackets = JSON.parse(document.getElementById('federalBrackets').value);
+        if (!Array.isArray(brackets) || !brackets.length) throw new Error('Invalid bracket array');
+        return brackets;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function calcProgressiveTax(taxableIncome, brackets) {
+      if (taxableIncome <= 0) return 0;
+      let tax = 0;
+      let lower = 0;
+      for (const bracket of brackets) {
+        const upper = bracket.upTo === null ? Infinity : Number(bracket.upTo);
+        const rate = Number(bracket.rate) / 100;
+        const amountInBracket = Math.max(0, Math.min(taxableIncome, upper) - lower);
+        tax += amountInBracket * rate;
+        if (taxableIncome <= upper) break;
+        lower = upper;
+      }
+      return tax;
+    }
+
+    function calcYear({ w2, stipend, sideIncome, retRate, ssRate, medicareRate, stateRate, stdDeduction, brackets, amortMonths }) {
+      const retirement403b = w2 * retRate;
+      const ficaW2 = w2 * (ssRate + medicareRate);
+      const seTax = sideIncome * (ssRate + medicareRate);
+      const fica = ficaW2 + seTax;
+      const agi = w2 + stipend + sideIncome - retirement403b;
+      const taxableFederal = Math.max(0, agi - stdDeduction);
+      const federalTax = calcProgressiveTax(taxableFederal, brackets);
+      const taxableState = Math.max(0, agi);
+      const stateTax = taxableState * stateRate;
+      const totalTax = fica + federalTax + stateTax;
+      const spendableNet = w2 + stipend + sideIncome - retirement403b - totalTax;
+      const amortizedMonthly = spendableNet / amortMonths;
+      return {
+        w2, stipend, sideIncome, retirement403b, ficaW2, seTax, fica, agi, taxableFederal,
+        federalTax, taxableState, stateTax, totalTax, spendableNet, amortizedMonthly
+      };
+    }
+
+    function update() {
+      const brackets = parseBrackets();
+      const bracketBox = document.getElementById('federalBrackets');
+      bracketBox.style.borderColor = brackets ? 'rgba(255,255,255,0.14)' : 'rgba(255,143,143,0.8)';
+      if (!brackets) return;
+
+      const pgy1 = val('pgy1');
+      const pgy2 = val('pgy2');
+      const stipend = val('stipend');
+      const sideIncome = val('sideIncome');
+      const scheduleCExpenses = val('scheduleCExpenses');
+      const scheduleCProfit = Math.max(0, sideIncome - scheduleCExpenses);
+      const retRate = val('retRate') / 100;
+      const matchRate = val('matchRate') / 100;
+      const ssRate = val('ssRate') / 100;
+      const medicareRate = val('medicareRate') / 100;
+      const stdDeduction = val('stdDeduction');
+      const stateRate = val('stateRate') / 100;
+      const daysInYear = HARD_CODED.daysInYear;
+      const daysY1 = HARD_CODED.daysY1;
+      const daysPgy1Y2 = HARD_CODED.daysPgy1Y2;
+      const daysPgy2Y2 = HARD_CODED.daysPgy2Y2;
+      const amortMonthsY1 = HARD_CODED.amortMonthsY1;
+      const amortMonthsY2 = HARD_CODED.amortMonthsY2;
+
+      const w2Y1 = pgy1 * (daysY1 / daysInYear);
+      const w2Y2 = pgy1 * (daysPgy1Y2 / daysInYear) + pgy2 * (daysPgy2Y2 / daysInYear);
+
+      const year1 = calcYear({
+        w2: w2Y1,
+        stipend,
+        sideIncome: scheduleCProfit,
+        retRate,
+        ssRate,
+        medicareRate,
+        stateRate,
+        stdDeduction,
+        brackets,
+        amortMonths: amortMonthsY1
+      });
+
+      const year2 = calcYear({
+        w2: w2Y2,
+        stipend,
+        sideIncome: 0,
+        retRate,
+        ssRate,
+        medicareRate,
+        stateRate,
+        stdDeduction,
+        brackets,
+        amortMonths: amortMonthsY2
+      });
+
+      const expenses = Object.keys(expenseLabels).map(key => ({ key, label: expenseLabels[key], cle: cleveland[key], bos: val(key) }));
+      const monthlyBudget = expenses.reduce((sum, x) => sum + x.bos, 0);
+      const annualBudget = monthlyBudget * 12;
+      const y1Surplus = year1.amortizedMonthly - monthlyBudget;
+      const y2Surplus = year2.amortizedMonthly - monthlyBudget;
+      const employeeRetAnnual = year2.retirement403b;
+      const employerMatchAnnual = year2.w2 * matchRate;
+      const totalAnnualRetirement = employeeRetAnnual + employerMatchAnnual;
+
+      document.getElementById('kpiY1Cash').textContent = fmt(year1.amortizedMonthly);
+      document.getElementById('kpiY2Cash').textContent = fmt(year2.amortizedMonthly);
+      document.getElementById('kpiBudget').textContent = fmt(monthlyBudget);
+      document.getElementById('kpiAnnualBudget').textContent = `Annualized: ${fmt(annualBudget)}`;
+      document.getElementById('kpiRetirement').textContent = fmt(totalAnnualRetirement);
+      document.getElementById('kpiMatch').textContent = `Employer match: ${fmt(employerMatchAnnual)}`;
+
+      const y1Class = y1Surplus >= 0 ? 'good' : 'bad';
+      const y2Class = y2Surplus >= 0 ? 'good' : 'bad';
+      document.getElementById('kpiY1Surplus').innerHTML = `Surplus: <span class="${y1Class}">${fmt(y1Surplus)}</span>`;
+      document.getElementById('kpiY2Surplus').innerHTML = `Surplus: <span class="${y2Class}">${fmt(y2Surplus)}</span>`;
+
+      setHTML('incomeY1', [
+        line(`Prorated PGY-1 W-2 = ${fmt(pgy1)} × ${daysY1}/${daysInYear}`, fmt(year1.w2)),
+        line('Taxable stipend', fmt(stipend)),
+        line('Annual Schedule C revenue', fmt(sideIncome)),
+        line('Schedule C deductible expenses', `- ${fmt(scheduleCExpenses)}`),
+        line('Net Schedule C profit (2026)', fmt(scheduleCProfit)),
+        line('2026 gross income', fmt(year1.w2 + stipend + scheduleCProfit), true)
+      ].join(''));
+
+      setHTML('incomeY2', [
+        line(`PGY-1 portion = ${fmt(pgy1)} × ${daysPgy1Y2}/${daysInYear}`, fmt(pgy1 * (daysPgy1Y2 / daysInYear))),
+        line(`PGY-2 portion = ${fmt(pgy2)} × ${daysPgy2Y2}/${daysInYear}`, fmt(pgy2 * (daysPgy2Y2 / daysInYear))),
+        line('Taxable stipend', fmt(stipend)),
+        line('2027 gross income', fmt(year2.w2 + stipend), true)
+      ].join(''));
+
+      setHTML('retirementMath', [
+        line(`2026 employee 403(b) = ${pct.format(retRate * 100)}% × 2026 W-2`, fmt(year1.retirement403b)),
+        line(`2026 employer match = ${pct.format(matchRate * 100)}% × 2026 W-2`, fmt(year1.w2 * matchRate)),
+        line(`2027 employee 403(b) = ${pct.format(retRate * 100)}% × 2027 W-2`, fmt(year2.retirement403b)),
+        line(`2027 employer match = ${pct.format(matchRate * 100)}% × 2027 W-2`, fmt(year2.w2 * matchRate)),
+        line('Combined retirement stack across modeled period', fmt(year1.retirement403b + year2.retirement403b + year1.w2 * matchRate + year2.w2 * matchRate), true)
+      ].join(''));
+
+      const narrative = [
+        `403(b) contributions reduce taxable income.`,
+        `Schedule C net profit is taxed as income and includes estimated self-employment tax.`,
+        `Employer match in 2027 is ${fmt(year2.w2 * matchRate)}.`
+      ].join(' ');
+      document.getElementById('retirementNarrative').textContent = narrative;
+
+      const benefits = [
+        ['Annual housing / trainee stipend', fmt(stipend), 'Taxable annual cash payment'],
+        ['403(b) match', `${pct.format(matchRate * 100)}% of W-2`, 'Immediate risk free return up to the match cap'],
+        ['Education fund', fmt(val('educationFund')), 'Can offset CME, licensing, courses, and similar costs'],
+        ['Meals', 'Free when on call or working late', 'Planning perk that may lower dining spend'],
+        ['MBTA transit benefit', '50% discount pre tax', 'Current out of pocket modeled at $45/month'],
+        ['Relocation stipend', fmt(0), 'No direct relocation cash assumed']
+      ];
+      setHTML('benefitsTable', benefits.map(row => `<tr><th>${row[0]}</th><td>${row[1]}</td><td class="muted">${row[2]}</td></tr>`).join(''));
+      setHTML('benefitPills', [
+        `<span class="pill">Stipend is taxable</span>`,
+        `<span class="pill">Education fund offsets expenses</span>`,
+        `<span class="pill">Lease guaranty excluded</span>`
+      ].join(''));
+
+      setHTML('taxY1', [
+        line('2026 W-2 income', fmt(year1.w2)),
+        line('Plus taxable stipend', fmt(stipend)),
+        line('Plus net Schedule C profit', fmt(scheduleCProfit)),
+        line('Less pretax 403(b)', `- ${fmt(year1.retirement403b)}`),
+        line('Adjusted gross income', fmt(year1.agi)),
+        line('Less standard deduction', `- ${fmt(stdDeduction)}`),
+        line('Federal taxable income', fmt(year1.taxableFederal)),
+        line('Federal income tax', fmt(year1.federalTax)),
+        line(`Payroll FICA on W-2`, fmt(year1.ficaW2)),
+        line(`Estimated self-employment tax on Schedule C profit`, fmt(year1.seTax)),
+        line(`MA tax = ${pct.format(stateRate * 100)}% × state taxable income`, fmt(year1.stateTax)),
+        line(`Amortized monthly cash flow = spendable net ÷ ${amortMonthsY1}`, fmt(year1.amortizedMonthly), true)
+      ].join(''));
+
+      setHTML('taxY2', [
+        line('2027 blended W-2 income', fmt(year2.w2)),
+        line('Plus taxable stipend', fmt(stipend)),
+        line('Less pretax 403(b)', `- ${fmt(year2.retirement403b)}`),
+        line('Adjusted gross income', fmt(year2.agi)),
+        line('Less standard deduction', `- ${fmt(stdDeduction)}`),
+        line('Federal taxable income', fmt(year2.taxableFederal)),
+        line('Federal income tax', fmt(year2.federalTax)),
+        line(`Payroll FICA on W-2`, fmt(year2.ficaW2)),
+        line(`MA tax = ${pct.format(stateRate * 100)}% × state taxable income`, fmt(year2.stateTax)),
+        line('Spendable net cash after taxes and 403(b)', fmt(year2.spendableNet)),
+        line(`Amortized monthly cash flow = spendable net ÷ ${amortMonthsY2}`, fmt(year2.amortizedMonthly), true)
+      ].join(''));
+
+      const clevelandTotal = Object.values(cleveland).reduce((a, b) => a + b, 0);
+      const totalDiff = monthlyBudget - clevelandTotal;
+      setHTML('expenseTable', expenses.map(x => {
+        const diff = x.bos - x.cle;
+        const cls = diff > 0 ? 'bad' : diff < 0 ? 'good' : 'muted';
+        return `<tr>
+          <td>${x.label}</td>
+          <td>${fmt(x.cle)}</td>
+          <td>${fmt(x.bos)}</td>
+          <td class="${cls}">${diff >= 0 ? '+' : '-'}${fmt(Math.abs(diff))}</td>
+        </tr>`;
+      }).join('') + `<tr>
+        <th>Total monthly spending</th>
+        <th>${fmt(clevelandTotal)}</th>
+        <th>${fmt(monthlyBudget)}</th>
+        <th class="${totalDiff > 0 ? 'bad' : totalDiff < 0 ? 'good' : 'muted'}">${totalDiff >= 0 ? '+' : '-'}${fmt(Math.abs(totalDiff))}</th>
+      </tr>`);
+
+      setHTML('marginY1', [
+        line('2026 amortized monthly cash flow', fmt(year1.amortizedMonthly)),
+        line('Boston monthly expenses', `- ${fmt(monthlyBudget)}`),
+        line('2026 monthly margin', fmt(y1Surplus), true)
+      ].join(''));
+
+      setHTML('marginY2', [
+        line('2027 amortized monthly cash flow', fmt(year2.amortizedMonthly)),
+        line('Boston monthly expenses', `- ${fmt(monthlyBudget)}`),
+        line('2027 monthly margin', fmt(y2Surplus), true)
+      ].join(''));
+
+      const hobbyMarginalRateY1 = year1.taxableFederal > 48475 ? 0.22 : year1.taxableFederal > 11925 ? 0.12 : 0.10;
+      const scheduleCTaxableProfit = scheduleCProfit;
+      const scheduleCTax = scheduleCTaxableProfit * (hobbyMarginalRateY1 + stateRate + ssRate + medicareRate);
+
+      document.getElementById('scheduleCText').textContent = `Side income is modeled as Schedule C net profit.`;
+
+      setHTML('scheduleCMath', [
+        line('Gross Schedule C revenue', fmt(sideIncome)),
+        line('Schedule C deductible expenses', `- ${fmt(scheduleCExpenses)}`),
+        line('Net business profit', fmt(scheduleCTaxableProfit)),
+        line('Approximate tax if profit remains', fmt(scheduleCTax)),
+        line('After tax business cash', fmt(sideIncome - scheduleCExpenses - scheduleCTax), true)
+      ].join(''));
+    }
+
+    function resetDefaults() {
+      Object.entries(defaults).forEach(([key, value]) => {
+        document.getElementById(key).value = value;
+      });
+      update();
+    }
+
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.add('open');
+      el.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.remove('open');
+      el.setAttribute('aria-hidden', 'true');
+    }
+
+    function closeAllModals() {
+      document.querySelectorAll('.modal-backdrop').forEach(el => {
+        el.classList.remove('open');
+        el.setAttribute('aria-hidden', 'true');
+      });
+    }
+
+    document.querySelectorAll('input, textarea').forEach(el => {
+      el.addEventListener('input', update);
+      el.addEventListener('change', update);
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', resetDefaults);
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+    const modalOpeners = [
+      ['openIncomeBtn', 'incomeModal'],
+      ['openRetirementBtn', 'retirementModal'],
+      ['openTaxBtn', 'taxModal'],
+      ['openExpensesBtn', 'expensesModal'],
+      ['openBenefitsBtn', 'benefitsModal'],
+      ['openAssumptionsBtn', 'assumptionsModal']
+    ];
+
+    modalOpeners.forEach(([btnId, modalId]) => {
+      const btn = document.getElementById(btnId);
+      if (!btn) return;
+      btn.addEventListener('click', () => openModal(modalId));
+    });
+
+    document.querySelectorAll('.close-modal').forEach(btn => {
+      btn.addEventListener('click', () => closeModal(btn.dataset.closeModal));
+    });
+
+    document.getElementById('closeAssumptionsBtn').addEventListener('click', () => closeModal('assumptionsModal'));
+
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) closeModal(backdrop.id);
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeAllModals();
+      }
+    });
+
+    const darkPref = window.matchMedia('(prefers-color-scheme: dark)');
+    document.documentElement.dataset.theme = darkPref.matches ? 'dark' : 'light';
+    darkPref.addEventListener('change', (e) => {
+      document.documentElement.dataset.theme = e.matches ? 'dark' : 'light';
+    });
+
+    resetDefaults();
+  </script>
+</body>
+</html>
