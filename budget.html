@@ -1169,7 +1169,7 @@
           amortMonths
         });
 
-        const annualAvailable = Math.max(0, (trialYear.amortizedMonthly - monthlyBudget - reserveCashMonthly) * 12);
+        const annualAvailable = Math.max(0, (trialYear.amortizedMonthly - monthlyBudget - reserveCashMonthly) * amortMonths);
         rothIraContribution = Math.min(rothIraAnnualMax, annualAvailable);
         extra403bContribution = Math.max(0, annualAvailable - rothIraContribution);
 
@@ -1198,7 +1198,7 @@
         amortMonths
       });
 
-      const annualAvailableFinal = Math.max(0, (year.amortizedMonthly - monthlyBudget - reserveCashMonthly) * 12);
+      const annualAvailableFinal = Math.max(0, (year.amortizedMonthly - monthlyBudget - reserveCashMonthly) * amortMonths);
       rothIraContribution = Math.min(rothIraAnnualMax, annualAvailableFinal);
       extra403bContribution = Math.max(0, annualAvailableFinal - rothIraContribution);
       const maxExtra403b = Math.max(0, employee403bAnnualMax - min403b);
