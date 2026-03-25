@@ -112,7 +112,7 @@
     body {
       margin: 0;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg-gradient);
+      background: var(--bg);
       color: var(--text);
     }
 
@@ -166,7 +166,7 @@
     }
 
     .panel {
-      background: var(--panel-grad);
+      background: var(--panel);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -329,6 +329,17 @@
     .mini-table, table {
       width: 100%;
       border-collapse: collapse;
+    }
+
+    .table-scroll {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .table-scroll table,
+    .table-scroll .mini-table {
+      min-width: 620px;
     }
 
     th, td {
@@ -531,9 +542,11 @@
           <div class="body">
             <div class="two-col">
               <div>
-                <table class="mini-table">
-                  <tbody id="benefitsTable"></tbody>
-                </table>
+                <div class="table-scroll">
+                  <table class="mini-table">
+                    <tbody id="benefitsTable"></tbody>
+                  </table>
+                </div>
               </div>
               <div>
                 <p class="subtle">Planning benefits only.</p>
@@ -560,17 +573,19 @@
         <section class="report-card">
           <div class="head"><h2>5. Cleveland vs. Boston Expense Projection &amp; Strict Budget</h2></div>
           <div class="body">
-            <table>
-              <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Cleveland historical</th>
-                  <th>Boston projection</th>
-                  <th>Monthly change</th>
-                </tr>
-              </thead>
-              <tbody id="expenseTable"></tbody>
-            </table>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Category</th>
+                    <th>Cleveland historical</th>
+                    <th>Boston projection</th>
+                    <th>Monthly change</th>
+                  </tr>
+                </thead>
+                <tbody id="expenseTable"></tbody>
+              </table>
+            </div>
           </div>
         </section>
 
@@ -763,17 +778,19 @@
       <div class="modal-body">
         <div class="two-col">
           <div>
-            <table class="mini-table">
-              <tbody>
-                <tr><th>Days in year</th><td>365</td></tr>
-                <tr><th>2026 employed days</th><td>204</td></tr>
-                <tr><th>2027 PGY-1 days</th><td>161</td></tr>
-                <tr><th>2027 PGY-2 days</th><td>204</td></tr>
-                <tr><th>2026 amortization months</th><td>6.6</td></tr>
-                <tr><th>2027 amortization months</th><td>12</td></tr>
-                <tr><th>2026 side income treatment</th><td>Assumed Schedule C net profit</td></tr>
-              </tbody>
-            </table>
+            <div class="table-scroll">
+              <table class="mini-table">
+                <tbody>
+                  <tr><th>Days in year</th><td>365</td></tr>
+                  <tr><th>2026 employed days</th><td>204</td></tr>
+                  <tr><th>2027 PGY-1 days</th><td>161</td></tr>
+                  <tr><th>2027 PGY-2 days</th><td>204</td></tr>
+                  <tr><th>2026 amortization months</th><td>6.6</td></tr>
+                  <tr><th>2027 amortization months</th><td>12</td></tr>
+                  <tr><th>2026 side income treatment</th><td>Assumed Schedule C net profit</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
           <div>
             <div class="info-box" style="margin-top:0;">
@@ -798,7 +815,9 @@
       daysPgy1Y2: 161,
       daysPgy2Y2: 204,
       amortMonthsY1: 6.6,
-      amortMonthsY2: 12
+      amortMonthsY2: 12,
+      mealCardMonthly: 60,
+      hospitalDinnerPerksMonthly: 40
     };
 
     const defaults = {
@@ -880,6 +899,18 @@
       return `<div class="line ${total ? 'total' : ''}"><span>${label}</span><span>${value}</span></div>`;
     }
 
+    function monthlyFoodPerkTotal() {
+      return HARD_CODED.mealCardMonthly + HARD_CODED.hospitalDinnerPerksMonthly;
+    }
+
+    function projectedExpenseValue(key) {
+      const base = val(key);
+      if (key === 'food') {
+        return Math.max(0, base - monthlyFoodPerkTotal());
+      }
+      return base;
+    }
+
     function parseBrackets() {
       try {
         const brackets = JSON.parse(document.getElementById('federalBrackets').value);
@@ -927,7 +958,7 @@
     function update() {
       const brackets = parseBrackets();
       const bracketBox = document.getElementById('federalBrackets');
-      bracketBox.style.borderColor = brackets ? 'rgba(255,255,255,0.14)' : 'rgba(255,143,143,0.8)';
+      bracketBox.style.borderColor = brackets ? 'var(--input-border)' : 'rgba(255,143,143,0.8)';
       if (!brackets) return;
 
       const pgy1 = val('pgy1');
@@ -978,7 +1009,13 @@
         amortMonths: amortMonthsY2
       });
 
-      const expenses = Object.keys(expenseLabels).map(key => ({ key, label: expenseLabels[key], cle: cleveland[key], bos: val(key) }));
+      const expenses = Object.keys(expenseLabels).map(key => ({
+        key,
+        label: expenseLabels[key],
+        cle: cleveland[key],
+        bos: projectedExpenseValue(key),
+        baseBos: val(key)
+      }));
       const monthlyBudget = expenses.reduce((sum, x) => sum + x.bos, 0);
       const annualBudget = monthlyBudget * 12;
       const y1Surplus = year1.amortizedMonthly - monthlyBudget;
@@ -1034,13 +1071,17 @@
         ['Annual housing / trainee stipend', fmt(stipend), 'Taxable annual cash payment'],
         ['403(b) match', `${pct.format(matchRate * 100)}% of W-2`, 'Immediate risk free return up to the match cap'],
         ['Education fund', fmt(val('educationFund')), 'Can offset CME, licensing, courses, and similar costs'],
-        ['Meals', 'Free when on call or working late', 'Planning perk that may lower dining spend'],
+        ['Meal card stipend', `${fmt(HARD_CODED.mealCardMonthly)}/month`, 'Food stipend loaded to meal card'],
+        ['Brigham dinner discount (6-8pm)', `${fmt(8)} per day`, 'Approximate value grouped into food perk estimate'],
+        ['MGH 9 oclock weekday meal', 'Free weekday dinner', 'Approximate value grouped into food perk estimate'],
+        ['Total modeled food perk', `${fmt(monthlyFoodPerkTotal())}/month`, 'Applied as reduction to projected Boston food budget'],
         ['MBTA transit benefit', '50% discount pre tax', 'Current out of pocket modeled at $45/month'],
         ['Relocation stipend', fmt(0), 'No direct relocation cash assumed']
       ];
       setHTML('benefitsTable', benefits.map(row => `<tr><th>${row[0]}</th><td>${row[1]}</td><td class="muted">${row[2]}</td></tr>`).join(''));
       setHTML('benefitPills', [
         `<span class="pill">Stipend is taxable</span>`,
+        `<span class="pill">Food perks modeled at ${fmt(monthlyFoodPerkTotal())}/month</span>`,
         `<span class="pill">Education fund offsets expenses</span>`,
         `<span class="pill">Lease guaranty excluded</span>`
       ].join(''));
@@ -1079,10 +1120,13 @@
       setHTML('expenseTable', expenses.map(x => {
         const diff = x.bos - x.cle;
         const cls = diff > 0 ? 'bad' : diff < 0 ? 'good' : 'muted';
+        const projectedValue = x.key === 'food'
+          ? `${fmt(x.bos)} <span class="muted">(from ${fmt(x.baseBos)} minus ${fmt(monthlyFoodPerkTotal())} meal perks)</span>`
+          : fmt(x.bos);
         return `<tr>
           <td>${x.label}</td>
           <td>${fmt(x.cle)}</td>
-          <td>${fmt(x.bos)}</td>
+          <td>${projectedValue}</td>
           <td class="${cls}">${diff >= 0 ? '+' : '-'}${fmt(Math.abs(diff))}</td>
         </tr>`;
       }).join('') + `<tr>
