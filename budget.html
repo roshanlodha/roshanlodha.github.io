@@ -1383,8 +1383,8 @@
       document.getElementById('kpiY2Cash').textContent = fmt(year2.amortizedMonthly);
       document.getElementById('kpiY1_403bPct').textContent = `${pct.format(monthly403bPctY1)}%`;
       document.getElementById('kpiY2_403bPct').textContent = `${pct.format(monthly403bPctY2)}%`;
-      document.getElementById('kpiY1RetirementTotal').textContent = `Total retirement contribution (${amortMonthsY1} months): ${fmt(totalRetirementY1)}`;
-      document.getElementById('kpiY2RetirementTotal').textContent = `Total retirement contribution (${amortMonthsY2} months): ${fmt(totalRetirementY2)}`;
+      document.getElementById('kpiY1RetirementTotal').textContent = `2026 Retirement Contribution: ${fmt(totalRetirementY1)}`;
+      document.getElementById('kpiY2RetirementTotal').textContent = `2027 Retirement Contribution: ${fmt(totalRetirementY2)}`;
 
       const y1Class = y1Surplus >= 0 ? 'good' : 'bad';
       const y2Class = y2Surplus >= 0 ? 'good' : 'bad';
