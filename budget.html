@@ -117,7 +117,7 @@
     }
 
     .wrap {
-      max-width: 1500px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 24px;
     }
@@ -149,6 +149,77 @@
       gap: 10px;
       margin-top: 14px;
       align-items: center;
+      justify-content: center;
+    }
+
+    .executive-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .summary-box {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      background: var(--panel-2);
+    }
+
+    .bar-wrap {
+      margin-top: 10px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 74px 1fr 74px;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .stacked-bar {
+      display: flex;
+      width: 100%;
+      height: 14px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--line-bg);
+      border: 1px solid var(--border);
+    }
+
+    .seg-expenses { background: #4b6cb7; }
+    .seg-reserve { background: #3c9c6d; }
+    .seg-ira { background: #b9770e; }
+    .seg-emp403b { background: #8e44ad; }
+    .seg-side { background: #0e7490; }
+    .seg-unallocated { background: #8b8b8b; }
+    .seg-income-salary { background: #1f6f8b; }
+    .seg-income-schedulec { background: #c06a2f; }
+
+    .legend {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend i {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      display: inline-block;
+      border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
     }
 
     .theme-status {
@@ -210,8 +281,8 @@
       display: grid;
       gap: 12px;
     }
-    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
 
     label {
       display: block;
@@ -285,7 +356,7 @@
 
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: 1fr;
       gap: 14px;
     }
 
@@ -331,9 +402,17 @@
       padding: 18px;
     }
 
+    .card-foot {
+      padding: 10px 18px 14px;
+      border-top: 1px solid var(--border);
+      font-size: 0.86rem;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
     .two-col {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 16px;
     }
 
@@ -384,14 +463,6 @@
       background: var(--line-total-bg);
       border: 1px solid var(--border);
       font-weight: 700;
-    }
-
-    .assumption-list {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--muted);
-      line-height: 1.5;
-      font-size: 0.92rem;
     }
 
     .good { color: var(--accent-2); }
@@ -455,9 +526,8 @@
     }
 
     @media (max-width: 1180px) {
-      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .two-col { grid-template-columns: 1fr; }
       .input-launcher { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .executive-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 760px) {
@@ -482,15 +552,36 @@
           <button id="openTaxBtn" class="secondary" type="button">Tax Inputs</button>
           <button id="openExpensesBtn" class="secondary" type="button">Expense Inputs</button>
           <button id="openBenefitsBtn" class="secondary" type="button">Benefits Inputs</button>
-          <button id="openAssumptionsBtn" class="secondary" type="button">Assumptions</button>
-          <button id="resetBtn" type="button">Reset</button>
-          <button id="printBtn" class="secondary" type="button">Print</button>
         </div>
       </div>
     </div>
 
     <div class="layout">
       <main class="report">
+        <section class="report-card">
+          <div class="head"><h2>Executive Summary (Monthly)</h2></div>
+          <div class="body executive-grid">
+            <div class="summary-box">
+              <h3>2026</h3>
+              <div class="bar-wrap" id="summaryY1"></div>
+            </div>
+            <div class="summary-box">
+              <h3>2027</h3>
+              <div class="bar-wrap" id="summaryY2"></div>
+            </div>
+            <div class="legend" style="grid-column: 1 / -1;">
+              <span><i class="seg-income-salary"></i>Income: Salary</span>
+              <span><i class="seg-income-schedulec"></i>Income: Schedule C</span>
+              <span><i class="seg-expenses"></i>Expenses</span>
+              <span><i class="seg-reserve"></i>Emergency reserve</span>
+              <span><i class="seg-ira"></i>Roth IRA</span>
+              <span><i class="seg-emp403b"></i>Employee 403(b)</span>
+              <span><i class="seg-side"></i>Side-plan retirement</span>
+              <span><i class="seg-unallocated"></i>Unallocated</span>
+            </div>
+          </div>
+        </section>
+
         <section class="kpi-grid">
           <div class="kpi">
             <div class="label">2026 amortized monthly cash flow</div>
@@ -530,37 +621,24 @@
 
         <section class="report-card">
           <div class="head"><h2>2. Retirement</h2></div>
-          <div class="body two-col">
+          <div class="body">
             <div>
               <div class="math" id="retirementMath"></div>
             </div>
-            <div>
-              <p class="subtle" id="retirementNarrative"></p>
-              <ul class="assumption-list">
-                <li>403(b) + employer match</li>
-                <li>Schedule C assumed</li>
-              </ul>
-            </div>
           </div>
+          <div class="card-foot" id="retirementFoot"></div>
         </section>
 
         <section class="report-card">
           <div class="head"><h2>3. MGB Benefits, Stipends &amp; Food Perks</h2></div>
           <div class="body">
-            <div class="two-col">
-              <div>
-                <div class="table-scroll">
-                  <table class="mini-table">
-                    <tbody id="benefitsTable"></tbody>
-                  </table>
-                </div>
-              </div>
-              <div>
-                <p class="subtle">Planning benefits only.</p>
-                <div id="benefitAssumptions"></div>
-              </div>
+            <div class="table-scroll">
+              <table class="mini-table">
+                <tbody id="benefitsTable"></tbody>
+              </table>
             </div>
           </div>
+          <div class="card-foot" id="benefitFoot"></div>
         </section>
 
         <section class="report-card">
@@ -807,55 +885,6 @@
     </div>
   </div>
 
-  <div id="assumptionsModal" class="modal-backdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="assumptionsTitle">
-      <div class="modal-head">
-        <div>
-          <h2 id="assumptionsTitle">Hard Coded Assumptions</h2>
-          <p class="subtle" style="margin:0;">Fixed values.</p>
-        </div>
-        <button id="closeAssumptionsBtn" class="secondary" type="button">Close</button>
-      </div>
-      <div class="modal-body">
-        <div class="two-col">
-          <div>
-            <div class="table-scroll">
-              <table class="mini-table">
-                <tbody>
-                  <tr><th>Days in year</th><td>365</td></tr>
-                  <tr><th>2026 employed days</th><td>204</td></tr>
-                  <tr><th>2027 PGY-1 days</th><td>161</td></tr>
-                  <tr><th>2027 PGY-2 days</th><td>204</td></tr>
-                  <tr><th>2026 amortization months</th><td>6.6</td></tr>
-                  <tr><th>2027 amortization months</th><td>12</td></tr>
-                  <tr><th>2026 side income treatment</th><td>Assumed Schedule C net profit</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div>
-            <div class="info-box" style="margin-top:0;">
-              Lease guaranty excluded.
-            </div>
-            <div class="info-box">
-              Schedule C includes estimated self-employment tax.
-            </div>
-            <div class="info-box">
-              Amortization months are fixed.
-            </div>
-            <div class="info-box">
-              <h3 style="margin-top:0;">WCI Resident Retirement Priority</h3>
-              <p style="margin:0 0 8px 0;">WCI Priority 1: Contribute to the 403(b) up to the exact match limit to capture all free money.</p>
-              <p style="margin:0 0 8px 0;">WCI Priority 2: Maximize your personal Roth IRA.</p>
-              <p style="margin:0 0 8px 0;">WCI Priority 3: Direct any remaining savings to max out the employer Roth 403(b).</p>
-              <p style="margin:0;">Tax Strategy: Utilize Roth accounts over Traditional tax-deferred accounts during residency to lock in your lowest lifetime tax bracket.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script>
     const HARD_CODED = {
       daysInYear: 365,
@@ -951,6 +980,17 @@
 
     function line(label, value, total = false) {
       return `<div class="line ${total ? 'total' : ''}"><span>${label}</span><span>${value}</span></div>`;
+    }
+
+    function stackedBar(parts, total) {
+      return `<div class="stacked-bar">${parts.map(part => {
+        const width = total > 0 ? (part.value / total) * 100 : 0;
+        return `<div class="${part.className}" style="width:${Math.max(0, width)}%" title="${part.label}: ${fmt(part.value)}"></div>`;
+      }).join('')}</div>`;
+    }
+
+    function summaryBarRow(label, total, parts) {
+      return `<div class="bar-row"><span>${label}</span>${stackedBar(parts, total)}<strong>${fmt(total)}</strong></div>`;
     }
 
     function monthlyFoodPerkTotal() {
@@ -1160,6 +1200,56 @@
         amortMonths: amortMonthsY2
       });
 
+      const sidePlanMonthlyY1 = year1.sideRetirementContribution / amortMonthsY1;
+      const sidePlanMonthlyY2 = year2.sideRetirementContribution / amortMonthsY2;
+      const emp403bMonthlyY1 = year1.retirement403b / amortMonthsY1;
+      const emp403bMonthlyY2 = year2.retirement403b / amortMonthsY2;
+      const grossY1 = year1.w2 + stipend + scheduleCProfit;
+      const salaryShareY1 = grossY1 > 0 ? (year1.w2 + stipend) / grossY1 : 1;
+      const scheduleCShareY1 = grossY1 > 0 ? scheduleCProfit / grossY1 : 0;
+      const salaryIncomeMonthlyY1 = year1.amortizedMonthly * salaryShareY1;
+      const scheduleCIncomeMonthlyY1 = year1.amortizedMonthly * scheduleCShareY1;
+      const salaryIncomeMonthlyY2 = year2.amortizedMonthly;
+      const scheduleCIncomeMonthlyY2 = 0;
+      const rothMonthlyY1 = 0;
+      const rothMonthlyY2 = rothIraContribution / amortMonthsY2;
+      const reserveMonthlyY1 = reserveCashMonthly;
+      const reserveMonthlyY2 = reserveCashMonthly;
+      const allocatedY1 = monthlyBudget + reserveMonthlyY1 + rothMonthlyY1 + emp403bMonthlyY1 + sidePlanMonthlyY1;
+      const allocatedY2 = monthlyBudget + reserveMonthlyY2 + rothMonthlyY2 + emp403bMonthlyY2 + sidePlanMonthlyY2;
+      const unallocatedY1 = Math.max(0, year1.amortizedMonthly - allocatedY1);
+      const unallocatedY2 = Math.max(0, year2.amortizedMonthly - allocatedY2);
+
+      setHTML('summaryY1', [
+        summaryBarRow('Income', year1.amortizedMonthly, [
+          { className: 'seg-income-salary', label: 'Income: Salary', value: salaryIncomeMonthlyY1 },
+          { className: 'seg-income-schedulec', label: 'Income: Schedule C', value: scheduleCIncomeMonthlyY1 }
+        ]),
+        summaryBarRow('Allocated', year1.amortizedMonthly, [
+          { className: 'seg-expenses', label: 'Expenses', value: monthlyBudget },
+          { className: 'seg-reserve', label: 'Emergency reserve', value: reserveMonthlyY1 },
+          { className: 'seg-ira', label: 'Roth IRA', value: rothMonthlyY1 },
+          { className: 'seg-emp403b', label: 'Employee 403(b)', value: emp403bMonthlyY1 },
+          { className: 'seg-side', label: 'Side-plan retirement', value: sidePlanMonthlyY1 },
+          { className: 'seg-unallocated', label: 'Unallocated', value: unallocatedY1 }
+        ])
+      ].join(''));
+
+      setHTML('summaryY2', [
+        summaryBarRow('Income', year2.amortizedMonthly, [
+          { className: 'seg-income-salary', label: 'Income: Salary', value: salaryIncomeMonthlyY2 },
+          { className: 'seg-income-schedulec', label: 'Income: Schedule C', value: scheduleCIncomeMonthlyY2 }
+        ]),
+        summaryBarRow('Allocated', year2.amortizedMonthly, [
+          { className: 'seg-expenses', label: 'Expenses', value: monthlyBudget },
+          { className: 'seg-reserve', label: 'Emergency reserve', value: reserveMonthlyY2 },
+          { className: 'seg-ira', label: 'Roth IRA', value: rothMonthlyY2 },
+          { className: 'seg-emp403b', label: 'Employee 403(b)', value: emp403bMonthlyY2 },
+          { className: 'seg-side', label: 'Side-plan retirement', value: sidePlanMonthlyY2 },
+          { className: 'seg-unallocated', label: 'Unallocated', value: unallocatedY2 }
+        ])
+      ].join(''));
+
       const y1Surplus = year1.amortizedMonthly - monthlyBudget;
       const y2Surplus = year2.amortizedMonthly - monthlyBudget;
       const employeeRetAnnual = year2.retirement403b;
@@ -1207,14 +1297,7 @@
         line('Combined retirement stack across modeled period', fmt(year1.retirement403b + year2.retirement403b + rothIraContribution + year1.w2 * matchRate + year2.w2 * matchRate), true)
       ].join(''));
 
-      const narrative = [
-        `403(b) contributions are auto-optimized from your reserve cash target and available monthly surplus.`,
-        `Monthly reserve cash is set to ${fmt(reserveCashMonthly)}.`,
-        `${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} contribution is modeled at ${pct.format(solo401kEmployerRate * 100)}% of eligible Schedule C profit.`,
-        `Schedule C net profit is taxed as income and includes estimated self-employment tax.`,
-        `Employer match in 2027 is ${fmt(year2.w2 * matchRate)}.`
-      ].join(' ');
-      document.getElementById('retirementNarrative').textContent = narrative;
+      document.getElementById('retirementFoot').textContent = `Assumptions: 403(b) waterfall (match -> Roth IRA -> remaining to 403(b)); reserve cash ${fmt(reserveCashMonthly)}/month; ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side-plan ${pct.format(solo401kEmployerRate * 100)}%.`;
 
       const benefits = [
         ['Annual housing / trainee stipend', fmt(stipend), 'Taxable annual cash payment'],
@@ -1228,14 +1311,7 @@
         ['Relocation stipend', fmt(0), 'No direct relocation cash assumed']
       ];
       setHTML('benefitsTable', benefits.map(row => `<tr><th>${row[0]}</th><td>${row[1]}</td><td class="muted">${row[2]}</td></tr>`).join(''));
-      setHTML('benefitAssumptions', [
-        '<ul class="assumption-list">',
-        '<li>Stipend is taxable</li>',
-        `<li>Food perks modeled at ${fmt(monthlyFoodPerkTotal())}/month</li>`,
-        '<li>Education fund offsets expenses</li>',
-        '<li>Lease guaranty excluded</li>',
-        '</ul>'
-      ].join(''));
+      document.getElementById('benefitFoot').textContent = `Assumptions: stipend taxable; food perks ${fmt(monthlyFoodPerkTotal())}/month; education fund offsets expenses; lease guaranty excluded.`;
 
       setHTML('taxY1', [
         line('2026 W-2 income', fmt(year1.w2)),
@@ -1284,13 +1360,10 @@
       setHTML('expenseTable', expenses.map(x => {
         const diff = x.bos - x.cle;
         const cls = diff > 0 ? 'bad' : diff < 0 ? 'good' : 'muted';
-        const projectedValue = x.key === 'food'
-          ? `${fmt(x.bos)} <span class="muted">(from ${fmt(x.baseBos)} minus ${fmt(monthlyFoodPerkTotal())} meal perks)</span>`
-          : fmt(x.bos);
         return `<tr>
           <td>${x.label}</td>
           <td>${fmt(x.cle)}</td>
-          <td>${projectedValue}</td>
+          <td>${fmt(x.bos)}</td>
           <td class="${cls}">${diff >= 0 ? '+' : '-'}${fmt(Math.abs(diff))}</td>
         </tr>`;
       }).join('') + `<tr>
@@ -1364,16 +1437,12 @@
       el.addEventListener('change', update);
     });
 
-    document.getElementById('resetBtn').addEventListener('click', resetDefaults);
-    document.getElementById('printBtn').addEventListener('click', () => window.print());
-
     const modalOpeners = [
       ['openIncomeBtn', 'incomeModal'],
       ['openRetirementBtn', 'retirementModal'],
       ['openTaxBtn', 'taxModal'],
       ['openExpensesBtn', 'expensesModal'],
-      ['openBenefitsBtn', 'benefitsModal'],
-      ['openAssumptionsBtn', 'assumptionsModal']
+      ['openBenefitsBtn', 'benefitsModal']
     ];
 
     modalOpeners.forEach(([btnId, modalId]) => {
@@ -1385,8 +1454,6 @@
     document.querySelectorAll('.close-modal').forEach(btn => {
       btn.addEventListener('click', () => closeModal(btn.dataset.closeModal));
     });
-
-    document.getElementById('closeAssumptionsBtn').addEventListener('click', () => closeModal('assumptionsModal'));
 
     document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
       backdrop.addEventListener('click', (e) => {
