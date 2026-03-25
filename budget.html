@@ -149,7 +149,7 @@
       gap: 10px;
       margin-top: 14px;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
     }
 
     .executive-grid {
@@ -301,7 +301,7 @@
       display: grid;
       gap: 12px;
     }
-    .grid-2 { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .grid-3 { grid-template-columns: 1fr; }
 
     label {
@@ -615,12 +615,12 @@
             <div class="small" id="kpiY2Surplus">Surplus: $0</div>
           </div>
           <div class="kpi">
-            <div class="label">2026 403(b) contribution percentage per month</div>
+            <div class="label">2026 403(b) contribution %</div>
             <div class="value" id="kpiY1_403bPct">0%</div>
             <div class="small" id="kpiY1RetirementTotal">Total retirement contribution: $0</div>
           </div>
           <div class="kpi">
-            <div class="label">2027 403(b) contribution percentage per month</div>
+            <div class="label">2027 403(b) contribution %</div>
             <div class="value" id="kpiY2_403bPct">0%</div>
             <div class="small" id="kpiY2RetirementTotal">Total retirement contribution: $0</div>
           </div>
@@ -729,19 +729,19 @@
       <div class="modal-body">
         <div class="grid-2">
           <div>
-            <label for="pgy1">PGY-1 base salary</label>
+            <label for="pgy1">PGY-1 base salary ($/year)</label>
             <input id="pgy1" type="number" step="0.01" value="84579" />
           </div>
           <div>
-            <label for="pgy2">PGY-2 base salary</label>
+            <label for="pgy2">PGY-2 base salary ($/year)</label>
             <input id="pgy2" type="number" step="0.01" value="88843" />
           </div>
           <div>
-            <label for="stipend">Annual housing/trainee stipend</label>
+            <label for="stipend">Annual housing/trainee stipend ($/year)</label>
             <input id="stipend" type="number" step="0.01" value="10500" />
           </div>
           <div>
-            <label for="sideIncome">Annual Schedule C revenue</label>
+            <label for="sideIncome">Annual Schedule C revenue ($/year)</label>
             <input id="sideIncome" type="number" step="0.01" value="5000" />
           </div>
         </div>
@@ -761,19 +761,19 @@
       <div class="modal-body">
         <div class="grid-2">
           <div>
-            <label for="matchRate">MGB match rate</label>
+            <label for="matchRate">MGB match rate (%)</label>
             <input id="matchRate" type="number" step="0.01" value="2" />
           </div>
           <div>
-            <label for="reserveCashMonthly">Monthly reserve cash</label>
+            <label for="reserveCashMonthly">Monthly reserve cash ($/month)</label>
             <input id="reserveCashMonthly" type="number" step="0.01" value="500" />
           </div>
           <div>
-            <label for="ssRate">Social Security rate</label>
+            <label for="ssRate">Social Security rate (%)</label>
             <input id="ssRate" type="number" step="0.01" value="6.2" />
           </div>
           <div>
-            <label for="medicareRate">Medicare rate</label>
+            <label for="medicareRate">Medicare rate (%)</label>
             <input id="medicareRate" type="number" step="0.01" value="1.45" />
           </div>
           <div>
@@ -784,7 +784,7 @@
             </select>
           </div>
           <div>
-            <label for="solo401kEmployerRate">Solo 401(k) Employer Contribution %</label>
+            <label for="solo401kEmployerRate">Solo 401(k) employer contribution (%)</label>
             <input id="solo401kEmployerRate" type="number" step="0.01" value="20" />
           </div>
         </div>
@@ -813,19 +813,19 @@
       <div class="modal-body">
         <div class="grid-2">
           <div>
-            <label for="stdDeduction">Federal standard deduction</label>
+            <label for="stdDeduction">Federal standard deduction ($/year)</label>
             <input id="stdDeduction" type="number" step="0.01" value="16100" />
           </div>
           <div>
-            <label for="stateRate">Massachusetts state tax rate</label>
+            <label for="stateRate">Massachusetts state tax rate (%)</label>
             <input id="stateRate" type="number" step="0.01" value="5" />
           </div>
           <div>
-            <label for="studentLoanInterest">Annual Student Loan Interest Paid</label>
+            <label for="studentLoanInterest">Annual student loan interest paid ($/year)</label>
             <input id="studentLoanInterest" type="number" step="0.01" value="2500" />
           </div>
           <div>
-            <label for="maMovingExpenses">MA Deductible Moving Expenses (2026 only)</label>
+            <label for="maMovingExpenses">MA deductible moving expenses (2026 only, $)</label>
             <input id="maMovingExpenses" type="number" step="0.01" value="0" />
           </div>
         </div>
@@ -857,30 +857,30 @@
       <div class="modal-body">
         <h3>Personal monthly expenses</h3>
         <div class="grid-2">
-          <div><label for="rent">Rent &amp; utilities</label><input id="rent" type="number" step="0.01" value="3100" /></div>
-          <div><label for="food">Food (dining)</label><input id="food" type="number" step="0.01" value="554.45" /></div>
-          <div><label for="groceries">Groceries</label><input id="groceries" type="number" step="0.01" value="291.66" /></div>
-          <div><label for="travel">Travel</label><input id="travel" type="number" step="0.01" value="381.12" /></div>
-          <div><label for="transport">Transportation</label><input id="transport" type="number" step="0.01" value="45" /></div>
-          <div><label for="clothes">Clothes &amp; hair</label><input id="clothes" type="number" step="0.01" value="75.71" /></div>
-          <div><label for="business">Business</label><input id="business" type="number" step="0.01" value="50" /></div>
-          <div><label for="other">Other</label><input id="other" type="number" step="0.01" value="50" /></div>
-          <div><label for="coffee">Coffee</label><input id="coffee" type="number" step="0.01" value="50" /></div>
-          <div><label for="education">Education</label><input id="education" type="number" step="0.01" value="0" /></div>
+          <div><label for="rent">Rent &amp; utilities ($/month)</label><input id="rent" type="number" step="0.01" value="3100" /></div>
+          <div><label for="food">Food (dining, $/month)</label><input id="food" type="number" step="0.01" value="554.45" /></div>
+          <div><label for="groceries">Groceries ($/month)</label><input id="groceries" type="number" step="0.01" value="291.66" /></div>
+          <div><label for="travel">Travel ($/month)</label><input id="travel" type="number" step="0.01" value="381.12" /></div>
+          <div><label for="transport">Transportation ($/month)</label><input id="transport" type="number" step="0.01" value="45" /></div>
+          <div><label for="clothes">Clothes &amp; hair ($/month)</label><input id="clothes" type="number" step="0.01" value="75.71" /></div>
+          <div><label for="business">Business ($/month)</label><input id="business" type="number" step="0.01" value="50" /></div>
+          <div><label for="other">Other ($/month)</label><input id="other" type="number" step="0.01" value="50" /></div>
+          <div><label for="coffee">Coffee ($/month)</label><input id="coffee" type="number" step="0.01" value="50" /></div>
+          <div><label for="education">Education ($/month)</label><input id="education" type="number" step="0.01" value="0" /></div>
         </div>
         <div class="section">
           <h3>Schedule C expenses</h3>
           <div class="grid-2">
             <div>
-              <label for="scheduleCExpenses">Annual Schedule C deductible expenses</label>
+              <label for="scheduleCExpenses">Annual Schedule C deductible expenses ($/year)</label>
               <input id="scheduleCExpenses" type="number" step="0.01" value="0" />
             </div>
             <div>
-              <label for="techServerCosts">Monthly Tech/Server Costs</label>
+              <label for="techServerCosts">Monthly tech/server costs ($/month)</label>
               <input id="techServerCosts" type="number" step="0.01" value="0" />
             </div>
             <div>
-              <label for="homeOfficeSqFt">Home Office Square Footage</label>
+              <label for="homeOfficeSqFt">Home office square footage (sq ft)</label>
               <input id="homeOfficeSqFt" type="number" step="1" value="0" />
             </div>
           </div>
@@ -900,7 +900,7 @@
       </div>
       <div class="modal-body">
         <div class="grid-2">
-          <div><label for="educationFund">Annual education fund</label><input id="educationFund" type="number" step="0.01" value="0" /></div>
+          <div><label for="educationFund">Annual education fund ($/year)</label><input id="educationFund" type="number" step="0.01" value="0" /></div>
         </div>
       </div>
     </div>
@@ -916,7 +916,7 @@
       daysPgy2Y2: 204,
       amortMonthsY1: 6.6,
       amortMonthsY2: 12,
-      employee403bAnnualMax: 25500,
+      employee403bAnnualMax: 24500,
       mealCardMonthly: 60,
       hospitalDinnerPerksMonthly: 40
     };
@@ -1019,7 +1019,8 @@
         const width = total > 0 ? (part.value / total) * 100 : 0;
         const label = `${part.label}`;
         const amount = fmt(part.value);
-        return `<div class="${part.className} bar-segment" style="width:${Math.max(0, width)}%" title="${escapeAttr(label)}: ${escapeAttr(amount)}" data-label="${escapeAttr(label)}" data-value="${escapeAttr(amount)}"></div>`;
+        const share = total > 0 ? `${pct.format(width)}%` : '0%';
+        return `<div class="${part.className} bar-segment" style="width:${Math.max(0, width)}%" title="${escapeAttr(label)}: ${escapeAttr(amount)} (${escapeAttr(share)})" data-label="${escapeAttr(label)}" data-value="${escapeAttr(amount)}" data-percent="${escapeAttr(share)}"></div>`;
       }).join('')}</div>`;
     }
 
@@ -1605,7 +1606,8 @@
 
       const label = segment.dataset.label || 'Value';
       const value = segment.dataset.value || '$0';
-      chartTooltip.textContent = `${label}: ${value}`;
+      const percent = segment.dataset.percent || '0%';
+      chartTooltip.textContent = `${label}: ${value} (${percent})`;
       chartTooltip.style.display = 'block';
       chartTooltip.style.left = `${e.clientX + 12}px`;
       chartTooltip.style.top = `${e.clientY + 12}px`;
