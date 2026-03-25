@@ -432,7 +432,7 @@
 
     .two-col {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px;
     }
 
@@ -554,7 +554,7 @@
     @media (max-width: 760px) {
       .wrap { padding: 14px; }
       .hero { flex-direction: column; }
-      .grid-2, .grid-3, .kpi-grid { grid-template-columns: 1fr; }
+      .grid-2, .grid-3, .kpi-grid, .two-col { grid-template-columns: 1fr; }
       .input-launcher { grid-template-columns: 1fr; }
     }
   </style>
