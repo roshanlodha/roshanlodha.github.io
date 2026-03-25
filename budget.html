@@ -190,6 +190,26 @@
       border: 1px solid var(--border);
     }
 
+    .bar-segment {
+      height: 100%;
+    }
+
+    .chart-tooltip {
+      position: fixed;
+      z-index: 2000;
+      pointer-events: none;
+      display: none;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      font-size: 0.8rem;
+      line-height: 1.3;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+      white-space: nowrap;
+    }
+
     .seg-expenses { background: #4b6cb7; }
     .seg-reserve { background: #3c9c6d; }
     .seg-ira { background: #b9770e; }
@@ -885,6 +905,8 @@
     </div>
   </div>
 
+  <div id="chartTooltip" class="chart-tooltip" aria-hidden="true"></div>
+
   <script>
     const HARD_CODED = {
       daysInYear: 365,
@@ -893,6 +915,7 @@
       daysPgy2Y2: 204,
       amortMonthsY1: 6.6,
       amortMonthsY2: 12,
+      employee403bAnnualMax: 25500,
       mealCardMonthly: 60,
       hospitalDinnerPerksMonthly: 40
     };
@@ -982,10 +1005,20 @@
       return `<div class="line ${total ? 'total' : ''}"><span>${label}</span><span>${value}</span></div>`;
     }
 
+    function escapeAttr(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
     function stackedBar(parts, total) {
       return `<div class="stacked-bar">${parts.map(part => {
         const width = total > 0 ? (part.value / total) * 100 : 0;
-        return `<div class="${part.className}" style="width:${Math.max(0, width)}%" title="${part.label}: ${fmt(part.value)}"></div>`;
+        const label = `${part.label}`;
+        const amount = fmt(part.value);
+        return `<div class="${part.className} bar-segment" style="width:${Math.max(0, width)}%" title="${escapeAttr(label)}: ${escapeAttr(amount)}" data-label="${escapeAttr(label)}" data-value="${escapeAttr(amount)}"></div>`;
       }).join('')}</div>`;
     }
 
@@ -1094,6 +1127,93 @@
       };
     }
 
+    function optimizeRetirementForYear({
+      w2,
+      stipend,
+      sideIncome,
+      min403b,
+      employee403bAnnualMax,
+      solo401kEmployerRate,
+      selfEmployedPlan,
+      ssRate,
+      medicareRate,
+      stateRate,
+      stdDeduction,
+      studentLoanInterest,
+      stateMovingExpenseDeduction,
+      brackets,
+      amortMonths,
+      monthlyBudget,
+      reserveCashMonthly,
+      rothIraAnnualMax
+    }) {
+      let recommended403b = Math.min(employee403bAnnualMax, min403b);
+      let rothIraContribution = 0;
+      let extra403bContribution = 0;
+
+      for (let i = 0; i < 30; i++) {
+        const trialYear = calcYear({
+          w2,
+          stipend,
+          sideIncome,
+          employee403bContribution: recommended403b,
+          solo401kEmployerRate,
+          selfEmployedPlan,
+          ssRate,
+          medicareRate,
+          stateRate,
+          stdDeduction,
+          studentLoanInterest,
+          stateMovingExpenseDeduction,
+          brackets,
+          amortMonths
+        });
+
+        const annualAvailable = Math.max(0, (trialYear.amortizedMonthly - monthlyBudget - reserveCashMonthly) * 12);
+        rothIraContribution = Math.min(rothIraAnnualMax, annualAvailable);
+        extra403bContribution = Math.max(0, annualAvailable - rothIraContribution);
+
+        const next403b = Math.min(employee403bAnnualMax, min403b + extra403bContribution);
+        if (Math.abs(next403b - recommended403b) < 0.5) {
+          recommended403b = next403b;
+          break;
+        }
+        recommended403b = next403b;
+      }
+
+      const year = calcYear({
+        w2,
+        stipend,
+        sideIncome,
+        employee403bContribution: recommended403b,
+        solo401kEmployerRate,
+        selfEmployedPlan,
+        ssRate,
+        medicareRate,
+        stateRate,
+        stdDeduction,
+        studentLoanInterest,
+        stateMovingExpenseDeduction,
+        brackets,
+        amortMonths
+      });
+
+      const annualAvailableFinal = Math.max(0, (year.amortizedMonthly - monthlyBudget - reserveCashMonthly) * 12);
+      rothIraContribution = Math.min(rothIraAnnualMax, annualAvailableFinal);
+      extra403bContribution = Math.max(0, annualAvailableFinal - rothIraContribution);
+      const maxExtra403b = Math.max(0, employee403bAnnualMax - min403b);
+      const appliedExtra403b = Math.min(extra403bContribution, maxExtra403b);
+      const overflowAfterCaps = Math.max(0, annualAvailableFinal - rothIraContribution - appliedExtra403b);
+
+      return {
+        year,
+        recommended403b,
+        rothIraContribution,
+        extra403bContribution: appliedExtra403b,
+        overflowAfterCaps
+      };
+    }
+
     function update() {
       const brackets = parseBrackets();
       const bracketBox = document.getElementById('federalBrackets');
@@ -1131,42 +1251,9 @@
       const w2Y1 = pgy1 * (daysY1 / daysInYear);
       const w2Y2 = pgy1 * (daysPgy1Y2 / daysInYear) + pgy2 * (daysPgy2Y2 / daysInYear);
       const rothIraAnnualMax = 7500;
+      const employee403bAnnualMax = HARD_CODED.employee403bAnnualMax;
       const min403bY1 = w2Y1 * matchRate;
       const min403bY2 = w2Y2 * matchRate;
-
-      const year1 = calcYear({
-        w2: w2Y1,
-        stipend,
-        sideIncome: scheduleCProfit,
-        employee403bContribution: min403bY1,
-        solo401kEmployerRate,
-        selfEmployedPlan,
-        ssRate,
-        medicareRate,
-        stateRate,
-        stdDeduction,
-        studentLoanInterest,
-        stateMovingExpenseDeduction: maMovingExpenses,
-        brackets,
-        amortMonths: amortMonthsY1
-      });
-
-      const year2Baseline = calcYear({
-        w2: w2Y2,
-        stipend,
-        sideIncome: 0,
-        employee403bContribution: min403bY2,
-        solo401kEmployerRate,
-        selfEmployedPlan,
-        ssRate,
-        medicareRate,
-        stateRate,
-        stdDeduction,
-        studentLoanInterest,
-        stateMovingExpenseDeduction: 0,
-        brackets,
-        amortMonths: amortMonthsY2
-      });
 
       const expenses = Object.keys(expenseLabels).map(key => ({
         key,
@@ -1178,16 +1265,38 @@
       const monthlyBudget = expenses.reduce((sum, x) => sum + x.bos, 0);
       const annualBudget = monthlyBudget * 12;
 
-      const annualAvailableForRetirement = Math.max(0, (year2Baseline.amortizedMonthly - monthlyBudget - reserveCashMonthly) * 12);
-      const rothIraContribution = Math.min(rothIraAnnualMax, annualAvailableForRetirement);
-      const extra403bContribution = Math.max(0, annualAvailableForRetirement - rothIraContribution);
-      const recommended403bY2 = min403bY2 + extra403bContribution;
+      const year1Optimized = optimizeRetirementForYear({
+        w2: w2Y1,
+        stipend,
+        sideIncome: scheduleCProfit,
+        min403b: min403bY1,
+        employee403bAnnualMax,
+        solo401kEmployerRate,
+        selfEmployedPlan,
+        ssRate,
+        medicareRate,
+        stateRate,
+        stdDeduction,
+        studentLoanInterest,
+        stateMovingExpenseDeduction: maMovingExpenses,
+        brackets,
+        amortMonths: amortMonthsY1,
+        monthlyBudget,
+        reserveCashMonthly,
+        rothIraAnnualMax
+      });
 
-      const year2 = calcYear({
+      const year1 = year1Optimized.year;
+      const rothIraContributionY1 = year1Optimized.rothIraContribution;
+      const extra403bContributionY1 = year1Optimized.extra403bContribution;
+      const overflowAfterCapsY1 = year1Optimized.overflowAfterCaps;
+
+      const year2Optimized = optimizeRetirementForYear({
         w2: w2Y2,
         stipend,
-        sideIncome: 0,
-        employee403bContribution: recommended403bY2,
+        sideIncome: scheduleCProfit,
+        min403b: min403bY2,
+        employee403bAnnualMax,
         solo401kEmployerRate,
         selfEmployedPlan,
         ssRate,
@@ -1197,8 +1306,16 @@
         studentLoanInterest,
         stateMovingExpenseDeduction: 0,
         brackets,
-        amortMonths: amortMonthsY2
+        amortMonths: amortMonthsY2,
+        monthlyBudget,
+        reserveCashMonthly,
+        rothIraAnnualMax
       });
+
+      const year2 = year2Optimized.year;
+      const rothIraContribution = year2Optimized.rothIraContribution;
+      const extra403bContribution = year2Optimized.extra403bContribution;
+      const overflowAfterCapsY2 = year2Optimized.overflowAfterCaps;
 
       const sidePlanMonthlyY1 = year1.sideRetirementContribution / amortMonthsY1;
       const sidePlanMonthlyY2 = year2.sideRetirementContribution / amortMonthsY2;
@@ -1209,9 +1326,12 @@
       const scheduleCShareY1 = grossY1 > 0 ? scheduleCProfit / grossY1 : 0;
       const salaryIncomeMonthlyY1 = year1.amortizedMonthly * salaryShareY1;
       const scheduleCIncomeMonthlyY1 = year1.amortizedMonthly * scheduleCShareY1;
-      const salaryIncomeMonthlyY2 = year2.amortizedMonthly;
-      const scheduleCIncomeMonthlyY2 = 0;
-      const rothMonthlyY1 = 0;
+      const grossY2 = year2.w2 + stipend + scheduleCProfit;
+      const salaryShareY2 = grossY2 > 0 ? (year2.w2 + stipend) / grossY2 : 1;
+      const scheduleCShareY2 = grossY2 > 0 ? scheduleCProfit / grossY2 : 0;
+      const salaryIncomeMonthlyY2 = year2.amortizedMonthly * salaryShareY2;
+      const scheduleCIncomeMonthlyY2 = year2.amortizedMonthly * scheduleCShareY2;
+      const rothMonthlyY1 = rothIraContributionY1 / amortMonthsY1;
       const rothMonthlyY2 = rothIraContribution / amortMonthsY2;
       const reserveMonthlyY1 = reserveCashMonthly;
       const reserveMonthlyY2 = reserveCashMonthly;
@@ -1283,21 +1403,27 @@
         line(`PGY-1 portion = ${fmt(pgy1)} × ${daysPgy1Y2}/${daysInYear}`, fmt(pgy1 * (daysPgy1Y2 / daysInYear))),
         line(`PGY-2 portion = ${fmt(pgy2)} × ${daysPgy2Y2}/${daysInYear}`, fmt(pgy2 * (daysPgy2Y2 / daysInYear))),
         line('Taxable stipend', fmt(stipend)),
-        line('2027 gross income', fmt(year2.w2 + stipend), true)
+        line('Net Schedule C profit (2027)', fmt(scheduleCProfit)),
+        line('2027 gross income', fmt(year2.w2 + stipend + scheduleCProfit), true)
       ].join(''));
 
       setHTML('retirementMath', [
         line(`2026 employee 403(b) baseline = ${pct.format(matchRate * 100)}% × 2026 W-2`, fmt(year1.retirement403b)),
         line(`2026 employer match = ${pct.format(matchRate * 100)}% × 2026 W-2`, fmt(year1.w2 * matchRate)),
+        line(`2026 Roth IRA target`, fmt(rothIraContributionY1)),
+        line(`2026 additional 403(b) from remaining cash`, fmt(extra403bContributionY1)),
+        line(`Employee 403(b) annual cap`, fmt(employee403bAnnualMax)),
+        line(`2026 overflow after caps`, fmt(overflowAfterCapsY1)),
         line(`2027 baseline 403(b) to match`, fmt(min403bY2)),
         line(`2027 Roth IRA target`, fmt(rothIraContribution)),
         line(`2027 additional 403(b) from remaining cash`, fmt(extra403bContribution)),
+        line(`2027 overflow after caps`, fmt(overflowAfterCapsY2)),
         line(`2027 recommended total employee 403(b)`, fmt(year2.retirement403b)),
         line(`2027 employer match = ${pct.format(matchRate * 100)}% × 2027 W-2`, fmt(year2.w2 * matchRate)),
         line('Combined retirement stack across modeled period', fmt(year1.retirement403b + year2.retirement403b + rothIraContribution + year1.w2 * matchRate + year2.w2 * matchRate), true)
       ].join(''));
 
-      document.getElementById('retirementFoot').textContent = `Assumptions: 403(b) waterfall (match -> Roth IRA -> remaining to 403(b)); reserve cash ${fmt(reserveCashMonthly)}/month; ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side-plan ${pct.format(solo401kEmployerRate * 100)}%.`;
+      document.getElementById('retirementFoot').textContent = `Assumptions: 403(b) waterfall (match -> Roth IRA -> remaining to 403(b)); employee 403(b) cap ${fmt(employee403bAnnualMax)}/year; reserve cash ${fmt(reserveCashMonthly)}/month; ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side-plan ${pct.format(solo401kEmployerRate * 100)}%. Unallocated cash can remain after caps.`;
 
       const benefits = [
         ['Annual housing / trainee stipend', fmt(stipend), 'Taxable annual cash payment'],
@@ -1465,6 +1591,26 @@
       if (e.key === 'Escape') {
         closeAllModals();
       }
+    });
+
+    const chartTooltip = document.getElementById('chartTooltip');
+    document.addEventListener('mousemove', (e) => {
+      const segment = e.target.closest('.bar-segment');
+      if (!segment || !chartTooltip) {
+        if (chartTooltip) chartTooltip.style.display = 'none';
+        return;
+      }
+
+      const label = segment.dataset.label || 'Value';
+      const value = segment.dataset.value || '$0';
+      chartTooltip.textContent = `${label}: ${value}`;
+      chartTooltip.style.display = 'block';
+      chartTooltip.style.left = `${e.clientX + 12}px`;
+      chartTooltip.style.top = `${e.clientY + 12}px`;
+    });
+
+    document.addEventListener('mouseleave', () => {
+      if (chartTooltip) chartTooltip.style.display = 'none';
     });
 
     const darkPref = window.matchMedia('(prefers-color-scheme: dark)');
