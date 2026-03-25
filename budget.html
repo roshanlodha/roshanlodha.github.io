@@ -376,7 +376,7 @@
 
     .kpi-grid {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 14px;
     }
 
@@ -548,6 +548,7 @@
     @media (max-width: 1180px) {
       .input-launcher { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .executive-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 760px) {
@@ -614,14 +615,14 @@
             <div class="small" id="kpiY2Surplus">Surplus: $0</div>
           </div>
           <div class="kpi">
-            <div class="label">Monthly Boston budget</div>
-            <div class="value" id="kpiBudget">$0</div>
-            <div class="small" id="kpiAnnualBudget">Annualized: $0</div>
+            <div class="label">2026 403(b) contribution percentage per month</div>
+            <div class="value" id="kpiY1_403bPct">0%</div>
+            <div class="small" id="kpiY1RetirementTotal">Total retirement contribution: $0</div>
           </div>
           <div class="kpi">
-            <div class="label">Annual retirement savings</div>
-            <div class="value" id="kpiRetirement">$0</div>
-            <div class="small" id="kpiMatch">Employer match + Roth: $0</div>
+            <div class="label">2027 403(b) contribution percentage per month</div>
+            <div class="value" id="kpiY2_403bPct">0%</div>
+            <div class="small" id="kpiY2RetirementTotal">Total retirement contribution: $0</div>
           </div>
         </section>
 
@@ -1372,16 +1373,17 @@
 
       const y1Surplus = year1.amortizedMonthly - monthlyBudget;
       const y2Surplus = year2.amortizedMonthly - monthlyBudget;
-      const employeeRetAnnual = year2.retirement403b;
-      const employerMatchAnnual = year2.w2 * matchRate;
-      const totalAnnualRetirement = employeeRetAnnual + employerMatchAnnual + rothIraContribution;
+      const monthly403bPctY1 = year1.amortizedMonthly > 0 ? (emp403bMonthlyY1 / year1.amortizedMonthly) * 100 : 0;
+      const monthly403bPctY2 = year2.amortizedMonthly > 0 ? (emp403bMonthlyY2 / year2.amortizedMonthly) * 100 : 0;
+      const totalRetirementY1 = year1.retirement403b + (year1.w2 * matchRate) + rothIraContributionY1 + year1.sideRetirementContribution;
+      const totalRetirementY2 = year2.retirement403b + (year2.w2 * matchRate) + rothIraContribution + year2.sideRetirementContribution;
 
       document.getElementById('kpiY1Cash').textContent = fmt(year1.amortizedMonthly);
       document.getElementById('kpiY2Cash').textContent = fmt(year2.amortizedMonthly);
-      document.getElementById('kpiBudget').textContent = fmt(monthlyBudget);
-      document.getElementById('kpiAnnualBudget').textContent = `Annualized: ${fmt(annualBudget)}`;
-      document.getElementById('kpiRetirement').textContent = fmt(totalAnnualRetirement);
-      document.getElementById('kpiMatch').textContent = `403(b): ${fmt(employeeRetAnnual)} | Roth IRA: ${fmt(rothIraContribution)} | Match: ${fmt(employerMatchAnnual)}`;
+      document.getElementById('kpiY1_403bPct').textContent = `${pct.format(monthly403bPctY1)}%`;
+      document.getElementById('kpiY2_403bPct').textContent = `${pct.format(monthly403bPctY2)}%`;
+      document.getElementById('kpiY1RetirementTotal').textContent = `Total retirement contribution (${amortMonthsY1} months): ${fmt(totalRetirementY1)}`;
+      document.getElementById('kpiY2RetirementTotal').textContent = `Total retirement contribution (${amortMonthsY2} months): ${fmt(totalRetirementY2)}`;
 
       const y1Class = y1Surplus >= 0 ? 'good' : 'bad';
       const y2Class = y2Surplus >= 0 ? 'good' : 'bad';
