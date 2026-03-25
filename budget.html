@@ -154,7 +154,7 @@
 
     .executive-grid {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px;
     }
 
@@ -642,9 +642,14 @@
 
         <section class="report-card">
           <div class="head"><h2>2. Retirement</h2></div>
-          <div class="body">
+          <div class="body two-col">
             <div>
-              <div class="math" id="retirementMath"></div>
+              <h3>2026 retirement math</h3>
+              <div class="math" id="retirementMathY1"></div>
+            </div>
+            <div>
+              <h3>2027 retirement math</h3>
+              <div class="math" id="retirementMathY2"></div>
             </div>
           </div>
           <div class="card-foot" id="retirementFoot"></div>
@@ -1392,38 +1397,43 @@
       document.getElementById('kpiY2Surplus').innerHTML = `Surplus: <span class="${y2Class}">${fmt(y2Surplus)}</span>`;
 
       setHTML('incomeY1', [
-        line(`Prorated PGY-1 W-2 = ${fmt(pgy1)} × ${daysY1}/${daysInYear}`, fmt(year1.w2)),
+        line(`PGY-1 W-2`, fmt(year1.w2)),
         line('Taxable stipend', fmt(stipend)),
         line('Annual Schedule C revenue', fmt(sideIncome)),
         line('Schedule C base deductible expenses', `- ${fmt(scheduleCExpenses)}`),
         line('Annualized tech/server costs', `- ${fmt(techServerAnnual)}`),
         line('Home office deduction (simplified)', `- ${fmt(homeOfficeDeduction)}`),
-        line('Net Schedule C profit (2026)', fmt(scheduleCProfit)),
+        line('Net Schedule C profit', fmt(scheduleCProfit)),
         line('2026 gross income', fmt(year1.w2 + stipend + scheduleCProfit), true)
       ].join(''));
 
       setHTML('incomeY2', [
-        line(`PGY-1 portion = ${fmt(pgy1)} × ${daysPgy1Y2}/${daysInYear}`, fmt(pgy1 * (daysPgy1Y2 / daysInYear))),
-        line(`PGY-2 portion = ${fmt(pgy2)} × ${daysPgy2Y2}/${daysInYear}`, fmt(pgy2 * (daysPgy2Y2 / daysInYear))),
+        line(`PGY-1 + PGY-2 blended W-2`, fmt(year2.w2)),
         line('Taxable stipend', fmt(stipend)),
-        line('Net Schedule C profit (2027)', fmt(scheduleCProfit)),
+        line('Annual Schedule C revenue', fmt(sideIncome)),
+        line('Schedule C base deductible expenses', `- ${fmt(scheduleCExpenses)}`),
+        line('Annualized tech/server costs', `- ${fmt(techServerAnnual)}`),
+        line('Home office deduction (simplified)', `- ${fmt(homeOfficeDeduction)}`),
+        line('Net Schedule C profit', fmt(scheduleCProfit)),
         line('2027 gross income', fmt(year2.w2 + stipend + scheduleCProfit), true)
       ].join(''));
 
-      setHTML('retirementMath', [
-        line(`2026 employee 403(b) baseline = ${pct.format(matchRate * 100)}% × 2026 W-2`, fmt(year1.retirement403b)),
-        line(`2026 employer match = ${pct.format(matchRate * 100)}% × 2026 W-2`, fmt(year1.w2 * matchRate)),
-        line(`2026 Roth IRA target`, fmt(rothIraContributionY1)),
-        line(`2026 additional 403(b) from remaining cash`, fmt(extra403bContributionY1)),
-        line(`Employee 403(b) annual cap`, fmt(employee403bAnnualMax)),
-        line(`2026 overflow after caps`, fmt(overflowAfterCapsY1)),
-        line(`2027 baseline 403(b) to match`, fmt(min403bY2)),
-        line(`2027 Roth IRA target`, fmt(rothIraContribution)),
-        line(`2027 additional 403(b) from remaining cash`, fmt(extra403bContribution)),
-        line(`2027 overflow after caps`, fmt(overflowAfterCapsY2)),
-        line(`2027 recommended total employee 403(b)`, fmt(year2.retirement403b)),
-        line(`2027 employer match = ${pct.format(matchRate * 100)}% × 2027 W-2`, fmt(year2.w2 * matchRate)),
-        line('Combined retirement stack across modeled period', fmt(year1.retirement403b + year2.retirement403b + rothIraContribution + year1.w2 * matchRate + year2.w2 * matchRate), true)
+      setHTML('retirementMathY1', [
+        line(`Employee 403(b) to match (${pct.format(matchRate * 100)}%)`, fmt(year1.retirement403b)),
+        line(`Employer match (${pct.format(matchRate * 100)}%)`, fmt(year1.w2 * matchRate)),
+        line(`Roth IRA target`, fmt(rothIraContributionY1)),
+        line(`Additional 403(b) from remaining cash`, fmt(extra403bContributionY1)),
+        line(`Annual 403(b) cap`, fmt(employee403bAnnualMax)),
+        line(`Overflow after caps`, fmt(overflowAfterCapsY1), true)
+      ].join(''));
+
+      setHTML('retirementMathY2', [
+        line(`Employee 403(b) to match (${pct.format(matchRate * 100)}%)`, fmt(year2.retirement403b)),
+        line(`Employer match (${pct.format(matchRate * 100)}%)`, fmt(year2.w2 * matchRate)),
+        line(`Roth IRA target`, fmt(rothIraContribution)),
+        line(`Additional 403(b) from remaining cash`, fmt(extra403bContribution)),
+        line(`Annual 403(b) cap`, fmt(employee403bAnnualMax)),
+        line(`Overflow after caps`, fmt(overflowAfterCapsY2), true)
       ].join(''));
 
       document.getElementById('retirementFoot').textContent = `Assumptions: 403(b) waterfall (match -> Roth IRA -> remaining to 403(b)); employee 403(b) cap ${fmt(employee403bAnnualMax)}/year; reserve cash ${fmt(reserveCashMonthly)}/month; ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side-plan ${pct.format(solo401kEmployerRate * 100)}%. Unallocated cash can remain after caps.`;
@@ -1443,13 +1453,13 @@
       document.getElementById('benefitFoot').textContent = `Assumptions: stipend taxable; food perks ${fmt(monthlyFoodPerkTotal())}/month; education fund offsets expenses; lease guaranty excluded.`;
 
       setHTML('taxY1', [
-        line('2026 W-2 income', fmt(year1.w2)),
+        line('W-2 income', fmt(year1.w2)),
         line('Plus taxable stipend', fmt(stipend)),
         line('Plus net Schedule C profit', fmt(scheduleCProfit)),
         line('Less pretax 403(b)', `- ${fmt(year1.retirement403b)}`),
         line(`Less ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, `- ${fmt(year1.sideRetirementContribution)}`),
         line('Less half of SE tax (above-the-line)', `- ${fmt(year1.seTaxDeduction)}`),
-        line('Less student loan interest deduction (capped)', `- ${fmt(year1.studentLoanInterestDeduction)}`),
+        line('Less student loan interest deduction', `- ${fmt(year1.studentLoanInterestDeduction)}`),
         line('Adjusted gross income', fmt(year1.agi)),
         line('Less standard deduction', `- ${fmt(stdDeduction)}`),
         line('Federal taxable income before QBI', fmt(year1.taxableFederalPreQbi)),
@@ -1457,20 +1467,21 @@
         line('Federal taxable income', fmt(year1.taxableFederal)),
         line('Federal income tax', fmt(year1.federalTax)),
         line(`Payroll FICA on W-2`, fmt(year1.ficaW2)),
-        line(`Estimated self-employment tax on Schedule C profit`, fmt(year1.seTax)),
+        line(`Self-employment tax on Schedule C`, fmt(year1.seTax)),
         line('MA personal exemption', `- ${fmt(4400)}`),
-        line('MA deductible moving expenses (2026 only)', `- ${fmt(year1.stateMovingExpenseDeduction)}`),
-        line(`MA tax = ${pct.format(stateRate * 100)}% × state taxable income`, fmt(year1.stateTax)),
-        line(`Amortized monthly cash flow = spendable net ÷ ${amortMonthsY1}`, fmt(year1.amortizedMonthly), true)
+        line('MA tax', fmt(year1.stateTax)),
+        line('Spendable net cash after taxes & retirement', fmt(year1.spendableNet)),
+        line(`Amortized monthly cash flow ÷ ${amortMonthsY1}`, fmt(year1.amortizedMonthly), true)
       ].join(''));
 
       setHTML('taxY2', [
-        line('2027 blended W-2 income', fmt(year2.w2)),
+        line('W-2 income', fmt(year2.w2)),
         line('Plus taxable stipend', fmt(stipend)),
+        line('Plus net Schedule C profit', fmt(scheduleCProfit)),
         line('Less pretax 403(b)', `- ${fmt(year2.retirement403b)}`),
         line(`Less ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, `- ${fmt(year2.sideRetirementContribution)}`),
         line('Less half of SE tax (above-the-line)', `- ${fmt(year2.seTaxDeduction)}`),
-        line('Less student loan interest deduction (capped)', `- ${fmt(year2.studentLoanInterestDeduction)}`),
+        line('Less student loan interest deduction', `- ${fmt(year2.studentLoanInterestDeduction)}`),
         line('Adjusted gross income', fmt(year2.agi)),
         line('Less standard deduction', `- ${fmt(stdDeduction)}`),
         line('Federal taxable income before QBI', fmt(year2.taxableFederalPreQbi)),
@@ -1478,10 +1489,11 @@
         line('Federal taxable income', fmt(year2.taxableFederal)),
         line('Federal income tax', fmt(year2.federalTax)),
         line(`Payroll FICA on W-2`, fmt(year2.ficaW2)),
+        line(`Self-employment tax on Schedule C`, fmt(year2.seTax)),
         line('MA personal exemption', `- ${fmt(4400)}`),
-        line(`MA tax = ${pct.format(stateRate * 100)}% × state taxable income`, fmt(year2.stateTax)),
-        line('Spendable net cash after taxes and 403(b)', fmt(year2.spendableNet)),
-        line(`Amortized monthly cash flow = spendable net ÷ ${amortMonthsY2}`, fmt(year2.amortizedMonthly), true)
+        line('MA tax', fmt(year2.stateTax)),
+        line('Spendable net cash after taxes & retirement', fmt(year2.spendableNet)),
+        line(`Amortized monthly cash flow ÷ ${amortMonthsY2}`, fmt(year2.amortizedMonthly), true)
       ].join(''));
 
       const clevelandTotal = Object.values(cleveland).reduce((a, b) => a + b, 0);
