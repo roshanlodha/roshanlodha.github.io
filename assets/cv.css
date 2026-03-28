@@ -49,3 +49,113 @@ ul {
 li {
   margin-bottom: 1px;
 }
+
+/* Remove bullets from main list items */
+section > ul > li {
+  list-style-type: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+/* Entry header with flexbox for left/right alignment */
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.entry-title {
+  flex: 1;
+  font-weight: normal;
+}
+
+.entry-date {
+  flex-shrink: 0;
+  white-space: nowrap;
+  text-align: right;
+  font-style: italic;
+  min-width: 110px;
+}
+
+/* Nested lists styling */
+section > ul > li > ul {
+  margin-top: 0.5rem;
+  margin-left: 0;
+  padding-left: 1.5rem;
+  list-style-type: none;
+}
+
+section > ul > li > ul > li {
+  margin-bottom: 0.5rem;
+  margin-left: 0;
+  list-style-type: disc;
+}
+
+/* Responsive behavior for smaller screens and printing */
+@media (max-width: 600px) {
+  .entry-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  
+  .entry-date {
+    margin-top: 0.25rem;
+    text-align: left;
+  }
+}
+
+/* Remove bullets from main list items */
+section > ul > li {
+  list-style-type: none;
+}
+
+/* Entry header with flexbox for left/right alignment */
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.entry-title {
+  flex: 1;
+  font-weight: normal;
+}
+
+.entry-date {
+  flex-shrink: 0;
+  white-space: nowrap;
+  text-align: right;
+  font-style: italic;
+  min-width: 110px;
+}
+
+/* Nested lists styling */
+section > ul > li > ul {
+  margin-top: 0.5rem;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+section > ul > li > ul > li {
+  margin-bottom: 0.5rem;
+  margin-left: 1.5rem;
+}
+
+/* Responsive behavior for smaller screens */
+@media (max-width: 600px) {
+  .entry-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  
+  .entry-date {
+    margin-top: 0.25rem;
+    text-align: left;
+  }
+}
