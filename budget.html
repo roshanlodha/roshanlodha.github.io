@@ -862,16 +862,17 @@
       <div class="modal-body">
         <h3>Personal monthly expenses</h3>
         <div class="grid-2">
-          <div><label for="rent">Rent &amp; utilities ($/month)</label><input id="rent" type="number" step="0.01" value="3100" /></div>
+          <div><label for="rent">Rent &amp; utilities ($/month)</label><input id="rent" type="number" step="0.01" value="2900" /></div>
           <div><label for="food">Food (dining, $/month)</label><input id="food" type="number" step="0.01" value="554.45" /></div>
           <div><label for="groceries">Groceries ($/month)</label><input id="groceries" type="number" step="0.01" value="291.66" /></div>
           <div><label for="travel">Travel ($/month)</label><input id="travel" type="number" step="0.01" value="200" /></div>
-          <div><label for="transport">Transportation ($/month)</label><input id="transport" type="number" step="0.01" value="45" /></div>
+          <div><label for="transport">Transportation ($/month)</label><input id="transport" type="number" step="0.01" value="30" /></div>
           <div><label for="clothes">Clothes &amp; hair ($/month)</label><input id="clothes" type="number" step="0.01" value="75.71" /></div>
           <div><label for="business">Business ($/month)</label><input id="business" type="number" step="0.01" value="50" /></div>
           <div><label for="other">Other ($/month)</label><input id="other" type="number" step="0.01" value="50" /></div>
           <div><label for="coffee">Coffee ($/month)</label><input id="coffee" type="number" step="0.01" value="50" /></div>
-          <div><label for="education">Education ($/month)</label><input id="education" type="number" step="0.01" value="0" /></div>
+          <div><label for="education">Education ($/month)</label><input id="education" type="number" step="0.01" value="100" /></div>
+          <div><label for="healthcare">Healthcare ($/month)</label><input id="healthcare" type="number" step="0.01" value="100" /></div>
         </div>
         <div class="section">
           <h3>Schedule C expenses</h3>
@@ -953,16 +954,17 @@
   {"upTo": 640600, "rate": 35},
   {"upTo": null, "rate": 37}
 ]`,
-      rent: 3100,
+      rent: 2900,
       food: 554.45,
       groceries: 291.66,
       travel: 200,
-      transport: 45,
+      transport: 30,
       clothes: 75.71,
       business: 50,
       other: 50,
       coffee: 50,
-      education: 0,
+      education: 100,
+      healthcare: 100,
       educationFund: 0
     };
 
@@ -976,7 +978,8 @@
       business: 54.66,
       other: 52.75,
       coffee: 30.74,
-      education: 806.15
+      education: 806.15,
+      healthcare: 0
     };
 
     const expenseLabels = {
@@ -989,7 +992,8 @@
       business: 'Business',
       other: 'Other',
       coffee: 'Coffee',
-      education: 'Education'
+      education: 'Education',
+      healthcare: 'Healthcare'
     };
 
     const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
