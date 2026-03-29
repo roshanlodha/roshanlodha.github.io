@@ -797,7 +797,7 @@
           Schedule C net profit is assumed.
         </div>
         <div class="info-box">
-          Contribution waterfall: 2% employee 403(b) to capture match, then Roth IRA up to $7,500/year, then remaining savings into 403(b).
+          Contribution waterfall: employee 403(b) up to the annual cap first, then Roth IRA up to $7,500/year.
         </div>
         <div class="info-box">
           WCI Tip: A Solo 401(k) is preferred over a SEP-IRA as it does not trigger the pro-rata rule for Backdoor Roth IRAs.
@@ -1161,6 +1161,7 @@
       let recommended403b = Math.min(employee403bAnnualMax, min403b);
       let rothIraContribution = 0;
       let extra403bContribution = 0;
+      const maxExtra403b = Math.max(0, employee403bAnnualMax - min403b);
 
       for (let i = 0; i < 30; i++) {
         const trialYear = calcYear({
@@ -1181,8 +1182,8 @@
         });
 
         const annualAvailable = Math.max(0, (trialYear.amortizedMonthly - monthlyBudget - reserveCashMonthly) * amortMonths);
-        rothIraContribution = Math.min(rothIraAnnualMax, annualAvailable);
-        extra403bContribution = Math.max(0, annualAvailable - rothIraContribution);
+        extra403bContribution = Math.min(maxExtra403b, annualAvailable);
+        rothIraContribution = Math.min(rothIraAnnualMax, Math.max(0, annualAvailable - extra403bContribution));
 
         const next403b = Math.min(employee403bAnnualMax, min403b + extra403bContribution);
         if (Math.abs(next403b - recommended403b) < 0.5) {
@@ -1210,11 +1211,10 @@
       });
 
       const annualAvailableFinal = Math.max(0, (year.amortizedMonthly - monthlyBudget - reserveCashMonthly) * amortMonths);
-      rothIraContribution = Math.min(rothIraAnnualMax, annualAvailableFinal);
-      extra403bContribution = Math.max(0, annualAvailableFinal - rothIraContribution);
-      const maxExtra403b = Math.max(0, employee403bAnnualMax - min403b);
-      const appliedExtra403b = Math.min(extra403bContribution, maxExtra403b);
-      const overflowAfterCaps = Math.max(0, annualAvailableFinal - rothIraContribution - appliedExtra403b);
+      const appliedExtra403b = Math.min(maxExtra403b, annualAvailableFinal);
+      rothIraContribution = Math.min(rothIraAnnualMax, Math.max(0, annualAvailableFinal - appliedExtra403b));
+      extra403bContribution = appliedExtra403b;
+      const overflowAfterCaps = Math.max(0, annualAvailableFinal - appliedExtra403b - rothIraContribution);
 
       return {
         year,
@@ -1423,24 +1423,24 @@
       ].join(''));
 
       setHTML('retirementMathY1', [
-        line(`Employee 403(b) to match (${pct.format(matchRate * 100)}%)`, fmt(year1.retirement403b)),
+        line('Employee 403(b) contribution', fmt(year1.retirement403b)),
         line(`Employer match (${pct.format(matchRate * 100)}%)`, fmt(year1.w2 * matchRate)),
-        line(`Roth IRA target`, fmt(rothIraContributionY1)),
-        line(`Additional 403(b) from remaining cash`, fmt(extra403bContributionY1)),
+        line('Additional 403(b) beyond match floor', fmt(extra403bContributionY1)),
+        line('Roth IRA target', fmt(rothIraContributionY1)),
         line(`Annual 403(b) cap`, fmt(employee403bAnnualMax)),
         line(`Overflow after caps`, fmt(overflowAfterCapsY1), true)
       ].join(''));
 
       setHTML('retirementMathY2', [
-        line(`Employee 403(b) to match (${pct.format(matchRate * 100)}%)`, fmt(year2.retirement403b)),
+        line('Employee 403(b) contribution', fmt(year2.retirement403b)),
         line(`Employer match (${pct.format(matchRate * 100)}%)`, fmt(year2.w2 * matchRate)),
-        line(`Roth IRA target`, fmt(rothIraContribution)),
-        line(`Additional 403(b) from remaining cash`, fmt(extra403bContribution)),
+        line('Additional 403(b) beyond match floor', fmt(extra403bContribution)),
+        line('Roth IRA target', fmt(rothIraContribution)),
         line(`Annual 403(b) cap`, fmt(employee403bAnnualMax)),
         line(`Overflow after caps`, fmt(overflowAfterCapsY2), true)
       ].join(''));
 
-      document.getElementById('retirementFoot').textContent = `Assumptions: 403(b) waterfall (match -> Roth IRA -> remaining to 403(b)); employee 403(b) cap ${fmt(employee403bAnnualMax)}/year; reserve cash ${fmt(reserveCashMonthly)}/month; ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side-plan ${pct.format(solo401kEmployerRate * 100)}%. Unallocated cash can remain after caps.`;
+      document.getElementById('retirementFoot').textContent = `Assumptions: 403(b) waterfall (fill employee 403(b) first, then Roth IRA); employee 403(b) cap ${fmt(employee403bAnnualMax)}/year; reserve cash ${fmt(reserveCashMonthly)}/month; ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side-plan ${pct.format(solo401kEmployerRate * 100)}%. Unallocated cash can remain after caps.`;
 
       const benefits = [
         ['Annual housing / trainee stipend', fmt(stipend), 'Taxable annual cash payment'],
