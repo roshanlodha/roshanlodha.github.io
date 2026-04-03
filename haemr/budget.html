@@ -3,584 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HAEMR Residency Financial & Budget Calculator</title>
-  <style>
-    :root {
-      --bg-gradient: none;
-      --panel-grad: none;
-      --bg: #ffffff;
-      --panel: #ffffff;
-      --panel-2: #f7f7f7;
-      --text: #111111;
-      --muted: #5a5a5a;
-      --label: #1f1f1f;
-      --accent: #000000;
-      --accent-2: #000000;
-      --danger: #444444;
-      --warn: #333333;
-      --border: #d8d8d8;
-      --input-bg: #ffffff;
-      --input-border: #bdbdbd;
-      --line-bg: #f7f7f7;
-      --line-total-bg: #f1f1f1;
-      --pill-bg: #f6f6f6;
-      --table-head: #111111;
-      --table-text: #1a1a1a;
-      --kpi-small: #444444;
-      --shadow: none;
-      --radius: 10px;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg-gradient: none;
-        --panel-grad: none;
-        --bg: #0f0f0f;
-        --panel: #151515;
-        --panel-2: #1d1d1d;
-        --text: #f5f5f5;
-        --muted: #b0b0b0;
-        --label: #eeeeee;
-        --accent: #ffffff;
-        --accent-2: #ffffff;
-        --danger: #d0d0d0;
-        --warn: #c4c4c4;
-        --border: #313131;
-        --input-bg: #0f0f0f;
-        --input-border: #4a4a4a;
-        --line-bg: #1a1a1a;
-        --line-total-bg: #202020;
-        --pill-bg: #1d1d1d;
-        --table-head: #ffffff;
-        --table-text: #f2f2f2;
-        --kpi-small: #cfcfcf;
-        --shadow: none;
-      }
-    }
-
-    :root[data-theme="light"] {
-      --bg-gradient: none;
-      --panel-grad: none;
-      --bg: #ffffff;
-      --panel: #ffffff;
-      --panel-2: #f7f7f7;
-      --text: #111111;
-      --muted: #5a5a5a;
-      --label: #1f1f1f;
-      --accent: #000000;
-      --accent-2: #000000;
-      --danger: #444444;
-      --warn: #333333;
-      --border: #d8d8d8;
-      --input-bg: #ffffff;
-      --input-border: #bdbdbd;
-      --line-bg: #f7f7f7;
-      --line-total-bg: #f1f1f1;
-      --pill-bg: #f6f6f6;
-      --table-head: #111111;
-      --table-text: #1a1a1a;
-      --kpi-small: #444444;
-      --shadow: none;
-    }
-
-    :root[data-theme="dark"] {
-      --bg-gradient: none;
-      --panel-grad: none;
-      --bg: #0f0f0f;
-      --panel: #151515;
-      --panel-2: #1d1d1d;
-      --text: #f5f5f5;
-      --muted: #b0b0b0;
-      --label: #eeeeee;
-      --accent: #ffffff;
-      --accent-2: #ffffff;
-      --danger: #d0d0d0;
-      --warn: #c4c4c4;
-      --border: #313131;
-      --input-bg: #0f0f0f;
-      --input-border: #4a4a4a;
-      --line-bg: #1a1a1a;
-      --line-total-bg: #202020;
-      --pill-bg: #1d1d1d;
-      --table-head: #ffffff;
-      --table-text: #f2f2f2;
-      --kpi-small: #cfcfcf;
-      --shadow: none;
-    }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    .wrap {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    .hero {
-      display: flex;
-      justify-content: space-between;
-      gap: 24px;
-      align-items: flex-start;
-      margin-bottom: 24px;
-    }
-
-    .hero h1 {
-      margin: 0 0 8px 0;
-      font-size: clamp(1.8rem, 2vw + 1rem, 3rem);
-      line-height: 1.1;
-    }
-
-    .hero p {
-      margin: 0;
-      color: var(--muted);
-      max-width: 980px;
-      line-height: 1.55;
-    }
-
-    .action-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-      align-items: center;
-      justify-content: flex-start;
-    }
-
-    .executive-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .summary-box {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
-      background: var(--panel-2);
-    }
-
-    .bar-wrap {
-      margin-top: 10px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .bar-row {
-      display: grid;
-      grid-template-columns: 74px 1fr 74px;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.82rem;
-      color: var(--muted);
-    }
-
-    .stacked-bar {
-      display: flex;
-      width: 100%;
-      height: 14px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: var(--line-bg);
-      border: 1px solid var(--border);
-    }
-
-    .bar-segment {
-      height: 100%;
-    }
-
-    .chart-tooltip {
-      position: fixed;
-      z-index: 2000;
-      pointer-events: none;
-      display: none;
-      padding: 6px 8px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--panel);
-      color: var(--text);
-      font-size: 0.8rem;
-      line-height: 1.3;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
-      white-space: nowrap;
-    }
-
-    .seg-expenses { background: #4b6cb7; }
-    .seg-reserve { background: #3c9c6d; }
-    .seg-ira { background: #b9770e; }
-    .seg-emp403b { background: #8e44ad; }
-    .seg-side { background: #0e7490; }
-    .seg-unallocated { background: #8b8b8b; }
-    .seg-income-salary { background: #1f6f8b; }
-    .seg-income-schedulec { background: #c06a2f; }
-
-    .legend {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      color: var(--muted);
-      font-size: 0.8rem;
-    }
-
-    .legend span {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .legend i {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      display: inline-block;
-      border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
-    }
-
-    .theme-status {
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-size: 0.92rem;
-    }
-
-    .layout {
-      display: grid;
-      gap: 18px;
-    }
-
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .panel-inner { padding: 20px; }
-
-    .input-launcher {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .input-launcher button {
-      width: 100%;
-    }
-
-    h2, h3, h4 {
-      margin: 0 0 12px 0;
-      line-height: 1.2;
-    }
-
-    h2 { font-size: 1.35rem; }
-    h3 { font-size: 1.08rem; color: var(--text); }
-    h4 { font-size: 0.95rem; color: var(--text); text-transform: uppercase; letter-spacing: 0.04em; }
-
-    .subtle {
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.45;
-    }
-
-    .section + .section {
-      border-top: 1px solid var(--border);
-      margin-top: 18px;
-      padding-top: 18px;
-    }
-
-    .grid-2, .grid-3 {
-      display: grid;
-      gap: 12px;
-    }
-    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid-3 { grid-template-columns: 1fr; }
-
-    label {
-      display: block;
-      font-size: 0.9rem;
-      color: var(--label);
-      margin-bottom: 6px;
-    }
-
-    input, textarea {
-      width: 100%;
-      border: 1px solid var(--input-border);
-      border-radius: 12px;
-      background: var(--input-bg);
-      color: var(--text);
-      padding: 11px 12px;
-      font: inherit;
-      outline: none;
-    }
-
-    select {
-      width: 100%;
-      border: 1px solid var(--input-border);
-      border-radius: 12px;
-      background: var(--input-bg);
-      color: var(--text);
-      padding: 11px 12px;
-      font: inherit;
-      outline: none;
-    }
-
-    input:focus, textarea:focus, select:focus {
-      border-color: color-mix(in srgb, var(--accent) 70%, transparent);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
-    }
-
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.88rem;
-      line-height: 1.45;
-    }
-
-    .controls {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    button {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 14px;
-      background: var(--panel);
-      color: var(--text);
-      font-weight: 650;
-      cursor: pointer;
-    }
-
-    button.secondary {
-      background: color-mix(in srgb, var(--panel-2) 80%, transparent);
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-
-    .report {
-      display: grid;
-      gap: 18px;
-    }
-
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .kpi {
-      padding: 16px;
-      border-radius: 16px;
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-    }
-
-    .kpi .label {
-      color: var(--muted);
-      font-size: 0.85rem;
-      margin-bottom: 8px;
-    }
-
-    .kpi .value {
-      font-size: 1.55rem;
-      font-weight: 750;
-      line-height: 1.1;
-    }
-
-    .kpi .small {
-      margin-top: 6px;
-      color: var(--kpi-small);
-      font-size: 0.88rem;
-    }
-
-    .report-card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    .report-card .head {
-      padding: 16px 18px;
-      background: var(--panel-2);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .report-card .body {
-      padding: 18px;
-    }
-
-    .card-foot {
-      padding: 10px 18px 14px;
-      border-top: 1px solid var(--border);
-      font-size: 0.86rem;
-      line-height: 1.45;
-      color: var(--muted);
-    }
-
-    .two-col {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .mini-table, table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .table-scroll {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .table-scroll table,
-    .table-scroll .mini-table {
-      min-width: 620px;
-    }
-
-    th, td {
-      text-align: left;
-      padding: 10px 8px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
-    }
-
-    th { color: var(--table-head); font-size: 0.92rem; }
-    td { color: var(--table-text); }
-    tr:last-child td, tr:last-child th { border-bottom: none; }
-
-    .math {
-      display: grid;
-      gap: 8px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.92rem;
-    }
-
-    .math .line {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 8px 10px;
-      border-radius: 10px;
-      background: var(--line-bg);
-    }
-
-    .math .line.total {
-      background: var(--line-total-bg);
-      border: 1px solid var(--border);
-      font-weight: 700;
-    }
-
-    .good { color: var(--accent-2); }
-    .bad { color: var(--danger); }
-    .warn { color: var(--warn); }
-    .muted { color: var(--muted); }
-
-    .info-box {
-      padding: 14px 16px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: var(--panel-2);
-      color: var(--text);
-      line-height: 1.5;
-      margin-top: 12px;
-    }
-
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-      z-index: 1000;
-    }
-
-    .modal-backdrop.open { display: flex; }
-
-    .modal {
-      width: min(920px, 100%);
-      max-height: 85vh;
-      overflow: auto;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-    }
-
-    .modal-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 18px 20px;
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      background: var(--panel);
-    }
-
-    .modal-body {
-      padding: 20px;
-    }
-
-    .footnote {
-      color: var(--muted);
-      font-size: 0.84rem;
-      line-height: 1.5;
-    }
-
-    @media (max-width: 1180px) {
-      .input-launcher { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .executive-grid { grid-template-columns: 1fr; }
-      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-
-    @media (max-width: 760px) {
-      .wrap { padding: 14px; }
-      .hero { flex-direction: column; }
-      .grid-2, .grid-3, .kpi-grid, .two-col { grid-template-columns: 1fr; }
-      .input-launcher { grid-template-columns: 1fr; }
-    }
-  </style>
+  <title>HAEMR Residency Financial &amp; Budget Calculator · AY 2026–27</title>
+  <link rel="stylesheet" href="haemr-shared.css" />
 </head>
 <body>
-  <div class="wrap">
-    <div class="hero">
-      <div>
-        <h1>HAEMR Residency Financial &amp; Budget Calculator</h1>
-        <p>
-          Adjust inputs from the buttons below.
-        </p>
-        <div class="action-row">
-          <button id="openIncomeBtn" class="secondary" type="button">Income Inputs</button>
-          <button id="openRetirementBtn" class="secondary" type="button">Retirement &amp; Payroll Inputs</button>
-          <button id="openTaxBtn" class="secondary" type="button">Tax Inputs</button>
-          <button id="openExpensesBtn" class="secondary" type="button">Expense Inputs</button>
-          <button id="openBenefitsBtn" class="secondary" type="button">Benefits Inputs</button>
+  <div class="wrap wrap-wide">
+    <div class="masthead">
+      <div class="top-bar">
+        <div>
+          <div class="masthead-label">HAEMR · AY 2026–27 · Budget Planning</div>
+          <h1>Residency Financial &amp; Budget Calculator</h1>
+          <div class="masthead-sub">Modeled around MGB PGY-1 / PGY-2 compensation and the low-utilization benefits assumptions summarized in the companion guide.</div>
         </div>
+        <div class="top-actions">
+          <a class="theme-btn" href="benefits.html">Open benefits guide</a>
+          <button class="theme-btn" type="button" onclick="toggleTheme()">Toggle theme</button>
+        </div>
+      </div>
+      <div class="action-row">
+        <button id="openIncomeBtn" class="secondary" type="button">Income Inputs</button>
+        <button id="openRetirementBtn" class="secondary" type="button">Retirement &amp; Payroll Inputs</button>
+        <button id="openTaxBtn" class="secondary" type="button">Tax Inputs</button>
+        <button id="openExpensesBtn" class="secondary" type="button">Expense Inputs</button>
+        <button id="openBenefitsBtn" class="secondary" type="button">Benefits Inputs</button>
       </div>
     </div>
 
     <div class="layout">
       <main class="report">
         <section class="report-card">
-          <div class="head"><h2>Executive Summary (Monthly)</h2></div>
+          <div class="head"><span class="section-num">00</span><h2>Executive Summary (Monthly)</h2></div>
           <div class="body executive-grid">
             <div class="summary-box">
               <h3>2026</h3>
@@ -627,7 +79,7 @@
         </section>
 
         <section class="report-card">
-          <div class="head"><h2>1. Income Overview (Gross)</h2></div>
+          <div class="head"><span class="section-num">01</span><h2>Income Overview (Gross)</h2></div>
           <div class="body two-col">
             <div>
               <h3>2026 partial year</h3>
@@ -641,7 +93,7 @@
         </section>
 
         <section class="report-card">
-          <div class="head"><h2>2. Retirement</h2></div>
+          <div class="head"><span class="section-num">02</span><h2>Retirement</h2></div>
           <div class="body two-col">
             <div>
               <h3>2026 retirement math</h3>
@@ -656,7 +108,7 @@
         </section>
 
         <section class="report-card">
-          <div class="head"><h2>3. MGB Benefits, Stipends &amp; Food Perks</h2></div>
+          <div class="head"><span class="section-num">03</span><h2>MGB Benefits, Stipends &amp; Food Perks</h2></div>
           <div class="body">
             <div class="table-scroll">
               <table class="mini-table">
@@ -668,7 +120,7 @@
         </section>
 
         <section class="report-card">
-          <div class="head"><h2>4. Tax Breakdown &amp; Amortized Take Home Pay (Independent Single Filer)</h2></div>
+          <div class="head"><span class="section-num">04</span><h2>Tax Breakdown &amp; Amortized Take Home Pay (Independent Single Filer)</h2></div>
           <div class="body two-col">
             <div>
               <h3>2026 tax math</h3>
@@ -682,7 +134,7 @@
         </section>
 
         <section class="report-card">
-          <div class="head"><h2>5. Cleveland vs. Boston Expense Projection &amp; Strict Budget</h2></div>
+          <div class="head"><span class="section-num">05</span><h2>Cleveland vs. Boston Expense Projection &amp; Strict Budget</h2></div>
           <div class="body">
             <div class="table-scroll">
               <table>
@@ -701,7 +153,7 @@
         </section>
 
         <section class="report-card">
-          <div class="head"><h2>6. Final Margin Analysis</h2></div>
+          <div class="head"><span class="section-num">06</span><h2>Final Margin Analysis</h2></div>
           <div class="body two-col">
             <div><div class="math" id="marginY1"></div></div>
             <div><div class="math" id="marginY2"></div></div>
@@ -709,7 +161,7 @@
         </section>
 
         <section class="report-card">
-          <div class="head"><h2>7. Schedule C</h2></div>
+          <div class="head"><span class="section-num">07</span><h2>Schedule C</h2></div>
           <div class="body">
             <p class="subtle" id="scheduleCText"></p>
             <div style="margin-top:14px;">
@@ -866,13 +318,13 @@
           <div><label for="food">Food (dining, $/month)</label><input id="food" type="number" step="0.01" value="554.45" /></div>
           <div><label for="groceries">Groceries ($/month)</label><input id="groceries" type="number" step="0.01" value="291.66" /></div>
           <div><label for="travel">Travel ($/month)</label><input id="travel" type="number" step="0.01" value="200" /></div>
-          <div><label for="transport">Transportation ($/month)</label><input id="transport" type="number" step="0.01" value="30" /></div>
+          <div><label for="transport">Transportation ($/month)</label><input id="transport" type="number" step="0.01" value="45" /></div>
           <div><label for="clothes">Clothes &amp; hair ($/month)</label><input id="clothes" type="number" step="0.01" value="75.71" /></div>
           <div><label for="business">Business ($/month)</label><input id="business" type="number" step="0.01" value="50" /></div>
           <div><label for="other">Other ($/month)</label><input id="other" type="number" step="0.01" value="50" /></div>
           <div><label for="coffee">Coffee ($/month)</label><input id="coffee" type="number" step="0.01" value="50" /></div>
           <div><label for="education">Education ($/month)</label><input id="education" type="number" step="0.01" value="100" /></div>
-          <div><label for="healthcare">Healthcare ($/month)</label><input id="healthcare" type="number" step="0.01" value="100" /></div>
+          <div><label for="healthcare">Healthcare ($/month)</label><input id="healthcare" type="number" step="0.01" value="22" /></div>
         </div>
         <div class="section">
           <h3>Schedule C expenses</h3>
@@ -907,6 +359,9 @@
       <div class="modal-body">
         <div class="grid-2">
           <div><label for="educationFund">Annual education fund ($/year)</label><input id="educationFund" type="number" step="0.01" value="0" /></div>
+        </div>
+        <div class="info-box">
+          Default healthcare assumptions follow the companion benefits guide: HDHP medical at $0/month, a separate $500 employer HSA seed, and roughly $22/month for dental, vision, and light routine out-of-pocket spending.
         </div>
       </div>
     </div>
@@ -958,13 +413,13 @@
       food: 554.45,
       groceries: 291.66,
       travel: 200,
-      transport: 30,
+      transport: 45,
       clothes: 75.71,
       business: 50,
       other: 50,
       coffee: 50,
       education: 100,
-      healthcare: 100,
+      healthcare: 22,
       educationFund: 0
     };
 
@@ -1443,18 +898,19 @@
       document.getElementById('retirementFoot').textContent = `Assumptions: 403(b) waterfall (fill employee 403(b) first, then Roth IRA); employee 403(b) cap ${fmt(employee403bAnnualMax)}/year; reserve cash ${fmt(reserveCashMonthly)}/month; ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side-plan ${pct.format(solo401kEmployerRate * 100)}%. Unallocated cash can remain after caps.`;
 
       const benefits = [
+        ['Medical premium (employee only)', `${fmt(0)}/month`, 'Modeled on the HDHP election used in the companion benefits guide'],
+        ['Employer HSA seed', fmt(500), 'Annual employer contribution tied to HDHP enrollment; shown for planning, not as monthly spendable cash'],
+        ['Modeled healthcare budget', `${fmt(val('healthcare'))}/month`, 'Midpoint assumption for core dental, vision, and light routine out-of-pocket spending'],
         ['Annual housing / trainee stipend', fmt(stipend), 'Taxable annual cash payment'],
         ['403(b) match', `${pct.format(matchRate * 100)}% of W-2`, 'Immediate risk free return up to the match cap'],
         ['Education fund', fmt(val('educationFund')), 'Can offset CME, licensing, courses, and similar costs'],
         ['Meal card stipend', `${fmt(HARD_CODED.mealCardMonthly)}/month`, 'Food stipend loaded to meal card'],
-        ['Brigham dinner discount (6-8pm)', `${fmt(8)} per day`, 'Approximate value grouped into food perk estimate'],
-        ['MGH 9 oclock weekday meal', 'Free weekday dinner', 'Approximate value grouped into food perk estimate'],
-        ['Total modeled food perk', `${fmt(monthlyFoodPerkTotal())}/month`, 'Applied as reduction to projected Boston food budget'],
+        ['Hospital meal perks', `${fmt(monthlyFoodPerkTotal())}/month modeled`, 'Used as a reduction to projected Boston food spending'],
         ['MBTA transit benefit', '50% discount pre tax', 'Current out of pocket modeled at $45/month'],
         ['Relocation stipend', fmt(0), 'No direct relocation cash assumed']
       ];
       setHTML('benefitsTable', benefits.map(row => `<tr><th>${row[0]}</th><td>${row[1]}</td><td class="muted">${row[2]}</td></tr>`).join(''));
-      document.getElementById('benefitFoot').textContent = `Assumptions: stipend taxable; food perks ${fmt(monthlyFoodPerkTotal())}/month; education fund offsets expenses; lease guaranty excluded.`;
+      document.getElementById('benefitFoot').textContent = `Assumptions: stipend taxable; healthcare budget defaults to ${fmt(val('healthcare'))}/month from the companion benefits guide; food perks ${fmt(monthlyFoodPerkTotal())}/month; education fund offsets expenses; HSA seed shown separately and not counted as recurring spendable cash.`;
 
       setHTML('taxY1', [
         line('W-2 income', fmt(year1.w2)),
@@ -1633,12 +1089,47 @@
       if (chartTooltip) chartTooltip.style.display = 'none';
     });
 
+    const THEME_KEY = 'haemr-theme';
+
+    function applyTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+    }
+
+    function readSavedTheme() {
+      try {
+        return localStorage.getItem(THEME_KEY);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function initializeTheme() {
+      const saved = readSavedTheme();
+      if (saved === 'light' || saved === 'dark') {
+        applyTheme(saved);
+        return;
+      }
+      applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    }
+
+    function toggleTheme() {
+      const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      applyTheme(nextTheme);
+      try {
+        localStorage.setItem(THEME_KEY, nextTheme);
+      } catch (error) {
+        // Ignore storage failures.
+      }
+    }
+
     const darkPref = window.matchMedia('(prefers-color-scheme: dark)');
-    document.documentElement.dataset.theme = darkPref.matches ? 'dark' : 'light';
     darkPref.addEventListener('change', (e) => {
-      document.documentElement.dataset.theme = e.matches ? 'dark' : 'light';
+      const saved = readSavedTheme();
+      if (saved === 'light' || saved === 'dark') return;
+      applyTheme(e.matches ? 'dark' : 'light');
     });
 
+    initializeTheme();
     resetDefaults();
   </script>
 </body>
