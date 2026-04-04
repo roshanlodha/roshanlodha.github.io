@@ -20,6 +20,11 @@
   --page-max: 1180px;
   --shadow: 0 18px 44px rgba(17, 17, 17, 0.07);
   --shadow-soft: 0 10px 24px rgba(17, 17, 17, 0.04);
+  --space-page: clamp(18px, 2.8vw, 32px);
+  --space-inline: clamp(16px, 2vw, 20px);
+  --space-block: clamp(16px, 1.7vw, 20px);
+  --space-block-lg: clamp(22px, 3vw, 30px);
+  --grid-gap: 16px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -118,12 +123,12 @@ a:hover {
 .wrap {
   max-width: var(--page-max);
   margin: 0 auto;
-  padding: clamp(18px, 2.8vw, 32px);
+  padding: var(--space-page);
 }
 
 .masthead {
   margin-bottom: 22px;
-  padding: clamp(22px, 3vw, 30px);
+  padding: var(--space-block-lg) var(--space-inline);
   background: linear-gradient(180deg, color-mix(in srgb, var(--panel) 90%, var(--panel-2)) 0%, var(--panel) 100%);
   border: 1px solid var(--border);
   border-radius: calc(var(--radius) + 6px);
@@ -216,7 +221,7 @@ button:hover,
 .layout,
 .report {
   display: grid;
-  gap: 20px;
+  gap: var(--grid-gap);
 }
 
 .surface-card {
@@ -230,7 +235,7 @@ button:hover,
   display: grid;
   gap: 8px;
   margin-bottom: 20px;
-  padding: 20px 22px;
+  padding: var(--space-block) var(--space-inline);
   background: linear-gradient(135deg, color-mix(in srgb, var(--panel-2) 90%, var(--panel)) 0%, var(--panel) 100%);
 }
 
@@ -261,12 +266,12 @@ button:hover,
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
+  gap: var(--grid-gap);
 }
 
 .kpi,
 .dis-card {
-  padding: 16px 17px;
+  padding: var(--space-block) var(--space-inline);
 }
 
 .kpi .label {
@@ -308,7 +313,7 @@ button:hover,
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
-  padding: 15px 20px;
+  padding: var(--space-block) var(--space-inline);
   background: linear-gradient(180deg, var(--panel-2) 0%, color-mix(in srgb, var(--panel-2) 70%, var(--panel)) 100%);
   border-bottom: 1px solid var(--border);
 }
@@ -321,11 +326,11 @@ button:hover,
 }
 
 .report-card .body {
-  padding: 20px;
+  padding: var(--space-block) var(--space-inline);
 }
 
 .card-foot {
-  padding: 12px 20px 16px;
+  padding: 12px var(--space-inline) var(--space-block);
   border-top: 1px solid var(--border);
   color: var(--muted);
   font-size: 0.84rem;
@@ -396,7 +401,7 @@ h4 {
 .two-col,
 .grid-2 {
   display: grid;
-  gap: 14px;
+  gap: var(--grid-gap);
 }
 
 .executive-grid,
@@ -407,7 +412,7 @@ h4 {
 
 .summary-box,
 .plan-card {
-  padding: 16px;
+  padding: var(--space-block) var(--space-inline);
 }
 
 .summary-box,
@@ -524,7 +529,7 @@ h4 {
 
 .callout {
   margin-top: 12px;
-  padding: 14px 16px;
+  padding: var(--space-block) var(--space-inline);
   color: var(--text);
   font-size: 0.87rem;
   line-height: 1.5;
@@ -552,7 +557,7 @@ h4 {
 
 .info-box {
   margin-top: 12px;
-  padding: 14px 16px;
+  padding: var(--space-block) var(--space-inline);
   line-height: 1.5;
 }
 
@@ -620,7 +625,7 @@ table,
 }
 
 thead th {
-  padding: 9px 10px;
+  padding: 11px 12px;
   border-bottom: 1px solid var(--border);
   background: var(--line-bg);
   color: var(--muted);
@@ -634,7 +639,7 @@ thead th {
 
 tbody th,
 td {
-  padding: 10px;
+  padding: 12px;
   border-bottom: 1px solid var(--border);
   color: var(--text);
   text-align: left;
@@ -698,25 +703,8 @@ tbody tr:hover th {
 .plan-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 14px;
+  gap: var(--grid-gap);
   margin-bottom: 14px;
-}
-
-.plan-card.winner {
-  border: 2px solid var(--accent);
-}
-
-.winner-badge {
-  display: inline-block;
-  margin-bottom: 8px;
-  padding: 2px 7px;
-  background: var(--accent);
-  border-radius: 4px;
-  color: var(--bg);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
 }
 
 .plan-name {
@@ -907,7 +895,7 @@ tbody tr:hover th {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 12px 14px;
+  padding: var(--space-block) var(--space-inline);
   font-size: 0.88rem;
 }
 
@@ -1010,13 +998,13 @@ tbody tr:hover th {
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
-  padding: 18px 20px;
+  padding: var(--space-block) var(--space-inline);
   background: color-mix(in srgb, var(--panel) 92%, var(--panel-2));
   border-bottom: 1px solid var(--border);
 }
 
 .modal-body {
-  padding: 20px;
+  padding: var(--space-block) var(--space-inline);
 }
 
 @media (max-width: 1180px) {
@@ -1036,18 +1024,16 @@ tbody tr:hover th {
 }
 
 @media (max-width: 760px) {
-  .wrap {
-    padding: 14px;
+  :root {
+    --space-page: 14px;
+    --space-inline: 16px;
+    --space-block: 16px;
+    --space-block-lg: 20px;
+    --grid-gap: 14px;
   }
 
-  .masthead,
-  .verdict,
-  .report-card .body,
-  .card-foot,
-  .modal-body,
-  .modal-head {
-    padding-left: 16px;
-    padding-right: 16px;
+  .wrap {
+    padding: var(--space-page);
   }
 
   .top-actions {
