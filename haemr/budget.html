@@ -17,7 +17,6 @@
         </div>
         <div class="top-actions">
           <a class="theme-btn" href="benefits.html">Open benefits guide</a>
-          <button class="theme-btn" type="button" onclick="toggleTheme()">Toggle theme</button>
         </div>
       </div>
       <div class="action-row">
@@ -1101,47 +1100,6 @@
       if (chartTooltip) chartTooltip.style.display = 'none';
     });
 
-    const THEME_KEY = 'haemr-theme';
-
-    function applyTheme(theme) {
-      document.documentElement.dataset.theme = theme;
-    }
-
-    function readSavedTheme() {
-      try {
-        return localStorage.getItem(THEME_KEY);
-      } catch (error) {
-        return null;
-      }
-    }
-
-    function initializeTheme() {
-      const saved = readSavedTheme();
-      if (saved === 'light' || saved === 'dark') {
-        applyTheme(saved);
-        return;
-      }
-      applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    }
-
-    function toggleTheme() {
-      const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-      applyTheme(nextTheme);
-      try {
-        localStorage.setItem(THEME_KEY, nextTheme);
-      } catch (error) {
-        // Ignore storage failures.
-      }
-    }
-
-    const darkPref = window.matchMedia('(prefers-color-scheme: dark)');
-    darkPref.addEventListener('change', (e) => {
-      const saved = readSavedTheme();
-      if (saved === 'light' || saved === 'dark') return;
-      applyTheme(e.matches ? 'dark' : 'light');
-    });
-
-    initializeTheme();
     resetDefaults();
   </script>
 </body>
