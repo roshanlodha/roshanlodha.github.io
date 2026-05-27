@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    if (sessionStorage.getItem("haemr_auth") !== "true") {
+      let pw = prompt("Enter password:");
+      while (pw !== "haemr") {
+        if (pw === null) {
+          window.location.href = "../index.html";
+          break;
+        }
+        pw = prompt("Incorrect password. Enter password:");
+      }
+      if (pw === "haemr") {
+        sessionStorage.setItem("haemr_auth", "true");
+      }
+    }
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HAEMR Residency Financial &amp; Budget Calculator · AY 2026–27</title>
