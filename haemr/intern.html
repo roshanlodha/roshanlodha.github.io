@@ -63,7 +63,7 @@
     
     .checklist-item {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 12px;
       padding: 12px 16px;
       border-bottom: 1px solid var(--md-sys-color-outline-variant);
@@ -82,7 +82,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 4px;
+      margin-top: 0;
       flex-shrink: 0;
     }
     
@@ -189,11 +189,11 @@
           <div class="masthead-label">HAEMR · Incoming Residents</div>
           <h1 style="margin-bottom: 16px;">The Master Onboarding Checklist</h1>
           
-          <div class="verdict" style="margin: 0; padding: 16px; border-radius: var(--md-sys-shape-corner-medium); background: var(--md-sys-color-surface-container-highest);">
-            <div class="verdict-label" style="color: var(--md-sys-color-primary); margin-bottom: 4px;">Instruction</div>
-            <div class="verdict-headline" style="font-size: var(--md-sys-typescale-title-medium-size); font-weight: 700; line-height: 1.4;">
-              Always use a personal, non-medical school email address on every single form, portal, and application.
-            </div>
+          <div class="verdict" style="margin: 0; padding: 12px 16px; border-radius: var(--md-sys-shape-corner-medium); background: var(--md-sys-color-surface-container-highest);">
+            <div class="verdict-label" style="color: var(--md-sys-color-primary); margin-bottom: 4px;">INSTRUCTION</div>
+            <ul style="margin: 0; padding-left: 20px;">
+              <li><strong>Personal email only:</strong> Use a personal, non-medical school email address on every single form, portal, and application.</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -208,9 +208,7 @@
       <div class="progress-bar-container">
         <div class="progress-bar-fill" id="progress-bar"></div>
       </div>
-      <div class="progress-actions">
-        <button onclick="resetChecklist()" class="secondary">Reset Progress</button>
-      </div>
+
     </div>
 
     <!-- Phase 1 -->
@@ -264,7 +262,7 @@
         <p style="margin: 0 24px 16px 24px; color: var(--muted);" class="subtle">Due within 14 days of receipt. Follow guidelines carefully to avoid delays.</p>
         
         <!-- Shared Phase 2 Instructions -->
-        <div class="verdict" style="margin: 0; padding: 16px; border-radius: var(--md-sys-shape-corner-medium); background: var(--md-sys-color-surface-container-highest);">
+        <div class="verdict" style="margin: 0 24px 16px; padding: 12px 16px; border-radius: var(--md-sys-shape-corner-medium); background: var(--md-sys-color-surface-container-highest);">
           <div class="verdict-label" style="color: var(--md-sys-color-primary); margin-bottom: 4px;">INSTRUCTION</div>
           <div class="verdict-headline" style="font-size: var(--md-sys-typescale-title-small-size); font-weight: 700;">MD-App</div>
           <ul style="margin:0; padding-left:20px;">
@@ -404,10 +402,11 @@
           <span class="section-num">04</span>
           <h2>Phase 4: State/Federal Enrollment</h2>
         </div>
-        <div class="verdict" style="margin: 12px 24px; background: var(--md-sys-color-surface-container-highest);">
-          <div class="verdict-label" style="color: var(--md-sys-color-primary); margin-bottom: 12px;">Instruction</div>
-          <div class="verdict-headline" style="font-size: var(--md-sys-typescale-title-small-size); margin-bottom: 4px;">Wait until Limited License is ISSUED</div>
-          <p style="margin: 0;">You cannot submit these applications until your Limited License is officially approved and issued by the state.</p>
+        <div class="verdict" style="margin: 0 24px 16px; padding: 12px 16px; border-radius: var(--md-sys-shape-corner-medium); background: var(--md-sys-color-surface-container-highest);">
+          <div class="verdict-label" style="color: var(--md-sys-color-primary); margin-bottom: 4px;">INSTRUCTION</div>
+          <ul style="margin: 0; padding-left: 20px;">
+            <li><strong>Wait until Limited License is ISSUED</strong> before submitting any of these applications.</li>
+          </ul>
         </div>
         <div class="body" style="padding: 0; border-top: 1px solid var(--md-sys-color-outline-variant);">
           <div class="checklist-list">
