@@ -252,6 +252,11 @@
              <input id="solo401kEmployerRate" type="number" step="0.01" value="20" />
              <p class="footnote">Employer profit-sharing contribution. Falls under IRS Section 415(c) and does not count against the $24,500 employee limit for the 403(b), meaning you can maximize both safely.</p>
           </div>
+          <div>
+            <label for="hsaAnnualTarget">Annual HSA contribution target ($/year)</label>
+            <input id="hsaAnnualTarget" type="number" step="0.01" value="4400" />
+            <p class="footnote">The employer seeds $500 of this target, leaving $3,900 as the employee payroll contribution.</p>
+          </div>
         </div>
 
       </div>
@@ -408,6 +413,17 @@
             <div style="margin-top: 4px; font-size: var(--md-sys-typescale-body-small-size); color: var(--md-sys-color-on-surface-variant);">When enabled, deducts 20% of qualified business income from federal taxable income. Currently <strong id="qbiStatusLabel">OFF — $0 deduction</strong>.</div>
           </div>
         </div>
+
+        <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--md-sys-color-outline-variant); display: flex; align-items: flex-start; gap: 16px;">
+          <label class="md3-switch" for="solo401kToggle" style="flex-shrink: 0;">
+            <input type="checkbox" id="solo401kToggle" checked />
+            <span class="md3-switch-track"><span class="md3-switch-thumb"></span></span>
+          </label>
+          <div>
+            <div style="font-weight: 600; font-size: var(--md-sys-typescale-body-large-size); color: var(--md-sys-color-on-surface);">Schedule C Solo 401(k) / SEP-IRA Contribution</div>
+            <div style="margin-top: 4px; font-size: var(--md-sys-typescale-body-small-size); color: var(--md-sys-color-on-surface-variant);">When enabled, calculates tax-deductible retirement contributions for self-employment income. Currently <strong id="solo401kStatusLabel">ON</strong>.</div>
+          </div>
+        </div>
       </div>
       <div class="modal-foot">
         <button class="text-btn close-modal" type="button" data-close-modal="scheduleCModal">Close</button>
@@ -448,6 +464,7 @@
       homeOfficeSqFt: 0,
       matchRate: 2,
       reserveCashMonthly: 500,
+      hsaAnnualTarget: 4400,
       selfEmployedPlan: 'solo401k',
       solo401kEmployerRate: 20,
       ssRate: 6.2,
@@ -489,7 +506,8 @@
       coffee: 30.74,
       education: 806.15,
       healthcare: 0,
-      disability: 0
+      disability: 0,
+      reserveCashMonthly: 0
     };
 
     const expenseLabels = {
@@ -503,7 +521,8 @@
       coffee: 'Coffee',
       education: 'Education',
       healthcare: 'Healthcare',
-      disability: 'Supplemental Disability (IDI)'
+      disability: 'Supplemental Disability (IDI)',
+      reserveCashMonthly: 'Emergency Surplus/Reserve'
     };
 
     const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
@@ -591,7 +610,8 @@
       stateMovingExpenseDeduction,
       brackets,
       amortMonths,
-      useQbi = false
+      useQbi = false,
+      useSolo401k = true
     }) {
       const MA_PERSONAL_EXEMPTION_SINGLE = 4400;
       const retirement403b = Math.max(0, employee403bContribution);
@@ -605,7 +625,7 @@
       const seTax = ssSE + medicareSE;
       const seTaxDeduction = seTax / 2;
       const sidePlanContributionBase = Math.max(0, sideIncome - seTaxDeduction);
-      const sideRetirementContribution = (selfEmployedPlan === 'solo401k' || selfEmployedPlan === 'sepira')
+      const sideRetirementContribution = (useSolo401k && (selfEmployedPlan === 'solo401k' || selfEmployedPlan === 'sepira'))
         ? sidePlanContributionBase * solo401kEmployerRate
         : 0;
       const fica = ficaW2 + seTax;
@@ -743,11 +763,11 @@
       amortMonths,
       monthlyBudget,
       reserveCashMonthly,
-      maxEmployeeHsaContribution,
-      useQbi = false
+      hsaContribution,
+      useQbi = false,
+      useSolo401k = true
     }) {
       let recommended403b = Math.min(employee403bAnnualMax, min403b);
-      let hsaContribution = 0;
       let extra403bContribution = 0;
       const maxExtra403b = Math.max(0, employee403bAnnualMax - min403b);
 
@@ -767,19 +787,16 @@
           stateMovingExpenseDeduction,
           brackets,
           amortMonths,
-          useQbi
+          useQbi,
+          useSolo401k
         });
 
-        // Amortized surplus without subtracting reserve Cash (prioritize 403(b) / HSA)
+        // Amortized surplus without subtracting reserve Cash (prioritize 403(b))
         const annualAvailable = Math.max(0, (trialYear.amortizedMonthly - monthlyBudget) * amortMonths);
-        let totalSurplus = annualAvailable + extra403bContribution + hsaContribution;
+        let totalSurplus = annualAvailable + extra403bContribution;
 
         // Priority 1: Maximize employee 403(b)
         extra403bContribution = Math.min(maxExtra403b, totalSurplus);
-        totalSurplus = Math.max(0, totalSurplus - extra403bContribution);
-
-        // Priority 2: Maximize HSA
-        hsaContribution = Math.min(maxEmployeeHsaContribution, totalSurplus);
 
         const next403b = Math.min(employee403bAnnualMax, min403b + extra403bContribution);
         if (Math.abs(next403b - recommended403b) < 0.5) {
@@ -804,33 +821,36 @@
         stateMovingExpenseDeduction,
         brackets,
         amortMonths,
-        useQbi
+        useQbi,
+        useSolo401k
       });
 
       const annualAvailableFinal = Math.max(0, (year.amortizedMonthly - monthlyBudget) * amortMonths);
-      let totalSurplusFinal = annualAvailableFinal + extra403bContribution + hsaContribution;
+      let totalSurplusFinal = annualAvailableFinal + extra403bContribution;
 
       // Priority 1: Maximize employee 403(b)
       extra403bContribution = Math.min(maxExtra403b, totalSurplusFinal);
-      totalSurplusFinal = Math.max(0, totalSurplusFinal - extra403bContribution);
-
-      // Priority 2: Maximize HSA
-      hsaContribution = Math.min(maxEmployeeHsaContribution, totalSurplusFinal);
-      totalSurplusFinal = Math.max(0, totalSurplusFinal - hsaContribution);
-
-      // Priority 3: Emergency Reserve
-      const maxReserve = reserveCashMonthly * amortMonths;
-      const reserveContribution = Math.min(maxReserve, totalSurplusFinal);
-      const overflowAfterCaps = Math.max(0, totalSurplusFinal - reserveContribution);
+      const overflowAfterCaps = Math.max(0, totalSurplusFinal - extra403bContribution);
 
       return {
         year,
         recommended403b,
         hsaContribution,
-        reserveContribution,
+        reserveContribution: 0,
         extra403bContribution,
         overflowAfterCaps
       };
+    }
+
+    function renderTaxSection(title, linesHtml, isOpen = true) {
+      return `
+        <details class="tax-details" ${isOpen ? 'open' : ''}>
+          <summary class="tax-summary">${title}</summary>
+          <div class="tax-details-content">
+            ${linesHtml}
+          </div>
+        </details>
+      `;
     }
 
     function update() {
@@ -840,6 +860,7 @@
       if (!brackets) return;
 
       const useQbi = document.getElementById('qbiToggle').checked;
+      const useSolo401k = document.getElementById('solo401kToggle').checked;
 
       const pgy1 = val('pgy1');
       const pgy2 = val('pgy2');
@@ -847,6 +868,7 @@
       const sideIncome = val('sideIncome');
       const matchRate = val('matchRate') / 100;
       const reserveCashMonthly = Math.max(0, val('reserveCashMonthly'));
+      const hsaAnnualTarget = val('hsaAnnualTarget');
       const selfEmployedPlan = document.getElementById('selfEmployedPlan').value;
       const solo401kEmployerRate = val('solo401kEmployerRate') / 100;
       const ssRate = val('ssRate') / 100;
@@ -864,9 +886,8 @@
       const w2Y1 = pgy1 * (daysY1 / daysInYear);
       const w2Y2 = pgy1 * (daysPgy1Y2 / daysInYear) + pgy2 * (daysPgy2Y2 / daysInYear);
       const employee403bAnnualMax = HARD_CODED.employee403bAnnualMax;
-      const irsHsaLimit = HARD_CODED.irsHsaLimit;
       const employerHsaSeed = HARD_CODED.employerHsaSeed;
-      const maxEmployeeHsaContribution = irsHsaLimit - employerHsaSeed;
+      const employeeHsaContribution = Math.max(0, hsaAnnualTarget - employerHsaSeed);
       const min403bY1 = w2Y1 * matchRate;
       const min403bY2 = w2Y2 * matchRate;
 
@@ -900,6 +921,12 @@
         qbiStatusLabel.textContent = useQbi ? 'ON — 20% deduction applied' : 'OFF — $0 deduction';
       }
 
+      // Update Solo 401(k) status label
+      const solo401kStatusLabel = document.getElementById('solo401kStatusLabel');
+      if (solo401kStatusLabel) {
+        solo401kStatusLabel.textContent = useSolo401k ? 'ON' : 'OFF';
+      }
+
       const year1Optimized = optimizeRetirementForYear({
         w2: w2Y1,
         stipend,
@@ -917,8 +944,9 @@
         amortMonths: amortMonthsY1,
         monthlyBudget,
         reserveCashMonthly,
-        maxEmployeeHsaContribution,
-        useQbi
+        hsaContribution: employeeHsaContribution,
+        useQbi,
+        useSolo401k
       });
 
       const year1 = year1Optimized.year;
@@ -944,8 +972,9 @@
         amortMonths: amortMonthsY2,
         monthlyBudget,
         reserveCashMonthly,
-        maxEmployeeHsaContribution,
-        useQbi
+        hsaContribution: employeeHsaContribution,
+        useQbi,
+        useSolo401k
       });
 
       const year2 = year2Optimized.year;
@@ -969,8 +998,8 @@
 
       const hsaMonthlyY1 = year1.hsaMonthly;
       const hsaMonthlyY2 = year2.hsaMonthly;
-      const reserveMonthlyY1 = reserveContributionY1 / amortMonthsY1;
-      const reserveMonthlyY2 = reserveContributionY2 / amortMonthsY2;
+      const reserveMonthlyY1 = reserveCashMonthly;
+      const reserveMonthlyY2 = reserveCashMonthly;
 
       const fedTaxMonthlyY1 = year1.federalTaxMonthly;
       const fedTaxMonthlyY2 = year2.federalTaxMonthly;
@@ -990,7 +1019,7 @@
           { className: 'seg-income-schedulec', label: 'Income: Schedule C', value: scheduleCIncomeMonthlyY1 }
         ]),
         summaryBarRow('Allocated', monthlyGrossY1, [
-          { className: 'seg-expenses', label: 'Expenses', value: monthlyBudget },
+          { className: 'seg-expenses', label: 'Expenses', value: monthlyBudget - reserveCashMonthly },
           { className: 'seg-reserve', label: 'Emergency reserve', value: reserveMonthlyY1 },
           { className: 'seg-hsa', label: 'HSA', value: hsaMonthlyY1 },
           { className: 'seg-emp403b', label: 'Employee 403(b)', value: emp403bMonthlyY1 },
@@ -1009,7 +1038,7 @@
           { className: 'seg-income-schedulec', label: 'Income: Schedule C', value: scheduleCIncomeMonthlyY2 }
         ]),
         summaryBarRow('Allocated', monthlyGrossY2, [
-          { className: 'seg-expenses', label: 'Expenses', value: monthlyBudget },
+          { className: 'seg-expenses', label: 'Expenses', value: monthlyBudget - reserveCashMonthly },
           { className: 'seg-reserve', label: 'Emergency reserve', value: reserveMonthlyY2 },
           { className: 'seg-hsa', label: 'HSA', value: hsaMonthlyY2 },
           { className: 'seg-emp403b', label: 'Employee 403(b)', value: emp403bMonthlyY2 },
@@ -1102,57 +1131,79 @@
       setHTML('benefitsTable', benefits.map(row => `<tr><th>${row[0]}</th><td>${row[1]}</td><td class="muted">${row[2]}</td></tr>`).join(''));
 
       setHTML('taxY1', [
-        line('W-2 income', fmt(year1.w2)),
-        line('Plus taxable stipend', fmt(stipend)),
-        line('Plus net Schedule C profit', fmt(scheduleCProfit)),
-        line('Less pretax 403(b)', `- ${fmt(year1.retirement403b)}`),
-        line(`Less ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, `- ${fmt(year1.sideRetirementContribution)}`),
-        line('Less half of SE tax (above-the-line)', `- ${fmt(year1.seTaxDeduction)}`),
-        line('Less pretax HSA contribution', `- ${fmt(year1.hsaContribution)}`),
-        line('Adjusted gross income', fmt(year1.agi)),
-        line('Less standard deduction', `- ${fmt(stdDeduction)}`),
-        line('Federal taxable income before QBI', fmt(year1.taxableFederalPreQbi)),
-        useQbi ? line('Less Section 199A QBI deduction (20%)', `- ${fmt(year1.qbiDeduction)}`) : line('Section 199A QBI deduction', 'OFF — $0'),
-        line('Federal taxable income', fmt(year1.taxableFederal)),
-        line('Federal income tax', fmt(year1.federalTax)),
-        line(`Social Security tax on W-2 (${pct.format(ssRate * 100)}%)`, fmt(year1.ssW2)),
-        line(`Medicare tax on W-2 (${pct.format(medicareRate * 100)}%)`, fmt(year1.medicareW2)),
-        line(`Social Security tax on Schedule C (${pct.format(ssRate * 200)}%)`, fmt(year1.ssSE)),
-        line(`Medicare tax on Schedule C (${pct.format(medicareRate * 200)}%)`, fmt(year1.medicareSE)),
-        line('MA personal exemption', `- ${fmt(4400)}`),
-        line('MA tax', fmt(year1.stateTax)),
-        line('Spendable net cash after taxes & retirement', fmt(year1.spendableNet)),
-        line('Post-tax stipend (June lump sum)', fmt(year1.stipendNet)),
-        line('Schedule C monthly net cash', fmt(year1.sideNetMonthly)),
-        line('W-2 monthly net cash (post-deductions)', fmt(year1.w2NetMonthly)),
-        line('Regular monthly cash flow (W-2 + Schedule C)', fmt(year1.regularMonthlyCashFlow), true)
+        renderTaxSection('Adjusted Gross Income (AGI) Calculation', [
+          line('W-2 income', fmt(year1.w2)),
+          line('Plus taxable stipend', fmt(stipend)),
+          line('Plus net Schedule C profit', fmt(scheduleCProfit)),
+          line('Less pretax 403(b)', `- ${fmt(year1.retirement403b)}`),
+          line(`Less ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, `- ${fmt(year1.sideRetirementContribution)}`),
+          line('Less half of SE tax (above-the-line)', `- ${fmt(year1.seTaxDeduction)}`),
+          line('Less pretax HSA contribution', `- ${fmt(year1.hsaContribution)}`),
+          line('Adjusted gross income', fmt(year1.agi), true)
+        ].join(''), true),
+
+        renderTaxSection('Federal Income Tax Calculation', [
+          line('Less standard deduction', `- ${fmt(stdDeduction)}`),
+          line('Federal taxable income before QBI', fmt(year1.taxableFederalPreQbi)),
+          useQbi ? line('Less Section 199A QBI deduction (20%)', `- ${fmt(year1.qbiDeduction)}`) : line('Section 199A QBI deduction', 'OFF — $0'),
+          line('Federal taxable income', fmt(year1.taxableFederal)),
+          line('Federal income tax', fmt(year1.federalTax), true)
+        ].join(''), true),
+
+        renderTaxSection('FICA & State Tax Calculations', [
+          line(`Social Security tax on W-2 (${pct.format(ssRate * 100)}%)`, fmt(year1.ssW2)),
+          line(`Medicare tax on W-2 (${pct.format(medicareRate * 100)}%)`, fmt(year1.medicareW2)),
+          line(`Social Security tax on Schedule C (${pct.format(ssRate * 200)}%)`, fmt(year1.ssSE)),
+          line(`Medicare tax on Schedule C (${pct.format(medicareRate * 200)}%)`, fmt(year1.medicareSE)),
+          line('MA personal exemption', `- ${fmt(4400)}`),
+          line('MA tax', fmt(year1.stateTax), true)
+        ].join(''), true),
+
+        renderTaxSection('Monthly Take-Home Cash Flow Summary', [
+          line('Spendable net cash after taxes & retirement', fmt(year1.spendableNet)),
+          line('Post-tax stipend (June lump sum)', fmt(year1.stipendNet)),
+          line('Schedule C monthly net cash', fmt(year1.sideNetMonthly)),
+          line('W-2 monthly net cash (post-deductions)', fmt(year1.w2NetMonthly)),
+          line('Regular monthly cash flow (W-2 + Schedule C)', fmt(year1.regularMonthlyCashFlow), true)
+        ].join(''), true)
       ].join(''));
 
       setHTML('taxY2', [
-        line('W-2 income', fmt(year2.w2)),
-        line('Plus taxable stipend', fmt(stipend)),
-        line('Plus net Schedule C profit', fmt(scheduleCProfit)),
-        line('Less pretax 403(b)', `- ${fmt(year2.retirement403b)}`),
-        line(`Less ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, `- ${fmt(year2.sideRetirementContribution)}`),
-        line('Less half of SE tax (above-the-line)', `- ${fmt(year2.seTaxDeduction)}`),
-        line('Less pretax HSA contribution', `- ${fmt(year2.hsaContribution)}`),
-        line('Adjusted gross income', fmt(year2.agi)),
-        line('Less standard deduction', `- ${fmt(stdDeduction)}`),
-        line('Federal taxable income before QBI', fmt(year2.taxableFederalPreQbi)),
-        useQbi ? line('Less Section 199A QBI deduction (20%)', `- ${fmt(year2.qbiDeduction)}`) : line('Section 199A QBI deduction', 'OFF — $0'),
-        line('Federal taxable income', fmt(year2.taxableFederal)),
-        line('Federal income tax', fmt(year2.federalTax)),
-        line(`Social Security tax on W-2 (${pct.format(ssRate * 100)}%)`, fmt(year2.ssW2)),
-        line(`Medicare tax on W-2 (${pct.format(medicareRate * 100)}%)`, fmt(year2.medicareW2)),
-        line(`Social Security tax on Schedule C (${pct.format(ssRate * 200)}%)`, fmt(year2.ssSE)),
-        line(`Medicare tax on Schedule C (${pct.format(medicareRate * 200)}%)`, fmt(year2.medicareSE)),
-        line('MA personal exemption', `- ${fmt(4400)}`),
-        line('MA tax', fmt(year2.stateTax)),
-        line('Spendable net cash after taxes & retirement', fmt(year2.spendableNet)),
-        line('Post-tax stipend (June lump sum)', fmt(year2.stipendNet)),
-        line('Schedule C monthly net cash', fmt(year2.sideNetMonthly)),
-        line('W-2 monthly net cash (post-deductions)', fmt(year2.w2NetMonthly)),
-        line('Regular monthly cash flow (W-2 + Schedule C)', fmt(year2.regularMonthlyCashFlow), true)
+        renderTaxSection('Adjusted Gross Income (AGI) Calculation', [
+          line('W-2 income', fmt(year2.w2)),
+          line('Plus taxable stipend', fmt(stipend)),
+          line('Plus net Schedule C profit', fmt(scheduleCProfit)),
+          line('Less pretax 403(b)', `- ${fmt(year2.retirement403b)}`),
+          line(`Less ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, `- ${fmt(year2.sideRetirementContribution)}`),
+          line('Less half of SE tax (above-the-line)', `- ${fmt(year2.seTaxDeduction)}`),
+          line('Less pretax HSA contribution', `- ${fmt(year2.hsaContribution)}`),
+          line('Adjusted gross income', fmt(year2.agi), true)
+        ].join(''), true),
+
+        renderTaxSection('Federal Income Tax Calculation', [
+          line('Less standard deduction', `- ${fmt(stdDeduction)}`),
+          line('Federal taxable income before QBI', fmt(year2.taxableFederalPreQbi)),
+          useQbi ? line('Less Section 199A QBI deduction (20%)', `- ${fmt(year2.qbiDeduction)}`) : line('Section 199A QBI deduction', 'OFF — $0'),
+          line('Federal taxable income', fmt(year2.taxableFederal)),
+          line('Federal income tax', fmt(year2.federalTax), true)
+        ].join(''), true),
+
+        renderTaxSection('FICA & State Tax Calculations', [
+          line(`Social Security tax on W-2 (${pct.format(ssRate * 100)}%)`, fmt(year2.ssW2)),
+          line(`Medicare tax on W-2 (${pct.format(medicareRate * 100)}%)`, fmt(year2.medicareW2)),
+          line(`Social Security tax on Schedule C (${pct.format(ssRate * 200)}%)`, fmt(year2.ssSE)),
+          line(`Medicare tax on Schedule C (${pct.format(medicareRate * 200)}%)`, fmt(year2.medicareSE)),
+          line('MA personal exemption', `- ${fmt(4400)}`),
+          line('MA tax', fmt(year2.stateTax), true)
+        ].join(''), true),
+
+        renderTaxSection('Monthly Take-Home Cash Flow Summary', [
+          line('Spendable net cash after taxes & retirement', fmt(year2.spendableNet)),
+          line('Post-tax stipend (June lump sum)', fmt(year2.stipendNet)),
+          line('Schedule C monthly net cash', fmt(year2.sideNetMonthly)),
+          line('W-2 monthly net cash (post-deductions)', fmt(year2.w2NetMonthly)),
+          line('Regular monthly cash flow (W-2 + Schedule C)', fmt(year2.regularMonthlyCashFlow), true)
+        ].join(''), true)
       ].join(''));
 
       const clevelandTotal = expenses.reduce((sum, x) => sum + x.cle, 0);
@@ -1205,8 +1256,11 @@
 
     function resetDefaults() {
       Object.entries(defaults).forEach(([key, value]) => {
-        document.getElementById(key).value = value;
+        const el = document.getElementById(key);
+        if (el) el.value = value;
       });
+      document.getElementById('qbiToggle').checked = false;
+      document.getElementById('solo401kToggle').checked = true;
       update();
     }
 
@@ -1237,6 +1291,7 @@
     });
 
     document.getElementById('qbiToggle').addEventListener('change', update);
+    document.getElementById('solo401kToggle').addEventListener('change', update);
 
     const modalOpeners = [
       ['openIncomeBtn', 'incomeModal'],

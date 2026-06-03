@@ -1567,6 +1567,70 @@ tbody tr:hover th {
   background-color: var(--md-sys-color-on-primary);
 }
 
+/* ─── COLLAPSIBLE TAX SECTIONS ─────────────────────────────────────────── */
+.tax-details {
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
+  margin-bottom: 12px;
+  background: var(--md-sys-color-surface-container-low);
+  overflow: hidden;
+  transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.tax-details:hover {
+  background: var(--md-sys-color-surface-container-medium);
+}
+
+.tax-details[open] {
+  background: var(--md-sys-color-surface-container-low);
+}
+
+.tax-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px var(--space-inline);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--md-sys-typescale-title-small-size);
+  color: var(--md-sys-color-on-surface);
+  cursor: pointer;
+  list-style: none; /* Hide default browser marker */
+  user-select: none;
+  background: var(--md-sys-color-surface-container);
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.tax-details[open] .tax-summary {
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  background: var(--md-sys-color-surface-container-high);
+}
+
+.tax-summary::-webkit-details-marker {
+  display: none; /* Hide default Safari marker */
+}
+
+/* Custom material-style expand indicator */
+.tax-summary::after {
+  content: '\e5cf'; /* Material icon code for expand_more */
+  font-family: 'Material Symbols Outlined';
+  font-size: 20px;
+  color: var(--md-sys-color-on-surface-variant);
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.tax-details[open] .tax-summary::after {
+  transform: rotate(180deg);
+}
+
+.tax-details-content {
+  padding: 12px var(--space-inline);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 /* ─── RESPONSIVE ───────────────────────────────────────────────────────── */
 @media (max-width: 1180px) {
   .executive-grid {
