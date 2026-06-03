@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
   <link rel="stylesheet" href="haemr.css" />
 </head>
 <body>
@@ -22,12 +23,21 @@
 
       </div>
       <div class="action-row">
-        <button id="openIncomeBtn" class="secondary" type="button">Income Inputs</button>
-        <button id="openRetirementBtn" class="secondary" type="button">Retirement &amp; Payroll Inputs</button>
-        <button id="openTaxBtn" class="secondary" type="button">Tax Inputs</button>
-        <button id="openExpensesBtn" class="secondary" type="button">Expense Inputs</button>
-        <button id="openBenefitsBtn" class="secondary" type="button">Benefits Inputs</button>
-        <button id="openScheduleCBtn" class="secondary" type="button">Schedule C Inputs</button>
+        <button id="openIncomeBtn" class="tonal" type="button">
+          <span class="material-symbols-outlined">payments</span>Income Inputs
+        </button>
+        <button id="openRetirementBtn" class="tonal" type="button">
+          <span class="material-symbols-outlined">savings</span>Retirement &amp; Payroll Inputs
+        </button>
+        <button id="openTaxBtn" class="tonal" type="button">
+          <span class="material-symbols-outlined">percent</span>Tax Inputs
+        </button>
+        <button id="openExpensesBtn" class="tonal" type="button">
+          <span class="material-symbols-outlined">shopping_cart</span>Expense Inputs
+        </button>
+        <button id="openScheduleCBtn" class="tonal" type="button">
+          <span class="material-symbols-outlined">storefront</span>Schedule C Inputs
+        </button>
       </div>
     </div>
 
@@ -121,7 +131,7 @@
               </table>
             </div>
             <div class="callout surface-card info" style="margin-top: 16px;">
-              <span class="callout-icon">🛡️</span> <strong>Zero-Cost Employer Insurance Perks</strong>
+              <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 6px; color: var(--md-sys-color-primary);">shield</span> <strong>Zero-Cost Employer Insurance Perks</strong>
               <div style="display: grid; gap: 6px; font-size: 0.88rem; color: var(--text); margin-top: 8px; padding-left: 24px;">
                 <div>• Core Long-Term Disability (60% of salary up to $8,000/mo)</div>
                 <div>• Basic Life Insurance (1x salary up to $500,000)</div>
@@ -191,11 +201,8 @@
   <div id="incomeModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="incomeTitle">
       <div class="modal-head">
-        <div>
-          <h2 id="incomeTitle">Employment and Income Inputs</h2>
-          <p class="subtle subtle-reset">Update values.</p>
-        </div>
-        <button class="secondary close-modal" type="button" data-close-modal="incomeModal">Close</button>
+        <span class="material-symbols-outlined modal-icon">payments</span>
+        <h2 id="incomeTitle">Employment and Income Inputs</h2>
       </div>
       <div class="modal-body">
         <div class="grid-2">
@@ -214,17 +221,17 @@
           </div>
         </div>
       </div>
+      <div class="modal-foot">
+        <button class="text-btn close-modal" type="button" data-close-modal="incomeModal">Close</button>
+      </div>
     </div>
   </div>
 
   <div id="retirementModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="retirementTitle">
       <div class="modal-head">
-        <div>
-          <h2 id="retirementTitle">Retirement and Payroll Inputs</h2>
-          <p class="subtle subtle-reset">Update values.</p>
-        </div>
-        <button class="secondary close-modal" type="button" data-close-modal="retirementModal">Close</button>
+        <span class="material-symbols-outlined modal-icon">savings</span>
+        <h2 id="retirementTitle">Retirement and Payroll Inputs</h2>
       </div>
       <div class="modal-body">
         <div class="grid-2">
@@ -258,17 +265,17 @@
         </div>
 
       </div>
+      <div class="modal-foot">
+        <button class="text-btn close-modal" type="button" data-close-modal="retirementModal">Close</button>
+      </div>
     </div>
   </div>
 
   <div id="taxModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="taxTitle">
       <div class="modal-head">
-        <div>
-          <h2 id="taxTitle">Income Tax Assumptions</h2>
-          <p class="subtle subtle-reset">Update values.</p>
-        </div>
-        <button class="secondary close-modal" type="button" data-close-modal="taxModal">Close</button>
+        <span class="material-symbols-outlined modal-icon">percent</span>
+        <h2 id="taxTitle">Income Tax Assumptions</h2>
       </div>
       <div class="modal-body">
         <div class="grid-2">
@@ -298,17 +305,17 @@
 ]</textarea>
 
       </div>
+      <div class="modal-foot">
+        <button class="text-btn close-modal" type="button" data-close-modal="taxModal">Close</button>
+      </div>
     </div>
   </div>
 
   <div id="expensesModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="expensesTitle">
       <div class="modal-head">
-        <div>
-          <h2 id="expensesTitle">Monthly Expense Inputs</h2>
-          <p class="subtle subtle-reset">Update values.</p>
-        </div>
-        <button class="secondary close-modal" type="button" data-close-modal="expensesModal">Close</button>
+        <span class="material-symbols-outlined modal-icon">shopping_cart</span>
+        <h2 id="expensesTitle">Monthly Expense Inputs</h2>
       </div>
       <div class="modal-body">
         <h3>Personal monthly expenses</h3>
@@ -346,44 +353,19 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div id="benefitsModal" class="modal-backdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="benefitsTitle">
-      <div class="modal-head">
-        <div>
-          <h2 id="benefitsTitle">Benefits and Tools Inputs</h2>
-          <p class="subtle subtle-reset">Update values.</p>
-        </div>
-        <button class="secondary close-modal" type="button" data-close-modal="benefitsModal">Close</button>
-      </div>
-      <div class="modal-body">
-        <div class="grid-2">
-          <div><label for="educationFund">Annual education fund ($/year)</label><input id="educationFund" type="number" step="0.01" value="0" /></div>
-          <div>
-            <label for="fitnessReimbursement">Annual fitness reimbursement ($/year)</label>
-            <input id="fitnessReimbursement" type="number" step="0.01" value="150" />
-          </div>
-          <div>
-            <label for="examReimbursement">Annual exam/licensing reimbursement ($/year)</label>
-            <input id="examReimbursement" type="number" step="0.01" value="0" />
-            <p class="footnote">Maximum of $5,250 reimbursement limit for Step 3 and UWorld or Tuition.</p>
-          </div>
-        </div>
-
+      <div class="modal-foot">
+        <button class="text-btn close-modal" type="button" data-close-modal="expensesModal">Close</button>
       </div>
     </div>
   </div>
+
+
 
   <div id="scheduleCModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="scheduleCModalTitle">
       <div class="modal-head">
-        <div>
-          <h2 id="scheduleCModalTitle">Schedule C Income &amp; Expenses</h2>
-          <p class="subtle subtle-reset">Update business income and deductible expenses.</p>
-        </div>
-        <button class="secondary close-modal" type="button" data-close-modal="scheduleCModal">Close</button>
+        <span class="material-symbols-outlined modal-icon">storefront</span>
+        <h2 id="scheduleCModalTitle">Schedule C Income &amp; Expenses</h2>
       </div>
       <div class="modal-body">
         <div class="grid-2">
@@ -408,6 +390,9 @@
             <input id="homeOfficeSqFt" type="number" step="1" value="0" />
           </div>
         </div>
+      </div>
+      <div class="modal-foot">
+        <button class="text-btn close-modal" type="button" data-close-modal="scheduleCModal">Close</button>
       </div>
     </div>
   </div>
@@ -468,10 +453,7 @@
       coffee: 50,
       education: 0,
       healthcare: 22,
-      disability: 0,
-      educationFund: 0,
-      fitnessReimbursement: 150,
-      examReimbursement: 0
+      disability: 0
     };
 
     const cleveland = {
@@ -976,7 +958,7 @@
         ['Employer HSA seed', fmt(500), 'Annual employer contribution tied to HDHP enrollment; shown for planning, not as monthly spendable cash'],
         ['Modeled healthcare budget', `${fmt(val('healthcare'))}/month`, 'Midpoint assumption for core dental, vision, and light routine out-of-pocket spending'],
         ['403(b) match', `${pct.format(matchRate * 100)}% of W-2`, 'Immediate risk free return up to the match cap'],
-        ['Education fund', fmt(val('educationFund')), 'Can offset CME, licensing, courses, and similar costs'],
+        ['Education fund', fmt(0), 'Can offset CME, licensing, courses, and similar costs'],
         ['Meal card stipend', `${fmt(HARD_CODED.mealCardMonthly)}/month`, 'Food stipend loaded to meal card; modeled as offset in food budget'],
         ['Hospital meal perks', `${fmt(monthlyFoodPerkTotal())}/month modeled`, 'Includes $60 meal card stipend + $40 evening meal allowance; reference perk, not subtracted from food expenses'],
         ['MBTA transit benefit', '50% discount pre tax', 'Current out of pocket modeled at $45/month'],
@@ -1121,7 +1103,6 @@
       ['openRetirementBtn', 'retirementModal'],
       ['openTaxBtn', 'taxModal'],
       ['openExpensesBtn', 'expensesModal'],
-      ['openBenefitsBtn', 'benefitsModal'],
       ['openScheduleCBtn', 'scheduleCModal']
     ];
 
