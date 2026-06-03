@@ -62,9 +62,12 @@
               <span><i class="seg-expenses"></i>Expenses</span>
               <span><i class="seg-reserve"></i>Emergency reserve</span>
               <span><i class="seg-hsa"></i>HSA</span>
-              <span><i class="seg-ira"></i>Roth IRA</span>
               <span><i class="seg-emp403b"></i>Employee 403(b)</span>
               <span><i class="seg-side"></i>Side-plan retirement</span>
+              <span><i class="seg-tax-fed"></i>Federal Tax</span>
+              <span><i class="seg-tax-state"></i>State Tax</span>
+              <span><i class="seg-tax-ss"></i>Social Security</span>
+              <span><i class="seg-tax-med"></i>Medicare</span>
               <span><i class="seg-unallocated"></i>Unallocated</span>
             </div>
           </div>
@@ -574,10 +577,13 @@
       const MA_PERSONAL_EXEMPTION_SINGLE = 4400;
       const retirement403b = Math.max(0, employee403bContribution);
       const hsa = Math.max(0, hsaContribution);
-      const ficaW2 = w2 * (ssRate + medicareRate);
+      const ssW2 = w2 * ssRate;
+      const medicareW2 = w2 * medicareRate;
+      const ficaW2 = ssW2 + medicareW2;
       const seTaxableEarnings = sideIncome * 0.9235;
-      const seTaxRate = (ssRate * 2) + (medicareRate * 2);
-      const seTax = seTaxableEarnings * seTaxRate;
+      const ssSE = seTaxableEarnings * (ssRate * 2);
+      const medicareSE = seTaxableEarnings * (medicareRate * 2);
+      const seTax = ssSE + medicareSE;
       const seTaxDeduction = seTax / 2;
       const sidePlanContributionBase = Math.max(0, sideIncome - seTaxDeduction);
       const sideRetirementContribution = (selfEmployedPlan === 'solo401k' || selfEmployedPlan === 'sepira')
@@ -601,6 +607,10 @@
         sideIncome,
         retirement403b,
         hsaContribution: hsa,
+        ssW2,
+        medicareW2,
+        ssSE,
+        medicareSE,
         ficaW2,
         seTax,
         seTaxDeduction,
@@ -636,12 +646,10 @@
       brackets,
       amortMonths,
       monthlyBudget,
-      reserveCashMonthly,
-      rothIraAnnualMax
+      reserveCashMonthly
     }) {
       let recommended403b = Math.min(employee403bAnnualMax, min403b);
       let hsaContribution = 0;
-      let rothIraContribution = 0;
       let extra403bContribution = 0;
       const maxExtra403b = Math.max(0, employee403bAnnualMax - min403b);
 
@@ -663,19 +671,16 @@
           amortMonths
         });
 
-        const annualAvailable = Math.max(0, (trialYear.amortizedMonthly - monthlyBudget - reserveCashMonthly) * amortMonths);
+        // Amortized surplus without subtracting reserve Cash (prioritize 403(b) / HSA)
+        const annualAvailable = Math.max(0, (trialYear.amortizedMonthly - monthlyBudget) * amortMonths);
         let totalSurplus = annualAvailable + extra403bContribution + hsaContribution;
 
-        // Priority 2: Maximize HSA (up to $3,900)
-        hsaContribution = Math.min(3900, totalSurplus);
-        totalSurplus = Math.max(0, totalSurplus - hsaContribution);
-
-        // Priority 3: Maximize Traditional 403(b)
+        // Priority 1: Maximize employee 403(b)
         extra403bContribution = Math.min(maxExtra403b, totalSurplus);
         totalSurplus = Math.max(0, totalSurplus - extra403bContribution);
 
-        // Priority 5: Roth IRA Overflow
-        rothIraContribution = Math.min(rothIraAnnualMax, totalSurplus);
+        // Priority 2: Maximize HSA (up to $3,900)
+        hsaContribution = Math.min(3900, totalSurplus);
 
         const next403b = Math.min(employee403bAnnualMax, min403b + extra403bContribution);
         if (Math.abs(next403b - recommended403b) < 0.5) {
@@ -702,23 +707,27 @@
         amortMonths
       });
 
-      const annualAvailableFinal = Math.max(0, (year.amortizedMonthly - monthlyBudget - reserveCashMonthly) * amortMonths);
+      const annualAvailableFinal = Math.max(0, (year.amortizedMonthly - monthlyBudget) * amortMonths);
       let totalSurplusFinal = annualAvailableFinal + extra403bContribution + hsaContribution;
 
-      hsaContribution = Math.min(3900, totalSurplusFinal);
-      totalSurplusFinal = Math.max(0, totalSurplusFinal - hsaContribution);
-
+      // Priority 1: Maximize employee 403(b)
       extra403bContribution = Math.min(maxExtra403b, totalSurplusFinal);
       totalSurplusFinal = Math.max(0, totalSurplusFinal - extra403bContribution);
 
-      rothIraContribution = Math.min(rothIraAnnualMax, totalSurplusFinal);
-      const overflowAfterCaps = Math.max(0, totalSurplusFinal - rothIraContribution);
+      // Priority 2: Maximize HSA (up to $3,900)
+      hsaContribution = Math.min(3900, totalSurplusFinal);
+      totalSurplusFinal = Math.max(0, totalSurplusFinal - hsaContribution);
+
+      // Priority 3: Emergency Reserve
+      const maxReserve = reserveCashMonthly * amortMonths;
+      const reserveContribution = Math.min(maxReserve, totalSurplusFinal);
+      const overflowAfterCaps = Math.max(0, totalSurplusFinal - reserveContribution);
 
       return {
         year,
         recommended403b,
         hsaContribution,
-        rothIraContribution,
+        reserveContribution,
         extra403bContribution,
         overflowAfterCaps
       };
@@ -752,7 +761,6 @@
 
       const w2Y1 = pgy1 * (daysY1 / daysInYear);
       const w2Y2 = pgy1 * (daysPgy1Y2 / daysInYear) + pgy2 * (daysPgy2Y2 / daysInYear);
-      const rothIraAnnualMax = 7500;
       const employee403bAnnualMax = HARD_CODED.employee403bAnnualMax;
       const min403bY1 = w2Y1 * matchRate;
       const min403bY2 = w2Y2 * matchRate;
@@ -797,13 +805,13 @@
         brackets,
         amortMonths: amortMonthsY1,
         monthlyBudget,
-        reserveCashMonthly,
-        rothIraAnnualMax
+        reserveCashMonthly
       });
 
       const year1 = year1Optimized.year;
-      const rothIraContributionY1 = year1Optimized.rothIraContribution;
       const extra403bContributionY1 = year1Optimized.extra403bContribution;
+      const hsaContributionY1 = year1Optimized.hsaContribution;
+      const reserveContributionY1 = year1Optimized.reserveContribution;
       const overflowAfterCapsY1 = year1Optimized.overflowAfterCaps;
 
       const year2Optimized = optimizeRetirementForYear({
@@ -822,78 +830,91 @@
         brackets,
         amortMonths: amortMonthsY2,
         monthlyBudget,
-        reserveCashMonthly,
-        rothIraAnnualMax
+        reserveCashMonthly
       });
 
       const year2 = year2Optimized.year;
-      const rothIraContribution = year2Optimized.rothIraContribution;
       const extra403bContribution = year2Optimized.extra403bContribution;
+      const hsaContributionY2 = year2Optimized.hsaContribution;
+      const reserveContributionY2 = year2Optimized.reserveContribution;
       const overflowAfterCapsY2 = year2Optimized.overflowAfterCaps;
 
       const sidePlanMonthlyY1 = year1.sideRetirementContribution / amortMonthsY1;
       const sidePlanMonthlyY2 = year2.sideRetirementContribution / amortMonthsY2;
       const emp403bMonthlyY1 = year1.retirement403b / amortMonthsY1;
       const emp403bMonthlyY2 = year2.retirement403b / amortMonthsY2;
+
       const grossY1 = year1.w2 + stipend + scheduleCProfit;
-      const salaryShareY1 = grossY1 > 0 ? (year1.w2 + stipend) / grossY1 : 1;
-      const scheduleCShareY1 = grossY1 > 0 ? scheduleCProfit / grossY1 : 0;
-      const salaryIncomeMonthlyY1 = year1.amortizedMonthly * salaryShareY1;
-      const scheduleCIncomeMonthlyY1 = year1.amortizedMonthly * scheduleCShareY1;
+      const monthlyGrossY1 = grossY1 / amortMonthsY1;
+      const salaryIncomeMonthlyY1 = (year1.w2 + stipend) / amortMonthsY1;
+      const scheduleCIncomeMonthlyY1 = scheduleCProfit / amortMonthsY1;
+
       const grossY2 = year2.w2 + stipend + scheduleCProfit;
-      const salaryShareY2 = grossY2 > 0 ? (year2.w2 + stipend) / grossY2 : 1;
-      const scheduleCShareY2 = grossY2 > 0 ? scheduleCProfit / grossY2 : 0;
-      const salaryIncomeMonthlyY2 = year2.amortizedMonthly * salaryShareY2;
-      const scheduleCIncomeMonthlyY2 = year2.amortizedMonthly * scheduleCShareY2;
-      const rothMonthlyY1 = rothIraContributionY1 / amortMonthsY1;
-      const rothMonthlyY2 = rothIraContribution / amortMonthsY2;
-      const hsaMonthlyY1 = year1.hsaContribution / amortMonthsY1;
-      const hsaMonthlyY2 = year2.hsaContribution / amortMonthsY2;
-      const reserveMonthlyY1 = reserveCashMonthly;
-      const reserveMonthlyY2 = reserveCashMonthly;
-      const allocatedY1 = monthlyBudget + reserveMonthlyY1 + rothMonthlyY1 + emp403bMonthlyY1 + sidePlanMonthlyY1 + hsaMonthlyY1;
-      const allocatedY2 = monthlyBudget + reserveMonthlyY2 + rothMonthlyY2 + emp403bMonthlyY2 + sidePlanMonthlyY2 + hsaMonthlyY2;
-      const unallocatedY1 = Math.max(0, year1.amortizedMonthly - allocatedY1);
-      const unallocatedY2 = Math.max(0, year2.amortizedMonthly - allocatedY2);
+      const monthlyGrossY2 = grossY2 / amortMonthsY2;
+      const salaryIncomeMonthlyY2 = (year2.w2 + stipend) / amortMonthsY2;
+      const scheduleCIncomeMonthlyY2 = scheduleCProfit / amortMonthsY2;
+
+      const hsaMonthlyY1 = hsaContributionY1 / amortMonthsY1;
+      const hsaMonthlyY2 = hsaContributionY2 / amortMonthsY2;
+      const reserveMonthlyY1 = reserveContributionY1 / amortMonthsY1;
+      const reserveMonthlyY2 = reserveContributionY2 / amortMonthsY2;
+
+      const fedTaxMonthlyY1 = year1.federalTax / amortMonthsY1;
+      const fedTaxMonthlyY2 = year2.federalTax / amortMonthsY2;
+      const stateTaxMonthlyY1 = year1.stateTax / amortMonthsY1;
+      const stateTaxMonthlyY2 = year2.stateTax / amortMonthsY2;
+      const ssMonthlyY1 = (year1.ssW2 + year1.ssSE) / amortMonthsY1;
+      const ssMonthlyY2 = (year2.ssW2 + year2.ssSE) / amortMonthsY2;
+      const medMonthlyY1 = (year1.medicareW2 + year1.medicareSE) / amortMonthsY1;
+      const medMonthlyY2 = (year2.medicareW2 + year2.medicareSE) / amortMonthsY2;
+
+      const unallocatedMonthlyY1 = overflowAfterCapsY1 / amortMonthsY1;
+      const unallocatedMonthlyY2 = overflowAfterCapsY2 / amortMonthsY2;
 
       setHTML('summaryY1', [
-        summaryBarRow('Income', year1.amortizedMonthly, [
+        summaryBarRow('Income', monthlyGrossY1, [
           { className: 'seg-income-salary', label: 'Income: Salary', value: salaryIncomeMonthlyY1 },
           { className: 'seg-income-schedulec', label: 'Income: Schedule C', value: scheduleCIncomeMonthlyY1 }
         ]),
-        summaryBarRow('Allocated', year1.amortizedMonthly, [
+        summaryBarRow('Allocated', monthlyGrossY1, [
           { className: 'seg-expenses', label: 'Expenses', value: monthlyBudget },
           { className: 'seg-reserve', label: 'Emergency reserve', value: reserveMonthlyY1 },
           { className: 'seg-hsa', label: 'HSA', value: hsaMonthlyY1 },
-          { className: 'seg-ira', label: 'Roth IRA', value: rothMonthlyY1 },
           { className: 'seg-emp403b', label: 'Employee 403(b)', value: emp403bMonthlyY1 },
           { className: 'seg-side', label: 'Side-plan retirement', value: sidePlanMonthlyY1 },
-          { className: 'seg-unallocated', label: 'Unallocated', value: unallocatedY1 }
+          { className: 'seg-tax-fed', label: 'Federal Tax', value: fedTaxMonthlyY1 },
+          { className: 'seg-tax-state', label: 'State Tax', value: stateTaxMonthlyY1 },
+          { className: 'seg-tax-ss', label: 'Social Security', value: ssMonthlyY1 },
+          { className: 'seg-tax-med', label: 'Medicare', value: medMonthlyY1 },
+          { className: 'seg-unallocated', label: 'Unallocated', value: unallocatedMonthlyY1 }
         ])
       ].join(''));
 
       setHTML('summaryY2', [
-        summaryBarRow('Income', year2.amortizedMonthly, [
+        summaryBarRow('Income', monthlyGrossY2, [
           { className: 'seg-income-salary', label: 'Income: Salary', value: salaryIncomeMonthlyY2 },
           { className: 'seg-income-schedulec', label: 'Income: Schedule C', value: scheduleCIncomeMonthlyY2 }
         ]),
-        summaryBarRow('Allocated', year2.amortizedMonthly, [
+        summaryBarRow('Allocated', monthlyGrossY2, [
           { className: 'seg-expenses', label: 'Expenses', value: monthlyBudget },
           { className: 'seg-reserve', label: 'Emergency reserve', value: reserveMonthlyY2 },
           { className: 'seg-hsa', label: 'HSA', value: hsaMonthlyY2 },
-          { className: 'seg-ira', label: 'Roth IRA', value: rothMonthlyY2 },
           { className: 'seg-emp403b', label: 'Employee 403(b)', value: emp403bMonthlyY2 },
           { className: 'seg-side', label: 'Side-plan retirement', value: sidePlanMonthlyY2 },
-          { className: 'seg-unallocated', label: 'Unallocated', value: unallocatedY2 }
+          { className: 'seg-tax-fed', label: 'Federal Tax', value: fedTaxMonthlyY2 },
+          { className: 'seg-tax-state', label: 'State Tax', value: stateTaxMonthlyY2 },
+          { className: 'seg-tax-ss', label: 'Social Security', value: ssMonthlyY2 },
+          { className: 'seg-tax-med', label: 'Medicare', value: medMonthlyY2 },
+          { className: 'seg-unallocated', label: 'Unallocated', value: unallocatedMonthlyY2 }
         ])
       ].join(''));
 
       const y1Surplus = year1.amortizedMonthly - monthlyBudget;
       const y2Surplus = year2.amortizedMonthly - monthlyBudget;
-      const monthly403bPctY1 = year1.amortizedMonthly > 0 ? (emp403bMonthlyY1 / year1.amortizedMonthly) * 100 : 0;
-      const monthly403bPctY2 = year2.amortizedMonthly > 0 ? (emp403bMonthlyY2 / year2.amortizedMonthly) * 100 : 0;
-      const totalRetirementY1 = year1.retirement403b + (year1.w2 * matchRate) + rothIraContributionY1 + year1.sideRetirementContribution + year1.hsaContribution;
-      const totalRetirementY2 = year2.retirement403b + (year2.w2 * matchRate) + rothIraContribution + year2.sideRetirementContribution + year2.hsaContribution;
+      const monthly403bPctY1 = monthlyGrossY1 > 0 ? (emp403bMonthlyY1 / monthlyGrossY1) * 100 : 0;
+      const monthly403bPctY2 = monthlyGrossY2 > 0 ? (emp403bMonthlyY2 / monthlyGrossY2) * 100 : 0;
+      const totalRetirementY1 = year1.retirement403b + (year1.w2 * matchRate) + year1.sideRetirementContribution + year1.hsaContribution;
+      const totalRetirementY2 = year2.retirement403b + (year2.w2 * matchRate) + year2.sideRetirementContribution + year2.hsaContribution;
 
       document.getElementById('kpiY1Cash').textContent = fmt(year1.amortizedMonthly);
       document.getElementById('kpiY2Cash').textContent = fmt(year2.amortizedMonthly);
@@ -937,7 +958,6 @@
         line('Additional 403(b) beyond match floor', fmt(extra403bContributionY1)),
         line('HSA contribution', fmt(year1.hsaContribution)),
         line(`${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, fmt(year1.sideRetirementContribution)),
-        line('Roth IRA target', fmt(rothIraContributionY1)),
         line(`Annual 403(b) cap`, fmt(employee403bAnnualMax)),
         line(`Overflow after caps`, fmt(overflowAfterCapsY1), true)
       ].join(''));
@@ -948,7 +968,6 @@
         line('Additional 403(b) beyond match floor', fmt(extra403bContribution)),
         line('HSA contribution', fmt(year2.hsaContribution)),
         line(`${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, fmt(year2.sideRetirementContribution)),
-        line('Roth IRA target', fmt(rothIraContribution)),
         line(`Annual 403(b) cap`, fmt(employee403bAnnualMax)),
         line(`Overflow after caps`, fmt(overflowAfterCapsY2), true)
       ].join(''));
@@ -985,8 +1004,10 @@
         line('Less Section 199A QBI deduction (20%)', `- ${fmt(year1.qbiDeduction)}`),
         line('Federal taxable income', fmt(year1.taxableFederal)),
         line('Federal income tax', fmt(year1.federalTax)),
-        line(`Payroll FICA on W-2`, fmt(year1.ficaW2)),
-        line(`Self-employment tax on Schedule C`, fmt(year1.seTax)),
+        line(`Social Security tax on W-2 (${pct.format(ssRate * 100)}%)`, fmt(year1.ssW2)),
+        line(`Medicare tax on W-2 (${pct.format(medicareRate * 100)}%)`, fmt(year1.medicareW2)),
+        line(`Social Security tax on Schedule C (${pct.format(ssRate * 200)}%)`, fmt(year1.ssSE)),
+        line(`Medicare tax on Schedule C (${pct.format(medicareRate * 200)}%)`, fmt(year1.medicareSE)),
         line('MA personal exemption', `- ${fmt(4400)}`),
         line('MA tax', fmt(year1.stateTax)),
         line('Spendable net cash after taxes & retirement', fmt(year1.spendableNet)),
@@ -1007,8 +1028,10 @@
         line('Less Section 199A QBI deduction (20%)', `- ${fmt(year2.qbiDeduction)}`),
         line('Federal taxable income', fmt(year2.taxableFederal)),
         line('Federal income tax', fmt(year2.federalTax)),
-        line(`Payroll FICA on W-2`, fmt(year2.ficaW2)),
-        line(`Self-employment tax on Schedule C`, fmt(year2.seTax)),
+        line(`Social Security tax on W-2 (${pct.format(ssRate * 100)}%)`, fmt(year2.ssW2)),
+        line(`Medicare tax on W-2 (${pct.format(medicareRate * 100)}%)`, fmt(year2.medicareW2)),
+        line(`Social Security tax on Schedule C (${pct.format(ssRate * 200)}%)`, fmt(year2.ssSE)),
+        line(`Medicare tax on Schedule C (${pct.format(medicareRate * 200)}%)`, fmt(year2.medicareSE)),
         line('MA personal exemption', `- ${fmt(4400)}`),
         line('MA tax', fmt(year2.stateTax)),
         line('Spendable net cash after taxes & retirement', fmt(year2.spendableNet)),
@@ -1047,9 +1070,7 @@
 
       const hobbyMarginalRateY1 = year1.taxableFederal > 48475 ? 0.22 : year1.taxableFederal > 11925 ? 0.12 : 0.10;
       const scheduleCTaxableProfit = scheduleCProfit;
-      const scheduleCTax = scheduleCTaxableProfit * (hobbyMarginalRateY1 + stateRate + ssRate + medicareRate);
-
-
+      const scheduleCTax = scheduleCTaxableProfit * (hobbyMarginalRateY1 + stateRate + (ssRate * 2) + (medicareRate * 2));
 
       setHTML('scheduleCMath', [
         line('Gross Schedule C revenue', fmt(sideIncome)),

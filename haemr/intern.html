@@ -1,86 +1,634 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HAEMR Intern Guide · AY 2026–27</title>
+  <title>The Master Residency Onboarding Checklist · HAEMR</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
   <link rel="stylesheet" href="haemr.css" />
+  <style>
+    /* Checklist Custom Interactive Styles */
+    .progress-card {
+      margin-bottom: 24px;
+      padding: var(--space-block) var(--space-inline);
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      border-radius: var(--radius);
+      border: 1px solid color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .progress-title {
+      font-size: var(--md-sys-typescale-title-medium-size);
+      font-weight: 700;
+      margin: 0;
+    }
+    .progress-stats {
+      font-size: var(--md-sys-typescale-title-medium-size);
+      font-weight: 700;
+    }
+    .progress-bar-container {
+      height: 12px;
+      background: var(--md-sys-color-surface-container-highest);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--md-sys-color-primary);
+      border-radius: 6px;
+      transition: width 0.3s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .progress-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+    
+    .checklist-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .checklist-item:last-child {
+      border-bottom: none;
+    }
+    .checklist-item:hover {
+      background: var(--md-sys-color-surface-container-high);
+    }
+    
+    .checklist-checkbox-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+    
+    .checklist-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid var(--md-sys-color-primary);
+      border-radius: 3px;
+      outline: none;
+      background-color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+    .checklist-checkbox:checked {
+      background-color: var(--md-sys-color-primary);
+      border-color: var(--md-sys-color-primary);
+    }
+    .checklist-checkbox:checked::after {
+      content: "\e5ca";
+      font-family: "Material Symbols Outlined";
+      color: var(--md-sys-color-on-primary);
+      font-size: 14px;
+      font-weight: bold;
+    }
+    
+    .checklist-body {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .checklist-text {
+      font-family: var(--font-body);
+      font-size: var(--md-sys-typescale-body-large-size);
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+      transition: opacity 0.2s, color 0.2s;
+    }
+    
+    .checklist-desc {
+      font-family: var(--font-body);
+      font-size: var(--md-sys-typescale-body-medium-size);
+      color: var(--muted);
+      line-height: 1.5;
+      transition: opacity 0.2s;
+    }
+    
+    .checklist-item.checked .checklist-text {
+      opacity: 0.5;
+      text-decoration: line-through;
+    }
+    .checklist-item.checked .checklist-desc {
+      opacity: 0.5;
+    }
+    
+    .sub-section-title {
+      font-size: var(--md-sys-typescale-title-medium-size);
+      font-weight: 700;
+      margin: 18px 16px 8px 16px;
+      color: var(--md-sys-color-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .sub-section-desc {
+      font-size: var(--md-sys-typescale-body-medium-size);
+      color: var(--muted);
+      margin: 0 16px 12px 16px;
+    }
+    
+
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    @media (max-width: 900px) {
+      .phase-grid {
+        grid-template-columns: 1fr;
+      }
+      .phase-grid > div:first-child {
+        border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      }
+    }
+    @media (min-width: 901px) {
+      .phase-grid > div:first-child {
+        border-right: 1px solid var(--md-sys-color-outline-variant);
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="masthead">
+    <div class="masthead" style="margin-bottom: 24px; padding: var(--space-block-lg) var(--space-inline);">
       <div class="top-bar">
-        <div>
-          <div class="masthead-label">HAEMR · AY 2026–27 · Intern Guide</div>
-          <h1>Intern Onboarding Checklist</h1>
-
+        <div style="width: 100%;">
+          <div class="masthead-label">HAEMR · Incoming Residents</div>
+          <h1 style="margin-bottom: 16px;">The Master Onboarding Checklist</h1>
+          
+          <!-- Integrated Golden Rule Warning -->
+          <div class="verdict" style="margin: 0; padding: 16px; border-radius: var(--md-sys-shape-corner-medium); background: var(--md-sys-color-surface-container-highest);">
+            <div class="verdict-label" style="color: var(--md-sys-color-primary); display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+              <span class="material-symbols-outlined" style="font-size: 18px;">warning</span>
+              Crucial Golden Rule
+            </div>
+            <div class="verdict-headline" style="font-size: var(--md-sys-typescale-title-medium-size); font-weight: 700; line-height: 1.4;">
+              Always use a personal, non-medical school email address on every single form, portal, and application.
+            </div>
+            <p style="margin-top: 4px; font-size: var(--md-sys-typescale-body-medium-size); opacity: 0.9;">
+              Your medical school email will expire soon. Using a reliable personal email (like Gmail or Outlook) prevents login blockages and missed onboarding updates.
+            </p>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="verdict surface-card">
-      <div class="verdict-label">
-        <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 4px; font-size: 16px;">info</span>Important Note
+    <!-- Interactive Progress Tracker -->
+    <div class="progress-card">
+      <div class="progress-header">
+        <h3 class="progress-title">Your Onboarding Progress</h3>
+        <span class="progress-stats" id="progress-stats">0% (0 of 0 completed)</span>
       </div>
-      <div class="verdict-headline">Please fill out the HAEMR Intern Onboarding Form from Kate.</div>
-      <p>This should be completed at the start of your onboarding workflow.</p>
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progress-bar"></div>
+      </div>
+      <div class="progress-actions">
+        <button onclick="resetChecklist()" class="secondary">Reset Progress</button>
+      </div>
     </div>
 
+    <!-- Phase 1 -->
     <div class="section">
       <div class="report-card">
         <div class="head">
           <span class="section-num">01</span>
-          <h2><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 8px;">sort</span>Permutable Checklist (Order Matters)</h2>
+          <h2>Phase 1: Immediate Actions</h2>
         </div>
-        <div class="body">
-
-          <ol>
-            <li>
-              NPI Application
-            </li>
-            <li>
-              Credentialing Application
-              <ol type="a">
-                <li>MA Limited License Application</li>
-                <li>Medical School Graduation Forms (BORIM forms from school)</li>
-              </ol>
-            </li>
-            <li>MA Prescription Provider Form</li>
-          </ol>
+        <div class="body" style="padding: 0;">
+          <div class="checklist-list">
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p1_google_form">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">Google Form</span>
+                <span class="checklist-desc">Complete the Intern Information Google Form sent by the program coordinator.</span>
+              </div>
+            </label>
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p1_email_reply">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">Email Reply</span>
+                <span class="checklist-desc">Reply directly to the initial orientation email and attach a clear picture of your government ID (Driver's License or Passport).</span>
+              </div>
+            </label>
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p1_format_cv">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">Format CV</span>
+                <span class="checklist-desc">Ensure all dates on your CV are formatted strictly as MM/YYYY. Include your residency program under your Education section with the correct start date.</span>
+              </div>
+            </label>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- Phase 2 -->
     <div class="section">
       <div class="report-card">
         <div class="head">
           <span class="section-num">02</span>
-          <h2><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 8px;">checklist</span>Combinatorial Checklist (Order Does Not Matter)</h2>
+          <h2>Phase 2: Core Credentialing</h2>
         </div>
-        <div class="body">
+        <p style="margin: 0 24px 16px 24px; color: var(--muted);" class="subtle">Due within 14 days of receipt. Follow guidelines carefully to avoid delays.</p>
+        
+        <!-- Shared Phase 2 Instructions -->
+        <div class="verdict" style="margin: 12px 24px; background: var(--md-sys-color-surface-container-highest);">
+          <div class="verdict-label" style="color: var(--md-sys-color-primary); margin-bottom: 12px;">Instruction</div>
+          
+          <div style="margin-bottom: 16px;">
+            <div class="verdict-headline" style="font-size: var(--md-sys-typescale-title-small-size); margin-bottom: 4px;">MD-App: Gaps / Leave of Absence</div>
+            <p style="margin: 0;">If you completed a dual degree or a research year during medical school, you must select "Yes." BORIM considers both scenarios to be a leave of absence, even if you maintained clinical duties.</p>
+          </div>
+          
+          <div style="margin-bottom: 16px;">
+            <div class="verdict-headline" style="font-size: var(--md-sys-typescale-title-small-size); margin-bottom: 4px;">MD-App: Peer References</div>
+            <p style="margin: 0;">First-Year Match Trainees must enter the names of their ERAS letter writers. Do <strong>NOT</strong> use their real email addresses; you must enter <strong>CentralCredentialingOffice@mgb.org</strong> for all three.</p>
+          </div>
 
-          <ul>
-            <li>CHB Responsibilities Form (via DocuSign)</li>
-            <li>MGB Responsibilities Form (via DocuSign)</li>
-            <li>Sign Contract (via Adobe)</li>
-            <li>MGB Occupational Health forms</li>
-            <li>Submit Schedule preference form</li>
-            <li>RSVP for graduation</li>
-            <li>Intern Cruise Form</li>
-          </ul>
+          <div style="margin-bottom: 16px;">
+            <div class="verdict-headline" style="font-size: var(--md-sys-typescale-title-small-size); margin-bottom: 4px;">eLX Portal: Leave of Absence</div>
+            <p style="margin: 0;">Answer "Yes" if you pursued a dual degree or took a research year.</p>
+          </div>
+
+          <div>
+            <div class="verdict-headline" style="font-size: var(--md-sys-typescale-title-small-size); margin-bottom: 4px;">eLX Portal: MassHealth Question</div>
+            <p style="margin: 0;">Answer "Yes" to the MassHealth Enrollment requirement.</p>
+          </div>
+        </div>
+        
+        <div class="body" style="padding: 0; border-top: 1px solid var(--md-sys-color-outline-variant);">
+          <div class="phase-grid">
+            
+            <!-- 1. MGB Credentialing Portal (MD-App) -->
+            <div>
+              <div class="sub-section-title">
+                <span class="material-symbols-outlined">badge</span>
+                1. MGB Credentialing Portal (MD-App)
+              </div>
+              <p class="sub-section-desc">Look for an email from <strong>mdstaffsupport@mgb.org</strong>.</p>
+              
+              <div class="checklist-list">
+                <label class="checklist-item">
+                  <div class="checklist-checkbox-container">
+                    <input type="checkbox" class="checklist-checkbox" data-id="p2_mdapp_notary">
+                  </div>
+                  <div class="checklist-body">
+                    <span class="checklist-text">Notarized Forms</span>
+                    <span class="checklist-desc">Download the "MGB Notarized Proof of Identification Form" and "Massachusetts Notarized CORI Form." Have them notarized (online notaries are accepted).</span>
+                  </div>
+                </label>
+                <label class="checklist-item">
+                  <div class="checklist-checkbox-container">
+                    <input type="checkbox" class="checklist-checkbox" data-id="p2_mdapp_uploads">
+                  </div>
+                  <div class="checklist-body">
+                    <span class="checklist-text">Uploads</span>
+                    <span class="checklist-desc">Upload your CV, a passport-sized photo, and the notarized forms into the portal and submit.</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- 2. BORIM MA Limited License (eLX Portal) -->
+            <div>
+              <div class="sub-section-title">
+                <span class="material-symbols-outlined">assignment_ind</span>
+                2. BORIM MA Limited License (eLX Portal)
+              </div>
+              <p class="sub-section-desc">Look for an email from the <strong>Mass Board of Medicine</strong>.</p>
+              
+              <div class="checklist-list">
+                <label class="checklist-item">
+                  <div class="checklist-checkbox-container">
+                    <input type="checkbox" class="checklist-checkbox" data-id="p2_borim_forma">
+                  </div>
+                  <div class="checklist-body">
+                    <span class="checklist-text">Form A</span>
+                    <span class="checklist-desc">Send Form A to your medical school registrar so they can attest you are on track to graduate.</span>
+                  </div>
+                </label>
+                <label class="checklist-item">
+                  <div class="checklist-checkbox-container">
+                    <input type="checkbox" class="checklist-checkbox" data-id="p2_borim_formb">
+                  </div>
+                  <div class="checklist-body">
+                    <span class="checklist-text">Form B</span>
+                    <span class="checklist-desc">Upon graduation, request that your medical school complete Form B and email it directly to <strong>formB@mass.gov</strong>.</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="section">
+      <div class="report-card">
+        <div class="head">
+          <span class="section-num">03</span>
+          <h2>Phase 3: National IDs & Pre-Boarding</h2>
+        </div>
+        <p style="margin: 0 24px 16px 24px; color: var(--muted);" class="subtle">Complete as soon as possible (Do ASAP).</p>
+        <div class="body" style="padding: 0; border-top: 1px solid var(--md-sys-color-outline-variant);">
+          <div class="checklist-list">
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p3_npi">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">NPI Application</span>
+                <span class="checklist-desc">Go to the <a href="https://nppes.cms.hhs.gov" target="_blank" rel="noopener">NPPES website</a> to apply for your National Provider Identifier. Apply strictly as an "Individual" (not an organization). Use the hospital's address (e.g., 55 Fruit St, Boston, MA 02114) for your practice location.</span>
+              </div>
+            </label>
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p3_hireright">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">HireRight I-9 (Section 1)</span>
+                <span class="checklist-desc">Complete Section 1 online via the emailed link before your first day. You must use your exact legal name and a U.S. address.</span>
+              </div>
+            </label>
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p3_occhealth">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">Occupational Health Clearance</span>
+                <span class="checklist-desc">Look for an email from <strong>noreply@okta</strong> (the MGB pre-boarding portal). Submit your vaccination records with dates. You must be cleared before you can start working.</span>
+              </div>
+            </label>
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p3_network">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">MGB Network Access</span>
+                <span class="checklist-desc">Register as a new user at <a href="https://myprofile.partners.org" target="_blank" rel="noopener">myprofile.partners.org</a>. Create your password and enroll your mobile number in the Employee Alert System (EAS).</span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="section">
+      <div class="report-card">
+        <div class="head">
+          <span class="section-num">04</span>
+          <h2>Phase 4: State/Federal Enrollment</h2>
+        </div>
+        <div class="verdict" style="margin: 12px 24px; background: var(--md-sys-color-surface-container-highest);">
+          <div class="verdict-label" style="color: var(--md-sys-color-primary); margin-bottom: 12px;">Instruction</div>
+          <div class="verdict-headline" style="font-size: var(--md-sys-typescale-title-small-size); margin-bottom: 4px;">Wait until Limited License is ISSUED</div>
+          <p style="margin: 0;">You cannot submit these applications until your Limited License is officially approved and issued by the state.</p>
+        </div>
+        <div class="body" style="padding: 0; border-top: 1px solid var(--md-sys-color-outline-variant);">
+          <div class="checklist-list">
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p4_masshealth_orp">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">MassHealth ORP</span>
+                <span class="checklist-desc">Download the current application from <a href="https://www.mass.gov" target="_blank" rel="noopener">Mass.gov</a>. Use your primary hospital's PIDSL and DEA numbers (for MGH, PIDSL is <strong>110001958E</strong> and DEA is <strong>AT9729433</strong>). Fax or mail the application along with a copy of your approved license.</span>
+              </div>
+            </label>
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p4_medicare_pecos">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">Medicare PECOS</span>
+                <span class="checklist-desc">Log into <a href="https://pecos.cms.hhs.gov" target="_blank" rel="noopener">PECOS</a> and apply as an "Individual Provider" for "Ordering/Referring." Select the category for licensed residents/fellows not employed by a Group 1 entity. Answer "No" to the PCC Plan site question, and upload a copy of your MA Medical License.</span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 5 -->
+    <div class="section">
+      <div class="report-card">
+        <div class="head">
+          <span class="section-num">05</span>
+          <h2>Phase 5: First Week Deadlines & Critical Admin</h2>
+        </div>
+        <div class="body" style="padding: 0;">
+          <div class="checklist-list">
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p5_i9_section2">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">Schedule I-9 Section 2 Verification</span>
+                <span class="checklist-desc">Present physical, unexpired identification documents within 3 business days of your start date. You can email a PDF scan of your documents to <strong>mgbprostaffcomp@mgb.org</strong> to schedule a 5-minute Microsoft Teams video verification call, OR visit the MGH Professional Staff Benefits Office in person (Bulfinch Building, Room 126).</span>
+              </div>
+            </label>
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p5_union">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">Sign up for the Union (CIR/SEIU)</span>
+                <span class="checklist-desc">Register and sign your membership card with the House Staff Union (Committee of Interns and Residents / SEIU) to ensure you are officially enrolled and receive negotiated stipends and benefits.</span>
+              </div>
+            </label>
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p5_badge">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">MGH ID Badge</span>
+                <span class="checklist-desc">Wait until you have been in the HR system for at least 48 hours, then go to MGH Police & Security in The Wang Building, Room 232.</span>
+              </div>
+            </label>
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p5_workday">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">Workday Setup (Day 1)</span>
+                <span class="checklist-desc">Update your Personal Information, set up Direct Deposit, adjust your Federal/State Tax Allowances, and request an MBTA commuter pass if needed.</span>
+              </div>
+            </label>
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p5_healthstream">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">HealthStream Trainings</span>
+                <span class="checklist-desc">Log in and complete all assigned annual trainings within your first week. Non-compliance can result in termination.</span>
+              </div>
+            </label>
+            <label class="checklist-item">
+              <div class="checklist-checkbox-container">
+                <input type="checkbox" class="checklist-checkbox" data-id="p5_benefits">
+              </div>
+              <div class="checklist-body">
+                <span class="checklist-text">Benefit Elections</span>
+                <span class="checklist-desc">Elect or decline your medical, dental, and vision benefits via Alight within 30 days of your start date. Set up your retirement via Fidelity.</span>
+              </div>
+            </label>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="footer">
-      <div>HAEMR · AY 2026–27 · Intern Onboarding Checklist</div>
-      <div>Prepared April 2026</div>
+      <div>HAEMR · The Master Residency Onboarding Checklist</div>
+      <div>AY 2026–27 · Updated June 2026</div>
     </div>
   </div>
+
+  <script>
+    // Checklist Storage and State Logic
+    const STORAGE_KEY = 'haemr_onboarding_checklist';
+    const checkboxes = document.querySelectorAll('.checklist-checkbox');
+    
+    function loadState() {
+      let savedState = {};
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          savedState = JSON.parse(stored);
+        }
+      } catch (e) {
+        console.error('Failed to parse localStorage checklist state', e);
+      }
+      
+      checkboxes.forEach(cb => {
+        const id = cb.getAttribute('data-id');
+        const isChecked = !!savedState[id];
+        cb.checked = isChecked;
+        
+        // Style parent container
+        const item = cb.closest('.checklist-item');
+        if (item) {
+          if (isChecked) {
+            item.classList.add('checked');
+          } else {
+            item.classList.remove('checked');
+          }
+        }
+      });
+      
+      updateProgress();
+    }
+    
+    function saveState() {
+      const state = {};
+      checkboxes.forEach(cb => {
+        const id = cb.getAttribute('data-id');
+        state[id] = cb.checked;
+      });
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.error('Failed to save state to localStorage', e);
+      }
+    }
+    
+    function updateProgress() {
+      const total = checkboxes.length;
+      let checkedCount = 0;
+      
+      checkboxes.forEach(cb => {
+        if (cb.checked) {
+          checkedCount++;
+        }
+      });
+      
+      const percent = total > 0 ? Math.round((checkedCount / total) * 100) : 0;
+      
+      // Update UI elements
+      const fillEl = document.getElementById('progress-bar');
+      const statsEl = document.getElementById('progress-stats');
+      
+      if (fillEl) {
+        fillEl.style.width = percent + '%';
+      }
+      if (statsEl) {
+        statsEl.textContent = `${percent}% (${checkedCount} of ${total} completed)`;
+      }
+    }
+    
+    function resetChecklist() {
+      if (confirm('Are you sure you want to reset all checklist items?')) {
+        checkboxes.forEach(cb => {
+          cb.checked = false;
+          const item = cb.closest('.checklist-item');
+          if (item) {
+            item.classList.remove('checked');
+          }
+        });
+        saveState();
+        updateProgress();
+      }
+    }
+    
+    // Add event listeners
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', (e) => {
+        const item = cb.closest('.checklist-item');
+        if (item) {
+          if (cb.checked) {
+            item.classList.add('checked');
+          } else {
+            item.classList.remove('checked');
+          }
+        }
+        saveState();
+        updateProgress();
+      });
+    });
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', loadState);
+  </script>
 </body>
 </html>

@@ -175,9 +175,12 @@
   --chart-expenses:   #B3261E;   /* error red */
   --chart-reserve:    #006A6A;   /* teal */
   --chart-hsa:        #3B6939;   /* forest green */
-  --chart-ira:        #984816;   /* burnt orange */
   --chart-emp403b:    #1B5FA5;   /* deep blue */
   --chart-side:       #625B71;   /* secondary mauve */
+  --chart-tax-fed:    #D97706;   /* amber */
+  --chart-tax-state:  #0284C7;   /* sky blue */
+  --chart-tax-ss:     #4F46E5;   /* indigo */
+  --chart-tax-med:    #06B6D4;   /* cyan */
   --chart-unalloc:    #938F99;   /* muted grey */
 }
 
@@ -230,9 +233,12 @@
     --chart-expenses:   #F2B8B5;
     --chart-reserve:    #4DB8B8;
     --chart-hsa:        #88C98A;
-    --chart-ira:        #FFB77C;
     --chart-emp403b:    #7BAEE8;
     --chart-side:       #CCC2DC;
+    --chart-tax-fed:    #FCD34D;
+    --chart-tax-state:  #7DD3FC;
+    --chart-tax-ss:     #A5B4FC;
+    --chart-tax-med:    #67E8F9;
     --chart-unalloc:    #938F99;
   }
 }
@@ -750,9 +756,12 @@ button.text-btn:active,
 .seg-expenses        { background: var(--chart-expenses);  }
 .seg-reserve         { background: var(--chart-reserve);   }
 .seg-hsa             { background: var(--chart-hsa);       }
-.seg-ira             { background: var(--chart-ira);       }
 .seg-emp403b         { background: var(--chart-emp403b);   }
 .seg-side            { background: var(--chart-side);      }
+.seg-tax-fed         { background: var(--chart-tax-fed);   }
+.seg-tax-state       { background: var(--chart-tax-state); }
+.seg-tax-ss          { background: var(--chart-tax-ss);    }
+.seg-tax-med         { background: var(--chart-tax-med);   }
 .seg-unallocated     { background: var(--chart-unalloc);   }
 
 /* ─── LEGEND ───────────────────────────────────────────────────────────── */
@@ -792,9 +801,12 @@ button.text-btn:active,
 .legend i.seg-expenses         { background: var(--chart-expenses);  }
 .legend i.seg-reserve          { background: var(--chart-reserve);   }
 .legend i.seg-hsa              { background: var(--chart-hsa);       }
-.legend i.seg-ira              { background: var(--chart-ira);       }
 .legend i.seg-emp403b          { background: var(--chart-emp403b);   }
 .legend i.seg-side             { background: var(--chart-side);      }
+.legend i.seg-tax-fed          { background: var(--chart-tax-fed);   }
+.legend i.seg-tax-state        { background: var(--chart-tax-state); }
+.legend i.seg-tax-ss           { background: var(--chart-tax-ss);    }
+.legend i.seg-tax-med          { background: var(--chart-tax-med);   }
 .legend i.seg-unallocated      { background: var(--chart-unalloc);   }
 
 /* ─── CALLOUTS ─────────────────────────────────────────────────────────── */
