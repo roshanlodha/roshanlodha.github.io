@@ -19,9 +19,7 @@
           <h1>Residency Financial &amp; Budget Calculator</h1>
 
         </div>
-        <div class="top-actions">
-          <a class="theme-btn" href="benefits.html">Open benefits guide</a>
-        </div>
+
       </div>
       <div class="action-row">
         <button id="openIncomeBtn" class="secondary" type="button">Income Inputs</button>
@@ -122,8 +120,15 @@
                 <tbody id="benefitsTable"></tbody>
               </table>
             </div>
+            <div class="callout surface-card info" style="margin-top: 16px;">
+              <span class="callout-icon">🛡️</span> <strong>Zero-Cost Employer Insurance Perks</strong>
+              <div style="display: grid; gap: 6px; font-size: 0.88rem; color: var(--text); margin-top: 8px; padding-left: 24px;">
+                <div>• Core Long-Term Disability (60% of salary up to $8,000/mo)</div>
+                <div>• Basic Life Insurance (1x salary up to $500,000)</div>
+                <div>• Basic AD&D Insurance (1x salary up to $500,000)</div>
+              </div>
+            </div>
           </div>
-
         </section>
 
         <section class="report-card">
@@ -180,11 +185,7 @@
       </main>
     </div>
 
-    <div class="footer">
-      <div>HAEMR · AY 2026–27 · Residency Financial &amp; Budget Calculator</div>
-      <div>Companion references: <a href="benefits.html">Benefits Guide</a> · <a href="https://www.massgeneralbrigham.org/en/education-and-training/graduate-medical-education/resources/hr">MGB GME HR Resources</a></div>
-      <div>Prepared April 2026 · Planning tool only — verify payroll, tax, and benefit figures with official materials before making decisions</div>
-    </div>
+
   </div>
 
   <div id="incomeModal" class="modal-backdrop" aria-hidden="true">
@@ -338,6 +339,11 @@
             <input id="healthcare" type="number" step="0.01" value="22" />
             <p class="footnote">Fitness fully subsidized by MGB $150/yr benefit.</p>
           </div>
+          <div>
+            <label for="disability">Supplemental Disability (IDI) ($/month)</label>
+            <input id="disability" type="number" step="0.01" value="0.00" />
+            <p class="footnote">Optional Guardian IDI individual policy premium.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -462,6 +468,7 @@
       coffee: 50,
       education: 0,
       healthcare: 22,
+      disability: 0,
       educationFund: 0,
       fitnessReimbursement: 150,
       examReimbursement: 0
@@ -478,7 +485,8 @@
       other: 52.75,
       coffee: 30.74,
       education: 806.15,
-      healthcare: 0
+      healthcare: 0,
+      disability: 0
     };
 
     const expenseLabels = {
@@ -491,7 +499,8 @@
       other: 'Other',
       coffee: 'Coffee',
       education: 'Education',
-      healthcare: 'Healthcare'
+      healthcare: 'Healthcare',
+      disability: 'Supplemental Disability (IDI)'
     };
 
     const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
