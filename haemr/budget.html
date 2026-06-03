@@ -29,6 +29,7 @@
         <button id="openTaxBtn" class="secondary" type="button">Tax Inputs</button>
         <button id="openExpensesBtn" class="secondary" type="button">Expense Inputs</button>
         <button id="openBenefitsBtn" class="secondary" type="button">Benefits Inputs</button>
+        <button id="openScheduleCBtn" class="secondary" type="button">Schedule C Inputs</button>
       </div>
     </div>
 
@@ -52,6 +53,7 @@
               <span><i class="seg-income-schedulec"></i>Income: Schedule C</span>
               <span><i class="seg-expenses"></i>Expenses</span>
               <span><i class="seg-reserve"></i>Emergency reserve</span>
+              <span><i class="seg-hsa"></i>HSA</span>
               <span><i class="seg-ira"></i>Roth IRA</span>
               <span><i class="seg-emp403b"></i>Employee 403(b)</span>
               <span><i class="seg-side"></i>Side-plan retirement</span>
@@ -207,10 +209,7 @@
           <div>
             <label for="stipend">Annual housing/trainee stipend ($/year)</label>
             <input id="stipend" type="number" step="0.01" value="10500" />
-          </div>
-          <div>
-            <label for="sideIncome">Annual Schedule C revenue ($/year)</label>
-            <input id="sideIncome" type="number" step="0.01" value="5000" />
+            <p class="footnote">Paid as a summer lump sum. Taxed at your marginal rate (approx ~$9k net).</p>
           </div>
         </div>
       </div>
@@ -252,8 +251,8 @@
             </select>
           </div>
           <div>
-            <label for="solo401kEmployerRate">Solo 401(k) employer contribution (%)</label>
-            <input id="solo401kEmployerRate" type="number" step="0.01" value="20" />
+             <label for="solo401kEmployerRate">Solo 401(k) employer contribution (%)</label>
+             <input id="solo401kEmployerRate" type="number" step="0.01" value="20" />
           </div>
         </div>
 
@@ -280,10 +279,7 @@
             <label for="stateRate">Massachusetts state tax rate (%)</label>
             <input id="stateRate" type="number" step="0.01" value="5" />
           </div>
-          <div>
-            <label for="studentLoanInterest">Annual student loan interest paid ($/year)</label>
-            <input id="studentLoanInterest" type="number" step="0.01" value="2500" />
-          </div>
+
           <div>
             <label for="maMovingExpenses">MA deductible moving expenses (2026 only, $)</label>
             <input id="maMovingExpenses" type="number" step="0.01" value="0" />
@@ -317,32 +313,30 @@
         <h3>Personal monthly expenses</h3>
         <div class="grid-2">
           <div><label for="rent">Rent &amp; utilities ($/month)</label><input id="rent" type="number" step="0.01" value="2900" /></div>
-          <div><label for="food">Food (dining, $/month)</label><input id="food" type="number" step="0.01" value="554.45" /></div>
+          <div>
+            <label for="food">Food (dining, $/month)</label>
+            <input id="food" type="number" step="0.01" value="494.45" />
+            <p class="footnote">Consider BWH $8 off, MGH 9pm meals, and off-service lunches when estimating.</p>
+          </div>
           <div><label for="groceries">Groceries ($/month)</label><input id="groceries" type="number" step="0.01" value="291.66" /></div>
-          <div><label for="travel">Travel ($/month)</label><input id="travel" type="number" step="0.01" value="200" /></div>
-          <div><label for="transport">Transportation ($/month)</label><input id="transport" type="number" step="0.01" value="45" /></div>
+          <div><label for="travel">Travel ($/month)</label><input id="travel" type="number" step="0.01" value="100" /></div>
+          <div>
+            <label for="transport">Transportation ($/month)</label>
+            <input id="transport" type="number" step="0.01" value="45" />
+            <p class="footnote">MBTA is $45/mo pre-tax, parking is ~$140/mo. Bluebikes are $73.50/yr.</p>
+          </div>
           <div><label for="clothes">Clothes &amp; hair ($/month)</label><input id="clothes" type="number" step="0.01" value="75.71" /></div>
-          <div><label for="business">Business ($/month)</label><input id="business" type="number" step="0.01" value="50" /></div>
           <div><label for="other">Other ($/month)</label><input id="other" type="number" step="0.01" value="50" /></div>
           <div><label for="coffee">Coffee ($/month)</label><input id="coffee" type="number" step="0.01" value="50" /></div>
-          <div><label for="education">Education ($/month)</label><input id="education" type="number" step="0.01" value="100" /></div>
-          <div><label for="healthcare">Healthcare ($/month)</label><input id="healthcare" type="number" step="0.01" value="22" /></div>
-        </div>
-        <div class="section">
-          <h3>Schedule C expenses</h3>
-          <div class="grid-2">
-            <div>
-              <label for="scheduleCExpenses">Annual Schedule C deductible expenses ($/year)</label>
-              <input id="scheduleCExpenses" type="number" step="0.01" value="0" />
-            </div>
-            <div>
-              <label for="techServerCosts">Monthly tech/server costs ($/month)</label>
-              <input id="techServerCosts" type="number" step="0.01" value="0" />
-            </div>
-            <div>
-              <label for="homeOfficeSqFt">Home office square footage (sq ft)</label>
-              <input id="homeOfficeSqFt" type="number" step="1" value="0" />
-            </div>
+          <div>
+            <label for="education">Education ($/month)</label>
+            <input id="education" type="number" step="0.01" value="0" />
+            <p class="footnote">Step 3 &amp; UWorld / Tuition reimbursement covers up to $5,250/yr.</p>
+          </div>
+          <div>
+            <label for="healthcare">Healthcare ($/month)</label>
+            <input id="healthcare" type="number" step="0.01" value="22" />
+            <p class="footnote">Fitness fully subsidized by MGB $150/yr benefit.</p>
           </div>
         </div>
       </div>
@@ -361,8 +355,53 @@
       <div class="modal-body">
         <div class="grid-2">
           <div><label for="educationFund">Annual education fund ($/year)</label><input id="educationFund" type="number" step="0.01" value="0" /></div>
+          <div>
+            <label for="fitnessReimbursement">Annual fitness reimbursement ($/year)</label>
+            <input id="fitnessReimbursement" type="number" step="0.01" value="150" />
+          </div>
+          <div>
+            <label for="examReimbursement">Annual exam/licensing reimbursement ($/year)</label>
+            <input id="examReimbursement" type="number" step="0.01" value="0" />
+            <p class="footnote">Maximum of $5,250 reimbursement limit for Step 3 and UWorld or Tuition.</p>
+          </div>
         </div>
 
+      </div>
+    </div>
+  </div>
+
+  <div id="scheduleCModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="scheduleCModalTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="scheduleCModalTitle">Schedule C Income &amp; Expenses</h2>
+          <p class="subtle subtle-reset">Update business income and deductible expenses.</p>
+        </div>
+        <button class="secondary close-modal" type="button" data-close-modal="scheduleCModal">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid-2">
+          <div>
+            <label for="sideIncome">Annual Schedule C revenue ($/year)</label>
+            <input id="sideIncome" type="number" step="0.01" value="7500" />
+          </div>
+          <div>
+            <label for="business">Monthly business expenses ($/month)</label>
+            <input id="business" type="number" step="0.01" value="50" />
+          </div>
+          <div>
+            <label for="scheduleCExpenses">Annual Schedule C deductible expenses ($/year)</label>
+            <input id="scheduleCExpenses" type="number" step="0.01" value="0" />
+          </div>
+          <div>
+            <label for="techServerCosts">Monthly tech/server costs ($/month)</label>
+            <input id="techServerCosts" type="number" step="0.01" value="0" />
+          </div>
+          <div>
+            <label for="homeOfficeSqFt">Home office square footage (sq ft)</label>
+            <input id="homeOfficeSqFt" type="number" step="1" value="0" />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -379,14 +418,19 @@
       amortMonthsY2: 12,
       employee403bAnnualMax: 24500,
       mealCardMonthly: 60,
-      hospitalDinnerPerksMonthly: 40
+      hospitalDinnerPerksMonthly: 40,
+      fitnessReimbursementAnnual: 150,
+      bluebikesAnnual: 73.50,
+      educationGrant: 375,
+      step3ReimbursementMax: 5250,
+      conferenceTravelMax: 1200
     };
 
     const defaults = {
       pgy1: 84579,
       pgy2: 88843,
       stipend: 10500,
-      sideIncome: 5000,
+      sideIncome: 7500,
       scheduleCExpenses: 0,
       techServerCosts: 0,
       homeOfficeSqFt: 0,
@@ -398,7 +442,6 @@
       medicareRate: 1.45,
       stdDeduction: 16100,
       stateRate: 5,
-      studentLoanInterest: 2500,
       maMovingExpenses: 0,
       federalBrackets: `[
   {"upTo": 12400, "rate": 10},
@@ -410,17 +453,18 @@
   {"upTo": null, "rate": 37}
 ]`,
       rent: 2900,
-      food: 554.45,
+      food: 494.45,
       groceries: 291.66,
-      travel: 200,
+      travel: 100,
       transport: 45,
       clothes: 75.71,
-      business: 50,
       other: 50,
       coffee: 50,
-      education: 100,
+      education: 0,
       healthcare: 22,
-      educationFund: 0
+      educationFund: 0,
+      fitnessReimbursement: 150,
+      examReimbursement: 0
     };
 
     const cleveland = {
@@ -444,7 +488,6 @@
       travel: 'Travel',
       transport: 'Transportation',
       clothes: 'Clothes & hair',
-      business: 'Business',
       other: 'Other',
       coffee: 'Coffee',
       education: 'Education',
@@ -496,14 +539,6 @@
       return HARD_CODED.mealCardMonthly + HARD_CODED.hospitalDinnerPerksMonthly;
     }
 
-    function projectedExpenseValue(key) {
-      const base = val(key);
-      if (key === 'food') {
-        return Math.max(0, base - monthlyFoodPerkTotal());
-      }
-      return base;
-    }
-
     function parseBrackets() {
       try {
         const brackets = JSON.parse(document.getElementById('federalBrackets').value);
@@ -534,19 +569,20 @@
       stipend,
       sideIncome,
       employee403bContribution,
+      hsaContribution = 0,
       solo401kEmployerRate,
       selfEmployedPlan,
       ssRate,
       medicareRate,
       stateRate,
       stdDeduction,
-      studentLoanInterest,
       stateMovingExpenseDeduction,
       brackets,
       amortMonths
     }) {
       const MA_PERSONAL_EXEMPTION_SINGLE = 4400;
       const retirement403b = Math.max(0, employee403bContribution);
+      const hsa = Math.max(0, hsaContribution);
       const ficaW2 = w2 * (ssRate + medicareRate);
       const seTaxableEarnings = sideIncome * 0.9235;
       const seTaxRate = (ssRate * 2) + (medicareRate * 2);
@@ -556,28 +592,28 @@
       const sideRetirementContribution = (selfEmployedPlan === 'solo401k' || selfEmployedPlan === 'sepira')
         ? sidePlanContributionBase * solo401kEmployerRate
         : 0;
-      const studentLoanInterestDeduction = Math.min(Math.max(0, studentLoanInterest), 2500);
       const fica = ficaW2 + seTax;
-      const agi = w2 + stipend + sideIncome - retirement403b - seTaxDeduction - sideRetirementContribution - studentLoanInterestDeduction;
+      const agi = w2 + stipend + sideIncome - retirement403b - seTaxDeduction - sideRetirementContribution - hsa;
       const taxableFederalPreQbi = Math.max(0, agi - stdDeduction);
-      const qbiDeduction = sideIncome * 0.20;
+      const qbiDeduction = Math.max(0, sideIncome - seTaxDeduction - sideRetirementContribution) * 0.20;
       const taxableFederal = Math.max(0, taxableFederalPreQbi - qbiDeduction);
       const federalTax = calcProgressiveTax(taxableFederal, brackets);
-      const taxableState = Math.max(0, agi - MA_PERSONAL_EXEMPTION_SINGLE - Math.max(0, stateMovingExpenseDeduction));
+      // HSA is not deductible for MA state tax purposes, add it back to AGI
+      const taxableState = Math.max(0, agi + hsa - MA_PERSONAL_EXEMPTION_SINGLE - Math.max(0, stateMovingExpenseDeduction));
       const stateTax = taxableState * stateRate;
       const totalTax = fica + federalTax + stateTax;
-      const spendableNet = w2 + stipend + sideIncome - retirement403b - sideRetirementContribution - totalTax;
+      const spendableNet = w2 + stipend + sideIncome - retirement403b - sideRetirementContribution - hsa - totalTax;
       const amortizedMonthly = spendableNet / amortMonths;
       return {
         w2,
         stipend,
         sideIncome,
         retirement403b,
+        hsaContribution: hsa,
         ficaW2,
         seTax,
         seTaxDeduction,
         sideRetirementContribution,
-        studentLoanInterestDeduction,
         qbiDeduction,
         fica,
         agi,
@@ -605,7 +641,6 @@
       medicareRate,
       stateRate,
       stdDeduction,
-      studentLoanInterest,
       stateMovingExpenseDeduction,
       brackets,
       amortMonths,
@@ -614,6 +649,7 @@
       rothIraAnnualMax
     }) {
       let recommended403b = Math.min(employee403bAnnualMax, min403b);
+      let hsaContribution = 0;
       let rothIraContribution = 0;
       let extra403bContribution = 0;
       const maxExtra403b = Math.max(0, employee403bAnnualMax - min403b);
@@ -624,21 +660,31 @@
           stipend,
           sideIncome,
           employee403bContribution: recommended403b,
+          hsaContribution,
           solo401kEmployerRate,
           selfEmployedPlan,
           ssRate,
           medicareRate,
           stateRate,
           stdDeduction,
-          studentLoanInterest,
           stateMovingExpenseDeduction,
           brackets,
           amortMonths
         });
 
         const annualAvailable = Math.max(0, (trialYear.amortizedMonthly - monthlyBudget - reserveCashMonthly) * amortMonths);
-        extra403bContribution = Math.min(maxExtra403b, annualAvailable);
-        rothIraContribution = Math.min(rothIraAnnualMax, Math.max(0, annualAvailable - extra403bContribution));
+        let totalSurplus = annualAvailable + extra403bContribution + hsaContribution;
+
+        // Priority 2: Maximize HSA (up to $3,900)
+        hsaContribution = Math.min(3900, totalSurplus);
+        totalSurplus = Math.max(0, totalSurplus - hsaContribution);
+
+        // Priority 3: Maximize Traditional 403(b)
+        extra403bContribution = Math.min(maxExtra403b, totalSurplus);
+        totalSurplus = Math.max(0, totalSurplus - extra403bContribution);
+
+        // Priority 5: Roth IRA Overflow
+        rothIraContribution = Math.min(rothIraAnnualMax, totalSurplus);
 
         const next403b = Math.min(employee403bAnnualMax, min403b + extra403bContribution);
         if (Math.abs(next403b - recommended403b) < 0.5) {
@@ -653,29 +699,36 @@
         stipend,
         sideIncome,
         employee403bContribution: recommended403b,
+        hsaContribution,
         solo401kEmployerRate,
         selfEmployedPlan,
         ssRate,
         medicareRate,
         stateRate,
         stdDeduction,
-        studentLoanInterest,
         stateMovingExpenseDeduction,
         brackets,
         amortMonths
       });
 
       const annualAvailableFinal = Math.max(0, (year.amortizedMonthly - monthlyBudget - reserveCashMonthly) * amortMonths);
-      const appliedExtra403b = Math.min(maxExtra403b, annualAvailableFinal);
-      rothIraContribution = Math.min(rothIraAnnualMax, Math.max(0, annualAvailableFinal - appliedExtra403b));
-      extra403bContribution = appliedExtra403b;
-      const overflowAfterCaps = Math.max(0, annualAvailableFinal - appliedExtra403b - rothIraContribution);
+      let totalSurplusFinal = annualAvailableFinal + extra403bContribution + hsaContribution;
+
+      hsaContribution = Math.min(3900, totalSurplusFinal);
+      totalSurplusFinal = Math.max(0, totalSurplusFinal - hsaContribution);
+
+      extra403bContribution = Math.min(maxExtra403b, totalSurplusFinal);
+      totalSurplusFinal = Math.max(0, totalSurplusFinal - extra403bContribution);
+
+      rothIraContribution = Math.min(rothIraAnnualMax, totalSurplusFinal);
+      const overflowAfterCaps = Math.max(0, totalSurplusFinal - rothIraContribution);
 
       return {
         year,
         recommended403b,
+        hsaContribution,
         rothIraContribution,
-        extra403bContribution: appliedExtra403b,
+        extra403bContribution,
         overflowAfterCaps
       };
     }
@@ -690,13 +743,6 @@
       const pgy2 = val('pgy2');
       const stipend = val('stipend');
       const sideIncome = val('sideIncome');
-      const scheduleCExpenses = val('scheduleCExpenses');
-      const techServerCosts = Math.max(0, val('techServerCosts'));
-      const homeOfficeSqFt = Math.max(0, val('homeOfficeSqFt'));
-      const homeOfficeDeduction = Math.min(1500, homeOfficeSqFt * 5);
-      const techServerAnnual = techServerCosts * 12;
-      const totalScheduleCExpenses = scheduleCExpenses + techServerAnnual + homeOfficeDeduction;
-      const scheduleCProfit = Math.max(0, sideIncome - totalScheduleCExpenses);
       const matchRate = val('matchRate') / 100;
       const reserveCashMonthly = Math.max(0, val('reserveCashMonthly'));
       const selfEmployedPlan = document.getElementById('selfEmployedPlan').value;
@@ -705,7 +751,6 @@
       const medicareRate = val('medicareRate') / 100;
       const stdDeduction = val('stdDeduction');
       const stateRate = val('stateRate') / 100;
-      const studentLoanInterest = val('studentLoanInterest');
       const maMovingExpenses = val('maMovingExpenses');
       const daysInYear = HARD_CODED.daysInYear;
       const daysY1 = HARD_CODED.daysY1;
@@ -721,15 +766,29 @@
       const min403bY1 = w2Y1 * matchRate;
       const min403bY2 = w2Y2 * matchRate;
 
-      const expenses = Object.keys(expenseLabels).map(key => ({
-        key,
-        label: expenseLabels[key],
-        cle: cleveland[key],
-        bos: projectedExpenseValue(key),
-        baseBos: val(key)
-      }));
+      const expenses = Object.keys(expenseLabels).map(key => {
+        const bos = val(key);
+        return {
+          key,
+          label: expenseLabels[key],
+          cle: cleveland[key],
+          bos,
+          baseBos: bos
+        };
+      });
       const monthlyBudget = expenses.reduce((sum, x) => sum + x.bos, 0);
       const annualBudget = monthlyBudget * 12;
+
+      const scheduleCExpenses = val('scheduleCExpenses');
+      const techServerCosts = Math.max(0, val('techServerCosts'));
+      const homeOfficeSqFt = Math.max(0, val('homeOfficeSqFt'));
+      const homeOfficeDeduction = Math.min(1500, homeOfficeSqFt * 5);
+      const techServerAnnual = techServerCosts * 12;
+      const techServerDeductible = Math.max(0, techServerAnnual - 375);
+      const businessExpensesMonthly = val('business');
+      const businessExpensesAnnual = businessExpensesMonthly * 12;
+      const totalScheduleCExpenses = scheduleCExpenses + techServerDeductible + homeOfficeDeduction + businessExpensesAnnual;
+      const scheduleCProfit = Math.max(0, sideIncome - totalScheduleCExpenses);
 
       const year1Optimized = optimizeRetirementForYear({
         w2: w2Y1,
@@ -743,7 +802,6 @@
         medicareRate,
         stateRate,
         stdDeduction,
-        studentLoanInterest,
         stateMovingExpenseDeduction: maMovingExpenses,
         brackets,
         amortMonths: amortMonthsY1,
@@ -769,7 +827,6 @@
         medicareRate,
         stateRate,
         stdDeduction,
-        studentLoanInterest,
         stateMovingExpenseDeduction: 0,
         brackets,
         amortMonths: amortMonthsY2,
@@ -799,10 +856,12 @@
       const scheduleCIncomeMonthlyY2 = year2.amortizedMonthly * scheduleCShareY2;
       const rothMonthlyY1 = rothIraContributionY1 / amortMonthsY1;
       const rothMonthlyY2 = rothIraContribution / amortMonthsY2;
+      const hsaMonthlyY1 = year1.hsaContribution / amortMonthsY1;
+      const hsaMonthlyY2 = year2.hsaContribution / amortMonthsY2;
       const reserveMonthlyY1 = reserveCashMonthly;
       const reserveMonthlyY2 = reserveCashMonthly;
-      const allocatedY1 = monthlyBudget + reserveMonthlyY1 + rothMonthlyY1 + emp403bMonthlyY1 + sidePlanMonthlyY1;
-      const allocatedY2 = monthlyBudget + reserveMonthlyY2 + rothMonthlyY2 + emp403bMonthlyY2 + sidePlanMonthlyY2;
+      const allocatedY1 = monthlyBudget + reserveMonthlyY1 + rothMonthlyY1 + emp403bMonthlyY1 + sidePlanMonthlyY1 + hsaMonthlyY1;
+      const allocatedY2 = monthlyBudget + reserveMonthlyY2 + rothMonthlyY2 + emp403bMonthlyY2 + sidePlanMonthlyY2 + hsaMonthlyY2;
       const unallocatedY1 = Math.max(0, year1.amortizedMonthly - allocatedY1);
       const unallocatedY2 = Math.max(0, year2.amortizedMonthly - allocatedY2);
 
@@ -814,6 +873,7 @@
         summaryBarRow('Allocated', year1.amortizedMonthly, [
           { className: 'seg-expenses', label: 'Expenses', value: monthlyBudget },
           { className: 'seg-reserve', label: 'Emergency reserve', value: reserveMonthlyY1 },
+          { className: 'seg-hsa', label: 'HSA', value: hsaMonthlyY1 },
           { className: 'seg-ira', label: 'Roth IRA', value: rothMonthlyY1 },
           { className: 'seg-emp403b', label: 'Employee 403(b)', value: emp403bMonthlyY1 },
           { className: 'seg-side', label: 'Side-plan retirement', value: sidePlanMonthlyY1 },
@@ -829,6 +889,7 @@
         summaryBarRow('Allocated', year2.amortizedMonthly, [
           { className: 'seg-expenses', label: 'Expenses', value: monthlyBudget },
           { className: 'seg-reserve', label: 'Emergency reserve', value: reserveMonthlyY2 },
+          { className: 'seg-hsa', label: 'HSA', value: hsaMonthlyY2 },
           { className: 'seg-ira', label: 'Roth IRA', value: rothMonthlyY2 },
           { className: 'seg-emp403b', label: 'Employee 403(b)', value: emp403bMonthlyY2 },
           { className: 'seg-side', label: 'Side-plan retirement', value: sidePlanMonthlyY2 },
@@ -840,8 +901,8 @@
       const y2Surplus = year2.amortizedMonthly - monthlyBudget;
       const monthly403bPctY1 = year1.amortizedMonthly > 0 ? (emp403bMonthlyY1 / year1.amortizedMonthly) * 100 : 0;
       const monthly403bPctY2 = year2.amortizedMonthly > 0 ? (emp403bMonthlyY2 / year2.amortizedMonthly) * 100 : 0;
-      const totalRetirementY1 = year1.retirement403b + (year1.w2 * matchRate) + rothIraContributionY1 + year1.sideRetirementContribution;
-      const totalRetirementY2 = year2.retirement403b + (year2.w2 * matchRate) + rothIraContribution + year2.sideRetirementContribution;
+      const totalRetirementY1 = year1.retirement403b + (year1.w2 * matchRate) + rothIraContributionY1 + year1.sideRetirementContribution + year1.hsaContribution;
+      const totalRetirementY2 = year2.retirement403b + (year2.w2 * matchRate) + rothIraContribution + year2.sideRetirementContribution + year2.hsaContribution;
 
       document.getElementById('kpiY1Cash').textContent = fmt(year1.amortizedMonthly);
       document.getElementById('kpiY2Cash').textContent = fmt(year2.amortizedMonthly);
@@ -860,7 +921,8 @@
         line('Taxable stipend', fmt(stipend)),
         line('Annual Schedule C revenue', fmt(sideIncome)),
         line('Schedule C base deductible expenses', `- ${fmt(scheduleCExpenses)}`),
-        line('Annualized tech/server costs', `- ${fmt(techServerAnnual)}`),
+        line('Annualized business expenses', `- ${fmt(businessExpensesAnnual)}`),
+        line('Annualized tech/server costs (net of grant)', `- ${fmt(techServerDeductible)}`),
         line('Home office deduction (simplified)', `- ${fmt(homeOfficeDeduction)}`),
         line('Net Schedule C profit', fmt(scheduleCProfit)),
         line('2026 gross income', fmt(year1.w2 + stipend + scheduleCProfit), true)
@@ -871,7 +933,8 @@
         line('Taxable stipend', fmt(stipend)),
         line('Annual Schedule C revenue', fmt(sideIncome)),
         line('Schedule C base deductible expenses', `- ${fmt(scheduleCExpenses)}`),
-        line('Annualized tech/server costs', `- ${fmt(techServerAnnual)}`),
+        line('Annualized business expenses', `- ${fmt(businessExpensesAnnual)}`),
+        line('Annualized tech/server costs (net of grant)', `- ${fmt(techServerDeductible)}`),
         line('Home office deduction (simplified)', `- ${fmt(homeOfficeDeduction)}`),
         line('Net Schedule C profit', fmt(scheduleCProfit)),
         line('2027 gross income', fmt(year2.w2 + stipend + scheduleCProfit), true)
@@ -881,6 +944,8 @@
         line('Employee 403(b) contribution', fmt(year1.retirement403b)),
         line(`Employer match (${pct.format(matchRate * 100)}%)`, fmt(year1.w2 * matchRate)),
         line('Additional 403(b) beyond match floor', fmt(extra403bContributionY1)),
+        line('HSA contribution', fmt(year1.hsaContribution)),
+        line(`${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, fmt(year1.sideRetirementContribution)),
         line('Roth IRA target', fmt(rothIraContributionY1)),
         line(`Annual 403(b) cap`, fmt(employee403bAnnualMax)),
         line(`Overflow after caps`, fmt(overflowAfterCapsY1), true)
@@ -890,27 +955,30 @@
         line('Employee 403(b) contribution', fmt(year2.retirement403b)),
         line(`Employer match (${pct.format(matchRate * 100)}%)`, fmt(year2.w2 * matchRate)),
         line('Additional 403(b) beyond match floor', fmt(extra403bContribution)),
+        line('HSA contribution', fmt(year2.hsaContribution)),
+        line(`${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, fmt(year2.sideRetirementContribution)),
         line('Roth IRA target', fmt(rothIraContribution)),
         line(`Annual 403(b) cap`, fmt(employee403bAnnualMax)),
         line(`Overflow after caps`, fmt(overflowAfterCapsY2), true)
       ].join(''));
 
-
-
       const benefits = [
         ['Medical premium (employee only)', `${fmt(0)}/month`, 'Modeled on the HDHP election used in the companion benefits guide'],
         ['Employer HSA seed', fmt(500), 'Annual employer contribution tied to HDHP enrollment; shown for planning, not as monthly spendable cash'],
         ['Modeled healthcare budget', `${fmt(val('healthcare'))}/month`, 'Midpoint assumption for core dental, vision, and light routine out-of-pocket spending'],
-        ['Annual housing / trainee stipend', fmt(stipend), 'Taxable annual cash payment'],
         ['403(b) match', `${pct.format(matchRate * 100)}% of W-2`, 'Immediate risk free return up to the match cap'],
         ['Education fund', fmt(val('educationFund')), 'Can offset CME, licensing, courses, and similar costs'],
-        ['Meal card stipend', `${fmt(HARD_CODED.mealCardMonthly)}/month`, 'Food stipend loaded to meal card'],
-        ['Hospital meal perks', `${fmt(monthlyFoodPerkTotal())}/month modeled`, 'Used as a reduction to projected Boston food spending'],
+        ['Meal card stipend', `${fmt(HARD_CODED.mealCardMonthly)}/month`, 'Food stipend loaded to meal card; modeled as offset in food budget'],
+        ['Hospital meal perks', `${fmt(monthlyFoodPerkTotal())}/month modeled`, 'Includes $60 meal card stipend + $40 evening meal allowance; reference perk, not subtracted from food expenses'],
         ['MBTA transit benefit', '50% discount pre tax', 'Current out of pocket modeled at $45/month'],
-        ['Relocation stipend', fmt(0), 'No direct relocation cash assumed']
+        ['Relocation stipend', fmt(0), 'No direct relocation cash assumed'],
+        ['<strong>Housing/Childcare Stipend</strong>', `${fmt(stipend)}/year`, 'Taxable annual cash payment; included in gross income and modeled in take-home pay'],
+        ['<strong>Step 3 &amp; UWorld / Tuition</strong>', 'Up to $5,250/year', 'Requires 90-day submission; reference benefit not subtracted from education expenses'],
+        ['<strong>Fitness Subsidy</strong>', '$150/year', 'Gyms or fitness apps; reference subsidy not subtracted from healthcare/other expenses'],
+        ['<strong>Education Grant</strong>', '$375 one-time', 'Textbooks/online access'],
+        ['<strong>Travel &amp; Transit</strong>', 'Variable', '$45/mo MBTA, $73.50 Bluebikes, $1,200 PGY-4 Conference']
       ];
       setHTML('benefitsTable', benefits.map(row => `<tr><th>${row[0]}</th><td>${row[1]}</td><td class="muted">${row[2]}</td></tr>`).join(''));
-
 
       setHTML('taxY1', [
         line('W-2 income', fmt(year1.w2)),
@@ -919,7 +987,7 @@
         line('Less pretax 403(b)', `- ${fmt(year1.retirement403b)}`),
         line(`Less ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, `- ${fmt(year1.sideRetirementContribution)}`),
         line('Less half of SE tax (above-the-line)', `- ${fmt(year1.seTaxDeduction)}`),
-        line('Less student loan interest deduction', `- ${fmt(year1.studentLoanInterestDeduction)}`),
+        line('Less pretax HSA contribution', `- ${fmt(year1.hsaContribution)}`),
         line('Adjusted gross income', fmt(year1.agi)),
         line('Less standard deduction', `- ${fmt(stdDeduction)}`),
         line('Federal taxable income before QBI', fmt(year1.taxableFederalPreQbi)),
@@ -941,7 +1009,7 @@
         line('Less pretax 403(b)', `- ${fmt(year2.retirement403b)}`),
         line(`Less ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, `- ${fmt(year2.sideRetirementContribution)}`),
         line('Less half of SE tax (above-the-line)', `- ${fmt(year2.seTaxDeduction)}`),
-        line('Less student loan interest deduction', `- ${fmt(year2.studentLoanInterestDeduction)}`),
+        line('Less pretax HSA contribution', `- ${fmt(year2.hsaContribution)}`),
         line('Adjusted gross income', fmt(year2.agi)),
         line('Less standard deduction', `- ${fmt(stdDeduction)}`),
         line('Federal taxable income before QBI', fmt(year2.taxableFederalPreQbi)),
@@ -956,7 +1024,7 @@
         line(`Amortized monthly cash flow ÷ ${amortMonthsY2}`, fmt(year2.amortizedMonthly), true)
       ].join(''));
 
-      const clevelandTotal = Object.values(cleveland).reduce((a, b) => a + b, 0);
+      const clevelandTotal = expenses.reduce((sum, x) => sum + x.cle, 0);
       const totalDiff = monthlyBudget - clevelandTotal;
       setHTML('expenseTable', expenses.map(x => {
         const diff = x.bos - x.cle;
@@ -995,7 +1063,8 @@
       setHTML('scheduleCMath', [
         line('Gross Schedule C revenue', fmt(sideIncome)),
         line('Schedule C base deductible expenses', `- ${fmt(scheduleCExpenses)}`),
-        line('Annualized tech/server costs', `- ${fmt(techServerAnnual)}`),
+        line('Annualized business expenses', `- ${fmt(businessExpensesAnnual)}`),
+        line('Annualized tech/server costs (net of grant)', `- ${fmt(techServerDeductible)}`),
         line('Home office deduction (simplified)', `- ${fmt(homeOfficeDeduction)}`),
         line('Total Schedule C deductions', `- ${fmt(totalScheduleCExpenses)}`),
         line('Net business profit', fmt(scheduleCTaxableProfit)),
@@ -1043,7 +1112,8 @@
       ['openRetirementBtn', 'retirementModal'],
       ['openTaxBtn', 'taxModal'],
       ['openExpensesBtn', 'expensesModal'],
-      ['openBenefitsBtn', 'benefitsModal']
+      ['openBenefitsBtn', 'benefitsModal'],
+      ['openScheduleCBtn', 'scheduleCModal']
     ];
 
     modalOpeners.forEach(([btnId, modalId]) => {
