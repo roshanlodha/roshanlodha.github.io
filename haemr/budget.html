@@ -1,21 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>
-    if (sessionStorage.getItem("haemr_auth") !== "true") {
-      let pw = prompt("Enter password:");
-      while (pw !== "haemr") {
-        if (pw === null) {
-          window.location.href = "../index.html";
-          break;
-        }
-        pw = prompt("Incorrect password. Enter password:");
-      }
-      if (pw === "haemr") {
-        sessionStorage.setItem("haemr_auth", "true");
-      }
-    }
-  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HAEMR Residency Financial &amp; Budget Calculator · AY 2026–27</title>
@@ -28,7 +14,7 @@
         <div>
           <div class="masthead-label">HAEMR · AY 2026–27 · Budget Planning</div>
           <h1>Residency Financial &amp; Budget Calculator</h1>
-          <div class="masthead-sub">Modeled around MGB PGY-1 / PGY-2 compensation and the low-utilization benefits assumptions summarized in the companion guide.</div>
+
         </div>
         <div class="top-actions">
           <a class="theme-btn" href="benefits.html">Open benefits guide</a>
@@ -43,11 +29,7 @@
       </div>
     </div>
 
-    <div class="verdict surface-card">
-      <div class="verdict-label">Budget Planning Lens</div>
-      <div class="verdict-headline">This model turns HAEMR residency pay, taxes, benefits, retirement targets, and Boston living costs into an amortized monthly view for 2026 and 2027.</div>
-      <p>Use the input controls above to pressure-test compensation, payroll deductions, healthcare assumptions, and expense categories while keeping the planning logic aligned with the companion benefits guide.</p>
-    </div>
+
 
     <div class="layout">
       <main class="report">
@@ -124,7 +106,7 @@
               <div class="math" id="retirementMathY2"></div>
             </div>
           </div>
-          <div class="card-foot" id="retirementFoot"></div>
+
         </section>
 
         <section class="report-card">
@@ -136,7 +118,7 @@
               </table>
             </div>
           </div>
-          <div class="card-foot" id="benefitFoot"></div>
+
         </section>
 
         <section class="report-card">
@@ -183,7 +165,7 @@
         <section class="report-card">
           <div class="head"><span class="section-num">07</span><h2>Schedule C</h2></div>
           <div class="body">
-            <p class="subtle" id="scheduleCText"></p>
+
             <div class="stack-top-md">
               <h3>Assumed path: Schedule C net profit</h3>
               <div class="math" id="scheduleCMath"></div>
@@ -271,15 +253,7 @@
             <input id="solo401kEmployerRate" type="number" step="0.01" value="20" />
           </div>
         </div>
-        <div class="info-box surface-card">
-          Schedule C net profit is assumed.
-        </div>
-        <div class="info-box surface-card">
-          Contribution waterfall: employee 403(b) up to the annual cap first, then Roth IRA up to $7,500/year.
-        </div>
-        <div class="info-box surface-card">
-          WCI Tip: A Solo 401(k) is preferred over a SEP-IRA as it does not trigger the pro-rata rule for Backdoor Roth IRAs.
-        </div>
+
       </div>
     </div>
   </div>
@@ -322,8 +296,7 @@
   {"upTo": 640600, "rate": 35},
   {"upTo": null, "rate": 37}
 ]</textarea>
-        <p class="footnote">Each bracket uses <code>upTo</code> and <code>rate</code>. Set <code>upTo</code> to null for the top bracket.</p>
-        <p class="footnote">Student loan interest deduction is capped at $2,500 and phases out at higher MAGI limits.</p>
+
       </div>
     </div>
   </div>
@@ -386,9 +359,7 @@
         <div class="grid-2">
           <div><label for="educationFund">Annual education fund ($/year)</label><input id="educationFund" type="number" step="0.01" value="0" /></div>
         </div>
-        <div class="info-box surface-card">
-          Default healthcare assumptions follow the companion benefits guide: HDHP medical at $0/month, a separate $500 employer HSA seed, and roughly $22/month for dental, vision, and light routine out-of-pocket spending.
-        </div>
+
       </div>
     </div>
   </div>
@@ -921,7 +892,7 @@
         line(`Overflow after caps`, fmt(overflowAfterCapsY2), true)
       ].join(''));
 
-      document.getElementById('retirementFoot').textContent = `Assumptions: 403(b) waterfall (fill employee 403(b) first, then Roth IRA); employee 403(b) cap ${fmt(employee403bAnnualMax)}/year; reserve cash ${fmt(reserveCashMonthly)}/month; ${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side-plan ${pct.format(solo401kEmployerRate * 100)}%. Unallocated cash can remain after caps.`;
+
 
       const benefits = [
         ['Medical premium (employee only)', `${fmt(0)}/month`, 'Modeled on the HDHP election used in the companion benefits guide'],
@@ -936,7 +907,7 @@
         ['Relocation stipend', fmt(0), 'No direct relocation cash assumed']
       ];
       setHTML('benefitsTable', benefits.map(row => `<tr><th>${row[0]}</th><td>${row[1]}</td><td class="muted">${row[2]}</td></tr>`).join(''));
-      document.getElementById('benefitFoot').textContent = `Assumptions: stipend taxable; healthcare budget defaults to ${fmt(val('healthcare'))}/month from the companion benefits guide; food perks ${fmt(monthlyFoodPerkTotal())}/month; education fund offsets expenses; HSA seed shown separately and not counted as recurring spendable cash.`;
+
 
       setHTML('taxY1', [
         line('W-2 income', fmt(year1.w2)),
@@ -1016,7 +987,7 @@
       const scheduleCTaxableProfit = scheduleCProfit;
       const scheduleCTax = scheduleCTaxableProfit * (hobbyMarginalRateY1 + stateRate + ssRate + medicareRate);
 
-      document.getElementById('scheduleCText').textContent = `Side income is modeled as Schedule C net profit.`;
+
 
       setHTML('scheduleCMath', [
         line('Gross Schedule C revenue', fmt(sideIncome)),

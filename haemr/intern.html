@@ -1,21 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>
-    if (sessionStorage.getItem("haemr_auth") !== "true") {
-      let pw = prompt("Enter password:");
-      while (pw !== "haemr") {
-        if (pw === null) {
-          window.location.href = "../index.html";
-          break;
-        }
-        pw = prompt("Incorrect password. Enter password:");
-      }
-      if (pw === "haemr") {
-        sessionStorage.setItem("haemr_auth", "true");
-      }
-    }
-  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HAEMR Intern Guide · AY 2026–27</title>
@@ -28,7 +14,7 @@
         <div>
           <div class="masthead-label">HAEMR · AY 2026–27 · Intern Guide</div>
           <h1>Intern Onboarding Checklist</h1>
-          <div class="masthead-sub">Complete your onboarding requirements using the checklists below.</div>
+
         </div>
       </div>
     </div>
@@ -43,7 +29,7 @@
       <div class="report-card">
         <div class="head"><span class="section-num">01</span><h2>Permutable Checklist (Order Matters)</h2></div>
         <div class="body">
-          <p class="subtle">Complete these in sequence.</p>
+
           <ol>
             <li>
               NPI Application
@@ -65,7 +51,7 @@
       <div class="report-card">
         <div class="head"><span class="section-num">02</span><h2>Combinatorial Checklist (Order Does Not Matter)</h2></div>
         <div class="body">
-          <p class="subtle">These can be completed in any order.</p>
+
           <ul>
             <li>CHB Responsibilities Form (via DocuSign)</li>
             <li>MGB Responsibilities Form (via DocuSign)</li>

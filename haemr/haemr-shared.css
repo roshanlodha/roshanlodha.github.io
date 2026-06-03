@@ -434,7 +434,7 @@ h4 {
 }
 
 .seg-ira {
-  background: #b9770e;
+  background: #ec4899; /* Pink */
 }
 
 .seg-emp403b {
@@ -450,11 +450,11 @@ h4 {
 }
 
 .seg-income-salary {
-  background: #1f6f8b;
+  background: #2563eb; /* Royal Blue */
 }
 
 .seg-income-schedulec {
-  background: #c06a2f;
+  background: #f97316; /* Vibrant Orange */
 }
 
 .legend {

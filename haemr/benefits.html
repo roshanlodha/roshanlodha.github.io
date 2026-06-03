@@ -1,21 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>
-  if (sessionStorage.getItem("haemr_auth") !== "true") {
-    let pw = prompt("Enter password:");
-    while (pw !== "haemr") {
-      if (pw === null) {
-        window.location.href = "../index.html";
-        break;
-      }
-      pw = prompt("Incorrect password. Enter password:");
-    }
-    if (pw === "haemr") {
-      sessionStorage.setItem("haemr_auth", "true");
-    }
-  }
-</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HAEMR Benefits Guide · AY 2026–27</title>
@@ -29,7 +15,7 @@
       <div>
         <div class="masthead-label">HAEMR · AY 2026–27 · Benefits Guide</div>
         <h1>Benefits Guide</h1>
-        <div class="masthead-sub">Employee-only reference for a low-utilization profile, with most modeled use coming from routine dental care, one vision exam, and contact lenses.</div>
+
       </div>
       <div class="top-actions">
         <a class="theme-btn" href="budget.html">Open budget calculator</a>
@@ -68,7 +54,7 @@
     <div class="report-card">
       <div class="head"><span class="section-num">01</span><h2>Medical Plan Comparison — Low-Utilization Scenario</h2></div>
       <div class="body">
-        <p class="subtle body-copy">All three plans cost $0/month in employee-only premiums. The main differences are deductible, visit cost-sharing, out-of-pocket maximum, and whether the plan permits HSA contributions. For a profile with little or no non-preventive medical use, the biggest realized cost differences are most likely to appear only if unexpected care occurs.</p>
+
         <div class="plan-grid">
           <div class="plan-card surface-card">
             <div class="plan-name">Premium EPO</div>
@@ -123,7 +109,7 @@
     <div class="report-card">
       <div class="head"><span class="section-num">02</span><h2>Dental &amp; Vision — Most Likely Routine Use</h2></div>
       <div class="body">
-        <p class="subtle body-copy">For a low-utilization profile, most recurring healthcare spend is likely to come from dental premiums, vision premiums, and a small amount of annual vision out-of-pocket expense.</p>
+
         <div class="table-scroll">
           <table class="cost-table">
             <thead>
@@ -267,7 +253,7 @@
     <div class="report-card">
       <div class="head"><span class="section-num">04</span><h2>Disability Insurance — Reference Comparison</h2></div>
       <div class="body">
-        <p class="subtle body-copy">This section summarizes the employer-paid group LTD design alongside an example individual policy structure. The main comparison points are cost, portability, tax treatment, disability definition, and how each policy behaves when income rises or employment changes.</p>
+
 
         <div class="two-col">
           <div class="dis-card surface-card">
@@ -413,7 +399,7 @@
     <div class="report-card">
       <div class="head"><span class="section-num">05</span><h2>Monthly Planning Inputs</h2></div>
       <div class="body">
-        <p class="subtle body-copy">Illustrative values for the companion budget calculator using a low-utilization profile with contacts and routine dental/vision care.</p>
+
         <div class="table-scroll">
           <table class="cost-table">
             <thead>
