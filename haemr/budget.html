@@ -122,30 +122,16 @@
               <div class="math" id="retirementMathY2"></div>
             </div>
           </div>
-
-        </section>
-
-        <section class="report-card">
-          <div class="head"><span class="section-num">03</span><h2>MGB Benefits, Stipends &amp; Food Perks</h2></div>
-          <div class="body">
-            <div class="table-scroll">
-              <table class="mini-table">
-                <tbody id="benefitsTable"></tbody>
-              </table>
-            </div>
-            <div class="callout surface-card info" style="margin-top: 16px;">
-              <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 6px; color: var(--md-sys-color-primary);">shield</span> <strong>Zero-Cost Employer Insurance Perks</strong>
-              <div style="display: grid; gap: 6px; font-size: 0.88rem; color: var(--text); margin-top: 8px; padding-left: 24px;">
-                <div>• Core Long-Term Disability (60% of salary up to $8,000/mo)</div>
-                <div>• Basic Life Insurance (1x salary up to $500,000)</div>
-                <div>• Basic AD&D Insurance (1x salary up to $500,000)</div>
-              </div>
+          <div class="body" style="padding-top: 0;">
+            <div class="callout info">
+              <span class="material-symbols-outlined callout-icon" style="vertical-align: middle;">info</span>
+              <strong>Note on Solo 401(k):</strong> The 20% Solo 401(k) contribution is an employer profit-sharing contribution. It falls under the IRS Section 415(c) limit and does not count against the $24,500 employee elective deferral limit for the 403(b), meaning it is perfectly safe to maximize both.
             </div>
           </div>
         </section>
 
         <section class="report-card">
-          <div class="head"><span class="section-num">04</span><h2>Tax Breakdown &amp; Amortized Take Home Pay (Independent Single Filer)</h2></div>
+          <div class="head"><span class="section-num">03</span><h2>Tax Breakdown &amp; Amortized Take Home Pay (Independent Single Filer)</h2></div>
           <div class="body two-col">
             <div>
               <h3>2026 tax math</h3>
@@ -159,7 +145,7 @@
         </section>
 
         <section class="report-card">
-          <div class="head"><span class="section-num">05</span><h2>Cleveland vs. Boston Expense Projection &amp; Strict Budget</h2></div>
+          <div class="head"><span class="section-num">04</span><h2>Cleveland vs. Boston Expense Projection &amp; Strict Budget</h2></div>
           <div class="body">
             <div class="table-scroll">
               <table>
@@ -178,7 +164,7 @@
         </section>
 
         <section class="report-card">
-          <div class="head"><span class="section-num">06</span><h2>Final Margin Analysis</h2></div>
+          <div class="head"><span class="section-num">05</span><h2>Final Margin Analysis</h2></div>
           <div class="body two-col">
             <div><div class="math" id="marginY1"></div></div>
             <div><div class="math" id="marginY2"></div></div>
@@ -186,7 +172,7 @@
         </section>
 
         <section class="report-card">
-          <div class="head"><span class="section-num">07</span><h2>Schedule C</h2></div>
+          <div class="head"><span class="section-num">06</span><h2>Schedule C</h2></div>
           <div class="body">
 
             <div class="stack-top-md">
@@ -264,6 +250,7 @@
           <div>
              <label for="solo401kEmployerRate">Solo 401(k) employer contribution (%)</label>
              <input id="solo401kEmployerRate" type="number" step="0.01" value="20" />
+             <p class="footnote">Employer profit-sharing contribution. Falls under IRS Section 415(c) and does not count against the $24,500 employee limit for the 403(b), meaning you can maximize both safely.</p>
           </div>
         </div>
 
@@ -355,6 +342,23 @@
             <p class="footnote">Optional Guardian IDI individual policy premium.</p>
           </div>
         </div>
+
+        <div style="margin-top: 24px; border-top: 1px solid var(--md-sys-color-outline-variant); padding-top: 16px;">
+          <h3 style="margin-bottom: 12px;">MGB Benefits Guide</h3>
+          <div class="table-scroll">
+            <table class="mini-table">
+              <tbody id="benefitsTable"></tbody>
+            </table>
+          </div>
+          <div class="callout surface-card info" style="margin-top: 16px;">
+            <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 6px; color: var(--md-sys-color-primary);">shield</span> <strong>Zero-Cost Employer Insurance Perks</strong>
+            <div style="display: grid; gap: 6px; font-size: 0.88rem; color: var(--text); margin-top: 8px; padding-left: 24px;">
+              <div>• Core Long-Term Disability (60% of salary up to $8,000/mo)</div>
+              <div>• Basic Life Insurance (1x salary up to $500,000)</div>
+              <div>• Basic AD&D Insurance (1x salary up to $500,000)</div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="modal-foot">
         <button class="text-btn close-modal" type="button" data-close-modal="expensesModal">Close</button>
@@ -378,7 +382,7 @@
           </div>
           <div>
             <label for="business">Monthly business expenses ($/month)</label>
-            <input id="business" type="number" step="0.01" value="50" />
+            <input id="business" type="number" step="0.01" value="0" />
           </div>
           <div>
             <label for="scheduleCExpenses">Annual Schedule C deductible expenses ($/year)</label>
@@ -391,6 +395,17 @@
           <div>
             <label for="homeOfficeSqFt">Home office square footage (sq ft)</label>
             <input id="homeOfficeSqFt" type="number" step="1" value="0" />
+          </div>
+        </div>
+
+        <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--md-sys-color-outline-variant); display: flex; align-items: flex-start; gap: 16px;">
+          <label class="md3-switch" for="qbiToggle" style="flex-shrink: 0;">
+            <input type="checkbox" id="qbiToggle" />
+            <span class="md3-switch-track"><span class="md3-switch-thumb"></span></span>
+          </label>
+          <div>
+            <div style="font-weight: 600; font-size: var(--md-sys-typescale-body-large-size); color: var(--md-sys-color-on-surface);">Section 199A QBI Deduction (20%)</div>
+            <div style="margin-top: 4px; font-size: var(--md-sys-typescale-body-small-size); color: var(--md-sys-color-on-surface-variant);">When enabled, deducts 20% of qualified business income from federal taxable income. Currently <strong id="qbiStatusLabel">OFF — $0 deduction</strong>.</div>
           </div>
         </div>
       </div>
@@ -417,7 +432,9 @@
       bluebikesAnnual: 73.50,
       educationGrant: 375,
       step3ReimbursementMax: 5250,
-      conferenceTravelMax: 1200
+      conferenceTravelMax: 1200,
+      irsHsaLimit: 4400,
+      employerHsaSeed: 500
     };
 
     const defaults = {
@@ -426,6 +443,7 @@
       stipend: 10500,
       sideIncome: 7500,
       scheduleCExpenses: 0,
+      business: 0,
       techServerCosts: 0,
       homeOfficeSqFt: 0,
       matchRate: 2,
@@ -572,7 +590,8 @@
       stdDeduction,
       stateMovingExpenseDeduction,
       brackets,
-      amortMonths
+      amortMonths,
+      useQbi = false
     }) {
       const MA_PERSONAL_EXEMPTION_SINGLE = 4400;
       const retirement403b = Math.max(0, employee403bContribution);
@@ -592,7 +611,9 @@
       const fica = ficaW2 + seTax;
       const agi = w2 + stipend + sideIncome - retirement403b - seTaxDeduction - sideRetirementContribution - hsa;
       const taxableFederalPreQbi = Math.max(0, agi - stdDeduction);
-      const qbiDeduction = Math.max(0, sideIncome - seTaxDeduction - sideRetirementContribution) * 0.20;
+      const qbiDeduction = useQbi
+        ? Math.max(0, sideIncome - seTaxDeduction - sideRetirementContribution) * 0.20
+        : 0;
       const taxableFederal = Math.max(0, taxableFederalPreQbi - qbiDeduction);
       const federalTax = calcProgressiveTax(taxableFederal, brackets);
       // HSA is not deductible for MA state tax purposes, add it back to AGI
@@ -600,7 +621,66 @@
       const stateTax = taxableState * stateRate;
       const totalTax = fica + federalTax + stateTax;
       const spendableNet = w2 + stipend + sideIncome - retirement403b - sideRetirementContribution - hsa - totalTax;
-      const amortizedMonthly = spendableNet / amortMonths;
+
+      // Side income components are distributed over 12 months
+      const sideIncomeMonthly = sideIncome / 12;
+      const sideRetirementMonthly = sideRetirementContribution / 12;
+      const ssSEMonthly = ssSE / 12;
+      const medicareSEMonthly = medicareSE / 12;
+
+      // W2 salary, stipend, 403b, and HSA are concentrated in the residency months (amortMonths)
+      const w2Monthly = w2 / amortMonths;
+      const stipendMonthly = stipend / amortMonths;
+      const retirement403bMonthly = retirement403b / amortMonths;
+      const hsaMonthly = hsa / amortMonths;
+      const ssW2Monthly = ssW2 / amortMonths;
+      const medicareW2Monthly = medicareW2 / amortMonths;
+
+      // Allocate federal and state income tax proportionally between W-2, stipend, and side income
+      const grossIncome = w2 + stipend + sideIncome;
+      const w2Ratio = grossIncome > 0 ? (w2 / grossIncome) : 0;
+      const stipendRatio = grossIncome > 0 ? (stipend / grossIncome) : 0;
+      const sideIncomeRatio = grossIncome > 0 ? (sideIncome / grossIncome) : 0;
+
+      const annualIncomeTax = federalTax + stateTax;
+      
+      const w2IncomeTaxAnnual = annualIncomeTax * w2Ratio;
+      const stipendIncomeTaxAnnual = annualIncomeTax * stipendRatio;
+      const sideIncomeTaxAnnual = annualIncomeTax * sideIncomeRatio;
+      
+      const w2IncomeTaxMonthly = w2IncomeTaxAnnual / amortMonths;
+      const stipendIncomeTaxMonthly = stipendIncomeTaxAnnual / amortMonths;
+      const sideIncomeTaxMonthly = sideIncomeTaxAnnual / 12;
+      
+      // Monthly totals for display
+      const grossMonthly = w2Monthly + stipendMonthly + sideIncomeMonthly;
+      const ssMonthly = ssW2Monthly + ssSEMonthly;
+      const medicareMonthly = medicareW2Monthly + medicareSEMonthly;
+      
+      const federalTaxSideMonthly = (federalTax * sideIncomeRatio) / 12;
+      const federalTaxW2Monthly = (federalTax * w2Ratio) / amortMonths;
+      const federalTaxStipendMonthly = (federalTax * stipendRatio) / amortMonths;
+      const federalTaxMonthly = federalTaxW2Monthly + federalTaxSideMonthly + federalTaxStipendMonthly;
+
+      const stateTaxSideMonthly = (stateTax * sideIncomeRatio) / 12;
+      const stateTaxW2Monthly = (stateTax * w2Ratio) / amortMonths;
+      const stateTaxStipendMonthly = (stateTax * stipendRatio) / amortMonths;
+      const stateTaxMonthly = stateTaxW2Monthly + stateTaxSideMonthly + stateTaxStipendMonthly;
+
+      // W2 monthly net cash flow (excluding stipend)
+      const w2NetMonthly = w2Monthly - retirement403bMonthly - hsaMonthly - ssW2Monthly - medicareW2Monthly - w2IncomeTaxMonthly;
+      
+      // Post-tax stipend (lump sum)
+      const stipendNet = stipend - stipendIncomeTaxAnnual;
+
+      // Post-tax Schedule C monthly net cash
+      const sideNetMonthly = sideIncomeMonthly - sideRetirementMonthly - ssSEMonthly - medicareSEMonthly - sideIncomeTaxMonthly;
+
+      // Regular monthly cash flow (W-2 net + Schedule C net)
+      const regularMonthlyCashFlow = w2NetMonthly + sideNetMonthly;
+
+      const amortizedMonthly = regularMonthlyCashFlow + (stipendNet / amortMonths);
+
       return {
         w2,
         stipend,
@@ -626,7 +706,23 @@
         stateTax,
         totalTax,
         spendableNet,
-        amortizedMonthly
+        amortizedMonthly,
+        // Monthly break downs
+        sideIncomeMonthly,
+        sideRetirementMonthly,
+        w2Monthly,
+        stipendMonthly,
+        retirement403bMonthly,
+        hsaMonthly,
+        grossMonthly,
+        ssMonthly,
+        medicareMonthly,
+        federalTaxMonthly,
+        stateTaxMonthly,
+        w2NetMonthly,
+        stipendNet,
+        sideNetMonthly,
+        regularMonthlyCashFlow
       };
     }
 
@@ -646,7 +742,9 @@
       brackets,
       amortMonths,
       monthlyBudget,
-      reserveCashMonthly
+      reserveCashMonthly,
+      maxEmployeeHsaContribution,
+      useQbi = false
     }) {
       let recommended403b = Math.min(employee403bAnnualMax, min403b);
       let hsaContribution = 0;
@@ -668,7 +766,8 @@
           stdDeduction,
           stateMovingExpenseDeduction,
           brackets,
-          amortMonths
+          amortMonths,
+          useQbi
         });
 
         // Amortized surplus without subtracting reserve Cash (prioritize 403(b) / HSA)
@@ -679,8 +778,8 @@
         extra403bContribution = Math.min(maxExtra403b, totalSurplus);
         totalSurplus = Math.max(0, totalSurplus - extra403bContribution);
 
-        // Priority 2: Maximize HSA (up to $3,900)
-        hsaContribution = Math.min(3900, totalSurplus);
+        // Priority 2: Maximize HSA
+        hsaContribution = Math.min(maxEmployeeHsaContribution, totalSurplus);
 
         const next403b = Math.min(employee403bAnnualMax, min403b + extra403bContribution);
         if (Math.abs(next403b - recommended403b) < 0.5) {
@@ -704,7 +803,8 @@
         stdDeduction,
         stateMovingExpenseDeduction,
         brackets,
-        amortMonths
+        amortMonths,
+        useQbi
       });
 
       const annualAvailableFinal = Math.max(0, (year.amortizedMonthly - monthlyBudget) * amortMonths);
@@ -714,8 +814,8 @@
       extra403bContribution = Math.min(maxExtra403b, totalSurplusFinal);
       totalSurplusFinal = Math.max(0, totalSurplusFinal - extra403bContribution);
 
-      // Priority 2: Maximize HSA (up to $3,900)
-      hsaContribution = Math.min(3900, totalSurplusFinal);
+      // Priority 2: Maximize HSA
+      hsaContribution = Math.min(maxEmployeeHsaContribution, totalSurplusFinal);
       totalSurplusFinal = Math.max(0, totalSurplusFinal - hsaContribution);
 
       // Priority 3: Emergency Reserve
@@ -738,6 +838,8 @@
       const bracketBox = document.getElementById('federalBrackets');
       bracketBox.style.borderColor = brackets ? 'var(--input-border)' : 'rgba(255,143,143,0.8)';
       if (!brackets) return;
+
+      const useQbi = document.getElementById('qbiToggle').checked;
 
       const pgy1 = val('pgy1');
       const pgy2 = val('pgy2');
@@ -762,6 +864,9 @@
       const w2Y1 = pgy1 * (daysY1 / daysInYear);
       const w2Y2 = pgy1 * (daysPgy1Y2 / daysInYear) + pgy2 * (daysPgy2Y2 / daysInYear);
       const employee403bAnnualMax = HARD_CODED.employee403bAnnualMax;
+      const irsHsaLimit = HARD_CODED.irsHsaLimit;
+      const employerHsaSeed = HARD_CODED.employerHsaSeed;
+      const maxEmployeeHsaContribution = irsHsaLimit - employerHsaSeed;
       const min403bY1 = w2Y1 * matchRate;
       const min403bY2 = w2Y2 * matchRate;
 
@@ -783,11 +888,17 @@
       const homeOfficeSqFt = Math.max(0, val('homeOfficeSqFt'));
       const homeOfficeDeduction = Math.min(1500, homeOfficeSqFt * 5);
       const techServerAnnual = techServerCosts * 12;
-      const techServerDeductible = Math.max(0, techServerAnnual - 375);
+      const techServerDeductible = Math.max(0, techServerAnnual - HARD_CODED.educationGrant);
       const businessExpensesMonthly = val('business');
       const businessExpensesAnnual = businessExpensesMonthly * 12;
       const totalScheduleCExpenses = scheduleCExpenses + techServerDeductible + homeOfficeDeduction + businessExpensesAnnual;
       const scheduleCProfit = Math.max(0, sideIncome - totalScheduleCExpenses);
+
+      // Update QBI status label
+      const qbiStatusLabel = document.getElementById('qbiStatusLabel');
+      if (qbiStatusLabel) {
+        qbiStatusLabel.textContent = useQbi ? 'ON — 20% deduction applied' : 'OFF — $0 deduction';
+      }
 
       const year1Optimized = optimizeRetirementForYear({
         w2: w2Y1,
@@ -805,7 +916,9 @@
         brackets,
         amortMonths: amortMonthsY1,
         monthlyBudget,
-        reserveCashMonthly
+        reserveCashMonthly,
+        maxEmployeeHsaContribution,
+        useQbi
       });
 
       const year1 = year1Optimized.year;
@@ -830,7 +943,9 @@
         brackets,
         amortMonths: amortMonthsY2,
         monthlyBudget,
-        reserveCashMonthly
+        reserveCashMonthly,
+        maxEmployeeHsaContribution,
+        useQbi
       });
 
       const year2 = year2Optimized.year;
@@ -839,34 +954,32 @@
       const reserveContributionY2 = year2Optimized.reserveContribution;
       const overflowAfterCapsY2 = year2Optimized.overflowAfterCaps;
 
-      const sidePlanMonthlyY1 = year1.sideRetirementContribution / amortMonthsY1;
-      const sidePlanMonthlyY2 = year2.sideRetirementContribution / amortMonthsY2;
-      const emp403bMonthlyY1 = year1.retirement403b / amortMonthsY1;
-      const emp403bMonthlyY2 = year2.retirement403b / amortMonthsY2;
+      const sidePlanMonthlyY1 = year1.sideRetirementMonthly;
+      const sidePlanMonthlyY2 = year2.sideRetirementMonthly;
+      const emp403bMonthlyY1 = year1.retirement403bMonthly;
+      const emp403bMonthlyY2 = year2.retirement403bMonthly;
 
-      const grossY1 = year1.w2 + stipend + scheduleCProfit;
-      const monthlyGrossY1 = grossY1 / amortMonthsY1;
-      const salaryIncomeMonthlyY1 = (year1.w2 + stipend) / amortMonthsY1;
-      const scheduleCIncomeMonthlyY1 = scheduleCProfit / amortMonthsY1;
+      const monthlyGrossY1 = year1.grossMonthly;
+      const salaryIncomeMonthlyY1 = year1.w2Monthly + year1.stipendMonthly;
+      const scheduleCIncomeMonthlyY1 = year1.sideIncomeMonthly;
 
-      const grossY2 = year2.w2 + stipend + scheduleCProfit;
-      const monthlyGrossY2 = grossY2 / amortMonthsY2;
-      const salaryIncomeMonthlyY2 = (year2.w2 + stipend) / amortMonthsY2;
-      const scheduleCIncomeMonthlyY2 = scheduleCProfit / amortMonthsY2;
+      const monthlyGrossY2 = year2.grossMonthly;
+      const salaryIncomeMonthlyY2 = year2.w2Monthly + year2.stipendMonthly;
+      const scheduleCIncomeMonthlyY2 = year2.sideIncomeMonthly;
 
-      const hsaMonthlyY1 = hsaContributionY1 / amortMonthsY1;
-      const hsaMonthlyY2 = hsaContributionY2 / amortMonthsY2;
+      const hsaMonthlyY1 = year1.hsaMonthly;
+      const hsaMonthlyY2 = year2.hsaMonthly;
       const reserveMonthlyY1 = reserveContributionY1 / amortMonthsY1;
       const reserveMonthlyY2 = reserveContributionY2 / amortMonthsY2;
 
-      const fedTaxMonthlyY1 = year1.federalTax / amortMonthsY1;
-      const fedTaxMonthlyY2 = year2.federalTax / amortMonthsY2;
-      const stateTaxMonthlyY1 = year1.stateTax / amortMonthsY1;
-      const stateTaxMonthlyY2 = year2.stateTax / amortMonthsY2;
-      const ssMonthlyY1 = (year1.ssW2 + year1.ssSE) / amortMonthsY1;
-      const ssMonthlyY2 = (year2.ssW2 + year2.ssSE) / amortMonthsY2;
-      const medMonthlyY1 = (year1.medicareW2 + year1.medicareSE) / amortMonthsY1;
-      const medMonthlyY2 = (year2.medicareW2 + year2.medicareSE) / amortMonthsY2;
+      const fedTaxMonthlyY1 = year1.federalTaxMonthly;
+      const fedTaxMonthlyY2 = year2.federalTaxMonthly;
+      const stateTaxMonthlyY1 = year1.stateTaxMonthly;
+      const stateTaxMonthlyY2 = year2.stateTaxMonthly;
+      const ssMonthlyY1 = year1.ssMonthly;
+      const ssMonthlyY2 = year2.ssMonthly;
+      const medMonthlyY1 = year1.medicareMonthly;
+      const medMonthlyY2 = year2.medicareMonthly;
 
       const unallocatedMonthlyY1 = overflowAfterCapsY1 / amortMonthsY1;
       const unallocatedMonthlyY2 = overflowAfterCapsY2 / amortMonthsY2;
@@ -913,8 +1026,8 @@
       const y2Surplus = year2.amortizedMonthly - monthlyBudget;
       const monthly403bPctY1 = monthlyGrossY1 > 0 ? (emp403bMonthlyY1 / monthlyGrossY1) * 100 : 0;
       const monthly403bPctY2 = monthlyGrossY2 > 0 ? (emp403bMonthlyY2 / monthlyGrossY2) * 100 : 0;
-      const totalRetirementY1 = year1.retirement403b + (year1.w2 * matchRate) + year1.sideRetirementContribution + year1.hsaContribution;
-      const totalRetirementY2 = year2.retirement403b + (year2.w2 * matchRate) + year2.sideRetirementContribution + year2.hsaContribution;
+      const totalRetirementY1 = year1.retirement403b + (year1.w2 * matchRate) + year1.sideRetirementContribution + year1.hsaContribution + employerHsaSeed;
+      const totalRetirementY2 = year2.retirement403b + (year2.w2 * matchRate) + year2.sideRetirementContribution + year2.hsaContribution + employerHsaSeed;
 
       document.getElementById('kpiY1Cash').textContent = fmt(year1.amortizedMonthly);
       document.getElementById('kpiY2Cash').textContent = fmt(year2.amortizedMonthly);
@@ -955,7 +1068,6 @@
       setHTML('retirementMathY1', [
         line('Employee 403(b) contribution', fmt(year1.retirement403b)),
         line(`Employer match (${pct.format(matchRate * 100)}%)`, fmt(year1.w2 * matchRate)),
-        line('Additional 403(b) beyond match floor', fmt(extra403bContributionY1)),
         line('HSA contribution', fmt(year1.hsaContribution)),
         line(`${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, fmt(year1.sideRetirementContribution)),
         line(`Annual 403(b) cap`, fmt(employee403bAnnualMax)),
@@ -965,7 +1077,6 @@
       setHTML('retirementMathY2', [
         line('Employee 403(b) contribution', fmt(year2.retirement403b)),
         line(`Employer match (${pct.format(matchRate * 100)}%)`, fmt(year2.w2 * matchRate)),
-        line('Additional 403(b) beyond match floor', fmt(extra403bContribution)),
         line('HSA contribution', fmt(year2.hsaContribution)),
         line(`${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, fmt(year2.sideRetirementContribution)),
         line(`Annual 403(b) cap`, fmt(employee403bAnnualMax)),
@@ -974,7 +1085,7 @@
 
       const benefits = [
         ['Medical premium (employee only)', `${fmt(0)}/month`, 'Modeled on the HDHP election used in the companion benefits guide'],
-        ['Employer HSA seed', fmt(500), 'Annual employer contribution tied to HDHP enrollment; shown for planning, not as monthly spendable cash'],
+        ['Employer HSA seed', fmt(employerHsaSeed), 'Annual employer contribution tied to HDHP enrollment; shown for planning, not as monthly spendable cash'],
         ['Modeled healthcare budget', `${fmt(val('healthcare'))}/month`, 'Midpoint assumption for core dental, vision, and light routine out-of-pocket spending'],
         ['403(b) match', `${pct.format(matchRate * 100)}% of W-2`, 'Immediate risk free return up to the match cap'],
         ['Education fund', fmt(0), 'Can offset CME, licensing, courses, and similar costs'],
@@ -985,7 +1096,7 @@
         ['<strong>Housing/Childcare Stipend</strong>', `${fmt(stipend)}/year`, 'Taxable annual cash payment; included in gross income and modeled in take-home pay'],
         ['<strong>Step 3 &amp; UWorld / Tuition</strong>', 'Up to $5,250/year', 'Requires 90-day submission; reference benefit not subtracted from education expenses'],
         ['<strong>Fitness Subsidy</strong>', '$150/year', 'Gyms or fitness apps; reference subsidy not subtracted from healthcare/other expenses'],
-        ['<strong>Education Grant</strong>', '$375 one-time', 'Textbooks/online access'],
+        ['<strong>Education Grant</strong>', `${fmt(HARD_CODED.educationGrant)} one-time`, 'Textbooks/online access'],
         ['<strong>Travel &amp; Transit</strong>', 'Variable', '$45/mo MBTA, $73.50 Bluebikes, $1,200 PGY-4 Conference']
       ];
       setHTML('benefitsTable', benefits.map(row => `<tr><th>${row[0]}</th><td>${row[1]}</td><td class="muted">${row[2]}</td></tr>`).join(''));
@@ -1001,7 +1112,7 @@
         line('Adjusted gross income', fmt(year1.agi)),
         line('Less standard deduction', `- ${fmt(stdDeduction)}`),
         line('Federal taxable income before QBI', fmt(year1.taxableFederalPreQbi)),
-        line('Less Section 199A QBI deduction (20%)', `- ${fmt(year1.qbiDeduction)}`),
+        useQbi ? line('Less Section 199A QBI deduction (20%)', `- ${fmt(year1.qbiDeduction)}`) : line('Section 199A QBI deduction', 'OFF — $0'),
         line('Federal taxable income', fmt(year1.taxableFederal)),
         line('Federal income tax', fmt(year1.federalTax)),
         line(`Social Security tax on W-2 (${pct.format(ssRate * 100)}%)`, fmt(year1.ssW2)),
@@ -1011,7 +1122,10 @@
         line('MA personal exemption', `- ${fmt(4400)}`),
         line('MA tax', fmt(year1.stateTax)),
         line('Spendable net cash after taxes & retirement', fmt(year1.spendableNet)),
-        line(`Amortized monthly cash flow ÷ ${amortMonthsY1}`, fmt(year1.amortizedMonthly), true)
+        line('Post-tax stipend (June lump sum)', fmt(year1.stipendNet)),
+        line('Schedule C monthly net cash', fmt(year1.sideNetMonthly)),
+        line('W-2 monthly net cash (post-deductions)', fmt(year1.w2NetMonthly)),
+        line('Regular monthly cash flow (W-2 + Schedule C)', fmt(year1.regularMonthlyCashFlow), true)
       ].join(''));
 
       setHTML('taxY2', [
@@ -1025,7 +1139,7 @@
         line('Adjusted gross income', fmt(year2.agi)),
         line('Less standard deduction', `- ${fmt(stdDeduction)}`),
         line('Federal taxable income before QBI', fmt(year2.taxableFederalPreQbi)),
-        line('Less Section 199A QBI deduction (20%)', `- ${fmt(year2.qbiDeduction)}`),
+        useQbi ? line('Less Section 199A QBI deduction (20%)', `- ${fmt(year2.qbiDeduction)}`) : line('Section 199A QBI deduction', 'OFF — $0'),
         line('Federal taxable income', fmt(year2.taxableFederal)),
         line('Federal income tax', fmt(year2.federalTax)),
         line(`Social Security tax on W-2 (${pct.format(ssRate * 100)}%)`, fmt(year2.ssW2)),
@@ -1035,7 +1149,10 @@
         line('MA personal exemption', `- ${fmt(4400)}`),
         line('MA tax', fmt(year2.stateTax)),
         line('Spendable net cash after taxes & retirement', fmt(year2.spendableNet)),
-        line(`Amortized monthly cash flow ÷ ${amortMonthsY2}`, fmt(year2.amortizedMonthly), true)
+        line('Post-tax stipend (June lump sum)', fmt(year2.stipendNet)),
+        line('Schedule C monthly net cash', fmt(year2.sideNetMonthly)),
+        line('W-2 monthly net cash (post-deductions)', fmt(year2.w2NetMonthly)),
+        line('Regular monthly cash flow (W-2 + Schedule C)', fmt(year2.regularMonthlyCashFlow), true)
       ].join(''));
 
       const clevelandTotal = expenses.reduce((sum, x) => sum + x.cle, 0);
@@ -1080,7 +1197,7 @@
         line('Home office deduction (simplified)', `- ${fmt(homeOfficeDeduction)}`),
         line('Total Schedule C deductions', `- ${fmt(totalScheduleCExpenses)}`),
         line('Net business profit', fmt(scheduleCTaxableProfit)),
-        line('Section 199A QBI deduction (20%)', `- ${fmt(year1.qbiDeduction)}`),
+        useQbi ? line('Section 199A QBI deduction (20%)', `- ${fmt(year1.qbiDeduction)}`) : line('Section 199A QBI deduction', 'OFF — $0'),
         line('Approximate tax if profit remains', fmt(scheduleCTax)),
         line('After tax business cash', fmt(sideIncome - totalScheduleCExpenses - scheduleCTax), true)
       ].join(''));
@@ -1118,6 +1235,8 @@
       el.addEventListener('input', update);
       el.addEventListener('change', update);
     });
+
+    document.getElementById('qbiToggle').addEventListener('change', update);
 
     const modalOpeners = [
       ['openIncomeBtn', 'incomeModal'],
