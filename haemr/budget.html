@@ -18,9 +18,13 @@
         <div>
           <div class="masthead-label">HAEMR · AY 2026–27 · Budget Planning</div>
           <h1>Residency Financial &amp; Budget Calculator</h1>
-
         </div>
-
+        <div class="segmented-control">
+          <input type="radio" name="calcMode" id="calcModeOptimize" checked />
+          <label for="calcModeOptimize">Optimize</label>
+          <input type="radio" name="calcMode" id="calcModeInvert" />
+          <label for="calcModeInvert">Invert</label>
+        </div>
       </div>
       <div class="action-row">
         <button id="openIncomeBtn" class="tonal" type="button">
@@ -259,6 +263,16 @@
             <input id="hsaAnnualTarget" type="number" step="0.01" value="4400" />
             <p class="footnote">The employer seeds $500 of this target, leaving $3,900 as the employee payroll contribution.</p>
           </div>
+          <div class="invert-only">
+            <label for="custom403bRate">Invert Mode: 403(b) contribution rate (%)</label>
+            <input id="custom403bRate" type="number" step="0.1" value="30" />
+            <p class="footnote">Used in Invert mode to set W-2 403(b) elective deferral percentage (default 30%).</p>
+          </div>
+          <div class="invert-only">
+            <label for="customIRATarget">Invert Mode: Annual IRA contribution ($/year)</label>
+            <input id="customIRATarget" type="number" step="100" value="0" />
+            <p class="footnote">Used in Invert mode to set annual Roth IRA contribution (default $0).</p>
+          </div>
         </div>
 
       </div>
@@ -486,7 +500,9 @@
       coffee: 50,
       education: 0,
       healthcare: 22,
-      disability: 0
+      disability: 0,
+      custom403bRate: 30,
+      customIRATarget: 0
     };
 
     const cleveland = {
@@ -861,7 +877,31 @@
       `;
     }
 
+    function updateModeUI() {
+      const isInvertMode = document.getElementById('calcModeInvert') && document.getElementById('calcModeInvert').checked;
+      const custom403bInput = document.getElementById('custom403bRate');
+      const customIRAInput = document.getElementById('customIRATarget');
+      if (custom403bInput && customIRAInput) {
+        if (isInvertMode) {
+          custom403bInput.removeAttribute('disabled');
+          customIRAInput.removeAttribute('disabled');
+          custom403bInput.closest('.invert-only').style.opacity = '1';
+          custom403bInput.closest('.invert-only').style.pointerEvents = 'auto';
+          customIRAInput.closest('.invert-only').style.opacity = '1';
+          customIRAInput.closest('.invert-only').style.pointerEvents = 'auto';
+        } else {
+          custom403bInput.setAttribute('disabled', 'true');
+          customIRAInput.setAttribute('disabled', 'true');
+          custom403bInput.closest('.invert-only').style.opacity = '0.4';
+          custom403bInput.closest('.invert-only').style.pointerEvents = 'none';
+          customIRAInput.closest('.invert-only').style.opacity = '0.4';
+          customIRAInput.closest('.invert-only').style.pointerEvents = 'none';
+        }
+      }
+    }
+
     function update() {
+      updateModeUI();
       const brackets = parseBrackets();
       const bracketBox = document.getElementById('federalBrackets');
       bracketBox.style.borderColor = brackets ? 'var(--input-border)' : 'rgba(255,143,143,0.8)';
@@ -936,61 +976,141 @@
         solo401kStatusLabel.textContent = useSolo401k ? 'ON' : 'OFF';
       }
 
-      const year1Optimized = optimizeRetirementForYear({
-        w2: w2Y1,
-        stipend,
-        sideIncome: scheduleCProfit,
-        min403b: min403bY1,
-        employee403bAnnualMax,
-        solo401kEmployerRate,
-        selfEmployedPlan,
-        ssRate,
-        medicareRate,
-        stateRate,
-        stdDeduction,
-        stateMovingExpenseDeduction: maMovingExpenses,
-        brackets,
-        amortMonths: amortMonthsY1,
-        monthlyBudget,
-        reserveCashMonthly,
-        hsaContribution: employeeHsaContribution,
-        useQbi,
-        useSolo401k
-      });
+      let year1, year2;
+      let rothIRA_Y1, rothIRA_Y2;
+      let remainingOverflowY1, remainingOverflowY2;
+      let overflowAfterCapsY1, overflowAfterCapsY2;
+      let extra403bContributionY1, extra403bContribution;
+      let hsaContributionY1, hsaContributionY2;
+      let reserveContributionY1, reserveContributionY2;
 
-      const year1 = year1Optimized.year;
-      const extra403bContributionY1 = year1Optimized.extra403bContribution;
-      const hsaContributionY1 = year1Optimized.hsaContribution;
-      const reserveContributionY1 = year1Optimized.reserveContribution;
-      const overflowAfterCapsY1 = year1Optimized.overflowAfterCaps;
+      const isInvertMode = document.getElementById('calcModeInvert') && document.getElementById('calcModeInvert').checked;
 
-      const year2Optimized = optimizeRetirementForYear({
-        w2: w2Y2,
-        stipend,
-        sideIncome: scheduleCProfit,
-        min403b: min403bY2,
-        employee403bAnnualMax,
-        solo401kEmployerRate,
-        selfEmployedPlan,
-        ssRate,
-        medicareRate,
-        stateRate,
-        stdDeduction,
-        stateMovingExpenseDeduction: 0,
-        brackets,
-        amortMonths: amortMonthsY2,
-        monthlyBudget,
-        reserveCashMonthly,
-        hsaContribution: employeeHsaContribution,
-        useQbi,
-        useSolo401k
-      });
+      if (isInvertMode) {
+        const custom403bRate = val('custom403bRate') / 100;
+        const customIRATarget = val('customIRATarget');
 
-      const year2 = year2Optimized.year;
-      const extra403bContribution = year2Optimized.extra403bContribution;
-      const hsaContributionY2 = year2Optimized.hsaContribution;
-      const reserveContributionY2 = year2Optimized.reserveContribution;
-      const overflowAfterCapsY2 = year2Optimized.overflowAfterCaps;
+        const fixed403bY1 = Math.min(employee403bAnnualMax, w2Y1 * custom403bRate);
+        const fixed403bY2 = Math.min(employee403bAnnualMax, w2Y2 * custom403bRate);
+
+        year1 = calcYear({
+          w2: w2Y1,
+          stipend,
+          sideIncome: scheduleCProfit,
+          employee403bContribution: fixed403bY1,
+          hsaContribution: employeeHsaContribution,
+          solo401kEmployerRate,
+          selfEmployedPlan,
+          ssRate,
+          medicareRate,
+          stateRate,
+          stdDeduction,
+          stateMovingExpenseDeduction: maMovingExpenses,
+          brackets,
+          amortMonths: amortMonthsY1,
+          useQbi,
+          useSolo401k
+        });
+
+        year2 = calcYear({
+          w2: w2Y2,
+          stipend,
+          sideIncome: scheduleCProfit,
+          employee403bContribution: fixed403bY2,
+          hsaContribution: employeeHsaContribution,
+          solo401kEmployerRate,
+          selfEmployedPlan,
+          ssRate,
+          medicareRate,
+          stateRate,
+          stdDeduction,
+          stateMovingExpenseDeduction: 0,
+          brackets,
+          amortMonths: amortMonthsY2,
+          useQbi,
+          useSolo401k
+        });
+
+        rothIRA_Y1 = Math.max(0, Math.min(7000, customIRATarget));
+        rothIRA_Y2 = Math.max(0, Math.min(7000, customIRATarget));
+        
+        extra403bContributionY1 = Math.max(0, fixed403bY1 - min403bY1);
+        extra403bContribution = Math.max(0, fixed403bY2 - min403bY2);
+        
+        hsaContributionY1 = employeeHsaContribution;
+        hsaContributionY2 = employeeHsaContribution;
+        reserveContributionY1 = 0;
+        reserveContributionY2 = 0;
+
+        const annualAvailableY1 = year1.spendableNet - (monthlyBudget * amortMonthsY1);
+        remainingOverflowY1 = annualAvailableY1 - rothIRA_Y1;
+        overflowAfterCapsY1 = Math.max(0, annualAvailableY1);
+
+        const annualAvailableY2 = year2.spendableNet - (monthlyBudget * amortMonthsY2);
+        remainingOverflowY2 = annualAvailableY2 - rothIRA_Y2;
+        overflowAfterCapsY2 = Math.max(0, annualAvailableY2);
+      } else {
+        const year1Optimized = optimizeRetirementForYear({
+          w2: w2Y1,
+          stipend,
+          sideIncome: scheduleCProfit,
+          min403b: min403bY1,
+          employee403bAnnualMax,
+          solo401kEmployerRate,
+          selfEmployedPlan,
+          ssRate,
+          medicareRate,
+          stateRate,
+          stdDeduction,
+          stateMovingExpenseDeduction: maMovingExpenses,
+          brackets,
+          amortMonths: amortMonthsY1,
+          monthlyBudget,
+          reserveCashMonthly,
+          hsaContribution: employeeHsaContribution,
+          useQbi,
+          useSolo401k
+        });
+
+        year1 = year1Optimized.year;
+        extra403bContributionY1 = year1Optimized.extra403bContribution;
+        hsaContributionY1 = year1Optimized.hsaContribution;
+        reserveContributionY1 = year1Optimized.reserveContribution;
+        overflowAfterCapsY1 = year1Optimized.overflowAfterCaps;
+
+        const year2Optimized = optimizeRetirementForYear({
+          w2: w2Y2,
+          stipend,
+          sideIncome: scheduleCProfit,
+          min403b: min403bY2,
+          employee403bAnnualMax,
+          solo401kEmployerRate,
+          selfEmployedPlan,
+          ssRate,
+          medicareRate,
+          stateRate,
+          stdDeduction,
+          stateMovingExpenseDeduction: 0,
+          brackets,
+          amortMonths: amortMonthsY2,
+          monthlyBudget,
+          reserveCashMonthly,
+          hsaContribution: employeeHsaContribution,
+          useQbi,
+          useSolo401k
+        });
+
+        year2 = year2Optimized.year;
+        extra403bContribution = year2Optimized.extra403bContribution;
+        hsaContributionY2 = year2Optimized.hsaContribution;
+        reserveContributionY2 = year2Optimized.reserveContribution;
+        overflowAfterCapsY2 = year2Optimized.overflowAfterCaps;
+
+        rothIRA_Y1 = Math.min(7000, overflowAfterCapsY1);
+        rothIRA_Y2 = Math.min(7000, overflowAfterCapsY2);
+        remainingOverflowY1 = Math.max(0, overflowAfterCapsY1 - rothIRA_Y1);
+        remainingOverflowY2 = Math.max(0, overflowAfterCapsY2 - rothIRA_Y2);
+      }
 
       const sidePlanMonthlyY1 = year1.sideRetirementMonthly;
       const sidePlanMonthlyY2 = year2.sideRetirementMonthly;
@@ -1018,13 +1138,6 @@
       const ssMonthlyY2 = year2.ssMonthly;
       const medMonthlyY1 = year1.medicareMonthly;
       const medMonthlyY2 = year2.medicareMonthly;
-
-
-
-      const rothIRA_Y1 = Math.min(7000, overflowAfterCapsY1);
-      const rothIRA_Y2 = Math.min(7000, overflowAfterCapsY2);
-      const remainingOverflowY1 = Math.max(0, overflowAfterCapsY1 - rothIRA_Y1);
-      const remainingOverflowY2 = Math.max(0, overflowAfterCapsY2 - rothIRA_Y2);
 
       const rothIRAValY1 = showAnnual ? rothIRA_Y1 : rothIRA_Y1 / amortMonthsY1;
       const rothIRAValY2 = showAnnual ? rothIRA_Y2 : rothIRA_Y2 / amortMonthsY2;
@@ -1158,8 +1271,8 @@
 
       const y1Surplus = year1.amortizedMonthly - monthlyBudget;
       const y2Surplus = year2.amortizedMonthly - monthlyBudget;
-      const monthly403bPctY1 = monthlyGrossY1 > 0 ? (emp403bMonthlyY1 / monthlyGrossY1) * 100 : 0;
-      const monthly403bPctY2 = monthlyGrossY2 > 0 ? (emp403bMonthlyY2 / monthlyGrossY2) * 100 : 0;
+      const monthly403bPctY1 = w2Y1 > 0 ? (year1.retirement403b / w2Y1) * 100 : 0;
+      const monthly403bPctY2 = w2Y2 > 0 ? (year2.retirement403b / w2Y2) * 100 : 0;
       const totalRetirementY1 = year1.retirement403b + (year1.w2 * matchRate) + year1.sideRetirementContribution + year1.hsaContribution + employerHsaSeed + rothIRA_Y1;
       const totalRetirementY2 = year2.retirement403b + (year2.w2 * matchRate) + year2.sideRetirementContribution + year2.hsaContribution + employerHsaSeed + rothIRA_Y2;
 
@@ -1204,7 +1317,7 @@
         line(`Employer match (${pct.format(matchRate * 100)}%)`, fmt(year1.w2 * matchRate)),
         line('HSA contribution', fmt(year1.hsaContribution)),
         line(`${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, fmt(year1.sideRetirementContribution)),
-        line('Roth IRA contribution (from surplus)', fmt(rothIRA_Y1)),
+        line(isInvertMode ? 'Roth IRA contribution (fixed)' : 'Roth IRA contribution (from surplus)', fmt(rothIRA_Y1)),
         line(`Annual 403(b) cap`, fmt(employee403bAnnualMax)),
         line(`Remaining overflow after retirement caps`, fmt(remainingOverflowY1), true)
       ].join(''));
@@ -1214,7 +1327,7 @@
         line(`Employer match (${pct.format(matchRate * 100)}%)`, fmt(year2.w2 * matchRate)),
         line('HSA contribution', fmt(year2.hsaContribution)),
         line(`${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, fmt(year2.sideRetirementContribution)),
-        line('Roth IRA contribution (from surplus)', fmt(rothIRA_Y2)),
+        line(isInvertMode ? 'Roth IRA contribution (fixed)' : 'Roth IRA contribution (from surplus)', fmt(rothIRA_Y2)),
         line(`Annual 403(b) cap`, fmt(employee403bAnnualMax)),
         line(`Remaining overflow after retirement caps`, fmt(remainingOverflowY2), true)
       ].join(''));
@@ -1368,6 +1481,8 @@
       });
       document.getElementById('qbiToggle').checked = true;
       document.getElementById('summaryViewAnnual').checked = true;
+      const calcModeOpt = document.getElementById('calcModeOptimize');
+      if (calcModeOpt) calcModeOpt.checked = true;
       update();
     }
 

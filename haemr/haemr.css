@@ -1727,6 +1727,10 @@ tbody tr:hover th {
   transform: translateX(100%);
 }
 
+.segmented-control:has(#calcModeInvert:checked)::before {
+  transform: translateX(100%);
+}
+
 /* ─── RESPONSIVE ───────────────────────────────────────────────────────── */
 @media (max-width: 1180px) {
   .executive-grid {
