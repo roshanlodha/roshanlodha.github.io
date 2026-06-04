@@ -263,6 +263,18 @@
             <input id="hsaAnnualTarget" type="number" step="0.01" value="4400" />
             <p class="footnote">The employer seeds $500 of this target, leaving $3,900 as the employee payroll contribution.</p>
           </div>
+          <div>
+            <label for="medPremium">Weekly Medical Premium (HDHP with HSA) ($)</label>
+            <input id="medPremium" type="number" step="0.01" value="19.28" />
+          </div>
+          <div>
+            <label for="dentPremium">Weekly Dental Premium ($)</label>
+            <input id="dentPremium" type="number" step="0.01" value="4.03" />
+          </div>
+          <div>
+            <label for="visPremium">Weekly Vision Premium ($)</label>
+            <input id="visPremium" type="number" step="0.01" value="1.11" />
+          </div>
           <div class="invert-only">
             <label for="custom403bRate">Invert Mode: 403(b) contribution rate (%)</label>
             <input id="custom403bRate" type="number" step="0.1" value="30" />
@@ -475,6 +487,9 @@
       reserveCashMonthly: 0,
       hsaAnnualTarget: 4400,
       selfEmployedPlan: 'solo401k',
+      medPremium: 19.28,
+      dentPremium: 4.03,
+      visPremium: 1.11,
       solo401kEmployerRate: 20,
       ssRate: 6.2,
       medicareRate: 1.45,
@@ -515,7 +530,7 @@
       business: 54.66,
       other: 52.75,
       coffee: 30.74,
-      education: 806.15,
+      education: 50,
       healthcare: 0,
       disability: 0,
       reserveCashMonthly: 0
@@ -909,6 +924,12 @@
       const pgy2 = val('pgy2');
       const stipend = val('stipend');
       const sideIncome = val('sideIncome');
+      const medPremium = val('medPremium');
+      const dentPremium = val('dentPremium');
+      const visPremium = val('visPremium');
+      const totalWeeklyPremium = medPremium + dentPremium + visPremium;
+      const annualPremium = totalWeeklyPremium * 52;
+
       const matchRate = val('matchRate') / 100;
       const reserveCashMonthly = Math.max(0, val('reserveCashMonthly'));
       const hsaAnnualTarget = val('hsaAnnualTarget');
@@ -927,8 +948,11 @@
       const amortMonthsY1 = HARD_CODED.amortMonthsY1;
       const amortMonthsY2 = HARD_CODED.amortMonthsY2;
 
-      const w2Y1 = pgy1 * (daysY1 / daysInYear);
-      const w2Y2 = pgy1 * (daysPgy1Y2 / daysInYear) + pgy2 * (daysPgy2Y2 / daysInYear);
+      const pgy1PostPremium = Math.max(0, pgy1 - annualPremium);
+      const pgy2PostPremium = Math.max(0, pgy2 - annualPremium);
+
+      const w2Y1 = pgy1PostPremium * (daysY1 / daysInYear);
+      const w2Y2 = pgy1PostPremium * (daysPgy1Y2 / daysInYear) + pgy2PostPremium * (daysPgy2Y2 / daysInYear);
       const employee403bAnnualMax = HARD_CODED.employee403bAnnualMax;
       const employerHsaSeed = HARD_CODED.employerHsaSeed;
       const employeeHsaContribution = Math.max(0, hsaAnnualTarget - employerHsaSeed);
@@ -1283,8 +1307,13 @@
       document.getElementById('kpiY1Surplus').innerHTML = `Surplus: <span class="${y1Class}">${fmt(y1Surplus)}</span>`;
       document.getElementById('kpiY2Surplus').innerHTML = `Surplus: <span class="${y2Class}">${fmt(y2Surplus)}</span>`;
 
+      const rawW2Y1 = pgy1 * (daysY1 / daysInYear);
+      const premiumPaidY1 = annualPremium * (daysY1 / daysInYear);
+
       setHTML('incomeY1', [
-        line(`PGY-1 W-2`, fmt(year1.w2)),
+        line(`PGY-1 Gross W-2 (before premiums)`, fmt(rawW2Y1)),
+        line(`Pre-tax Insurance Premiums`, `- ${fmt(premiumPaidY1)}`),
+        line(`Taxable PGY-1 W-2`, fmt(year1.w2), true),
         line('Taxable stipend', fmt(stipend)),
         line('Annual Schedule C revenue', fmt(sideIncome)),
         line('Schedule C base deductible expenses', `- ${fmt(scheduleCExpenses)}`),
@@ -1292,11 +1321,16 @@
         line('Annualized tech/server costs (net of grant)', `- ${fmt(techServerDeductible)}`),
         line('Home office deduction (simplified)', `- ${fmt(homeOfficeDeduction)}`),
         line('Net Schedule C profit', fmt(scheduleCProfit)),
-        line('2026 gross income', fmt(year1.w2 + stipend + scheduleCProfit), true)
+        line('2026 taxable gross income', fmt(year1.w2 + stipend + scheduleCProfit), true)
       ].join(''));
 
+      const rawW2Y2 = pgy1 * (daysPgy1Y2 / daysInYear) + pgy2 * (daysPgy2Y2 / daysInYear);
+      const premiumPaidY2 = annualPremium;
+
       setHTML('incomeY2', [
-        line(`PGY-1 + PGY-2 blended W-2`, fmt(year2.w2)),
+        line(`PGY-1 + PGY-2 Gross W-2 (before premiums)`, fmt(rawW2Y2)),
+        line(`Pre-tax Insurance Premiums`, `- ${fmt(premiumPaidY2)}`),
+        line(`Taxable blended W-2`, fmt(year2.w2), true),
         line('Taxable stipend', fmt(stipend)),
         line('Annual Schedule C revenue', fmt(sideIncome)),
         line('Schedule C base deductible expenses', `- ${fmt(scheduleCExpenses)}`),
@@ -1304,7 +1338,7 @@
         line('Annualized tech/server costs (net of grant)', `- ${fmt(techServerDeductible)}`),
         line('Home office deduction (simplified)', `- ${fmt(homeOfficeDeduction)}`),
         line('Net Schedule C profit', fmt(scheduleCProfit)),
-        line('2027 gross income', fmt(year2.w2 + stipend + scheduleCProfit), true)
+        line('2027 taxable gross income', fmt(year2.w2 + stipend + scheduleCProfit), true)
       ].join(''));
 
       setHTML('retirementMathY1', [
@@ -1328,7 +1362,10 @@
       ].join(''));
 
       const benefits = [
-        ['Medical premium (employee only)', `${fmt(0)}/month`, 'Modeled on the HDHP election used in the companion benefits guide'],
+        ['Medical premium (employee only)', `${fmt(medPremium)}/week (~${fmt(medPremium * 52 / 12)}/month)`, 'Pre-tax payroll deduction for HDHP with HSA'],
+        ['Dental premium (employee only)', `${fmt(dentPremium)}/week (~${fmt(dentPremium * 52 / 12)}/month)`, 'Pre-tax payroll deduction for Delta Dental Core Plan'],
+        ['Vision premium (employee only)', `${fmt(visPremium)}/week (~${fmt(visPremium * 52 / 12)}/month)`, 'Pre-tax payroll deduction for Davis Vision'],
+        ['Total weekly premiums', `${fmt(totalWeeklyPremium)}/week (~${fmt(annualPremium / 12)}/month)`, 'Pre-tax automatic payroll deductions (exempt from FICA, Fed, and State taxes)'],
         ['Employer HSA seed', fmt(employerHsaSeed), 'Annual employer contribution tied to HDHP enrollment; shown for planning, not as monthly spendable cash'],
         ['Modeled healthcare budget', `${fmt(val('healthcare'))}/month`, 'Midpoint assumption for core dental, vision, and light routine out-of-pocket spending'],
         ['403(b) match', `${pct.format(matchRate * 100)}% of W-2`, 'Immediate risk free return up to the match cap'],
@@ -1347,7 +1384,7 @@
 
       setHTML('taxY1', [
         renderTaxSection('Adjusted Gross Income (AGI) Calculation', [
-          line('W-2 income', fmt(year1.w2)),
+          line('Taxable W-2 income', fmt(year1.w2)),
           line('Plus taxable stipend', fmt(stipend)),
           line('Plus net Schedule C profit', fmt(scheduleCProfit)),
           line('Less pretax 403(b)', `- ${fmt(year1.retirement403b)}`),
@@ -1385,7 +1422,7 @@
 
       setHTML('taxY2', [
         renderTaxSection('Adjusted Gross Income (AGI) Calculation', [
-          line('W-2 income', fmt(year2.w2)),
+          line('Taxable W-2 income', fmt(year2.w2)),
           line('Plus taxable stipend', fmt(stipend)),
           line('Plus net Schedule C profit', fmt(scheduleCProfit)),
           line('Less pretax 403(b)', `- ${fmt(year2.retirement403b)}`),
@@ -1423,7 +1460,7 @@
 
       const clevelandTotal = expenses.reduce((sum, x) => sum + x.cle, 0);
       const totalDiff = monthlyBudget - clevelandTotal;
-      setHTML('expenseTable', expenses.map(x => {
+      setHTML('expenseTable', expenses.filter(x => x.key !== 'disability' && x.key !== 'reserveCashMonthly').map(x => {
         const diff = x.bos - x.cle;
         const cls = diff > 0 ? 'bad' : diff < 0 ? 'good' : 'muted';
         return `<tr>
