@@ -1727,8 +1727,16 @@ tbody tr:hover th {
   transform: translateX(100%);
 }
 
-.segmented-control:has(#calcModeInvert:checked)::before {
+.segmented-control:has(input[name="calcMode"])::before {
+  width: calc(33.333% - 4px);
+}
+
+.segmented-control:has(#calcModeMaximize:checked)::before {
   transform: translateX(100%);
+}
+
+.segmented-control:has(#calcModeInvert:checked)::before {
+  transform: translateX(200%);
 }
 
 /* ─── RESPONSIVE ───────────────────────────────────────────────────────── */

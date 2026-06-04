@@ -22,6 +22,8 @@
         <div class="segmented-control">
           <input type="radio" name="calcMode" id="calcModeOptimize" checked />
           <label for="calcModeOptimize">Optimize</label>
+          <input type="radio" name="calcMode" id="calcModeMaximize" />
+          <label for="calcModeMaximize">Maximize</label>
           <input type="radio" name="calcMode" id="calcModeInvert" />
           <label for="calcModeInvert">Invert</label>
         </div>
@@ -74,7 +76,7 @@
             <div class="legend legend-full">
               <span><i class="seg-income-salary"></i>Income: Salary</span>
               <span><i class="seg-income-schedulec"></i>Income: Schedule C</span>
-              <span><i class="seg-income-savings"></i>Savings Drawdown</span>
+              <span id="legendSavingsDrawdown"><i class="seg-income-savings"></i>Savings Drawdown</span>
               <span><i class="seg-expenses"></i>Expenses</span>
               <span><i class="seg-retirement"></i>Retirement &amp; Reserve</span>
               <span><i class="seg-taxes"></i>Taxes</span>
@@ -277,8 +279,8 @@
           </div>
           <div class="invert-only">
             <label for="custom403bRate">Invert Mode: 403(b) contribution rate (%)</label>
-            <input id="custom403bRate" type="number" step="0.1" value="30" />
-            <p class="footnote">Used in Invert mode to set W-2 403(b) elective deferral percentage (default 30%).</p>
+            <input id="custom403bRate" type="number" step="0.1" value="40" />
+            <p class="footnote">Used in Invert mode to set W-2 403(b) elective deferral percentage (default 40%).</p>
           </div>
           <div class="invert-only">
             <label for="customIRATarget">Invert Mode: Annual IRA contribution ($/year)</label>
@@ -516,7 +518,7 @@
       education: 0,
       healthcare: 22,
       disability: 0,
-      custom403bRate: 30,
+      custom403bRate: 40,
       customIRATarget: 0
     };
 
@@ -804,14 +806,50 @@
       reserveCashMonthly,
       hsaContribution,
       useQbi = false,
-      useSolo401k = true
+      useSolo401k = true,
+      mode = 'optimize'
     }) {
-      let recommended403b = Math.min(employee403bAnnualMax, min403b);
-      let extra403bContribution = 0;
-      const maxExtra403b = Math.max(0, employee403bAnnualMax - min403b);
+      if (mode === 'maximize') {
+        let recommended403b = Math.min(employee403bAnnualMax, min403b);
+        let extra403bContribution = 0;
+        const maxExtra403b = Math.max(0, employee403bAnnualMax - min403b);
 
-      for (let i = 0; i < 30; i++) {
-        const trialYear = calcYear({
+        for (let i = 0; i < 30; i++) {
+          const trialYear = calcYear({
+            w2,
+            stipend,
+            sideIncome,
+            employee403bContribution: recommended403b,
+            hsaContribution,
+            solo401kEmployerRate,
+            selfEmployedPlan,
+            ssRate,
+            medicareRate,
+            stateRate,
+            stdDeduction,
+            stateMovingExpenseDeduction,
+            brackets,
+            amortMonths,
+            useQbi,
+            useSolo401k
+          });
+
+          // Utilize entire annual surplus (including pre-Boston cash)
+          const annualAvailable = Math.max(0, trialYear.spendableNet - (monthlyBudget * amortMonths));
+          let totalSurplus = annualAvailable + (recommended403b - min403b);
+
+          // Priority 1: Maximize employee 403(b)
+          extra403bContribution = Math.min(maxExtra403b, totalSurplus);
+
+          const next403b = Math.min(employee403bAnnualMax, min403b + extra403bContribution);
+          if (Math.abs(next403b - recommended403b) < 0.5) {
+            recommended403b = next403b;
+            break;
+          }
+          recommended403b = next403b;
+        }
+
+        const year = calcYear({
           w2,
           stipend,
           sideIncome,
@@ -830,19 +868,63 @@
           useSolo401k
         });
 
-        // Utilize entire annual surplus (including pre-Boston cash)
-        const annualAvailable = Math.max(0, trialYear.spendableNet - (monthlyBudget * amortMonths));
-        let totalSurplus = annualAvailable + (recommended403b - min403b);
+        const annualAvailableFinal = Math.max(0, year.spendableNet - (monthlyBudget * amortMonths));
+        let totalSurplusFinal = annualAvailableFinal + (recommended403b - min403b);
 
         // Priority 1: Maximize employee 403(b)
-        extra403bContribution = Math.min(maxExtra403b, totalSurplus);
+        extra403bContribution = Math.min(maxExtra403b, totalSurplusFinal);
+        const overflowAfterCaps = Math.max(0, totalSurplusFinal - extra403bContribution);
 
-        const next403b = Math.min(employee403bAnnualMax, min403b + extra403bContribution);
-        if (Math.abs(next403b - recommended403b) < 0.5) {
-          recommended403b = next403b;
-          break;
+        return {
+          year,
+          recommended403b,
+          hsaContribution,
+          reserveContribution: 0,
+          extra403bContribution,
+          overflowAfterCaps
+        };
+      }
+
+      // Default 'optimize' mode: binary search
+      const getAmortizedMonthly = (contrib) => {
+        return calcYear({
+          w2,
+          stipend,
+          sideIncome,
+          employee403bContribution: contrib,
+          hsaContribution,
+          solo401kEmployerRate,
+          selfEmployedPlan,
+          ssRate,
+          medicareRate,
+          stateRate,
+          stdDeduction,
+          stateMovingExpenseDeduction,
+          brackets,
+          amortMonths,
+          useQbi,
+          useSolo401k
+        }).amortizedMonthly;
+      };
+
+      let low = 0;
+      let high = employee403bAnnualMax;
+      let recommended403b;
+
+      const surplusAtHigh = getAmortizedMonthly(high) - monthlyBudget;
+      if (surplusAtHigh >= 0) {
+        recommended403b = high;
+      } else {
+        for (let i = 0; i < 30; i++) {
+          const mid = (low + high) / 2;
+          const surplus = getAmortizedMonthly(mid) - monthlyBudget;
+          if (surplus >= 0) {
+            low = mid;
+          } else {
+            high = mid;
+          }
         }
-        recommended403b = next403b;
+        recommended403b = low;
       }
 
       const year = calcYear({
@@ -864,12 +946,10 @@
         useSolo401k
       });
 
-      const annualAvailableFinal = Math.max(0, year.spendableNet - (monthlyBudget * amortMonths));
-      let totalSurplusFinal = annualAvailableFinal + (recommended403b - min403b);
-
-      // Priority 1: Maximize employee 403(b)
-      extra403bContribution = Math.min(maxExtra403b, totalSurplusFinal);
-      const overflowAfterCaps = Math.max(0, totalSurplusFinal - extra403bContribution);
+      const extra403bContribution = Math.max(0, recommended403b - min403b);
+      const overflowAfterCaps = recommended403b === employee403bAnnualMax
+        ? Math.max(0, year.spendableNet - (monthlyBudget * amortMonths))
+        : 0;
 
       return {
         year,
@@ -894,16 +974,25 @@
 
     function updateModeUI() {
       const isInvertMode = document.getElementById('calcModeInvert') && document.getElementById('calcModeInvert').checked;
+      const isMaximizeMode = document.getElementById('calcModeMaximize') && document.getElementById('calcModeMaximize').checked;
       const invertInputs = document.querySelectorAll('.invert-only input, .invert-only select');
       const optimizeInputs = document.querySelectorAll('.optimize-only input, .optimize-only select');
       
       if (isInvertMode) {
         document.body.classList.add('mode-invert');
         document.body.classList.remove('mode-optimize');
+        document.body.classList.remove('mode-maximize');
         invertInputs.forEach(el => el.removeAttribute('disabled'));
         optimizeInputs.forEach(el => el.setAttribute('disabled', 'true'));
+      } else if (isMaximizeMode) {
+        document.body.classList.add('mode-maximize');
+        document.body.classList.remove('mode-optimize');
+        document.body.classList.remove('mode-invert');
+        optimizeInputs.forEach(el => el.removeAttribute('disabled'));
+        invertInputs.forEach(el => el.setAttribute('disabled', 'true'));
       } else {
         document.body.classList.add('mode-optimize');
+        document.body.classList.remove('mode-maximize');
         document.body.classList.remove('mode-invert');
         optimizeInputs.forEach(el => el.removeAttribute('disabled'));
         invertInputs.forEach(el => el.setAttribute('disabled', 'true'));
@@ -1069,6 +1158,9 @@
         remainingOverflowY2 = annualAvailableY2 - rothIRA_Y2;
         overflowAfterCapsY2 = Math.max(0, annualAvailableY2);
       } else {
+        const isMaximizeMode = document.getElementById('calcModeMaximize') && document.getElementById('calcModeMaximize').checked;
+        const activeMode = isMaximizeMode ? 'maximize' : 'optimize';
+
         const year1Optimized = optimizeRetirementForYear({
           w2: w2Y1,
           stipend,
@@ -1088,7 +1180,8 @@
           reserveCashMonthly,
           hsaContribution: employeeHsaContribution,
           useQbi,
-          useSolo401k
+          useSolo401k,
+          mode: activeMode
         });
 
         year1 = year1Optimized.year;
@@ -1116,7 +1209,8 @@
           reserveCashMonthly,
           hsaContribution: employeeHsaContribution,
           useQbi,
-          useSolo401k
+          useSolo401k,
+          mode: activeMode
         });
 
         year2 = year2Optimized.year;
@@ -1306,6 +1400,12 @@
       const y2Class = y2Surplus >= 0 ? 'good' : 'bad';
       document.getElementById('kpiY1Surplus').innerHTML = `Surplus: <span class="${y1Class}">${fmt(y1Surplus)}</span>`;
       document.getElementById('kpiY2Surplus').innerHTML = `Surplus: <span class="${y2Class}">${fmt(y2Surplus)}</span>`;
+
+      const hasDrawdown = savingsDrawdownY1 > 0 || savingsDrawdownY2 > 0;
+      const legendDrawdown = document.getElementById('legendSavingsDrawdown');
+      if (legendDrawdown) {
+        legendDrawdown.style.display = hasDrawdown ? 'inline-flex' : 'none';
+      }
 
       const rawW2Y1 = pgy1 * (daysY1 / daysInYear);
       const premiumPaidY1 = annualPremium * (daysY1 / daysInYear);
