@@ -46,7 +46,18 @@
     <div class="layout">
       <main class="report">
         <section class="report-card">
-          <div class="head"><span class="section-num">00</span><h2>Executive Summary (Monthly)</h2></div>
+          <div class="head" style="display: flex; justify-content: space-between; align-items: center; width: 100%; min-height: 48px; flex-wrap: wrap; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span class="section-num">00</span>
+              <h2>Executive Summary</h2>
+            </div>
+            <div class="segmented-control" style="margin-right: 16px;">
+              <input type="radio" name="summaryView" id="summaryViewAnnual" checked />
+              <label for="summaryViewAnnual">Annual</label>
+              <input type="radio" name="summaryView" id="summaryViewMonthly" />
+              <label for="summaryViewMonthly">Monthly</label>
+            </div>
+          </div>
           <div class="body executive-grid">
             <div class="summary-box surface-card">
               <h3>2026</h3>
@@ -229,10 +240,6 @@
             <input id="matchRate" type="number" step="0.01" value="2" />
           </div>
           <div>
-            <label for="reserveCashMonthly">Monthly reserve cash ($/month)</label>
-            <input id="reserveCashMonthly" type="number" step="0.01" value="500" />
-          </div>
-          <div>
             <label for="ssRate">Social Security rate (%)</label>
             <input id="ssRate" type="number" step="0.01" value="6.2" />
           </div>
@@ -245,6 +252,7 @@
             <select id="selfEmployedPlan">
               <option value="solo401k" selected>Solo 401(k)</option>
               <option value="sepira">SEP-IRA</option>
+              <option value="none">None</option>
             </select>
           </div>
           <div>
@@ -346,6 +354,10 @@
             <input id="disability" type="number" step="0.01" value="0.00" />
             <p class="footnote">Optional Guardian IDI individual policy premium.</p>
           </div>
+          <div>
+            <label for="reserveCashMonthly">Monthly reserve cash ($/month)</label>
+            <input id="reserveCashMonthly" type="number" step="0.01" value="500" />
+          </div>
         </div>
 
         <div style="margin-top: 24px; border-top: 1px solid var(--md-sys-color-outline-variant); padding-top: 16px;">
@@ -405,23 +417,12 @@
 
         <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--md-sys-color-outline-variant); display: flex; align-items: flex-start; gap: 16px;">
           <label class="md3-switch" for="qbiToggle" style="flex-shrink: 0;">
-            <input type="checkbox" id="qbiToggle" />
+            <input type="checkbox" id="qbiToggle" checked />
             <span class="md3-switch-track"><span class="md3-switch-thumb"></span></span>
           </label>
           <div>
             <div style="font-weight: 600; font-size: var(--md-sys-typescale-body-large-size); color: var(--md-sys-color-on-surface);">Section 199A QBI Deduction (20%)</div>
-            <div style="margin-top: 4px; font-size: var(--md-sys-typescale-body-small-size); color: var(--md-sys-color-on-surface-variant);">When enabled, deducts 20% of qualified business income from federal taxable income. Currently <strong id="qbiStatusLabel">OFF — $0 deduction</strong>.</div>
-          </div>
-        </div>
-
-        <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--md-sys-color-outline-variant); display: flex; align-items: flex-start; gap: 16px;">
-          <label class="md3-switch" for="solo401kToggle" style="flex-shrink: 0;">
-            <input type="checkbox" id="solo401kToggle" checked />
-            <span class="md3-switch-track"><span class="md3-switch-thumb"></span></span>
-          </label>
-          <div>
-            <div style="font-weight: 600; font-size: var(--md-sys-typescale-body-large-size); color: var(--md-sys-color-on-surface);">Schedule C Solo 401(k) / SEP-IRA Contribution</div>
-            <div style="margin-top: 4px; font-size: var(--md-sys-typescale-body-small-size); color: var(--md-sys-color-on-surface-variant);">When enabled, calculates tax-deductible retirement contributions for self-employment income. Currently <strong id="solo401kStatusLabel">ON</strong>.</div>
+            <div style="margin-top: 4px; font-size: var(--md-sys-typescale-body-small-size); color: var(--md-sys-color-on-surface-variant);">When enabled, deducts 20% of qualified business income from federal taxable income. Currently <strong id="qbiStatusLabel">ON — 20% deduction applied</strong>.</div>
           </div>
         </div>
       </div>
@@ -860,7 +861,7 @@
       if (!brackets) return;
 
       const useQbi = document.getElementById('qbiToggle').checked;
-      const useSolo401k = document.getElementById('solo401kToggle').checked;
+      const showAnnual = document.getElementById('summaryViewAnnual').checked;
 
       const pgy1 = val('pgy1');
       const pgy2 = val('pgy2');
@@ -870,6 +871,7 @@
       const reserveCashMonthly = Math.max(0, val('reserveCashMonthly'));
       const hsaAnnualTarget = val('hsaAnnualTarget');
       const selfEmployedPlan = document.getElementById('selfEmployedPlan').value;
+      const useSolo401k = selfEmployedPlan !== 'none';
       const solo401kEmployerRate = val('solo401kEmployerRate') / 100;
       const ssRate = val('ssRate') / 100;
       const medicareRate = val('medicareRate') / 100;
@@ -1013,41 +1015,73 @@
       const unallocatedMonthlyY1 = overflowAfterCapsY1 / amortMonthsY1;
       const unallocatedMonthlyY2 = overflowAfterCapsY2 / amortMonthsY2;
 
+      // Year 1 Values (Annual or Monthly)
+      const grossTotalY1 = showAnnual ? (year1.w2 + stipend + scheduleCProfit) : monthlyGrossY1;
+      const salaryValY1 = showAnnual ? (year1.w2 + stipend) : salaryIncomeMonthlyY1;
+      const scheduleCValY1 = showAnnual ? scheduleCProfit : scheduleCIncomeMonthlyY1;
+
+      const expensesValY1 = showAnnual ? (monthlyBudget * amortMonthsY1 - reserveCashMonthly * amortMonthsY1) : (monthlyBudget - reserveCashMonthly);
+      const reserveValY1 = showAnnual ? (reserveCashMonthly * amortMonthsY1) : reserveMonthlyY1;
+      const hsaValY1 = showAnnual ? year1.hsaContribution : hsaMonthlyY1;
+      const emp403bValY1 = showAnnual ? year1.retirement403b : emp403bMonthlyY1;
+      const sidePlanValY1 = showAnnual ? year1.sideRetirementContribution : sidePlanMonthlyY1;
+      const fedTaxValY1 = showAnnual ? year1.federalTax : fedTaxMonthlyY1;
+      const stateTaxValY1 = showAnnual ? year1.stateTax : stateTaxMonthlyY1;
+      const ssValY1 = showAnnual ? (year1.ssW2 + year1.ssSE) : ssMonthlyY1;
+      const medValY1 = showAnnual ? (year1.medicareW2 + year1.medicareSE) : medMonthlyY1;
+      const unallocatedValY1 = showAnnual ? overflowAfterCapsY1 : unallocatedMonthlyY1;
+
+      // Year 2 Values (Annual or Monthly)
+      const grossTotalY2 = showAnnual ? (year2.w2 + stipend + scheduleCProfit) : monthlyGrossY2;
+      const salaryValY2 = showAnnual ? (year2.w2 + stipend) : salaryIncomeMonthlyY2;
+      const scheduleCValY2 = showAnnual ? scheduleCProfit : scheduleCIncomeMonthlyY2;
+
+      const expensesValY2 = showAnnual ? (monthlyBudget * amortMonthsY2 - reserveCashMonthly * amortMonthsY2) : (monthlyBudget - reserveCashMonthly);
+      const reserveValY2 = showAnnual ? (reserveCashMonthly * amortMonthsY2) : reserveMonthlyY2;
+      const hsaValY2 = showAnnual ? year2.hsaContribution : hsaMonthlyY2;
+      const emp403bValY2 = showAnnual ? year2.retirement403b : emp403bMonthlyY2;
+      const sidePlanValY2 = showAnnual ? year2.sideRetirementContribution : sidePlanMonthlyY2;
+      const fedTaxValY2 = showAnnual ? year2.federalTax : fedTaxMonthlyY2;
+      const stateTaxValY2 = showAnnual ? year2.stateTax : stateTaxMonthlyY2;
+      const ssValY2 = showAnnual ? (year2.ssW2 + year2.ssSE) : ssMonthlyY2;
+      const medValY2 = showAnnual ? (year2.medicareW2 + year2.medicareSE) : medMonthlyY2;
+      const unallocatedValY2 = showAnnual ? overflowAfterCapsY2 : unallocatedMonthlyY2;
+
       setHTML('summaryY1', [
-        summaryBarRow('Income', monthlyGrossY1, [
-          { className: 'seg-income-salary', label: 'Income: Salary', value: salaryIncomeMonthlyY1 },
-          { className: 'seg-income-schedulec', label: 'Income: Schedule C', value: scheduleCIncomeMonthlyY1 }
+        summaryBarRow('Income', grossTotalY1, [
+          { className: 'seg-income-salary', label: 'Income: Salary', value: salaryValY1 },
+          { className: 'seg-income-schedulec', label: 'Income: Schedule C', value: scheduleCValY1 }
         ]),
-        summaryBarRow('Allocated', monthlyGrossY1, [
-          { className: 'seg-expenses', label: 'Expenses', value: monthlyBudget - reserveCashMonthly },
-          { className: 'seg-reserve', label: 'Emergency reserve', value: reserveMonthlyY1 },
-          { className: 'seg-hsa', label: 'HSA', value: hsaMonthlyY1 },
-          { className: 'seg-emp403b', label: 'Employee 403(b)', value: emp403bMonthlyY1 },
-          { className: 'seg-side', label: 'Side-plan retirement', value: sidePlanMonthlyY1 },
-          { className: 'seg-tax-fed', label: 'Federal Tax', value: fedTaxMonthlyY1 },
-          { className: 'seg-tax-state', label: 'State Tax', value: stateTaxMonthlyY1 },
-          { className: 'seg-tax-ss', label: 'Social Security', value: ssMonthlyY1 },
-          { className: 'seg-tax-med', label: 'Medicare', value: medMonthlyY1 },
-          { className: 'seg-unallocated', label: 'Unallocated', value: unallocatedMonthlyY1 }
+        summaryBarRow('Allocated', grossTotalY1, [
+          { className: 'seg-expenses', label: 'Expenses', value: expensesValY1 },
+          { className: 'seg-reserve', label: 'Emergency reserve', value: reserveValY1 },
+          { className: 'seg-hsa', label: 'HSA', value: hsaValY1 },
+          { className: 'seg-emp403b', label: 'Employee 403(b)', value: emp403bValY1 },
+          { className: 'seg-side', label: 'Side-plan retirement', value: sidePlanValY1 },
+          { className: 'seg-tax-fed', label: 'Federal Tax', value: fedTaxValY1 },
+          { className: 'seg-tax-state', label: 'State Tax', value: stateTaxValY1 },
+          { className: 'seg-tax-ss', label: 'Social Security', value: ssValY1 },
+          { className: 'seg-tax-med', label: 'Medicare', value: medValY1 },
+          { className: 'seg-unallocated', label: 'Unallocated', value: unallocatedValY1 }
         ])
       ].join(''));
 
       setHTML('summaryY2', [
-        summaryBarRow('Income', monthlyGrossY2, [
-          { className: 'seg-income-salary', label: 'Income: Salary', value: salaryIncomeMonthlyY2 },
-          { className: 'seg-income-schedulec', label: 'Income: Schedule C', value: scheduleCIncomeMonthlyY2 }
+        summaryBarRow('Income', grossTotalY2, [
+          { className: 'seg-income-salary', label: 'Income: Salary', value: salaryValY2 },
+          { className: 'seg-income-schedulec', label: 'Income: Schedule C', value: scheduleCValY2 }
         ]),
-        summaryBarRow('Allocated', monthlyGrossY2, [
-          { className: 'seg-expenses', label: 'Expenses', value: monthlyBudget - reserveCashMonthly },
-          { className: 'seg-reserve', label: 'Emergency reserve', value: reserveMonthlyY2 },
-          { className: 'seg-hsa', label: 'HSA', value: hsaMonthlyY2 },
-          { className: 'seg-emp403b', label: 'Employee 403(b)', value: emp403bMonthlyY2 },
-          { className: 'seg-side', label: 'Side-plan retirement', value: sidePlanMonthlyY2 },
-          { className: 'seg-tax-fed', label: 'Federal Tax', value: fedTaxMonthlyY2 },
-          { className: 'seg-tax-state', label: 'State Tax', value: stateTaxMonthlyY2 },
-          { className: 'seg-tax-ss', label: 'Social Security', value: ssMonthlyY2 },
-          { className: 'seg-tax-med', label: 'Medicare', value: medMonthlyY2 },
-          { className: 'seg-unallocated', label: 'Unallocated', value: unallocatedMonthlyY2 }
+        summaryBarRow('Allocated', grossTotalY2, [
+          { className: 'seg-expenses', label: 'Expenses', value: expensesValY2 },
+          { className: 'seg-reserve', label: 'Emergency reserve', value: reserveValY2 },
+          { className: 'seg-hsa', label: 'HSA', value: hsaValY2 },
+          { className: 'seg-emp403b', label: 'Employee 403(b)', value: emp403bValY2 },
+          { className: 'seg-side', label: 'Side-plan retirement', value: sidePlanValY2 },
+          { className: 'seg-tax-fed', label: 'Federal Tax', value: fedTaxValY2 },
+          { className: 'seg-tax-state', label: 'State Tax', value: stateTaxValY2 },
+          { className: 'seg-tax-ss', label: 'Social Security', value: ssValY2 },
+          { className: 'seg-tax-med', label: 'Medicare', value: medValY2 },
+          { className: 'seg-unallocated', label: 'Unallocated', value: unallocatedValY2 }
         ])
       ].join(''));
 
@@ -1140,7 +1174,7 @@
           line('Less half of SE tax (above-the-line)', `- ${fmt(year1.seTaxDeduction)}`),
           line('Less pretax HSA contribution', `- ${fmt(year1.hsaContribution)}`),
           line('Adjusted gross income', fmt(year1.agi), true)
-        ].join(''), true),
+        ].join(''), false),
 
         renderTaxSection('Federal Income Tax Calculation', [
           line('Less standard deduction', `- ${fmt(stdDeduction)}`),
@@ -1148,7 +1182,7 @@
           useQbi ? line('Less Section 199A QBI deduction (20%)', `- ${fmt(year1.qbiDeduction)}`) : line('Section 199A QBI deduction', 'OFF — $0'),
           line('Federal taxable income', fmt(year1.taxableFederal)),
           line('Federal income tax', fmt(year1.federalTax), true)
-        ].join(''), true),
+        ].join(''), false),
 
         renderTaxSection('FICA & State Tax Calculations', [
           line(`Social Security tax on W-2 (${pct.format(ssRate * 100)}%)`, fmt(year1.ssW2)),
@@ -1157,7 +1191,7 @@
           line(`Medicare tax on Schedule C (${pct.format(medicareRate * 200)}%)`, fmt(year1.medicareSE)),
           line('MA personal exemption', `- ${fmt(4400)}`),
           line('MA tax', fmt(year1.stateTax), true)
-        ].join(''), true),
+        ].join(''), false),
 
         renderTaxSection('Monthly Take-Home Cash Flow Summary', [
           line('Spendable net cash after taxes & retirement', fmt(year1.spendableNet)),
@@ -1178,7 +1212,7 @@
           line('Less half of SE tax (above-the-line)', `- ${fmt(year2.seTaxDeduction)}`),
           line('Less pretax HSA contribution', `- ${fmt(year2.hsaContribution)}`),
           line('Adjusted gross income', fmt(year2.agi), true)
-        ].join(''), true),
+        ].join(''), false),
 
         renderTaxSection('Federal Income Tax Calculation', [
           line('Less standard deduction', `- ${fmt(stdDeduction)}`),
@@ -1186,7 +1220,7 @@
           useQbi ? line('Less Section 199A QBI deduction (20%)', `- ${fmt(year2.qbiDeduction)}`) : line('Section 199A QBI deduction', 'OFF — $0'),
           line('Federal taxable income', fmt(year2.taxableFederal)),
           line('Federal income tax', fmt(year2.federalTax), true)
-        ].join(''), true),
+        ].join(''), false),
 
         renderTaxSection('FICA & State Tax Calculations', [
           line(`Social Security tax on W-2 (${pct.format(ssRate * 100)}%)`, fmt(year2.ssW2)),
@@ -1195,7 +1229,7 @@
           line(`Medicare tax on Schedule C (${pct.format(medicareRate * 200)}%)`, fmt(year2.medicareSE)),
           line('MA personal exemption', `- ${fmt(4400)}`),
           line('MA tax', fmt(year2.stateTax), true)
-        ].join(''), true),
+        ].join(''), false),
 
         renderTaxSection('Monthly Take-Home Cash Flow Summary', [
           line('Spendable net cash after taxes & retirement', fmt(year2.spendableNet)),
@@ -1259,8 +1293,8 @@
         const el = document.getElementById(key);
         if (el) el.value = value;
       });
-      document.getElementById('qbiToggle').checked = false;
-      document.getElementById('solo401kToggle').checked = true;
+      document.getElementById('qbiToggle').checked = true;
+      document.getElementById('summaryViewAnnual').checked = true;
       update();
     }
 
@@ -1291,7 +1325,8 @@
     });
 
     document.getElementById('qbiToggle').addEventListener('change', update);
-    document.getElementById('solo401kToggle').addEventListener('change', update);
+    document.getElementById('summaryViewAnnual').addEventListener('change', update);
+    document.getElementById('summaryViewMonthly').addEventListener('change', update);
 
     const modalOpeners = [
       ['openIncomeBtn', 'incomeModal'],
