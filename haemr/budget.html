@@ -79,7 +79,6 @@
               <span><i class="seg-tax-state"></i>State Tax</span>
               <span><i class="seg-tax-ss"></i>Social Security</span>
               <span><i class="seg-tax-med"></i>Medicare</span>
-              <span><i class="seg-unallocated"></i>Unallocated</span>
             </div>
           </div>
         </section>
@@ -1012,8 +1011,7 @@
       const medMonthlyY1 = year1.medicareMonthly;
       const medMonthlyY2 = year2.medicareMonthly;
 
-      const unallocatedMonthlyY1 = overflowAfterCapsY1 / amortMonthsY1;
-      const unallocatedMonthlyY2 = overflowAfterCapsY2 / amortMonthsY2;
+
 
       // Year 1 Values (Annual or Monthly)
       const grossTotalY1 = showAnnual ? (year1.w2 + stipend + scheduleCProfit) : monthlyGrossY1;
@@ -1029,7 +1027,7 @@
       const stateTaxValY1 = showAnnual ? year1.stateTax : stateTaxMonthlyY1;
       const ssValY1 = showAnnual ? (year1.ssW2 + year1.ssSE) : ssMonthlyY1;
       const medValY1 = showAnnual ? (year1.medicareW2 + year1.medicareSE) : medMonthlyY1;
-      const unallocatedValY1 = showAnnual ? overflowAfterCapsY1 : unallocatedMonthlyY1;
+
 
       // Year 2 Values (Annual or Monthly)
       const grossTotalY2 = showAnnual ? (year2.w2 + stipend + scheduleCProfit) : monthlyGrossY2;
@@ -1045,7 +1043,12 @@
       const stateTaxValY2 = showAnnual ? year2.stateTax : stateTaxMonthlyY2;
       const ssValY2 = showAnnual ? (year2.ssW2 + year2.ssSE) : ssMonthlyY2;
       const medValY2 = showAnnual ? (year2.medicareW2 + year2.medicareSE) : medMonthlyY2;
-      const unallocatedValY2 = showAnnual ? overflowAfterCapsY2 : unallocatedMonthlyY2;
+
+
+      const allocatedTotalY1 = expensesValY1 + reserveValY1 + hsaValY1 + emp403bValY1 + sidePlanValY1 + fedTaxValY1 + stateTaxValY1 + ssValY1 + medValY1;
+      const freeCashY1 = Math.max(0, grossTotalY1 - allocatedTotalY1);
+      const allocatedTotalY2 = expensesValY2 + reserveValY2 + hsaValY2 + emp403bValY2 + sidePlanValY2 + fedTaxValY2 + stateTaxValY2 + ssValY2 + medValY2;
+      const freeCashY2 = Math.max(0, grossTotalY2 - allocatedTotalY2);
 
       setHTML('summaryY1', [
         summaryBarRow('Income', grossTotalY1, [
@@ -1061,9 +1064,9 @@
           { className: 'seg-tax-fed', label: 'Federal Tax', value: fedTaxValY1 },
           { className: 'seg-tax-state', label: 'State Tax', value: stateTaxValY1 },
           { className: 'seg-tax-ss', label: 'Social Security', value: ssValY1 },
-          { className: 'seg-tax-med', label: 'Medicare', value: medValY1 },
-          { className: 'seg-unallocated', label: 'Unallocated', value: unallocatedValY1 }
-        ])
+          { className: 'seg-tax-med', label: 'Medicare', value: medValY1 }
+        ]),
+        `<div class="bar-row free-cash-row"><span>Free Cash</span><strong>${fmt(freeCashY1)}</strong></div>`
       ].join(''));
 
       setHTML('summaryY2', [
@@ -1080,9 +1083,9 @@
           { className: 'seg-tax-fed', label: 'Federal Tax', value: fedTaxValY2 },
           { className: 'seg-tax-state', label: 'State Tax', value: stateTaxValY2 },
           { className: 'seg-tax-ss', label: 'Social Security', value: ssValY2 },
-          { className: 'seg-tax-med', label: 'Medicare', value: medValY2 },
-          { className: 'seg-unallocated', label: 'Unallocated', value: unallocatedValY2 }
-        ])
+          { className: 'seg-tax-med', label: 'Medicare', value: medValY2 }
+        ]),
+        `<div class="bar-row free-cash-row"><span>Free Cash</span><strong>${fmt(freeCashY2)}</strong></div>`
       ].join(''));
 
       const y1Surplus = year1.amortizedMonthly - monthlyBudget;

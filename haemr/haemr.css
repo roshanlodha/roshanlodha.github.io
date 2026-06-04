@@ -762,7 +762,7 @@ button.text-btn:active,
 .seg-tax-state       { background: var(--chart-tax-state); }
 .seg-tax-ss          { background: var(--chart-tax-ss);    }
 .seg-tax-med         { background: var(--chart-tax-med);   }
-.seg-unallocated     { background: var(--chart-unalloc);   }
+
 
 /* ─── LEGEND ───────────────────────────────────────────────────────────── */
 .legend {
@@ -807,7 +807,22 @@ button.text-btn:active,
 .legend i.seg-tax-state        { background: var(--chart-tax-state); }
 .legend i.seg-tax-ss           { background: var(--chart-tax-ss);    }
 .legend i.seg-tax-med          { background: var(--chart-tax-med);   }
-.legend i.seg-unallocated      { background: var(--chart-unalloc);   }
+
+/* Free Cash summary row */
+.free-cash-row {
+  grid-template-columns: 80px 1fr 88px;
+  padding-top: 4px;
+  border-top: 1px dashed var(--md-sys-color-outline-variant);
+  margin-top: 6px;
+}
+.free-cash-row span {
+  font-weight: 600;
+  color: var(--md-sys-color-tertiary);
+}
+.free-cash-row strong {
+  color: var(--md-sys-color-tertiary);
+}
+
 
 /* ─── CALLOUTS ─────────────────────────────────────────────────────────── */
 .callout {
@@ -1641,6 +1656,7 @@ tbody tr:hover th {
   border-radius: var(--md-sys-shape-corner-full);
   padding: 4px;
   user-select: none;
+  align-items: center;
 }
 
 .segmented-control input[type="radio"] {
@@ -1648,7 +1664,12 @@ tbody tr:hover th {
 }
 
 .segmented-control label {
-  padding: 6px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 96px;
+  height: 32px;
+  box-sizing: border-box;
   font-family: var(--font-body);
   font-size: var(--md-sys-typescale-label-large-size);
   font-weight: 600;
@@ -1657,6 +1678,7 @@ tbody tr:hover th {
   z-index: 2;
   border-radius: var(--md-sys-shape-corner-full);
   transition: color 0.2s cubic-bezier(0.2, 0, 0, 1);
+  padding: 0 12px;
 }
 
 .segmented-control input[type="radio"]:checked + label {
