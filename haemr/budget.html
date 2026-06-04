@@ -70,15 +70,10 @@
             <div class="legend legend-full">
               <span><i class="seg-income-salary"></i>Income: Salary</span>
               <span><i class="seg-income-schedulec"></i>Income: Schedule C</span>
+              <span><i class="seg-income-savings"></i>Savings Drawdown</span>
               <span><i class="seg-expenses"></i>Expenses</span>
-              <span><i class="seg-reserve"></i>Emergency reserve</span>
-              <span><i class="seg-hsa"></i>HSA</span>
-              <span><i class="seg-emp403b"></i>Employee 403(b)</span>
-              <span><i class="seg-side"></i>Side-plan retirement</span>
-              <span><i class="seg-tax-fed"></i>Federal Tax</span>
-              <span><i class="seg-tax-state"></i>State Tax</span>
-              <span><i class="seg-tax-ss"></i>Social Security</span>
-              <span><i class="seg-tax-med"></i>Medicare</span>
+              <span><i class="seg-retirement"></i>Retirement &amp; Reserve</span>
+              <span><i class="seg-taxes"></i>Taxes</span>
             </div>
           </div>
         </section>
@@ -355,7 +350,7 @@
           </div>
           <div>
             <label for="reserveCashMonthly">Monthly reserve cash ($/month)</label>
-            <input id="reserveCashMonthly" type="number" step="0.01" value="500" />
+            <input id="reserveCashMonthly" type="number" step="0.01" value="0" />
           </div>
         </div>
 
@@ -463,7 +458,7 @@
       techServerCosts: 0,
       homeOfficeSqFt: 0,
       matchRate: 2,
-      reserveCashMonthly: 500,
+      reserveCashMonthly: 0,
       hsaAnnualTarget: 4400,
       selfEmployedPlan: 'solo401k',
       solo401kEmployerRate: 20,
@@ -558,7 +553,20 @@
         const label = `${part.label}`;
         const amount = fmt(part.value);
         const share = total > 0 ? `${pct.format(width)}%` : '0%';
-        return `<div class="${part.className} bar-segment" style="width:${Math.max(0, width)}%" title="${escapeAttr(label)}: ${escapeAttr(amount)} (${escapeAttr(share)})" data-label="${escapeAttr(label)}" data-value="${escapeAttr(amount)}" data-percent="${escapeAttr(share)}"></div>`;
+        let breakdownAttr = '';
+        if (part.breakdown) {
+          const breakdownData = part.breakdown.map(item => {
+            const itemWidth = total > 0 ? (item.value / total) * 100 : 0;
+            const itemShare = total > 0 ? `${pct.format(itemWidth)}%` : '0%';
+            return {
+              label: item.label,
+              value: fmt(item.value),
+              percent: itemShare
+            };
+          });
+          breakdownAttr = ` data-breakdown="${escapeAttr(JSON.stringify(breakdownData))}"`;
+        }
+        return `<div class="${part.className} bar-segment" style="width:${Math.max(0, width)}%" data-label="${escapeAttr(label)}" data-value="${escapeAttr(amount)}" data-percent="${escapeAttr(share)}"${breakdownAttr}></div>`;
       }).join('')}</div>`;
     }
 
@@ -791,9 +799,9 @@
           useSolo401k
         });
 
-        // Amortized surplus without subtracting reserve Cash (prioritize 403(b))
-        const annualAvailable = Math.max(0, (trialYear.amortizedMonthly - monthlyBudget) * amortMonths);
-        let totalSurplus = annualAvailable + extra403bContribution;
+        // Utilize entire annual surplus (including pre-Boston cash)
+        const annualAvailable = Math.max(0, trialYear.spendableNet - (monthlyBudget * amortMonths));
+        let totalSurplus = annualAvailable + (recommended403b - min403b);
 
         // Priority 1: Maximize employee 403(b)
         extra403bContribution = Math.min(maxExtra403b, totalSurplus);
@@ -825,8 +833,8 @@
         useSolo401k
       });
 
-      const annualAvailableFinal = Math.max(0, (year.amortizedMonthly - monthlyBudget) * amortMonths);
-      let totalSurplusFinal = annualAvailableFinal + extra403bContribution;
+      const annualAvailableFinal = Math.max(0, year.spendableNet - (monthlyBudget * amortMonths));
+      let totalSurplusFinal = annualAvailableFinal + (recommended403b - min403b);
 
       // Priority 1: Maximize employee 403(b)
       extra403bContribution = Math.min(maxExtra403b, totalSurplusFinal);
@@ -1013,6 +1021,14 @@
 
 
 
+      const rothIRA_Y1 = Math.min(7000, overflowAfterCapsY1);
+      const rothIRA_Y2 = Math.min(7000, overflowAfterCapsY2);
+      const remainingOverflowY1 = Math.max(0, overflowAfterCapsY1 - rothIRA_Y1);
+      const remainingOverflowY2 = Math.max(0, overflowAfterCapsY2 - rothIRA_Y2);
+
+      const rothIRAValY1 = showAnnual ? rothIRA_Y1 : rothIRA_Y1 / amortMonthsY1;
+      const rothIRAValY2 = showAnnual ? rothIRA_Y2 : rothIRA_Y2 / amortMonthsY2;
+
       // Year 1 Values (Annual or Monthly)
       const grossTotalY1 = showAnnual ? (year1.w2 + stipend + scheduleCProfit) : monthlyGrossY1;
       const salaryValY1 = showAnnual ? (year1.w2 + stipend) : salaryIncomeMonthlyY1;
@@ -1027,7 +1043,6 @@
       const stateTaxValY1 = showAnnual ? year1.stateTax : stateTaxMonthlyY1;
       const ssValY1 = showAnnual ? (year1.ssW2 + year1.ssSE) : ssMonthlyY1;
       const medValY1 = showAnnual ? (year1.medicareW2 + year1.medicareSE) : medMonthlyY1;
-
 
       // Year 2 Values (Annual or Monthly)
       const grossTotalY2 = showAnnual ? (year2.w2 + stipend + scheduleCProfit) : monthlyGrossY2;
@@ -1044,46 +1059,99 @@
       const ssValY2 = showAnnual ? (year2.ssW2 + year2.ssSE) : ssMonthlyY2;
       const medValY2 = showAnnual ? (year2.medicareW2 + year2.medicareSE) : medMonthlyY2;
 
+      const allocatedTotalY1 = expensesValY1 + reserveValY1 + hsaValY1 + emp403bValY1 + sidePlanValY1 + fedTaxValY1 + stateTaxValY1 + ssValY1 + medValY1 + rothIRAValY1;
+      const allocatedTotalY2 = expensesValY2 + reserveValY2 + hsaValY2 + emp403bValY2 + sidePlanValY2 + fedTaxValY2 + stateTaxValY2 + ssValY2 + medValY2 + rothIRAValY2;
 
-      const allocatedTotalY1 = expensesValY1 + reserveValY1 + hsaValY1 + emp403bValY1 + sidePlanValY1 + fedTaxValY1 + stateTaxValY1 + ssValY1 + medValY1;
+      let savingsDrawdownY1 = 0;
+      let displayGrossTotalY1 = grossTotalY1;
+      if (allocatedTotalY1 > grossTotalY1) {
+        savingsDrawdownY1 = allocatedTotalY1 - grossTotalY1;
+        displayGrossTotalY1 = allocatedTotalY1;
+      }
       const freeCashY1 = Math.max(0, grossTotalY1 - allocatedTotalY1);
-      const allocatedTotalY2 = expensesValY2 + reserveValY2 + hsaValY2 + emp403bValY2 + sidePlanValY2 + fedTaxValY2 + stateTaxValY2 + ssValY2 + medValY2;
+
+      let savingsDrawdownY2 = 0;
+      let displayGrossTotalY2 = grossTotalY2;
+      if (allocatedTotalY2 > grossTotalY2) {
+        savingsDrawdownY2 = allocatedTotalY2 - grossTotalY2;
+        displayGrossTotalY2 = allocatedTotalY2;
+      }
       const freeCashY2 = Math.max(0, grossTotalY2 - allocatedTotalY2);
 
+      const incomeSegmentsY1 = [
+        { className: 'seg-income-salary', label: 'Income: Salary', value: salaryValY1 },
+        { className: 'seg-income-schedulec', label: 'Income: Schedule C', value: scheduleCValY1 }
+      ];
+      if (savingsDrawdownY1 > 0) {
+        incomeSegmentsY1.push({ className: 'seg-income-savings', label: 'Savings Drawdown', value: savingsDrawdownY1 });
+      }
+
+      const incomeSegmentsY2 = [
+        { className: 'seg-income-salary', label: 'Income: Salary', value: salaryValY2 },
+        { className: 'seg-income-schedulec', label: 'Income: Schedule C', value: scheduleCValY2 }
+      ];
+      if (savingsDrawdownY2 > 0) {
+        incomeSegmentsY2.push({ className: 'seg-income-savings', label: 'Savings Drawdown', value: savingsDrawdownY2 });
+      }
+
       setHTML('summaryY1', [
-        summaryBarRow('Income', grossTotalY1, [
-          { className: 'seg-income-salary', label: 'Income: Salary', value: salaryValY1 },
-          { className: 'seg-income-schedulec', label: 'Income: Schedule C', value: scheduleCValY1 }
-        ]),
-        summaryBarRow('Allocated', grossTotalY1, [
+        summaryBarRow('Income', displayGrossTotalY1, incomeSegmentsY1),
+        summaryBarRow('Allocated', displayGrossTotalY1, [
           { className: 'seg-expenses', label: 'Expenses', value: expensesValY1 },
-          { className: 'seg-reserve', label: 'Emergency reserve', value: reserveValY1 },
-          { className: 'seg-hsa', label: 'HSA', value: hsaValY1 },
-          { className: 'seg-emp403b', label: 'Employee 403(b)', value: emp403bValY1 },
-          { className: 'seg-side', label: 'Side-plan retirement', value: sidePlanValY1 },
-          { className: 'seg-tax-fed', label: 'Federal Tax', value: fedTaxValY1 },
-          { className: 'seg-tax-state', label: 'State Tax', value: stateTaxValY1 },
-          { className: 'seg-tax-ss', label: 'Social Security', value: ssValY1 },
-          { className: 'seg-tax-med', label: 'Medicare', value: medValY1 }
+          {
+            className: 'seg-retirement',
+            label: 'Retirement & Reserve',
+            value: hsaValY1 + emp403bValY1 + sidePlanValY1 + rothIRAValY1 + reserveValY1,
+            breakdown: [
+              { label: 'Emergency reserve', value: reserveValY1 },
+              { label: 'HSA', value: hsaValY1 },
+              { label: 'Employee 403(b)', value: emp403bValY1 },
+              { label: 'Side-plan retirement', value: sidePlanValY1 },
+              { label: 'Roth IRA', value: rothIRAValY1 }
+            ]
+          },
+          {
+            className: 'seg-taxes',
+            label: 'Taxes',
+            value: fedTaxValY1 + stateTaxValY1 + ssValY1 + medValY1,
+            breakdown: [
+              { label: 'Federal Tax', value: fedTaxValY1 },
+              { label: 'State Tax', value: stateTaxValY1 },
+              { label: 'Social Security', value: ssValY1 },
+              { label: 'Medicare', value: medValY1 }
+            ]
+          }
         ]),
         `<div class="bar-row free-cash-row"><span>Free Cash</span><strong>${fmt(freeCashY1)}</strong></div>`
       ].join(''));
 
       setHTML('summaryY2', [
-        summaryBarRow('Income', grossTotalY2, [
-          { className: 'seg-income-salary', label: 'Income: Salary', value: salaryValY2 },
-          { className: 'seg-income-schedulec', label: 'Income: Schedule C', value: scheduleCValY2 }
-        ]),
-        summaryBarRow('Allocated', grossTotalY2, [
+        summaryBarRow('Income', displayGrossTotalY2, incomeSegmentsY2),
+        summaryBarRow('Allocated', displayGrossTotalY2, [
           { className: 'seg-expenses', label: 'Expenses', value: expensesValY2 },
-          { className: 'seg-reserve', label: 'Emergency reserve', value: reserveValY2 },
-          { className: 'seg-hsa', label: 'HSA', value: hsaValY2 },
-          { className: 'seg-emp403b', label: 'Employee 403(b)', value: emp403bValY2 },
-          { className: 'seg-side', label: 'Side-plan retirement', value: sidePlanValY2 },
-          { className: 'seg-tax-fed', label: 'Federal Tax', value: fedTaxValY2 },
-          { className: 'seg-tax-state', label: 'State Tax', value: stateTaxValY2 },
-          { className: 'seg-tax-ss', label: 'Social Security', value: ssValY2 },
-          { className: 'seg-tax-med', label: 'Medicare', value: medValY2 }
+          {
+            className: 'seg-retirement',
+            label: 'Retirement & Reserve',
+            value: hsaValY2 + emp403bValY2 + sidePlanValY2 + rothIRAValY2 + reserveValY2,
+            breakdown: [
+              { label: 'Emergency reserve', value: reserveValY2 },
+              { label: 'HSA', value: hsaValY2 },
+              { label: 'Employee 403(b)', value: emp403bValY2 },
+              { label: 'Side-plan retirement', value: sidePlanValY2 },
+              { label: 'Roth IRA', value: rothIRAValY2 }
+            ]
+          },
+          {
+            className: 'seg-taxes',
+            label: 'Taxes',
+            value: fedTaxValY2 + stateTaxValY2 + ssValY2 + medValY2,
+            breakdown: [
+              { label: 'Federal Tax', value: fedTaxValY2 },
+              { label: 'State Tax', value: stateTaxValY2 },
+              { label: 'Social Security', value: ssValY2 },
+              { label: 'Medicare', value: medValY2 }
+            ]
+          }
         ]),
         `<div class="bar-row free-cash-row"><span>Free Cash</span><strong>${fmt(freeCashY2)}</strong></div>`
       ].join(''));
@@ -1092,8 +1160,8 @@
       const y2Surplus = year2.amortizedMonthly - monthlyBudget;
       const monthly403bPctY1 = monthlyGrossY1 > 0 ? (emp403bMonthlyY1 / monthlyGrossY1) * 100 : 0;
       const monthly403bPctY2 = monthlyGrossY2 > 0 ? (emp403bMonthlyY2 / monthlyGrossY2) * 100 : 0;
-      const totalRetirementY1 = year1.retirement403b + (year1.w2 * matchRate) + year1.sideRetirementContribution + year1.hsaContribution + employerHsaSeed;
-      const totalRetirementY2 = year2.retirement403b + (year2.w2 * matchRate) + year2.sideRetirementContribution + year2.hsaContribution + employerHsaSeed;
+      const totalRetirementY1 = year1.retirement403b + (year1.w2 * matchRate) + year1.sideRetirementContribution + year1.hsaContribution + employerHsaSeed + rothIRA_Y1;
+      const totalRetirementY2 = year2.retirement403b + (year2.w2 * matchRate) + year2.sideRetirementContribution + year2.hsaContribution + employerHsaSeed + rothIRA_Y2;
 
       document.getElementById('kpiY1Cash').textContent = fmt(year1.amortizedMonthly);
       document.getElementById('kpiY2Cash').textContent = fmt(year2.amortizedMonthly);
@@ -1136,8 +1204,9 @@
         line(`Employer match (${pct.format(matchRate * 100)}%)`, fmt(year1.w2 * matchRate)),
         line('HSA contribution', fmt(year1.hsaContribution)),
         line(`${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, fmt(year1.sideRetirementContribution)),
+        line('Roth IRA contribution (from surplus)', fmt(rothIRA_Y1)),
         line(`Annual 403(b) cap`, fmt(employee403bAnnualMax)),
-        line(`Overflow after caps`, fmt(overflowAfterCapsY1), true)
+        line(`Remaining overflow after retirement caps`, fmt(remainingOverflowY1), true)
       ].join(''));
 
       setHTML('retirementMathY2', [
@@ -1145,8 +1214,9 @@
         line(`Employer match (${pct.format(matchRate * 100)}%)`, fmt(year2.w2 * matchRate)),
         line('HSA contribution', fmt(year2.hsaContribution)),
         line(`${selfEmployedPlan === 'solo401k' ? 'Solo 401(k)' : 'SEP-IRA'} side plan contribution`, fmt(year2.sideRetirementContribution)),
+        line('Roth IRA contribution (from surplus)', fmt(rothIRA_Y2)),
         line(`Annual 403(b) cap`, fmt(employee403bAnnualMax)),
-        line(`Overflow after caps`, fmt(overflowAfterCapsY2), true)
+        line(`Remaining overflow after retirement caps`, fmt(remainingOverflowY2), true)
       ].join(''));
 
       const benefits = [
@@ -1372,7 +1442,29 @@
       const label = segment.dataset.label || 'Value';
       const value = segment.dataset.value || '$0';
       const percent = segment.dataset.percent || '0%';
-      chartTooltip.textContent = `${label}: ${value} (${percent})`;
+      const breakdownStr = segment.dataset.breakdown;
+
+      if (breakdownStr) {
+        try {
+          const breakdown = JSON.parse(breakdownStr);
+          let html = `<div style="font-weight: 700; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 4px; font-size: 0.88rem;">${label}: ${value} (${percent})</div>`;
+          html += '<table style="border-collapse: collapse; width: 100%; font-size: 0.8rem; color: inherit;">';
+          breakdown.forEach(item => {
+            html += `<tr>
+              <td style="padding: 2px 12px 2px 0; text-align: left; opacity: 0.95;">${item.label}</td>
+              <td style="padding: 2px 12px; text-align: right; font-weight: 600;">${item.value}</td>
+              <td style="padding: 2px 0 2px 12px; text-align: right; opacity: 0.8;">${item.percent}</td>
+            </tr>`;
+          });
+          html += '</table>';
+          chartTooltip.innerHTML = html;
+        } catch (err) {
+          chartTooltip.textContent = `${label}: ${value} (${percent})`;
+        }
+      } else {
+        chartTooltip.textContent = `${label}: ${value} (${percent})`;
+      }
+
       chartTooltip.style.display = 'block';
       chartTooltip.style.left = `${e.clientX + 12}px`;
       chartTooltip.style.top = `${e.clientY + 12}px`;

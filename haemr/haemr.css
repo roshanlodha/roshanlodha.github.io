@@ -170,10 +170,10 @@
   --grid-gap:       16px;
 
   /* Chart palette — 8 distinct, vibrant, on-surface-accessible hues */
-  --chart-salary:     #6750A4;   /* primary violet */
-  --chart-schedulec:  #7D5260;   /* tertiary dusty-rose */
-  --chart-expenses:   #B3261E;   /* error red */
-  --chart-reserve:    #006A6A;   /* teal */
+  --chart-salary:     var(--md-sys-color-primary);
+  --chart-schedulec:  var(--md-sys-color-tertiary);
+  --chart-expenses:   var(--md-sys-color-error);
+  --chart-reserve:    var(--md-sys-color-secondary);
   --chart-hsa:        #3B6939;   /* forest green */
   --chart-emp403b:    #1B5FA5;   /* deep blue */
   --chart-side:       #625B71;   /* secondary mauve */
@@ -182,6 +182,10 @@
   --chart-tax-ss:     #4F46E5;   /* indigo */
   --chart-tax-med:    #06B6D4;   /* cyan */
   --chart-unalloc:    #938F99;   /* muted grey */
+  --chart-roth-ira:   #D81B60;   /* pinkish-purple for Roth IRA */
+  --chart-savings-drawdown: #607D8B; /* slate blue */
+  --chart-retirement: #00796B;   /* M3 teal */
+  --chart-taxes:      #E65100;   /* warm amber-orange */
 }
 
 /* ─── DARK THEME ───────────────────────────────────────────────────────── */
@@ -228,10 +232,10 @@
     --warn-color: #FFB74D;
 
     /* Chart palette — lighter variants for dark backgrounds */
-    --chart-salary:     #D0BCFF;
-    --chart-schedulec:  #EFB8C8;
-    --chart-expenses:   #F2B8B5;
-    --chart-reserve:    #4DB8B8;
+    --chart-salary:     var(--md-sys-color-primary);
+    --chart-schedulec:  var(--md-sys-color-tertiary);
+    --chart-expenses:   var(--md-sys-color-error);
+    --chart-reserve:    var(--md-sys-color-secondary);
     --chart-hsa:        #88C98A;
     --chart-emp403b:    #7BAEE8;
     --chart-side:       #CCC2DC;
@@ -240,6 +244,10 @@
     --chart-tax-ss:     #A5B4FC;
     --chart-tax-med:    #67E8F9;
     --chart-unalloc:    #938F99;
+    --chart-roth-ira:   #F48FB1;
+    --chart-savings-drawdown: #B0BEC5;
+    --chart-retirement: #80CBC4;   /* M3 light teal */
+    --chart-taxes:      #FFB74D;   /* M3 light amber */
   }
 }
 
@@ -750,6 +758,13 @@ button.text-btn:active,
   pointer-events: none;
 }
 
+.chart-tooltip table,
+.chart-tooltip tr,
+.chart-tooltip td,
+.chart-tooltip th {
+  color: inherit;
+}
+
 /* ─── CHART SEGMENT COLORS ─────────────────────────────────────────────── */
 .seg-income-salary   { background: var(--chart-salary);    }
 .seg-income-schedulec{ background: var(--chart-schedulec); }
@@ -762,6 +777,10 @@ button.text-btn:active,
 .seg-tax-state       { background: var(--chart-tax-state); }
 .seg-tax-ss          { background: var(--chart-tax-ss);    }
 .seg-tax-med         { background: var(--chart-tax-med);   }
+.seg-roth-ira        { background: var(--chart-roth-ira);  }
+.seg-income-savings  { background: var(--chart-savings-drawdown); }
+.seg-retirement      { background: var(--chart-retirement); }
+.seg-taxes           { background: var(--chart-taxes);      }
 
 
 /* ─── LEGEND ───────────────────────────────────────────────────────────── */
@@ -807,6 +826,10 @@ button.text-btn:active,
 .legend i.seg-tax-state        { background: var(--chart-tax-state); }
 .legend i.seg-tax-ss           { background: var(--chart-tax-ss);    }
 .legend i.seg-tax-med          { background: var(--chart-tax-med);   }
+.legend i.seg-roth-ira         { background: var(--chart-roth-ira);  }
+.legend i.seg-income-savings   { background: var(--chart-savings-drawdown); }
+.legend i.seg-retirement       { background: var(--chart-retirement); }
+.legend i.seg-taxes            { background: var(--chart-taxes);      }
 
 /* Free Cash summary row */
 .free-cash-row {
@@ -1679,6 +1702,7 @@ tbody tr:hover th {
   border-radius: var(--md-sys-shape-corner-full);
   transition: color 0.2s cubic-bezier(0.2, 0, 0, 1);
   padding: 0 12px;
+  margin: 0;
 }
 
 .segmented-control input[type="radio"]:checked + label {
