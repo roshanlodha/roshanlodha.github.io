@@ -233,19 +233,19 @@
       </div>
       <div class="modal-body">
         <div class="grid-2">
-          <div>
+          <div class="optimize-only">
             <label for="matchRate">MGB match rate (%)</label>
             <input id="matchRate" type="number" step="0.01" value="2" />
           </div>
-          <div>
+          <div class="optimize-only">
             <label for="ssRate">Social Security rate (%)</label>
             <input id="ssRate" type="number" step="0.01" value="6.2" />
           </div>
-          <div>
+          <div class="optimize-only">
             <label for="medicareRate">Medicare rate (%)</label>
             <input id="medicareRate" type="number" step="0.01" value="1.45" />
           </div>
-          <div>
+          <div class="optimize-only">
             <label for="selfEmployedPlan">Side income retirement plan</label>
             <select id="selfEmployedPlan">
               <option value="solo401k" selected>Solo 401(k)</option>
@@ -253,7 +253,7 @@
               <option value="none">None</option>
             </select>
           </div>
-          <div>
+          <div class="optimize-only">
              <label for="solo401kEmployerRate">Solo 401(k) employer contribution (%)</label>
              <input id="solo401kEmployerRate" type="number" step="0.01" value="20" />
              <p class="footnote">Employer profit-sharing contribution. Falls under IRS Section 415(c) and does not count against the $24,500 employee limit for the 403(b), meaning you can maximize both safely.</p>
@@ -879,24 +879,19 @@
 
     function updateModeUI() {
       const isInvertMode = document.getElementById('calcModeInvert') && document.getElementById('calcModeInvert').checked;
-      const custom403bInput = document.getElementById('custom403bRate');
-      const customIRAInput = document.getElementById('customIRATarget');
-      if (custom403bInput && customIRAInput) {
-        if (isInvertMode) {
-          custom403bInput.removeAttribute('disabled');
-          customIRAInput.removeAttribute('disabled');
-          custom403bInput.closest('.invert-only').style.opacity = '1';
-          custom403bInput.closest('.invert-only').style.pointerEvents = 'auto';
-          customIRAInput.closest('.invert-only').style.opacity = '1';
-          customIRAInput.closest('.invert-only').style.pointerEvents = 'auto';
-        } else {
-          custom403bInput.setAttribute('disabled', 'true');
-          customIRAInput.setAttribute('disabled', 'true');
-          custom403bInput.closest('.invert-only').style.opacity = '0.4';
-          custom403bInput.closest('.invert-only').style.pointerEvents = 'none';
-          customIRAInput.closest('.invert-only').style.opacity = '0.4';
-          customIRAInput.closest('.invert-only').style.pointerEvents = 'none';
-        }
+      const invertInputs = document.querySelectorAll('.invert-only input, .invert-only select');
+      const optimizeInputs = document.querySelectorAll('.optimize-only input, .optimize-only select');
+      
+      if (isInvertMode) {
+        document.body.classList.add('mode-invert');
+        document.body.classList.remove('mode-optimize');
+        invertInputs.forEach(el => el.removeAttribute('disabled'));
+        optimizeInputs.forEach(el => el.setAttribute('disabled', 'true'));
+      } else {
+        document.body.classList.add('mode-optimize');
+        document.body.classList.remove('mode-invert');
+        optimizeInputs.forEach(el => el.removeAttribute('disabled'));
+        invertInputs.forEach(el => el.setAttribute('disabled', 'true'));
       }
     }
 

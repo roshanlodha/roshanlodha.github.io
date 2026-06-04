@@ -1777,3 +1777,11 @@ tbody tr:hover th {
     grid-template-columns: 1fr;
   }
 }
+
+body.mode-optimize .invert-only {
+  display: none !important;
+}
+
+body.mode-invert .optimize-only {
+  display: none !important;
+}
