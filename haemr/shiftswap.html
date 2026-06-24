@@ -1,0 +1,3715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShiftMaxxer &mdash; Swap Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  /* DARK THEME (Default) */
+  --calendar-grid-line: rgba(255, 255, 255, 0.05);
+  --md-sys-color-primary: #A5B4FC;
+  --md-sys-color-on-primary: #1E1B4B;
+  --md-sys-color-primary-container: #312E81;
+  --md-sys-color-on-primary-container: #E0E7FF;
+  
+  --md-sys-color-secondary: #94A3B8;
+  --md-sys-color-on-secondary: #0F172A;
+  --md-sys-color-secondary-container: #1E293B;
+  --md-sys-color-on-secondary-container: #F1F5F9;
+  
+  --md-sys-color-tertiary: #2DD4BF;
+  --md-sys-color-on-tertiary: #00332C;
+  --md-sys-color-tertiary-container: #115E59;
+  --md-sys-color-on-tertiary-container: #CCFBF1;
+  
+  --md-sys-color-error: #FCA5A5;
+  --md-sys-color-on-error: #7F1D1D;
+  --md-sys-color-error-container: #991B1B;
+  --md-sys-color-on-error-container: #FEE2E2;
+  
+  --md-sys-color-surface: #090D16;
+  --md-sys-color-on-surface: #F8FAFC;
+  --md-sys-color-on-surface-variant: #94A3B8;
+  
+  --md-sys-color-surface-container-lowest: #05070B;
+  --md-sys-color-surface-container-low: #0E1424;
+  --md-sys-color-surface-container: #151E33;
+  --md-sys-color-surface-container-high: #212C47;
+  --md-sys-color-surface-container-highest: #2D3B5C;
+  
+  --md-sys-color-outline: #475569;
+  --md-sys-color-outline-variant: #1E293B;
+  
+  /* Shapes */
+  --md-sys-shape-corner-none: 0px;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 9999px;
+  
+  /* Elevation Shadows */
+  --md-sys-elevation-shadow-1: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --md-sys-elevation-shadow-2: 0 3px 6px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.3);
+  --md-sys-elevation-shadow-3: 0 10px 20px rgba(0,0,0,0.5), 0 6px 6px rgba(0,0,0,0.4);
+  
+  /* Motion & Easing */
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* LIGHT THEME */
+    --calendar-grid-line: rgba(0, 0, 0, 0.05);
+    --md-sys-color-primary: #4F46E5;
+    --md-sys-color-on-primary: #FFFFFF;
+    --md-sys-color-primary-container: #E0E7FF;
+    --md-sys-color-on-primary-container: #1E1B4B;
+    
+    --md-sys-color-secondary: #475569;
+    --md-sys-color-on-secondary: #FFFFFF;
+    --md-sys-color-secondary-container: #F1F5F9;
+    --md-sys-color-on-secondary-container: #0F172A;
+    
+    --md-sys-color-tertiary: #0D9488;
+    --md-sys-color-on-tertiary: #FFFFFF;
+    --md-sys-color-tertiary-container: #CCFBF1;
+    --md-sys-color-on-tertiary-container: #115E59;
+    
+    --md-sys-color-error: #EF4444;
+    --md-sys-color-on-error: #FFFFFF;
+    --md-sys-color-error-container: #FEE2E2;
+    --md-sys-color-on-error-container: #991B1B;
+    
+    --md-sys-color-surface: #F8FAFC;
+    --md-sys-color-on-surface: #0F172A;
+    --md-sys-color-on-surface-variant: #475569;
+    
+    --md-sys-color-surface-container-lowest: #FFFFFF;
+    --md-sys-color-surface-container-low: #F1F5F9;
+    --md-sys-color-surface-container: #E2E8F0;
+    --md-sys-color-surface-container-high: #CBD5E1;
+    --md-sys-color-surface-container-highest: #94A3B8;
+    
+    --md-sys-color-outline: #94A3B8;
+    --md-sys-color-outline-variant: #E2E8F0;
+    
+    --md-sys-elevation-shadow-1: 0 1px 2px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.1);
+    --md-sys-elevation-shadow-2: 0 2px 4px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.08);
+    --md-sys-elevation-shadow-3: 0 4px 8px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.15);
+  }
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto Flex', system-ui, -apple-system, sans-serif;
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  line-height: 1.5;
+  font-size: 14px;
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Header / App Bar */
+.hdr {
+  background: var(--md-sys-color-surface-container-low);
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  transition: background-color 0.3s, border-color 0.3s;
+  height: 72px;
+}
+.logo-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--md-sys-shape-corner-large);
+  background: linear-gradient(135deg, var(--md-sys-color-primary), var(--md-sys-color-tertiary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--md-sys-color-on-primary);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+  flex-shrink: 0;
+}
+.logo {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+  letter-spacing: -0.2px;
+}
+.logo-sub {
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+/* Happiness Scorecard Card */
+.happiness-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
+  padding: 16px;
+  box-shadow: var(--md-sys-elevation-shadow-1);
+  transition: all 0.3s;
+  margin-bottom: 16px;
+}
+@keyframes happiness-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(45, 212, 191, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
+}
+.orb-pulse {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--md-sys-color-tertiary);
+  color: var(--md-sys-color-on-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: happiness-pulse 2s infinite;
+  flex-shrink: 0;
+}
+.orb-text {
+  line-height: 1.2;
+}
+.orb-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--md-sys-color-on-surface-variant);
+  font-weight: 700;
+}
+.orb-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--md-sys-color-on-surface);
+}
+
+/* MD3 Dropdown Selector */
+.md3-select-wrapper {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+}
+.md3-select-label {
+  position: absolute;
+  top: -6px;
+  left: 12px;
+  background: var(--md-sys-color-surface-container-low);
+  padding: 0 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--md-sys-color-primary);
+  pointer-events: none;
+  transition: color 0.2s, background-color 0.3s;
+}
+.md3-select {
+  height: 48px;
+  padding: 0 40px 0 16px;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-small);
+  background: transparent;
+  color: var(--md-sys-color-on-surface);
+  font-size: 0.9rem;
+  font-family: inherit;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  min-width: 180px;
+}
+.md3-select:focus {
+  border-color: var(--md-sys-color-primary);
+  border-width: 2px;
+}
+.md3-select-wrapper::after {
+  content: '▼';
+  font-family: inherit;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--md-sys-color-on-surface-variant);
+  pointer-events: none;
+  font-size: 10px;
+}
+
+/* MD3 Icon Buttons */
+.md3-btn-icon-outlined {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--md-sys-color-outline);
+  background: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.md3-btn-icon-outlined:hover {
+  background-color: var(--md-sys-color-primary-container);
+  border-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+/* Segmented Buttons */
+.md3-segmented-button-container {
+  display: inline-flex;
+  background: var(--md-sys-color-surface-container-high);
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-full);
+  overflow: hidden;
+  padding: 4px;
+  align-items: center;
+}
+.md3-segmented-button {
+  border: none;
+  background: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: var(--md-sys-shape-corner-full);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  outline: none;
+}
+.md3-segmented-button:hover {
+  background-color: rgba(79, 70, 229, 0.08);
+  color: var(--md-sys-color-primary);
+}
+.md3-segmented-button.selected {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+/* Main Layout */
+.main {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px 32px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Top Section Grid */
+.top-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 1024px) {
+  .top-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Section Header */
+.sec-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 18px;
+  background: var(--md-sys-color-primary);
+  border-radius: 2px;
+}
+
+/* Week Navigation & Grid */
+.week-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.week-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+  min-width: 200px;
+  text-align: center;
+}
+.week-view-container {
+  overflow-x: auto;
+  border-radius: var(--md-sys-shape-corner-medium);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background: var(--md-sys-color-surface-container-low);
+  transition: background-color 0.3s, border-color 0.3s;
+}
+.week-grid {
+  display: grid;
+  grid-template-columns: 50px repeat(7, minmax(130px, 1fr));
+  column-gap: 8px;
+  row-gap: 0;
+  padding: 12px;
+  min-width: 1000px;
+}
+.week-col-hdr {
+  text-align: center;
+  padding: 10px 8px;
+  background: var(--md-sys-color-surface-container);
+  border-radius: var(--md-sys-shape-corner-small);
+  transition: background-color 0.3s;
+  margin-bottom: 8px;
+}
+.week-col-hdr.today {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+.wch-dow {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--md-sys-color-on-surface-variant);
+}
+.week-col-hdr.today .wch-dow {
+  color: var(--md-sys-color-primary);
+}
+.wch-date {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--md-sys-color-on-surface);
+  line-height: 1.1;
+  margin-top: 2px;
+}
+.week-col-hdr.today .wch-date {
+  color: var(--md-sys-color-on-primary-container);
+}
+.week-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Time labels column styling */
+.time-labels-col {
+  position: relative;
+  height: 360px;
+  margin-top: 6px;
+  transition: margin-top 0.3s;
+}
+.week-grid.has-allday .time-labels-col {
+  margin-top: 0px;
+}
+.time-label {
+  position: absolute;
+  right: 8px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface-variant);
+  transform: translateY(-50%);
+}
+
+/* Calendar Sections */
+.allday-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: var(--md-sys-color-surface-container-lowest);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-bottom: none;
+  border-top-left-radius: var(--md-sys-shape-corner-small);
+  border-top-right-radius: var(--md-sys-shape-corner-small);
+  padding: 6px 6px 4px 6px;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+.allday-container.today-allday {
+  border-color: var(--md-sys-color-primary);
+  border-width: 2px 2px 0 2px;
+  background-color: rgba(79, 70, 229, 0.02);
+}
+
+.hourly-container {
+  position: relative;
+  height: 360px;
+  background: linear-gradient(var(--calendar-grid-line) 1px, transparent 1px);
+  background-size: 100% 15px; /* grid line every 1 hour (15px) */
+  background-color: var(--md-sys-color-surface-container-lowest);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-small);
+  padding: 6px;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+.hourly-container.today-hourly {
+  border-color: var(--md-sys-color-primary);
+  border-width: 2px;
+  background-color: rgba(79, 70, 229, 0.02);
+}
+.hourly-container.split-bottom {
+  border-top: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding-top: 0px;
+}
+.hourly-container.today-hourly.split-bottom {
+  border-width: 0 2px 2px 2px;
+}
+
+/* Shift card */
+.shift-card {
+  border-radius: var(--md-sys-shape-corner-small);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-left: 4px solid transparent;
+  transition: transform 0.2s var(--md-sys-motion-easing-emphasized),
+              box-shadow 0.2s var(--md-sys-motion-easing-emphasized),
+              background-color 0.3s;
+  cursor: default;
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface);
+}
+.shift-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--md-sys-elevation-shadow-1);
+}
+.shift-card.sb-mgh {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-left-color: var(--md-sys-color-primary);
+}
+.shift-card.sb-mgh .sb-loc { color: var(--md-sys-color-primary); }
+.shift-card.sb-bwh {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  border-left-color: var(--md-sys-color-secondary);
+}
+.shift-card.sb-bwh .sb-loc { color: var(--md-sys-color-secondary); }
+.shift-card.sb-give {
+  background: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+  border-left-color: var(--md-sys-color-error);
+  opacity: 0.85;
+}
+.shift-card.sb-give .sb-loc { color: var(--md-sys-color-error); }
+.shift-card.sb-recv {
+  background: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+  border-left-color: var(--md-sys-color-tertiary);
+}
+.shift-card.sb-recv .sb-loc { color: var(--md-sys-color-tertiary); }
+.allday-card {
+  border-radius: var(--md-sys-shape-corner-small);
+  padding: 6px 8px;
+  background: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: default;
+  transition: background-color 0.2s, transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 2px;
+}
+.allday-card:hover {
+  background: var(--md-sys-color-surface-container-high);
+  transform: translateY(-1px);
+}
+.allday-card.sb-give {
+  background: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+}
+.allday-card.sb-recv {
+  background: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+}
+.allday-card .sb-title {
+  text-align: center;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  color: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.shift-card.absolute-card {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 6px 8px;
+}
+
+/* Hourly part 1 tiny slice styling */
+.shift-card.part-1 {
+  height: 15px !important;
+  padding: 0 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+.shift-card.part-1 * {
+  display: none;
+}
+
+.sb-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+  line-height: 1.2;
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sb-loc {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface-variant);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sb-time {
+  font-size: 0.65rem;
+  color: var(--md-sys-color-on-surface-variant);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 1px 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+  width: fit-content;
+}
+.badge-give {
+  background: var(--md-sys-color-error);
+  color: var(--md-sys-color-on-error);
+}
+.badge-recv {
+  background: var(--md-sys-color-tertiary);
+  color: var(--md-sys-color-on-tertiary);
+}
+
+/* Sidebar Preferences / Metrics */
+.prefs-card {
+  background: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--md-sys-elevation-shadow-1);
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.pref-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.pref-lbl-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pref-lbl {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--md-sys-color-on-surface-variant);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pref-val {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+}
+.pref-val.any {
+  color: var(--md-sys-color-on-surface-variant);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* MD3 Dual-color Progress Indicators */
+.wbar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.wbar {
+  flex: 1;
+  height: 6px;
+  background: var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+  overflow: hidden;
+  display: flex;
+}
+.wfill-orig {
+  height: 100%;
+  background: var(--md-sys-color-outline); /* grey */
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.wfill-gain {
+  height: 100%;
+  background: var(--md-sys-color-tertiary); /* green */
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.wlbl {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface-variant);
+  min-width: 60px;
+  text-align: right;
+}
+
+/* Days Off Chips */
+.doff-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+.doff-chip {
+  background: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+  border-radius: var(--md-sys-shape-corner-small);
+  padding: 4px 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.doff-none {
+  font-size: 0.75rem;
+  color: var(--md-sys-color-on-surface-variant);
+  font-style: italic;
+}
+.divider {
+  border: none;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  margin: 4px 0;
+}
+
+/* Proposed Swaps Section */
+.swaps-section {
+  margin-top: 16px;
+}
+.count-badge {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border-radius: var(--md-sys-shape-corner-full);
+  padding: 2px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-left: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.swaps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 16px;
+}
+@media (max-width: 480px) {
+  .swaps-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Swap Card styling */
+.swap-card {
+  background: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
+  overflow: hidden;
+  transition: transform 0.2s var(--md-sys-motion-easing-emphasized),
+              box-shadow 0.2s var(--md-sys-motion-easing-emphasized),
+              border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.swap-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--md-sys-elevation-shadow-2);
+  border-color: var(--md-sys-color-outline);
+}
+.swap-card.pos-card { border-top: 4px solid var(--md-sys-color-tertiary); }
+.swap-card.neg-card { border-top: 4px solid var(--md-sys-color-error); }
+.swap-card.neu-card { border-top: 4px solid var(--md-sys-color-outline); }
+
+.swap-card-hdr {
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+.swap-card-hdr.pos { background: linear-gradient(90deg, rgba(45, 212, 191, 0.08), transparent); }
+.swap-card-hdr.neg { background: linear-gradient(90deg, rgba(239, 68, 68, 0.08), transparent); }
+.swap-card-hdr.neu { background: var(--md-sys-color-surface-container-high); }
+
+.swap-with-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.partner-chip {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-radius: var(--md-sys-shape-corner-small);
+  padding: 2px 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.delta-pill {
+  border-radius: var(--md-sys-shape-corner-full);
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.delta-pill.pos { background: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); }
+.delta-pill.neg { background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); }
+.delta-pill.neu { background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface-variant); }
+
+.card-body {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+.shift-blk {
+  padding: 12px;
+  border-radius: var(--md-sys-shape-corner-medium);
+  background: var(--md-sys-color-surface-container-lowest);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+}
+.shift-blk.give { border-left: 4px solid var(--md-sys-color-error); }
+.shift-blk.recv { border-left: 4px solid var(--md-sys-color-tertiary); }
+
+.blk-lbl {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.shift-blk.give .blk-lbl { color: var(--md-sys-color-error); }
+.shift-blk.recv .blk-lbl { color: var(--md-sys-color-tertiary); }
+
+.blk-summary {
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--md-sys-color-on-surface);
+}
+.blk-meta {
+  font-size: 0.72rem;
+  color: var(--md-sys-color-on-surface-variant);
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.loc-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--md-sys-shape-corner-small);
+  padding: 2px 8px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  margin-top: auto;
+  width: fit-content;
+}
+.loc-tag.lt-mgh { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+.loc-tag.lt-bwh { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
+.loc-tag.lt-none { background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface-variant); }
+
+.arrow-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.arrow-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--md-sys-color-surface-container-high);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--md-sys-color-primary);
+}
+
+/* Empty State */
+.no-swaps {
+  background: var(--md-sys-color-surface-container-low);
+  border: 1.5px dashed var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-large);
+  padding: 48px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  grid-column: 1 / -1;
+}
+.no-swaps-icon {
+  width: 48px;
+  height: 48px;
+  color: var(--md-sys-color-tertiary);
+  animation: bounce 2s infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.no-swaps-msg {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+}
+.no-swaps-sub {
+  font-size: 0.85rem;
+  color: var(--md-sys-color-on-surface-variant);
+  max-width: 340px;
+}
+
+/* Standardize Material Symbols for symmetric, uniform design */
+svg.lucide {
+  stroke-width: 2px;
+  stroke: currentColor;
+  fill: none;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .hdr {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    padding: 16px;
+    gap: 12px;
+  }
+  .hdr > div {
+    justify-content: space-between;
+  }
+  .md3-select-wrapper {
+    width: 100%;
+  }
+  .md3-select {
+    width: 100%;
+    flex-grow: 1;
+  }
+  .main {
+    padding: 16px 12px 32px;
+    gap: 24px;
+  }
+  .sec-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .sec-header > div {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 12px;
+  }
+  .md3-segmented-button-container {
+    width: 100%;
+  }
+  .md3-segmented-button {
+    flex: 1;
+    text-align: center;
+  }
+  .week-nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .week-label {
+    flex-grow: 1;
+    min-width: 0;
+  }
+  .swaps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Hide schedule calendar section on mobile completely */
+  .top-grid section {
+    display: none !important;
+  }
+
+  /* Calendar mobile vertical view override */
+  .week-view-container {
+    border: none !important;
+    background: transparent !important;
+  }
+  .week-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+  }
+  .time-labels-col, 
+  .week-col-hdr-spacer, 
+  .time-labels-allday-spacer {
+    display: none !important;
+  }
+  .week-col-hdr {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 12px 16px !important;
+    margin-top: 16px !important;
+    margin-bottom: 4px !important;
+    border-radius: var(--md-sys-shape-corner-medium) !important;
+    background: var(--md-sys-color-surface-container-high) !important;
+  }
+  .week-col-hdr.today {
+    background: var(--md-sys-color-primary-container) !important;
+  }
+  .week-col-hdr:first-of-type {
+    margin-top: 0 !important;
+  }
+  .wch-dow {
+    font-size: 0.85rem !important;
+  }
+  .wch-date {
+    font-size: 1.1rem !important;
+    margin-top: 0 !important;
+  }
+
+  /* Card and container layout overrides */
+  .allday-container {
+    border-bottom: 1px solid var(--md-sys-color-outline-variant) !important;
+    border-radius: var(--md-sys-shape-corner-small) !important;
+    margin-bottom: 8px !important;
+  }
+  .hourly-container {
+    position: static !important;
+    height: auto !important;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  .allday-container:empty,
+  .hourly-container:empty {
+    display: none !important;
+  }
+  .shift-card.absolute-card {
+    position: static !important;
+    height: auto !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin-bottom: 8px !important;
+    padding: 12px 16px !important;
+    border-radius: var(--md-sys-shape-corner-medium) !important;
+    box-shadow: var(--md-sys-elevation-1) !important;
+  }
+  .shift-card.absolute-card:last-child {
+    margin-bottom: 0 !important;
+  }
+  
+  /* Overnights (P1) on mobile should be fully legible */
+  .shift-card.part-1 {
+    height: auto !important;
+    padding: 12px 16px !important;
+    display: flex !important;
+  }
+  .shift-card.part-1 * {
+    display: block !important;
+  }
+
+  .sb-title {
+    font-size: 0.9rem !important;
+  }
+  .sb-loc, .sb-time {
+    font-size: 0.8rem !important;
+  }
+
+  /* Swap Cards mobile override */
+  .card-body {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    padding: 12px !important;
+  }
+  .arrow-col {
+    transform: rotate(90deg) !important;
+    margin: 8px 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1rem;
+  }
+  .logo-sub {
+    font-size: 0.7rem;
+  }
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+  }
+}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div style="display: flex; align-items: center; gap: 16px;">
+    <div class="logo-mark">
+      <i data-lucide="calendar-range" style="width: 24px; height: 24px;"></i>
+    </div>
+    <div>
+      <div class="logo">ShiftMaxxer</div>
+      <div class="logo-sub">Swap Optimizer Report</div>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <div class="md3-select-wrapper">
+      <span class="md3-select-label">Resident</span>
+      <select id="rsel" class="md3-select"></select>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="top-grid">
+    <section>
+      <div class="sec-header">
+        <h2 class="section-title">Schedule View</h2>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <div class="md3-segmented-button-container">
+            <button class="md3-segmented-button" id="toggle-original">Original</button>
+            <button class="md3-segmented-button selected" id="toggle-optimal">Optimal</button>
+            <button class="md3-segmented-button" id="toggle-all">All</button>
+          </div>
+          <div class="week-nav">
+            <button class="md3-btn-icon-outlined" id="prev-week" title="Previous week">
+              <i data-lucide="chevron-left" style="width: 20px; height: 20px;"></i>
+            </button>
+            <div class="week-label" id="week-label"></div>
+            <button class="md3-btn-icon-outlined" id="next-week" title="Next week">
+              <i data-lucide="chevron-right" style="width: 20px; height: 20px;"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="week-view-container">
+        <div id="week-view"></div>
+      </div>
+    </section>
+    
+    <aside>
+      <div class="sec-header">
+        <h2 class="section-title">Metrics</h2>
+      </div>
+      
+      <!-- Standalone Happiness Conserved Card -->
+      <div class="happiness-card" id="happiness-card">
+        <div class="orb-pulse">
+          <i data-lucide="party-popper" style="width: 22px; height: 22px;"></i>
+        </div>
+        <div class="orb-text">
+          <div class="orb-label">Total Happiness Conserved</div>
+          <div class="orb-value" id="happiness-value">+0.0%</div>
+        </div>
+      </div>
+      
+      <div class="prefs-card" id="prefs"></div>
+    </aside>
+  </div>
+
+  <div class="swaps-section">
+    <div class="sec-header">
+      <h2 class="section-title">Proposed Swaps <span class="count-badge" id="swap-count">0</span></h2>
+    </div>
+    
+    <div class="swaps-rows-container" style="display: flex; flex-direction: column; gap: 24px;">
+      <div class="swaps-row">
+        <h3 class="swaps-row-title" style="margin-bottom: 12px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+          <i data-lucide="heart-handshake" style="color: var(--md-sys-color-tertiary); width: 20px; height: 20px;"></i>
+          Swaps for You <span style="font-weight: normal; font-size: 0.8rem; color: var(--md-sys-color-on-surface-variant)">(you should propose these)</span>
+          <span class="count-badge" id="swaps-for-you-count">0</span>
+        </h3>
+        <div id="swaps-for-you-grid" class="swaps-grid"></div>
+      </div>
+
+      <div class="swaps-row">
+        <h3 class="swaps-row-title" style="margin-bottom: 12px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+          <i data-lucide="arrow-left-right" style="color: var(--md-sys-color-primary); width: 20px; height: 20px;"></i>
+          Swaps with You <span style="font-weight: normal; font-size: 0.8rem; color: var(--md-sys-color-on-surface-variant)">(others may propose these)</span>
+          <span class="count-badge" id="swaps-with-you-count">0</span>
+        </h3>
+        <div id="swaps-with-you-grid" class="swaps-grid"></div>
+      </div>
+    </div>
+
+    <!-- Unified empty state container -->
+    <div id="swaps-empty-state" style="display: none;"></div>
+  </div>
+</main>
+
+<script>
+const DATA = {
+  "residents": {
+    "wendy memishian": {
+      "name": "wendy memishian",
+      "locPref": "MGH",
+      "typePref": "Swing",
+      "daysPref": 5,
+      "daysWeight": 0.0,
+      "daysOff": [
+        "2026-06-04",
+        "2026-06-05",
+        "2027-06-03"
+      ],
+      "loc": {
+        "orig": 58,
+        "opt": 92
+      },
+      "type": {
+        "orig": 50,
+        "opt": 58
+      },
+      "streak": {
+        "orig": 1.6,
+        "opt": 1.5
+      },
+      "hours": {
+        "orig": 116.0,
+        "opt": 111.0
+      },
+      "happiness": {
+        "orig": 54,
+        "opt": 76
+      }
+    },
+    "brian song": {
+      "name": "brian song",
+      "locPref": "BWH",
+      "typePref": "Morning",
+      "daysPref": 5,
+      "daysWeight": 0.0,
+      "daysOff": [],
+      "loc": {
+        "orig": 46,
+        "opt": 69
+      },
+      "type": {
+        "orig": 31,
+        "opt": 69
+      },
+      "streak": {
+        "orig": 1.7,
+        "opt": 2.1
+      },
+      "hours": {
+        "orig": 119.0,
+        "opt": 115.0
+      },
+      "happiness": {
+        "orig": 38,
+        "opt": 69
+      }
+    },
+    "cliff danza": {
+      "name": "cliff danza",
+      "locPref": "MGH",
+      "typePref": "Swing",
+      "daysPref": 5,
+      "daysWeight": 0.23809523809523808,
+      "daysOff": [],
+      "loc": {
+        "orig": 54,
+        "opt": 62
+      },
+      "type": {
+        "orig": 54,
+        "opt": 62
+      },
+      "streak": {
+        "orig": 2.1,
+        "opt": 1.9
+      },
+      "hours": {
+        "orig": 122.0,
+        "opt": 123.0
+      },
+      "happiness": {
+        "orig": 50,
+        "opt": 56
+      }
+    },
+    "roshan lodha": {
+      "name": "roshan lodha",
+      "locPref": "MGH",
+      "typePref": "ANY",
+      "daysPref": 5,
+      "daysWeight": 0.6666666666666666,
+      "daysOff": [],
+      "loc": {
+        "orig": 54,
+        "opt": 54
+      },
+      "type": {
+        "orig": 100,
+        "opt": 100
+      },
+      "streak": {
+        "orig": 1.7,
+        "opt": 1.9
+      },
+      "hours": {
+        "orig": 121.0,
+        "opt": 122.0
+      },
+      "happiness": {
+        "orig": 37,
+        "opt": 40
+      }
+    },
+    "justin yang": {
+      "name": "justin yang",
+      "locPref": "MGH",
+      "typePref": "Swing",
+      "daysPref": 5,
+      "daysWeight": 0.37037037037037035,
+      "daysOff": [],
+      "loc": {
+        "orig": 62,
+        "opt": 54
+      },
+      "type": {
+        "orig": 46,
+        "opt": 62
+      },
+      "streak": {
+        "orig": 1.9,
+        "opt": 2.5
+      },
+      "hours": {
+        "orig": 122.0,
+        "opt": 129.0
+      },
+      "happiness": {
+        "orig": 47,
+        "opt": 52
+      }
+    },
+    "sara locke": {
+      "name": "sara locke",
+      "locPref": "BWH",
+      "typePref": "Swing",
+      "daysPref": 5,
+      "daysWeight": 0.21739130434782608,
+      "daysOff": [
+        "2026-06-30"
+      ],
+      "loc": {
+        "orig": 54,
+        "opt": 62
+      },
+      "type": {
+        "orig": 54,
+        "opt": 62
+      },
+      "streak": {
+        "orig": 1.7,
+        "opt": 1.7
+      },
+      "hours": {
+        "orig": 122.0,
+        "opt": 121.0
+      },
+      "happiness": {
+        "orig": 49,
+        "opt": 55
+      }
+    },
+    "andrea shehaj": {
+      "name": "andrea shehaj",
+      "locPref": "MGH",
+      "typePref": "Swing",
+      "daysPref": 5,
+      "daysWeight": 0.2916666666666667,
+      "daysOff": [],
+      "loc": {
+        "orig": 62,
+        "opt": 62
+      },
+      "type": {
+        "orig": 69,
+        "opt": 77
+      },
+      "streak": {
+        "orig": 1.5,
+        "opt": 1.5
+      },
+      "hours": {
+        "orig": 120.0,
+        "opt": 121.0
+      },
+      "happiness": {
+        "orig": 54,
+        "opt": 58
+      }
+    }
+  },
+  "shifts": {
+    "90e63cfd-4f7a-409b-b549-74b7b3441c7a": {
+      "uid": "90e63cfd-4f7a-409b-b549-74b7b3441c7a",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-18",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "8120b940-3954-4ae6-8d8f-5dec24463ef4": {
+      "uid": "8120b940-3954-4ae6-8d8f-5dec24463ef4",
+      "summary": "MGH Jr. - AC PGY1 1p-11p",
+      "startFmt": "1:00 PM",
+      "endFmt": "11:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-10",
+      "isJeopardy": false,
+      "startHour": 13.0,
+      "endHour": 23.0
+    },
+    "8276e130-5a9c-4d4d-9762-7e8015fa327f": {
+      "uid": "8276e130-5a9c-4d4d-9762-7e8015fa327f",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-14",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "c29ee8e5-8166-4312-bb43-e8c2832b91a1": {
+      "uid": "c29ee8e5-8166-4312-bb43-e8c2832b91a1",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-03",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "f932d7fe-db9f-4204-8312-9291922dcad2": {
+      "uid": "f932d7fe-db9f-4204-8312-9291922dcad2",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-12",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "99f3aed3-e122-4112-87e5-8765d36056ad": {
+      "uid": "99f3aed3-e122-4112-87e5-8765d36056ad",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-02",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "b4dbc9c9-7a4c-4cc2-acfa-18f63d0bd341": {
+      "uid": "b4dbc9c9-7a4c-4cc2-acfa-18f63d0bd341",
+      "summary": "BWH Jr.  - FF Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-07",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "15a8394c-11b1-43b7-81f9-6d9e134ebd0b": {
+      "uid": "15a8394c-11b1-43b7-81f9-6d9e134ebd0b",
+      "summary": "BWH Jr.  - FF Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-17",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "401e39e9-9e47-4d29-bedc-023e6f761b7d": {
+      "uid": "401e39e9-9e47-4d29-bedc-023e6f761b7d",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-06-30",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "37b24e9e-a0d7-4440-aa8b-e0a564012def": {
+      "uid": "37b24e9e-a0d7-4440-aa8b-e0a564012def",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-24",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "17c3a534-5ff1-4b8b-b3e5-6705baa97134": {
+      "uid": "17c3a534-5ff1-4b8b-b3e5-6705baa97134",
+      "summary": "MGH Jr. - AC PGY1 1p-11p",
+      "startFmt": "1:00 PM",
+      "endFmt": "11:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-26",
+      "isJeopardy": false,
+      "startHour": 13.0,
+      "endHour": 23.0
+    },
+    "494ffc84-c425-4227-b89c-3c27ee370ff4": {
+      "uid": "494ffc84-c425-4227-b89c-3c27ee370ff4",
+      "summary": "BWH Jr.  - Exe Jr 8a-4p",
+      "startFmt": "8:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-16",
+      "isJeopardy": false,
+      "startHour": 8.0,
+      "endHour": 16.0
+    },
+    "e727c632-f2c7-4041-8419-9172bbcf92b6": {
+      "uid": "e727c632-f2c7-4041-8419-9172bbcf92b6",
+      "summary": "BWH Jr.  - Exe Jr 12p-12a",
+      "startFmt": "12:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-21",
+      "isJeopardy": false,
+      "startHour": 12.0,
+      "endHour": 24.0
+    },
+    "2668ae46-0bac-49b6-9891-3367dc1666bf": {
+      "uid": "2668ae46-0bac-49b6-9891-3367dc1666bf",
+      "summary": "MGH Jr. - AC PGY1 1p-11p",
+      "startFmt": "1:00 PM",
+      "endFmt": "11:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-06-30",
+      "isJeopardy": false,
+      "startHour": 13.0,
+      "endHour": 23.0
+    },
+    "d55881dd-d265-4f45-a76d-898f860bc411": {
+      "uid": "d55881dd-d265-4f45-a76d-898f860bc411",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-04",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "9a5c6df8-c4c9-4d19-b053-628c642b8c12": {
+      "uid": "9a5c6df8-c4c9-4d19-b053-628c642b8c12",
+      "summary": "MGH Jr. - AC PGY1 1p-11p",
+      "startFmt": "1:00 PM",
+      "endFmt": "11:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-14",
+      "isJeopardy": false,
+      "startHour": 13.0,
+      "endHour": 23.0
+    },
+    "737a8e0d-0a63-4984-be03-757de143b5f9": {
+      "uid": "737a8e0d-0a63-4984-be03-757de143b5f9",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-17",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "ee96ec6d-e5e9-4041-80b2-469be910dffb": {
+      "uid": "ee96ec6d-e5e9-4041-80b2-469be910dffb",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-19",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "de088fac-2659-4e3b-9c69-3b5b46618244": {
+      "uid": "de088fac-2659-4e3b-9c69-3b5b46618244",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-24",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "73048cf3-ec0a-48cc-933b-598134e736cf": {
+      "uid": "73048cf3-ec0a-48cc-933b-598134e736cf",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-03",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "a06a4d2e-c549-4416-8332-abd6ae839bbd": {
+      "uid": "a06a4d2e-c549-4416-8332-abd6ae839bbd",
+      "summary": "BWH Jr.  - FF Jr 8a-4p",
+      "startFmt": "8:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-23",
+      "isJeopardy": false,
+      "startHour": 8.0,
+      "endHour": 16.0
+    },
+    "84e99799-5c76-46fc-b159-41213dd39591": {
+      "uid": "84e99799-5c76-46fc-b159-41213dd39591",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-10",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "cde6dbc2-2d7f-481b-a572-fe817c00c122": {
+      "uid": "cde6dbc2-2d7f-481b-a572-fe817c00c122",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-05",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "bb239480-d6cf-4503-b96b-797cd73c5a8e": {
+      "uid": "bb239480-d6cf-4503-b96b-797cd73c5a8e",
+      "summary": "BWH Jr.  - Exe Jr 12p-12a",
+      "startFmt": "12:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-07",
+      "isJeopardy": false,
+      "startHour": 12.0,
+      "endHour": 24.0
+    },
+    "a62e273a-e91d-4fbe-bd0f-2b60a30938ff": {
+      "uid": "a62e273a-e91d-4fbe-bd0f-2b60a30938ff",
+      "summary": "BWH Jr.  - FF Jr 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-18",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "296e81c9-c9e4-4d4a-9bdd-6e8c0a59e6a5": {
+      "uid": "296e81c9-c9e4-4d4a-9bdd-6e8c0a59e6a5",
+      "summary": "BWH Jr.  - FF Jr 8a-4p",
+      "startFmt": "8:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-21",
+      "isJeopardy": false,
+      "startHour": 8.0,
+      "endHour": 16.0
+    },
+    "d6e41086-0042-4ab7-9bd4-58b90a10fb85": {
+      "uid": "d6e41086-0042-4ab7-9bd4-58b90a10fb85",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-12",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "7c91f296-d43d-4f07-9721-a203d9816c52": {
+      "uid": "7c91f296-d43d-4f07-9721-a203d9816c52",
+      "summary": "MGH Jr. - AC PGY2 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-11",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "badcd664-0f20-43c8-989a-8acf9e61c8ed": {
+      "uid": "badcd664-0f20-43c8-989a-8acf9e61c8ed",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-18",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "8a7e679c-9dff-4bfb-a087-2f93597063ee": {
+      "uid": "8a7e679c-9dff-4bfb-a087-2f93597063ee",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-04",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "147ffb19-4c9f-478b-a749-bbf710740112": {
+      "uid": "147ffb19-4c9f-478b-a749-bbf710740112",
+      "summary": "MGH Jr. - AC PGY1 1p-11p",
+      "startFmt": "1:00 PM",
+      "endFmt": "11:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-24",
+      "isJeopardy": false,
+      "startHour": 13.0,
+      "endHour": 23.0
+    },
+    "7a0b7f4e-3da9-4f4b-a894-0482e81d536b": {
+      "uid": "7a0b7f4e-3da9-4f4b-a894-0482e81d536b",
+      "summary": "BWH Jr.  - Exe Jr 8a-4p",
+      "startFmt": "8:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-16",
+      "isJeopardy": false,
+      "startHour": 8.0,
+      "endHour": 16.0
+    },
+    "a1a3266a-445c-407a-9a55-4bf62601f7f9": {
+      "uid": "a1a3266a-445c-407a-9a55-4bf62601f7f9",
+      "summary": "BWH Jr.  - FF Jr 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-26",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "dc140904-559e-4297-a814-af554593b132": {
+      "uid": "dc140904-559e-4297-a814-af554593b132",
+      "summary": "BWH Jr.  - FF Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-17",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "b2fb5026-fc51-4f85-a88e-40d6baf8df01": {
+      "uid": "b2fb5026-fc51-4f85-a88e-40d6baf8df01",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-02",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "065b0412-2719-426b-8df7-ed27b625a604": {
+      "uid": "065b0412-2719-426b-8df7-ed27b625a604",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-07",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "34ecd5e1-5e38-4264-a0e7-12823370947d": {
+      "uid": "34ecd5e1-5e38-4264-a0e7-12823370947d",
+      "summary": "MGH Jr. - AC PGY1 1p-11p",
+      "startFmt": "1:00 PM",
+      "endFmt": "11:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-14",
+      "isJeopardy": false,
+      "startHour": 13.0,
+      "endHour": 23.0
+    },
+    "c4a775f8-33cd-4dc0-a184-75cb3f0f02a2": {
+      "uid": "c4a775f8-33cd-4dc0-a184-75cb3f0f02a2",
+      "summary": "BWH Jr.  - FF Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-03",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "70007c4e-f27a-444b-865b-dd345489375a": {
+      "uid": "70007c4e-f27a-444b-865b-dd345489375a",
+      "summary": "BWH Jr.  - Exe Jr 12p-12a",
+      "startFmt": "12:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-23",
+      "isJeopardy": false,
+      "startHour": 12.0,
+      "endHour": 24.0
+    },
+    "2f729d3a-eb8f-452e-87b4-ca3de977499e": {
+      "uid": "2f729d3a-eb8f-452e-87b4-ca3de977499e",
+      "summary": "MGH Jr. - AC PGY2 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-11",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "722a5ba7-5b76-4b1a-ac2d-5b7bf1289883": {
+      "uid": "722a5ba7-5b76-4b1a-ac2d-5b7bf1289883",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-23",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "b355f06c-b3db-4945-b2ae-f80b9caf0c4c": {
+      "uid": "b355f06c-b3db-4945-b2ae-f80b9caf0c4c",
+      "summary": "BWH Jr.  - Exe Jr 12p-12a",
+      "startFmt": "12:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-21",
+      "isJeopardy": false,
+      "startHour": 12.0,
+      "endHour": 24.0
+    },
+    "c1d9f90f-e8d5-4e3b-a7b0-cd161fd74baf": {
+      "uid": "c1d9f90f-e8d5-4e3b-a7b0-cd161fd74baf",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-26",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "36bd30b8-3ebb-416b-9ee5-8cbf46685b6a": {
+      "uid": "36bd30b8-3ebb-416b-9ee5-8cbf46685b6a",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-02",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "2b1d5046-ef8e-4ab3-8120-52bde9de922a": {
+      "uid": "2b1d5046-ef8e-4ab3-8120-52bde9de922a",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-04",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "3969970a-7307-4d92-85c0-d238b54d1487": {
+      "uid": "3969970a-7307-4d92-85c0-d238b54d1487",
+      "summary": "BWH Jr.  - FF Jr 8a-4p",
+      "startFmt": "8:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-07",
+      "isJeopardy": false,
+      "startHour": 8.0,
+      "endHour": 16.0
+    },
+    "c6bbfaf3-ce16-4df9-b7b6-935a3513d35d": {
+      "uid": "c6bbfaf3-ce16-4df9-b7b6-935a3513d35d",
+      "summary": "BWH Jr.  - FF Jr 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-18",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "2ce732a0-1ab1-4df8-810f-989dc3f2155f": {
+      "uid": "2ce732a0-1ab1-4df8-810f-989dc3f2155f",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-09",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "60f3eb32-6eae-4818-822d-1f630ffa7f62": {
+      "uid": "60f3eb32-6eae-4818-822d-1f630ffa7f62",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-16",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "57eecf92-db87-4d6b-97a6-d0cc99277d4f": {
+      "uid": "57eecf92-db87-4d6b-97a6-d0cc99277d4f",
+      "summary": "BWH Jr.  - FF Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-03",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "94916423-42e6-4487-ada0-c7d7fd034cce": {
+      "uid": "94916423-42e6-4487-ada0-c7d7fd034cce",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-17",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "08db6d94-dcac-41af-8002-6dba2503457f": {
+      "uid": "08db6d94-dcac-41af-8002-6dba2503457f",
+      "summary": "MGH Jr. - AC PGY1 1p-11p",
+      "startFmt": "1:00 PM",
+      "endFmt": "11:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-24",
+      "isJeopardy": false,
+      "startHour": 13.0,
+      "endHour": 23.0
+    },
+    "b04090a2-6ba3-4b02-8571-c9f8d9d6cd0c": {
+      "uid": "b04090a2-6ba3-4b02-8571-c9f8d9d6cd0c",
+      "summary": "MGH Jr. - AC PGY2 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-04",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "b1b0203e-a974-4cc1-aee5-102d35d09f67": {
+      "uid": "b1b0203e-a974-4cc1-aee5-102d35d09f67",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-18",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "812ea479-1d9d-4b91-b27c-394f49831b5e": {
+      "uid": "812ea479-1d9d-4b91-b27c-394f49831b5e",
+      "summary": "BWH Jr.  - FF Jr 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-25",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "a7f08738-553b-41fd-85a6-49601899911d": {
+      "uid": "a7f08738-553b-41fd-85a6-49601899911d",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-03",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "c9ad842c-dad0-4c64-b5e6-19f8a36fe9b0": {
+      "uid": "c9ad842c-dad0-4c64-b5e6-19f8a36fe9b0",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-09",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "adbe7f96-80fb-401f-bf31-a0411ceb12c8": {
+      "uid": "adbe7f96-80fb-401f-bf31-a0411ceb12c8",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-23",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "2583d041-c479-46b0-b1c3-e12f5e21e57d": {
+      "uid": "2583d041-c479-46b0-b1c3-e12f5e21e57d",
+      "summary": "BWH Jr.  - FF Jr 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-05",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "d5882e55-abd9-4148-a536-c0287b521cd6": {
+      "uid": "d5882e55-abd9-4148-a536-c0287b521cd6",
+      "summary": "MGH Jr. - AC PGY1 1p-11p",
+      "startFmt": "1:00 PM",
+      "endFmt": "11:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-16",
+      "isJeopardy": false,
+      "startHour": 13.0,
+      "endHour": 23.0
+    },
+    "a6661004-baca-4ddd-99be-1065353d2543": {
+      "uid": "a6661004-baca-4ddd-99be-1065353d2543",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-26",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "6d067d23-9ffc-44f6-812d-0987596827d1": {
+      "uid": "6d067d23-9ffc-44f6-812d-0987596827d1",
+      "summary": "BWH Jr.  - FF Jr 8a-4p",
+      "startFmt": "8:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-06-30",
+      "isJeopardy": false,
+      "startHour": 8.0,
+      "endHour": 16.0
+    },
+    "76e63094-d2e5-4db1-bafb-265ca4f7e85e": {
+      "uid": "76e63094-d2e5-4db1-bafb-265ca4f7e85e",
+      "summary": "BWH Jr.  - Exe Jr 12p-12a",
+      "startFmt": "12:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-07",
+      "isJeopardy": false,
+      "startHour": 12.0,
+      "endHour": 24.0
+    },
+    "9e8f53c6-1ed7-40ed-92cf-3c23682f963c": {
+      "uid": "9e8f53c6-1ed7-40ed-92cf-3c23682f963c",
+      "summary": "BWH Jr.  - Exe Jr 12p-12a",
+      "startFmt": "12:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-11",
+      "isJeopardy": false,
+      "startHour": 12.0,
+      "endHour": 24.0
+    },
+    "243551b6-9359-4185-9aa8-6f8a42d4c63e": {
+      "uid": "243551b6-9359-4185-9aa8-6f8a42d4c63e",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-12",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "5472c047-7757-4c75-b6d7-e139a0a75a52": {
+      "uid": "5472c047-7757-4c75-b6d7-e139a0a75a52",
+      "summary": "BWH Jr.  - Exe Jr 12p-12a",
+      "startFmt": "12:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-23",
+      "isJeopardy": false,
+      "startHour": 12.0,
+      "endHour": 24.0
+    },
+    "0b742ace-4d55-411a-86d9-e578a12b2422": {
+      "uid": "0b742ace-4d55-411a-86d9-e578a12b2422",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-06-30",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "4afd2caf-ed8a-4115-8bb5-58259b6a863a": {
+      "uid": "4afd2caf-ed8a-4115-8bb5-58259b6a863a",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-03",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "0058bd3f-127c-4ee8-be5f-e48522644e2f": {
+      "uid": "0058bd3f-127c-4ee8-be5f-e48522644e2f",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-07",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "23434e26-5486-4ac9-bd6c-88631c48129e": {
+      "uid": "23434e26-5486-4ac9-bd6c-88631c48129e",
+      "summary": "BWH Jr.  - FF Jr 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-04",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "3c2368ed-45a6-4f1d-9930-00fe7a4a0420": {
+      "uid": "3c2368ed-45a6-4f1d-9930-00fe7a4a0420",
+      "summary": "BWH Jr.  - FF Jr 8a-4p",
+      "startFmt": "8:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-21",
+      "isJeopardy": false,
+      "startHour": 8.0,
+      "endHour": 16.0
+    },
+    "17d961bc-b144-4c44-afe5-a0d1981762d4": {
+      "uid": "17d961bc-b144-4c44-afe5-a0d1981762d4",
+      "summary": "BWH Jr.  - Exe Jr 12p-12a",
+      "startFmt": "12:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-09",
+      "isJeopardy": false,
+      "startHour": 12.0,
+      "endHour": 24.0
+    },
+    "ad5adf3b-2c66-40c8-b40f-76c704fc5ba6": {
+      "uid": "ad5adf3b-2c66-40c8-b40f-76c704fc5ba6",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-05",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "c7d1ab07-f633-44d0-a1f0-60c431315d93": {
+      "uid": "c7d1ab07-f633-44d0-a1f0-60c431315d93",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-18",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "f1b10f25-1064-486b-a292-e39a1202ba1f": {
+      "uid": "f1b10f25-1064-486b-a292-e39a1202ba1f",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-10",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "a355b29e-0874-4277-83af-e9f8e3ab4690": {
+      "uid": "a355b29e-0874-4277-83af-e9f8e3ab4690",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-25",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "b7b6cb77-cfe5-4f64-ab0f-96aa738e5daf": {
+      "uid": "b7b6cb77-cfe5-4f64-ab0f-96aa738e5daf",
+      "summary": "BWH Jr.  - FF Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-14",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "74955872-ce7f-4394-ae1a-2592df9db995": {
+      "uid": "74955872-ce7f-4394-ae1a-2592df9db995",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-24",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "e84b98e1-d18b-44e7-ae34-ad43519e72ab": {
+      "uid": "e84b98e1-d18b-44e7-ae34-ad43519e72ab",
+      "summary": "MGH Jr. - AC PGY2 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-04",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "02489bec-cd48-45e0-b570-6c21ca527864": {
+      "uid": "02489bec-cd48-45e0-b570-6c21ca527864",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-12",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "966617ee-1e63-43b2-8873-5a15a054367e": {
+      "uid": "966617ee-1e63-43b2-8873-5a15a054367e",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-07",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "aeb53546-a50f-405c-ae60-765d58500d6b": {
+      "uid": "aeb53546-a50f-405c-ae60-765d58500d6b",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-21",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "eee43676-e445-43d8-bcc7-47f3af582c43": {
+      "uid": "eee43676-e445-43d8-bcc7-47f3af582c43",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-24",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "636e5e57-dbc5-452b-aad6-60649246cecf": {
+      "uid": "636e5e57-dbc5-452b-aad6-60649246cecf",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-05",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "834ee2ad-24a4-45df-b988-23e0bcb3f293": {
+      "uid": "834ee2ad-24a4-45df-b988-23e0bcb3f293",
+      "summary": "BWH Jr.  - FF Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-16",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "0c1bbee2-3829-447d-9ec2-0fb0f12a6f81": {
+      "uid": "0c1bbee2-3829-447d-9ec2-0fb0f12a6f81",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-02",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "245cdee2-ea04-4b57-85ad-3ab6b4a82e88": {
+      "uid": "245cdee2-ea04-4b57-85ad-3ab6b4a82e88",
+      "summary": "BWH Jr.  - Exe Jr 12p-12a",
+      "startFmt": "12:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-09",
+      "isJeopardy": false,
+      "startHour": 12.0,
+      "endHour": 24.0
+    },
+    "ee656061-4e54-4e32-999d-59a45be44cae": {
+      "uid": "ee656061-4e54-4e32-999d-59a45be44cae",
+      "summary": "BWH Jr.  - FF Jr 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-19",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "13d72997-d7fd-4877-b746-4dd195535f99": {
+      "uid": "13d72997-d7fd-4877-b746-4dd195535f99",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-17",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "6b856c0c-67e7-453c-a350-1beb3d3ab13b": {
+      "uid": "6b856c0c-67e7-453c-a350-1beb3d3ab13b",
+      "summary": "BWH Jr.  - Exe Jr 12p-12a",
+      "startFmt": "12:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-25",
+      "isJeopardy": false,
+      "startHour": 12.0,
+      "endHour": 24.0
+    }
+  },
+  "originalAssignment": {
+    "wendy memishian": [
+      "245cdee2-ea04-4b57-85ad-3ab6b4a82e88",
+      "834ee2ad-24a4-45df-b988-23e0bcb3f293",
+      "13d72997-d7fd-4877-b746-4dd195535f99",
+      "02489bec-cd48-45e0-b570-6c21ca527864",
+      "eee43676-e445-43d8-bcc7-47f3af582c43",
+      "aeb53546-a50f-405c-ae60-765d58500d6b",
+      "0c1bbee2-3829-447d-9ec2-0fb0f12a6f81",
+      "966617ee-1e63-43b2-8873-5a15a054367e",
+      "ee656061-4e54-4e32-999d-59a45be44cae",
+      "e84b98e1-d18b-44e7-ae34-ad43519e72ab",
+      "636e5e57-dbc5-452b-aad6-60649246cecf",
+      "6b856c0c-67e7-453c-a350-1beb3d3ab13b"
+    ],
+    "brian song": [
+      "737a8e0d-0a63-4984-be03-757de143b5f9",
+      "a62e273a-e91d-4fbe-bd0f-2b60a30938ff",
+      "9a5c6df8-c4c9-4d19-b053-628c642b8c12",
+      "2668ae46-0bac-49b6-9891-3367dc1666bf",
+      "de088fac-2659-4e3b-9c69-3b5b46618244",
+      "296e81c9-c9e4-4d4a-9bdd-6e8c0a59e6a5",
+      "cde6dbc2-2d7f-481b-a572-fe817c00c122",
+      "d55881dd-d265-4f45-a76d-898f860bc411",
+      "84e99799-5c76-46fc-b159-41213dd39591",
+      "bb239480-d6cf-4503-b96b-797cd73c5a8e",
+      "73048cf3-ec0a-48cc-933b-598134e736cf",
+      "ee96ec6d-e5e9-4041-80b2-469be910dffb",
+      "a06a4d2e-c549-4416-8332-abd6ae839bbd"
+    ],
+    "cliff danza": [
+      "8a7e679c-9dff-4bfb-a087-2f93597063ee",
+      "b2fb5026-fc51-4f85-a88e-40d6baf8df01",
+      "70007c4e-f27a-444b-865b-dd345489375a",
+      "7c91f296-d43d-4f07-9721-a203d9816c52",
+      "badcd664-0f20-43c8-989a-8acf9e61c8ed",
+      "147ffb19-4c9f-478b-a749-bbf710740112",
+      "c4a775f8-33cd-4dc0-a184-75cb3f0f02a2",
+      "dc140904-559e-4297-a814-af554593b132",
+      "a1a3266a-445c-407a-9a55-4bf62601f7f9",
+      "d6e41086-0042-4ab7-9bd4-58b90a10fb85",
+      "34ecd5e1-5e38-4264-a0e7-12823370947d",
+      "7a0b7f4e-3da9-4f4b-a894-0482e81d536b",
+      "065b0412-2719-426b-8df7-ed27b625a604"
+    ],
+    "roshan lodha": [
+      "812ea479-1d9d-4b91-b27c-394f49831b5e",
+      "d5882e55-abd9-4148-a536-c0287b521cd6",
+      "243551b6-9359-4185-9aa8-6f8a42d4c63e",
+      "6d067d23-9ffc-44f6-812d-0987596827d1",
+      "2583d041-c479-46b0-b1c3-e12f5e21e57d",
+      "76e63094-d2e5-4db1-bafb-265ca4f7e85e",
+      "adbe7f96-80fb-401f-bf31-a0411ceb12c8",
+      "c9ad842c-dad0-4c64-b5e6-19f8a36fe9b0",
+      "b1b0203e-a974-4cc1-aee5-102d35d09f67",
+      "9e8f53c6-1ed7-40ed-92cf-3c23682f963c",
+      "a7f08738-553b-41fd-85a6-49601899911d",
+      "b04090a2-6ba3-4b02-8571-c9f8d9d6cd0c",
+      "a6661004-baca-4ddd-99be-1065353d2543"
+    ],
+    "justin yang": [
+      "3969970a-7307-4d92-85c0-d238b54d1487",
+      "2b1d5046-ef8e-4ab3-8120-52bde9de922a",
+      "722a5ba7-5b76-4b1a-ac2d-5b7bf1289883",
+      "60f3eb32-6eae-4818-822d-1f630ffa7f62",
+      "57eecf92-db87-4d6b-97a6-d0cc99277d4f",
+      "b355f06c-b3db-4945-b2ae-f80b9caf0c4c",
+      "c1d9f90f-e8d5-4e3b-a7b0-cd161fd74baf",
+      "2ce732a0-1ab1-4df8-810f-989dc3f2155f",
+      "2f729d3a-eb8f-452e-87b4-ca3de977499e",
+      "36bd30b8-3ebb-416b-9ee5-8cbf46685b6a",
+      "08db6d94-dcac-41af-8002-6dba2503457f",
+      "94916423-42e6-4487-ada0-c7d7fd034cce",
+      "c6bbfaf3-ce16-4df9-b7b6-935a3513d35d"
+    ],
+    "sara locke": [
+      "4afd2caf-ed8a-4115-8bb5-58259b6a863a",
+      "23434e26-5486-4ac9-bd6c-88631c48129e",
+      "f1b10f25-1064-486b-a292-e39a1202ba1f",
+      "74955872-ce7f-4394-ae1a-2592df9db995",
+      "17d961bc-b144-4c44-afe5-a0d1981762d4",
+      "ad5adf3b-2c66-40c8-b40f-76c704fc5ba6",
+      "3c2368ed-45a6-4f1d-9930-00fe7a4a0420",
+      "0b742ace-4d55-411a-86d9-e578a12b2422",
+      "0058bd3f-127c-4ee8-be5f-e48522644e2f",
+      "c7d1ab07-f633-44d0-a1f0-60c431315d93",
+      "a355b29e-0874-4277-83af-e9f8e3ab4690",
+      "b7b6cb77-cfe5-4f64-ab0f-96aa738e5daf",
+      "5472c047-7757-4c75-b6d7-e139a0a75a52"
+    ],
+    "andrea shehaj": [
+      "b4dbc9c9-7a4c-4cc2-acfa-18f63d0bd341",
+      "99f3aed3-e122-4112-87e5-8765d36056ad",
+      "8120b940-3954-4ae6-8d8f-5dec24463ef4",
+      "f932d7fe-db9f-4204-8312-9291922dcad2",
+      "15a8394c-11b1-43b7-81f9-6d9e134ebd0b",
+      "37b24e9e-a0d7-4440-aa8b-e0a564012def",
+      "e727c632-f2c7-4041-8419-9172bbcf92b6",
+      "494ffc84-c425-4227-b89c-3c27ee370ff4",
+      "401e39e9-9e47-4d29-bedc-023e6f761b7d",
+      "8276e130-5a9c-4d4d-9762-7e8015fa327f",
+      "c29ee8e5-8166-4312-bb43-e8c2832b91a1",
+      "90e63cfd-4f7a-409b-b549-74b7b3441c7a",
+      "17c3a534-5ff1-4b8b-b3e5-6705baa97134"
+    ]
+  },
+  "finalAssignment": {
+    "wendy memishian": [
+      "13d72997-d7fd-4877-b746-4dd195535f99",
+      "9a5c6df8-c4c9-4d19-b053-628c642b8c12",
+      "02489bec-cd48-45e0-b570-6c21ca527864",
+      "aeb53546-a50f-405c-ae60-765d58500d6b",
+      "d55881dd-d265-4f45-a76d-898f860bc411",
+      "2f729d3a-eb8f-452e-87b4-ca3de977499e",
+      "0c1bbee2-3829-447d-9ec2-0fb0f12a6f81",
+      "ee96ec6d-e5e9-4041-80b2-469be910dffb",
+      "966617ee-1e63-43b2-8873-5a15a054367e",
+      "0b742ace-4d55-411a-86d9-e578a12b2422",
+      "adbe7f96-80fb-401f-bf31-a0411ceb12c8",
+      "636e5e57-dbc5-452b-aad6-60649246cecf"
+    ],
+    "brian song": [
+      "737a8e0d-0a63-4984-be03-757de143b5f9",
+      "3969970a-7307-4d92-85c0-d238b54d1487",
+      "a62e273a-e91d-4fbe-bd0f-2b60a30938ff",
+      "245cdee2-ea04-4b57-85ad-3ab6b4a82e88",
+      "de088fac-2659-4e3b-9c69-3b5b46618244",
+      "296e81c9-c9e4-4d4a-9bdd-6e8c0a59e6a5",
+      "84e99799-5c76-46fc-b159-41213dd39591",
+      "494ffc84-c425-4227-b89c-3c27ee370ff4",
+      "73048cf3-ec0a-48cc-933b-598134e736cf",
+      "a1a3266a-445c-407a-9a55-4bf62601f7f9",
+      "ee656061-4e54-4e32-999d-59a45be44cae",
+      "e84b98e1-d18b-44e7-ae34-ad43519e72ab",
+      "a06a4d2e-c549-4416-8332-abd6ae839bbd"
+    ],
+    "cliff danza": [
+      "8a7e679c-9dff-4bfb-a087-2f93597063ee",
+      "b2fb5026-fc51-4f85-a88e-40d6baf8df01",
+      "2668ae46-0bac-49b6-9891-3367dc1666bf",
+      "70007c4e-f27a-444b-865b-dd345489375a",
+      "7c91f296-d43d-4f07-9721-a203d9816c52",
+      "badcd664-0f20-43c8-989a-8acf9e61c8ed",
+      "147ffb19-4c9f-478b-a749-bbf710740112",
+      "c4a775f8-33cd-4dc0-a184-75cb3f0f02a2",
+      "dc140904-559e-4297-a814-af554593b132",
+      "d6e41086-0042-4ab7-9bd4-58b90a10fb85",
+      "34ecd5e1-5e38-4264-a0e7-12823370947d",
+      "7a0b7f4e-3da9-4f4b-a894-0482e81d536b",
+      "065b0412-2719-426b-8df7-ed27b625a604"
+    ],
+    "roshan lodha": [
+      "812ea479-1d9d-4b91-b27c-394f49831b5e",
+      "d5882e55-abd9-4148-a536-c0287b521cd6",
+      "243551b6-9359-4185-9aa8-6f8a42d4c63e",
+      "eee43676-e445-43d8-bcc7-47f3af582c43",
+      "6d067d23-9ffc-44f6-812d-0987596827d1",
+      "2583d041-c479-46b0-b1c3-e12f5e21e57d",
+      "76e63094-d2e5-4db1-bafb-265ca4f7e85e",
+      "c9ad842c-dad0-4c64-b5e6-19f8a36fe9b0",
+      "b1b0203e-a974-4cc1-aee5-102d35d09f67",
+      "9e8f53c6-1ed7-40ed-92cf-3c23682f963c",
+      "a7f08738-553b-41fd-85a6-49601899911d",
+      "b04090a2-6ba3-4b02-8571-c9f8d9d6cd0c",
+      "a6661004-baca-4ddd-99be-1065353d2543"
+    ],
+    "justin yang": [
+      "2b1d5046-ef8e-4ab3-8120-52bde9de922a",
+      "722a5ba7-5b76-4b1a-ac2d-5b7bf1289883",
+      "60f3eb32-6eae-4818-822d-1f630ffa7f62",
+      "57eecf92-db87-4d6b-97a6-d0cc99277d4f",
+      "b355f06c-b3db-4945-b2ae-f80b9caf0c4c",
+      "c1d9f90f-e8d5-4e3b-a7b0-cd161fd74baf",
+      "bb239480-d6cf-4503-b96b-797cd73c5a8e",
+      "f932d7fe-db9f-4204-8312-9291922dcad2",
+      "36bd30b8-3ebb-416b-9ee5-8cbf46685b6a",
+      "08db6d94-dcac-41af-8002-6dba2503457f",
+      "94916423-42e6-4487-ada0-c7d7fd034cce",
+      "6b856c0c-67e7-453c-a350-1beb3d3ab13b",
+      "c6bbfaf3-ce16-4df9-b7b6-935a3513d35d"
+    ],
+    "sara locke": [
+      "4afd2caf-ed8a-4115-8bb5-58259b6a863a",
+      "23434e26-5486-4ac9-bd6c-88631c48129e",
+      "f1b10f25-1064-486b-a292-e39a1202ba1f",
+      "834ee2ad-24a4-45df-b988-23e0bcb3f293",
+      "74955872-ce7f-4394-ae1a-2592df9db995",
+      "17d961bc-b144-4c44-afe5-a0d1981762d4",
+      "ad5adf3b-2c66-40c8-b40f-76c704fc5ba6",
+      "3c2368ed-45a6-4f1d-9930-00fe7a4a0420",
+      "0058bd3f-127c-4ee8-be5f-e48522644e2f",
+      "c7d1ab07-f633-44d0-a1f0-60c431315d93",
+      "a355b29e-0874-4277-83af-e9f8e3ab4690",
+      "b7b6cb77-cfe5-4f64-ab0f-96aa738e5daf",
+      "5472c047-7757-4c75-b6d7-e139a0a75a52"
+    ],
+    "andrea shehaj": [
+      "b4dbc9c9-7a4c-4cc2-acfa-18f63d0bd341",
+      "99f3aed3-e122-4112-87e5-8765d36056ad",
+      "2ce732a0-1ab1-4df8-810f-989dc3f2155f",
+      "8120b940-3954-4ae6-8d8f-5dec24463ef4",
+      "15a8394c-11b1-43b7-81f9-6d9e134ebd0b",
+      "37b24e9e-a0d7-4440-aa8b-e0a564012def",
+      "e727c632-f2c7-4041-8419-9172bbcf92b6",
+      "cde6dbc2-2d7f-481b-a572-fe817c00c122",
+      "401e39e9-9e47-4d29-bedc-023e6f761b7d",
+      "8276e130-5a9c-4d4d-9762-7e8015fa327f",
+      "c29ee8e5-8166-4312-bb43-e8c2832b91a1",
+      "90e63cfd-4f7a-409b-b549-74b7b3441c7a",
+      "17c3a534-5ff1-4b8b-b3e5-6705baa97134"
+    ]
+  },
+  "swaps": {
+    "wendy memishian": [
+      {
+        "giveUid": "ee656061-4e54-4e32-999d-59a45be44cae",
+        "giveSummary": "BWH Jr.  - FF Jr 7a-4p",
+        "giveDate": "2026-07-19",
+        "giveLoc": "BWH",
+        "giveType": "Morning",
+        "giveStart": "7:00 AM",
+        "giveEnd": "4:00 PM",
+        "recvUid": "ee96ec6d-e5e9-4041-80b2-469be910dffb",
+        "recvSummary": "MGH Jr. - FT 11a-8p",
+        "recvDate": "2026-07-19",
+        "recvLoc": "MGH",
+        "recvType": "Swing",
+        "recvStart": "11:00 AM",
+        "recvEnd": "8:00 PM",
+        "delta": 0.0833,
+        "swapWith": "brian song",
+        "partnerDelta": 0.0769
+      },
+      {
+        "giveUid": "834ee2ad-24a4-45df-b988-23e0bcb3f293",
+        "giveSummary": "BWH Jr.  - FF Jr 3p-12a",
+        "giveDate": "2026-07-16",
+        "giveLoc": "BWH",
+        "giveType": "Swing",
+        "giveStart": "3:00 PM",
+        "giveEnd": "12:00 AM",
+        "recvUid": "0b742ace-4d55-411a-86d9-e578a12b2422",
+        "recvSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "recvDate": "2026-06-30",
+        "recvLoc": "MGH",
+        "recvType": "Morning",
+        "recvStart": "7:00 AM",
+        "recvEnd": "5:00 PM",
+        "delta": 0.0056,
+        "swapWith": "sara locke",
+        "partnerDelta": 0.0602
+      },
+      {
+        "giveUid": "245cdee2-ea04-4b57-85ad-3ab6b4a82e88",
+        "giveSummary": "BWH Jr.  - Exe Jr 12p-12a",
+        "giveDate": "2026-07-09",
+        "giveLoc": "BWH",
+        "giveType": "Swing",
+        "giveStart": "12:00 PM",
+        "giveEnd": "12:00 AM",
+        "recvUid": "9a5c6df8-c4c9-4d19-b053-628c642b8c12",
+        "recvSummary": "MGH Jr. - AC PGY1 1p-11p",
+        "recvDate": "2026-07-14",
+        "recvLoc": "MGH",
+        "recvType": "Swing",
+        "recvStart": "1:00 PM",
+        "recvEnd": "11:00 PM",
+        "delta": 0.0444,
+        "swapWith": "brian song",
+        "partnerDelta": 0.0385
+      },
+      {
+        "giveUid": "e84b98e1-d18b-44e7-ae34-ad43519e72ab",
+        "giveSummary": "MGH Jr. - AC PGY2 7a-4p",
+        "giveDate": "2026-07-04",
+        "giveLoc": "MGH",
+        "giveType": "Morning",
+        "giveStart": "7:00 AM",
+        "giveEnd": "4:00 PM",
+        "recvUid": "d55881dd-d265-4f45-a76d-898f860bc411",
+        "recvSummary": "MGH Jr. - FT 11a-8p",
+        "recvDate": "2026-07-04",
+        "recvLoc": "MGH",
+        "recvType": "Swing",
+        "recvStart": "11:00 AM",
+        "recvEnd": "8:00 PM",
+        "delta": 0.0389,
+        "swapWith": "brian song",
+        "partnerDelta": 0.0385
+      },
+      {
+        "giveUid": "eee43676-e445-43d8-bcc7-47f3af582c43",
+        "giveSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "giveDate": "2026-07-24",
+        "giveLoc": "MGH",
+        "giveType": "Morning",
+        "giveStart": "7:00 AM",
+        "giveEnd": "5:00 PM",
+        "recvUid": "adbe7f96-80fb-401f-bf31-a0411ceb12c8",
+        "recvSummary": "MGH Jr. - FT 11a-8p",
+        "recvDate": "2026-07-23",
+        "recvLoc": "MGH",
+        "recvType": "Swing",
+        "recvStart": "11:00 AM",
+        "recvEnd": "8:00 PM",
+        "delta": 0.0389,
+        "swapWith": "roshan lodha",
+        "partnerDelta": 0.0241
+      },
+      {
+        "giveUid": "6b856c0c-67e7-453c-a350-1beb3d3ab13b",
+        "giveSummary": "BWH Jr.  - Exe Jr 12p-12a",
+        "giveDate": "2026-07-25",
+        "giveLoc": "BWH",
+        "giveType": "Swing",
+        "giveStart": "12:00 PM",
+        "giveEnd": "12:00 AM",
+        "recvUid": "2f729d3a-eb8f-452e-87b4-ca3de977499e",
+        "recvSummary": "MGH Jr. - AC PGY2 7a-4p",
+        "recvDate": "2026-07-11",
+        "recvLoc": "MGH",
+        "recvType": "Morning",
+        "recvStart": "7:00 AM",
+        "recvEnd": "4:00 PM",
+        "delta": 0.0056,
+        "swapWith": "justin yang",
+        "partnerDelta": 0.0316
+      }
+    ],
+    "brian song": [
+      {
+        "giveUid": "ee96ec6d-e5e9-4041-80b2-469be910dffb",
+        "giveSummary": "MGH Jr. - FT 11a-8p",
+        "giveDate": "2026-07-19",
+        "giveLoc": "MGH",
+        "giveType": "Swing",
+        "giveStart": "11:00 AM",
+        "giveEnd": "8:00 PM",
+        "recvUid": "ee656061-4e54-4e32-999d-59a45be44cae",
+        "recvSummary": "BWH Jr.  - FF Jr 7a-4p",
+        "recvDate": "2026-07-19",
+        "recvLoc": "BWH",
+        "recvType": "Morning",
+        "recvStart": "7:00 AM",
+        "recvEnd": "4:00 PM",
+        "delta": 0.0769,
+        "swapWith": "wendy memishian",
+        "partnerDelta": 0.0833
+      },
+      {
+        "giveUid": "2668ae46-0bac-49b6-9891-3367dc1666bf",
+        "giveSummary": "MGH Jr. - AC PGY1 1p-11p",
+        "giveDate": "2026-06-30",
+        "giveLoc": "MGH",
+        "giveType": "Swing",
+        "giveStart": "1:00 PM",
+        "giveEnd": "11:00 PM",
+        "recvUid": "a1a3266a-445c-407a-9a55-4bf62601f7f9",
+        "recvSummary": "BWH Jr.  - FF Jr 7a-4p",
+        "recvDate": "2026-07-26",
+        "recvLoc": "BWH",
+        "recvType": "Morning",
+        "recvStart": "7:00 AM",
+        "recvEnd": "4:00 PM",
+        "delta": 0.0769,
+        "swapWith": "cliff danza",
+        "partnerDelta": 0.0586
+      },
+      {
+        "giveUid": "9a5c6df8-c4c9-4d19-b053-628c642b8c12",
+        "giveSummary": "MGH Jr. - AC PGY1 1p-11p",
+        "giveDate": "2026-07-14",
+        "giveLoc": "MGH",
+        "giveType": "Swing",
+        "giveStart": "1:00 PM",
+        "giveEnd": "11:00 PM",
+        "recvUid": "245cdee2-ea04-4b57-85ad-3ab6b4a82e88",
+        "recvSummary": "BWH Jr.  - Exe Jr 12p-12a",
+        "recvDate": "2026-07-09",
+        "recvLoc": "BWH",
+        "recvType": "Swing",
+        "recvStart": "12:00 PM",
+        "recvEnd": "12:00 AM",
+        "delta": 0.0385,
+        "swapWith": "wendy memishian",
+        "partnerDelta": 0.0444
+      },
+      {
+        "giveUid": "d55881dd-d265-4f45-a76d-898f860bc411",
+        "giveSummary": "MGH Jr. - FT 11a-8p",
+        "giveDate": "2026-07-04",
+        "giveLoc": "MGH",
+        "giveType": "Swing",
+        "giveStart": "11:00 AM",
+        "giveEnd": "8:00 PM",
+        "recvUid": "e84b98e1-d18b-44e7-ae34-ad43519e72ab",
+        "recvSummary": "MGH Jr. - AC PGY2 7a-4p",
+        "recvDate": "2026-07-04",
+        "recvLoc": "MGH",
+        "recvType": "Morning",
+        "recvStart": "7:00 AM",
+        "recvEnd": "4:00 PM",
+        "delta": 0.0385,
+        "swapWith": "wendy memishian",
+        "partnerDelta": 0.0389
+      },
+      {
+        "giveUid": "cde6dbc2-2d7f-481b-a572-fe817c00c122",
+        "giveSummary": "BWH Jr.  - Exe Jr 3p-12a",
+        "giveDate": "2026-07-05",
+        "giveLoc": "BWH",
+        "giveType": "Swing",
+        "giveStart": "3:00 PM",
+        "giveEnd": "12:00 AM",
+        "recvUid": "494ffc84-c425-4227-b89c-3c27ee370ff4",
+        "recvSummary": "BWH Jr.  - Exe Jr 8a-4p",
+        "recvDate": "2026-07-16",
+        "recvLoc": "BWH",
+        "recvType": "Morning",
+        "recvStart": "8:00 AM",
+        "recvEnd": "4:00 PM",
+        "delta": 0.0385,
+        "swapWith": "andrea shehaj",
+        "partnerDelta": 0.0252
+      },
+      {
+        "giveUid": "bb239480-d6cf-4503-b96b-797cd73c5a8e",
+        "giveSummary": "BWH Jr.  - Exe Jr 12p-12a",
+        "giveDate": "2026-07-07",
+        "giveLoc": "BWH",
+        "giveType": "Swing",
+        "giveStart": "12:00 PM",
+        "giveEnd": "12:00 AM",
+        "recvUid": "3969970a-7307-4d92-85c0-d238b54d1487",
+        "recvSummary": "BWH Jr.  - FF Jr 8a-4p",
+        "recvDate": "2026-07-07",
+        "recvLoc": "BWH",
+        "recvType": "Morning",
+        "recvStart": "8:00 AM",
+        "recvEnd": "4:00 PM",
+        "delta": 0.0385,
+        "swapWith": "justin yang",
+        "partnerDelta": 0.0199
+      }
+    ],
+    "cliff danza": [
+      {
+        "giveUid": "a1a3266a-445c-407a-9a55-4bf62601f7f9",
+        "giveSummary": "BWH Jr.  - FF Jr 7a-4p",
+        "giveDate": "2026-07-26",
+        "giveLoc": "BWH",
+        "giveType": "Morning",
+        "giveStart": "7:00 AM",
+        "giveEnd": "4:00 PM",
+        "recvUid": "2668ae46-0bac-49b6-9891-3367dc1666bf",
+        "recvSummary": "MGH Jr. - AC PGY1 1p-11p",
+        "recvDate": "2026-06-30",
+        "recvLoc": "MGH",
+        "recvType": "Swing",
+        "recvStart": "1:00 PM",
+        "recvEnd": "11:00 PM",
+        "delta": 0.0586,
+        "swapWith": "brian song",
+        "partnerDelta": 0.0769
+      }
+    ],
+    "roshan lodha": [
+      {
+        "giveUid": "adbe7f96-80fb-401f-bf31-a0411ceb12c8",
+        "giveSummary": "MGH Jr. - FT 11a-8p",
+        "giveDate": "2026-07-23",
+        "giveLoc": "MGH",
+        "giveType": "Swing",
+        "giveStart": "11:00 AM",
+        "giveEnd": "8:00 PM",
+        "recvUid": "eee43676-e445-43d8-bcc7-47f3af582c43",
+        "recvSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "recvDate": "2026-07-24",
+        "recvLoc": "MGH",
+        "recvType": "Morning",
+        "recvStart": "7:00 AM",
+        "recvEnd": "5:00 PM",
+        "delta": 0.0241,
+        "swapWith": "wendy memishian",
+        "partnerDelta": 0.0389
+      }
+    ],
+    "justin yang": [
+      {
+        "giveUid": "3969970a-7307-4d92-85c0-d238b54d1487",
+        "giveSummary": "BWH Jr.  - FF Jr 8a-4p",
+        "giveDate": "2026-07-07",
+        "giveLoc": "BWH",
+        "giveType": "Morning",
+        "giveStart": "8:00 AM",
+        "giveEnd": "4:00 PM",
+        "recvUid": "bb239480-d6cf-4503-b96b-797cd73c5a8e",
+        "recvSummary": "BWH Jr.  - Exe Jr 12p-12a",
+        "recvDate": "2026-07-07",
+        "recvLoc": "BWH",
+        "recvType": "Swing",
+        "recvStart": "12:00 PM",
+        "recvEnd": "12:00 AM",
+        "delta": 0.0199,
+        "swapWith": "brian song",
+        "partnerDelta": 0.0385
+      },
+      {
+        "giveUid": "2f729d3a-eb8f-452e-87b4-ca3de977499e",
+        "giveSummary": "MGH Jr. - AC PGY2 7a-4p",
+        "giveDate": "2026-07-11",
+        "giveLoc": "MGH",
+        "giveType": "Morning",
+        "giveStart": "7:00 AM",
+        "giveEnd": "4:00 PM",
+        "recvUid": "6b856c0c-67e7-453c-a350-1beb3d3ab13b",
+        "recvSummary": "BWH Jr.  - Exe Jr 12p-12a",
+        "recvDate": "2026-07-25",
+        "recvLoc": "BWH",
+        "recvType": "Swing",
+        "recvStart": "12:00 PM",
+        "recvEnd": "12:00 AM",
+        "delta": 0.0316,
+        "swapWith": "wendy memishian",
+        "partnerDelta": 0.0056
+      },
+      {
+        "giveUid": "2ce732a0-1ab1-4df8-810f-989dc3f2155f",
+        "giveSummary": "MGH Jr. - FT 11a-8p",
+        "giveDate": "2026-07-09",
+        "giveLoc": "MGH",
+        "giveType": "Swing",
+        "giveStart": "11:00 AM",
+        "giveEnd": "8:00 PM",
+        "recvUid": "f932d7fe-db9f-4204-8312-9291922dcad2",
+        "recvSummary": "MGH Jr. - FT 11a-8p",
+        "recvDate": "2026-07-12",
+        "recvLoc": "MGH",
+        "recvType": "Swing",
+        "recvStart": "11:00 AM",
+        "recvEnd": "8:00 PM",
+        "delta": 0.0172,
+        "swapWith": "andrea shehaj",
+        "partnerDelta": 0.0084
+      }
+    ],
+    "sara locke": [
+      {
+        "giveUid": "0b742ace-4d55-411a-86d9-e578a12b2422",
+        "giveSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "giveDate": "2026-06-30",
+        "giveLoc": "MGH",
+        "giveType": "Morning",
+        "giveStart": "7:00 AM",
+        "giveEnd": "5:00 PM",
+        "recvUid": "834ee2ad-24a4-45df-b988-23e0bcb3f293",
+        "recvSummary": "BWH Jr.  - FF Jr 3p-12a",
+        "recvDate": "2026-07-16",
+        "recvLoc": "BWH",
+        "recvType": "Swing",
+        "recvStart": "3:00 PM",
+        "recvEnd": "12:00 AM",
+        "delta": 0.0602,
+        "swapWith": "wendy memishian",
+        "partnerDelta": 0.0056
+      }
+    ],
+    "andrea shehaj": [
+      {
+        "giveUid": "494ffc84-c425-4227-b89c-3c27ee370ff4",
+        "giveSummary": "BWH Jr.  - Exe Jr 8a-4p",
+        "giveDate": "2026-07-16",
+        "giveLoc": "BWH",
+        "giveType": "Morning",
+        "giveStart": "8:00 AM",
+        "giveEnd": "4:00 PM",
+        "recvUid": "cde6dbc2-2d7f-481b-a572-fe817c00c122",
+        "recvSummary": "BWH Jr.  - Exe Jr 3p-12a",
+        "recvDate": "2026-07-05",
+        "recvLoc": "BWH",
+        "recvType": "Swing",
+        "recvStart": "3:00 PM",
+        "recvEnd": "12:00 AM",
+        "delta": 0.0252,
+        "swapWith": "brian song",
+        "partnerDelta": 0.0385
+      },
+      {
+        "giveUid": "f932d7fe-db9f-4204-8312-9291922dcad2",
+        "giveSummary": "MGH Jr. - FT 11a-8p",
+        "giveDate": "2026-07-12",
+        "giveLoc": "MGH",
+        "giveType": "Swing",
+        "giveStart": "11:00 AM",
+        "giveEnd": "8:00 PM",
+        "recvUid": "2ce732a0-1ab1-4df8-810f-989dc3f2155f",
+        "recvSummary": "MGH Jr. - FT 11a-8p",
+        "recvDate": "2026-07-09",
+        "recvLoc": "MGH",
+        "recvType": "Swing",
+        "recvStart": "11:00 AM",
+        "recvEnd": "8:00 PM",
+        "delta": 0.0084,
+        "swapWith": "justin yang",
+        "partnerDelta": 0.0172
+      }
+    ]
+  }
+};
+
+const MONTHS = ['January','February','March','April','May','June',
+                'July','August','September','October','November','December'];
+const DOWS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DOWS_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+let cur = null;
+let weekOffset = 0; // weeks from the "anchor" week (first week with any shift)
+let anchorMonday = null; // Date object for Monday of anchor week
+let viewMode = 'optimal'; // 'optimal' or 'original'
+
+function isoToDate(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+function dateToIso(dt) {
+  return dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0');
+}
+function getMonday(dt) {
+  const d = new Date(dt);
+  const day = d.getDay(); // 0=Sun
+  const diff = day === 0 ? -6 : 1 - day;
+  d.setDate(d.getDate() + diff);
+  return d;
+}
+function addDays(dt, n) {
+  const d = new Date(dt);
+  d.setDate(d.getDate() + n);
+  return d;
+}
+function fmtShort(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  return MONTHS[m-1].slice(0,3) + ' ' + d;
+}
+function cap(s) {
+  if (!s) return s;
+  return s.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+}
+
+function init() {
+  const names = Object.keys(DATA.residents).sort();
+  const sel = document.getElementById('rsel');
+  names.forEach(n => {
+    const o = document.createElement('option');
+    o.value = n;
+    o.textContent = cap(n);
+    sel.appendChild(o);
+  });
+  cur = names[0];
+  sel.value = cur;
+
+  // Anchor week = Monday of first shift date across all residents
+  const allDates = Object.values(DATA.shifts).map(s => s.workDate).sort();
+  if (allDates.length) {
+    anchorMonday = getMonday(isoToDate(allDates[0]));
+  } else {
+    anchorMonday = getMonday(new Date());
+  }
+
+  document.getElementById('prev-week').addEventListener('click', () => { weekOffset--; renderWeek(); });
+  document.getElementById('next-week').addEventListener('click', () => { weekOffset++; renderWeek(); });
+  sel.addEventListener('change', e => { cur = e.target.value; weekOffset = 0; render(); });
+
+  const optBtn = document.getElementById('toggle-optimal');
+  const origBtn = document.getElementById('toggle-original');
+  const allBtn = document.getElementById('toggle-all');
+  
+  const setViewMode = (mode) => {
+    viewMode = mode;
+    [origBtn, optBtn, allBtn].forEach(btn => btn.classList.remove('selected'));
+    if (mode === 'original') origBtn.classList.add('selected');
+    else if (mode === 'optimal') optBtn.classList.add('selected');
+    else if (mode === 'all') allBtn.classList.add('selected');
+    renderWeek();
+  };
+
+  origBtn.addEventListener('click', () => setViewMode('original'));
+  optBtn.addEventListener('click', () => setViewMode('optimal'));
+  allBtn.addEventListener('click', () => setViewMode('all'));
+
+  render();
+}
+
+function render() {
+  renderHappiness();
+  renderPrefs();
+  renderWeek();
+  renderSwaps();
+}
+
+function updateLucide() {
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+}
+
+function layoutHourlyEntries(entries) {
+  const items = entries.map(e => {
+    let start = 0, end = 0;
+    if (e.part === 1) {
+      start = e.s.startHour;
+      end = e.s.startHour + 1.0;
+    } else if (e.part === 2) {
+      start = 0.0;
+      end = e.s.endHour;
+    } else {
+      start = e.s.startHour;
+      end = e.s.endHour;
+    }
+    return { ...e, start, end };
+  });
+
+  items.sort((a, b) => a.start - b.start || b.end - a.end);
+
+  const clusters = [];
+  let currentCluster = null;
+
+  items.forEach(item => {
+    if (!currentCluster || item.start >= currentCluster.maxEnd) {
+      currentCluster = {
+        items: [item],
+        maxEnd: item.end
+      };
+      clusters.push(currentCluster);
+    } else {
+      currentCluster.items.push(item);
+      currentCluster.maxEnd = Math.max(currentCluster.maxEnd, item.end);
+    }
+  });
+
+  clusters.forEach(cluster => {
+    const columns = [];
+    cluster.items.forEach(item => {
+      let colIdx = -1;
+      for (let c = 0; c < columns.length; c++) {
+        if (columns[c] <= item.start) {
+          colIdx = c;
+          break;
+        }
+      }
+      if (colIdx === -1) {
+        colIdx = columns.length;
+        columns.push(item.end);
+      } else {
+        columns[colIdx] = item.end;
+      }
+      item.colIdx = colIdx;
+    });
+    cluster.items.forEach(item => {
+      item.numCols = columns.length;
+    });
+  });
+
+  return items;
+}
+
+/* ── Happiness Card ── */
+function renderHappiness() {
+  const r = DATA.residents[cur];
+  const total = (r.happiness.opt - r.happiness.orig) / 100;
+  const pct = (total * 100).toFixed(1);
+  const el = document.getElementById('happiness-value');
+  const card = document.getElementById('happiness-card');
+  const pulse = card.querySelector('.orb-pulse');
+  el.textContent = (total >= 0 ? '+' : '') + pct + '%';
+  
+  if (total > 0.001) {
+    card.style.background = 'var(--md-sys-color-tertiary-container)';
+    card.style.color = 'var(--md-sys-color-on-tertiary-container)';
+    card.style.borderColor = 'transparent';
+    el.style.color = 'var(--md-sys-color-on-tertiary-container)';
+    pulse.style.background = 'var(--md-sys-color-tertiary)';
+    pulse.style.color = 'var(--md-sys-color-on-tertiary)';
+    pulse.innerHTML = '<i data-lucide="party-popper" style="width:22px; height:22px;"></i>';
+  } else if (total < -0.001) {
+    card.style.background = 'var(--md-sys-color-error-container)';
+    card.style.color = 'var(--md-sys-color-on-error-container)';
+    card.style.borderColor = 'transparent';
+    el.style.color = 'var(--md-sys-color-on-error-container)';
+    pulse.style.background = 'var(--md-sys-color-error)';
+    pulse.style.color = 'var(--md-sys-color-on-error)';
+    pulse.innerHTML = '<i data-lucide="trending-down" style="width:22px; height:22px;"></i>';
+  } else {
+    card.style.background = 'var(--md-sys-color-surface-container-low)';
+    card.style.color = 'var(--md-sys-color-on-surface)';
+    card.style.borderColor = 'var(--md-sys-color-outline-variant)';
+    el.style.color = 'var(--md-sys-color-on-surface)';
+    pulse.style.background = 'var(--md-sys-color-outline)';
+    pulse.style.color = 'var(--md-sys-color-surface)';
+    pulse.innerHTML = '<i data-lucide="meh" style="width:22px; height:22px;"></i>';
+  }
+  updateLucide();
+}
+
+/* ── Metrics ── */
+function renderPrefs() {
+  const r = DATA.residents[cur];
+  
+  const bar = (origVal, optVal, hideLabel = false) => {
+    const origPct = Math.min(100, Math.max(0, origVal));
+    const optPct = Math.min(100, Math.max(0, optVal));
+    const gainPct = Math.max(0, optPct - origPct);
+    
+    return '<div class="wbar-wrap">'
+      + '<div class="wbar">'
+      + '<div class="wfill-orig" style="width:' + origPct + '%"></div>'
+      + '<div class="wfill-gain" style="width:' + gainPct + '%"></div>'
+      + '</div>'
+      + (hideLabel ? '' : '<div class="wlbl">' + origPct + '% &rarr; ' + optPct + '%</div>')
+      + '</div>';
+  };
+
+  const row = (icon, label, prefVal, isAny, origVal, optVal) => {
+    const displayVal = isAny ? 'ANY' : prefVal;
+    const barHtml = isAny
+      ? '<div style="font-size:0.75rem; color:var(--md-sys-color-on-surface-variant); font-style:italic;">No preference declared</div>'
+      : bar(origVal, optVal);
+    
+    return '<div class="pref-row">'
+      + '<div class="pref-lbl-row">'
+      + '<span class="pref-lbl"><i data-lucide="' + icon + '" style="width:16px; height:16px;"></i>' + label + '</span>'
+      + '<span class="pref-val' + (isAny ? ' any' : '') + '">' + displayVal + '</span>'
+      + '</div>'
+      + barHtml + '</div>';
+  };
+
+  const streakRow = (icon, label, orig, opt, target, weight) => {
+    const isAny = weight === 0.0;
+    const streakLabel = target <= 4 ? 'Frequent Breaks' : 'Longer Breaks';
+    const body = isAny 
+      ? '<div style="font-size:0.75rem; color:var(--md-sys-color-on-surface-variant); font-style:italic;">No preference declared</div>'
+      : '<div style="font-size:0.75rem; color:var(--md-sys-color-on-surface-variant); margin-top:2px;">Target Work Streak: ' + streakLabel + '</div>';
+    const improved = !isAny && (Math.abs(opt - target) < Math.abs(orig - target));
+    const colorStyle = improved ? ' style="color: var(--md-sys-color-tertiary); font-weight: 700;"' : '';
+    return '<div class="pref-row">'
+      + '<div class="pref-lbl-row">'
+      + '<span class="pref-lbl"><i data-lucide="' + icon + '" style="width:16px; height:16px;"></i>' + label + '</span>'
+      + '<span class="pref-val"' + colorStyle + '>' + orig.toFixed(1) + ' &rarr; ' + opt.toFixed(1) + ' days</span>'
+      + '</div>'
+      + body
+      + '</div>';
+  };
+
+  const hoursRow = (orig, opt) => {
+    const delta = Math.round((opt - orig) * 10) / 10;
+    const deltaStr = delta > 0 ? '+' + delta.toFixed(1) : delta.toFixed(1);
+    const color = delta > 0.05
+      ? 'var(--md-sys-color-error)'
+      : delta < -0.05
+        ? 'var(--md-sys-color-tertiary)'
+        : 'var(--md-sys-color-on-surface-variant)';
+    return '<div class="pref-row">'
+      + '<div class="pref-lbl-row">'
+      + '<span class="pref-lbl"><i data-lucide="timer" style="width:16px; height:16px;"></i>Hours Worked</span>'
+      + '<span class="pref-val">' + orig.toFixed(1) + ' &rarr; <span style="color:' + color + '; font-weight:800;">' + opt.toFixed(1) + ' hrs</span>'
+      + '</span>'
+      + '</div>'
+      + '</div>';
+  };
+
+  const happinessRow = (origVal, optVal) => {
+    return '<div class="pref-row">'
+      + '<div class="pref-lbl-row">'
+      + '<span class="pref-lbl" style="color:var(--md-sys-color-tertiary)"><i data-lucide="party-popper" style="width:16px; height:16px;"></i>Total Happiness</span>'
+      + '<span class="pref-val" style="color:var(--md-sys-color-tertiary)">' + origVal + '% &rarr; ' + optVal + '%</span>'
+      + '</div>'
+      + bar(origVal, optVal, true)
+      + '</div>';
+  };
+  
+  document.getElementById('prefs').innerHTML =
+    row('map-pin', 'Location Preference', r.locPref, r.locPref === 'ANY', r.loc.orig, r.loc.opt)
+    + '<hr class="divider">'
+    + row('clock', 'Time Preference', r.typePref, r.typePref === 'ANY', r.type.orig, r.type.opt)
+    + '<hr class="divider">'
+    + streakRow('repeat', 'Avg Days Off Streak', r.streak.orig, r.streak.opt, r.daysPref, r.daysWeight)
+    + '<hr class="divider">'
+    + hoursRow(r.hours.orig, r.hours.opt)
+    + '<hr class="divider">'
+    + happinessRow(r.happiness.orig, r.happiness.opt);
+  updateLucide();
+}
+
+/* ── Week View ── */
+function renderWeek() {
+  const orig = new Set(DATA.originalAssignment[cur] || []);
+  const final = new Set(DATA.finalAssignment[cur] || []);
+  const gives = new Set((DATA.swaps[cur] || []).map(s => s.giveUid));
+  const recvs = new Set((DATA.swaps[cur] || []).map(s => s.recvUid));
+  
+  const visibleUids = viewMode === 'optimal' ? final : (viewMode === 'original' ? orig : new Set([...orig, ...final]));
+
+  const dm = {};
+  visibleUids.forEach(uid => {
+    const s = DATA.shifts[uid];
+    if (!s) return;
+    
+    let st = 'keep';
+    if (gives.has(uid)) st = 'give';
+    else if (recvs.has(uid)) st = 'recv';
+
+    if (s.isJeopardy) {
+      const k = s.workDate;
+      if (!dm[k]) dm[k] = [];
+      dm[k].push({ s, st, part: 'all-day' });
+    } else if (s.endHour < s.startHour) {
+      // Overnight shift!
+      // Part 1: on start day (workDate)
+      const k1 = s.workDate;
+      if (!dm[k1]) dm[k1] = [];
+      dm[k1].push({ s, st, part: 1 });
+
+      // Part 2: on start day + 1
+      const d1 = isoToDate(s.workDate);
+      const d2 = addDays(d1, 1);
+      const k2 = dateToIso(d2);
+      if (!dm[k2]) dm[k2] = [];
+      dm[k2].push({ s, st, part: 2 });
+    } else {
+      // Normal timed shift
+      const k = s.workDate;
+      if (!dm[k]) dm[k] = [];
+      dm[k].push({ s, st, part: 0 });
+    }
+  });
+
+  const monday = addDays(anchorMonday, weekOffset * 7);
+  const sunday = addDays(monday, 6);
+  const todayIso = new Date().toISOString().slice(0,10);
+
+  // Update week label
+  const moIso = dateToIso(monday);
+  const suIso = dateToIso(sunday);
+  const [my, mm, md] = moIso.split('-').map(Number);
+  const [sy, sm, sd] = suIso.split('-').map(Number);
+  const weekLbl = MONTHS[mm-1].slice(0,3) + ' ' + md
+    + (mm !== sm ? ' – ' + MONTHS[sm-1].slice(0,3) + ' ' + sd : ' – ' + sd)
+    + ', ' + my;
+  document.getElementById('week-label').textContent = weekLbl;
+
+  // Check if there are any all-day shifts in the current week
+  let weekHasAllday = false;
+  for (let i = 0; i < 7; i++) {
+    const day = addDays(monday, i);
+    const iso = dateToIso(day);
+    const entries = dm[iso] || [];
+    if (entries.some(e => e.part === 'all-day')) {
+      weekHasAllday = true;
+      break;
+    }
+  }
+
+  let gridHtml = '';
+
+  // 1. Time labels column elements
+  gridHtml += '<div class="week-col-hdr-spacer" style="grid-column: 1; grid-row: 1; visibility: hidden; height: 52px; padding: 0; margin-bottom: 8px;"></div>';
+  if (weekHasAllday) {
+    gridHtml += '<div class="time-labels-allday-spacer" style="grid-column: 1; grid-row: 2; height: 0;"></div>';
+  }
+  const timeLabelsRow = weekHasAllday ? 3 : 2;
+  gridHtml += '<div class="time-labels-col" style="grid-column: 1; grid-row: ' + timeLabelsRow + ';">'
+    + '<div class="time-label" style="top: 0px;">12 AM</div>'
+    + '<div class="time-label" style="top: 105px;">7 AM</div>'
+    + '<div class="time-label" style="top: 180px;">12 PM</div>'
+    + '<div class="time-label" style="top: 255px;">5 PM</div>'
+    + '<div class="time-label" style="top: 345px;">11 PM</div>'
+    + '</div>';
+
+  // 2. Day columns elements
+  for (let i = 0; i < 7; i++) {
+    const day = addDays(monday, i);
+    const iso = dateToIso(day);
+    const isToday = iso === todayIso;
+    const dow = DOWS_SHORT[day.getDay()];
+    const dateNum = day.getDate();
+
+    const entries = dm[iso] || [];
+    const alldayEntries = entries.filter(e => e.part === 'all-day');
+    const hourlyEntries = entries.filter(e => e.part !== 'all-day');
+
+    const colIdx = i + 2;
+
+    // Header
+    gridHtml += '<div class="week-col-hdr' + (isToday ? ' today' : '') + '" style="grid-column: ' + colIdx + '; grid-row: 1;">'
+      + '<div class="wch-dow">' + dow + '</div>'
+      + '<div class="wch-date">' + dateNum + '</div>'
+      + '</div>';
+
+    if (weekHasAllday) {
+      // All-day container
+      let alldayCardsHtml = alldayEntries.map(({ s, st }) => {
+        let cls = '';
+        let badge = '';
+        if (st === 'give') {
+          cls = ' sb-give';
+          badge = '<span class="sb-badge badge-give"><i data-lucide="arrow-up" style="width:10px; height:10px; stroke-width:3;"></i>Give</span>';
+        } else if (st === 'recv') {
+          cls = ' sb-recv';
+          badge = '<span class="sb-badge badge-recv"><i data-lucide="arrow-down" style="width:10px; height:10px; stroke-width:3;"></i>Recv</span>';
+        }
+        return '<div class="allday-card' + cls + '" title="' + s.summary + '">'
+          + '<div class="sb-title">' + s.summary + '</div>'
+          + badge
+          + '</div>';
+      }).join('');
+
+      gridHtml += '<div class="allday-container' + (isToday ? ' today-allday' : '') + '" style="grid-column: ' + colIdx + '; grid-row: 2;">'
+        + alldayCardsHtml
+        + '</div>';
+    }
+
+    // Hourly container
+    let cards = '';
+    const positionedEntries = layoutHourlyEntries(hourlyEntries);
+    positionedEntries.forEach(({ s, st, part, colIdx, numCols }) => {
+      let cls = st === 'give' ? 'sb-give' : st === 'recv' ? 'sb-recv' : s.loc === 'MGH' ? 'sb-mgh' : 'sb-bwh';
+      const locLabel = s.loc || 'Unknown';
+      
+      let badge = '';
+      if (st === 'give') {
+        badge = '<span class="sb-badge badge-give"><i data-lucide="arrow-up" style="width:10px; height:10px; stroke-width:3;"></i>Give</span>';
+      } else if (st === 'recv') {
+        badge = '<span class="sb-badge badge-recv"><i data-lucide="arrow-down" style="width:10px; height:10px; stroke-width:3;"></i>Recv</span>';
+      }
+
+      // Calculate width and left percentages
+      const widthPct = 98 / numCols;
+      const leftPct = colIdx * (100 / numCols) + 1;
+
+      if (part === 1) {
+        cards += '<div class="shift-card absolute-card part-1 ' + cls + '" style="top: ' + (s.startHour * 15) + 'px; height: 15px; left: ' + leftPct + '%; width: ' + widthPct + '%; right: auto;" title="' + s.summary + '">'
+          + '<div style="font-size:0.6rem; font-weight:700; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">' + s.summary + ' (P1)</div>'
+          + '</div>';
+      } else if (part === 2) {
+        const height = s.endHour * 15;
+        cards += '<div class="shift-card absolute-card ' + cls + '" style="top: 0px; height: ' + height + 'px; left: ' + leftPct + '%; width: ' + widthPct + '%; right: auto;" title="' + s.summary + '">'
+          + '<div class="sb-title">' + s.summary + ' (P2)</div>'
+          + '<div class="sb-loc"><i data-lucide="building" style="width:12px; height:12px;"></i>' + locLabel + (s.type ? ' · ' + s.type : '') + '</div>'
+          + '<div class="sb-time"><i data-lucide="clock" style="width:12px; height:12px;"></i>' + s.startFmt + ' - ' + s.endFmt + '</div>'
+          + badge
+          + '</div>';
+      } else {
+        const top = s.startHour * 15;
+        const height = (s.endHour - s.startHour) * 15;
+        cards += '<div class="shift-card absolute-card ' + cls + '" style="top: ' + top + 'px; height: ' + height + 'px; left: ' + leftPct + '%; width: ' + widthPct + '%; right: auto;" title="' + s.summary + '">'
+          + '<div class="sb-title">' + s.summary + '</div>'
+          + '<div class="sb-loc"><i data-lucide="building" style="width:12px; height:12px;"></i>' + locLabel + (s.type ? ' · ' + s.type : '') + '</div>'
+          + '<div class="sb-time"><i data-lucide="clock" style="width:12px; height:12px;"></i>' + s.startFmt + ' - ' + s.endFmt + '</div>'
+          + badge
+          + '</div>';
+      }
+    });
+
+    const hourlyRow = weekHasAllday ? 3 : 2;
+    gridHtml += '<div class="hourly-container' + (isToday ? ' today-hourly' : '') + (weekHasAllday ? ' split-bottom' : '') + '" style="grid-column: ' + colIdx + '; grid-row: ' + hourlyRow + ';">'
+      + cards
+      + '</div>';
+  }
+
+  document.getElementById('week-view').innerHTML =
+    '<div class="week-grid' + (weekHasAllday ? ' has-allday' : '') + '">' + gridHtml + '</div>';
+  updateLucide();
+}
+
+/* ── Swap Cards ── */
+function renderSwaps() {
+  const list = DATA.swaps[cur] || [];
+  document.getElementById('swap-count').textContent = list.length;
+
+  const rowsContainer = document.querySelector('.swaps-rows-container');
+  const emptyState = document.getElementById('swaps-empty-state');
+
+  if (!list.length) {
+    rowsContainer.style.display = 'none';
+    emptyState.style.display = 'block';
+    emptyState.innerHTML = '<div class="no-swaps">'
+      + '<i data-lucide="party-popper" class="no-swaps-icon"></i>'
+      + '<div class="no-swaps-msg">Already optimized!</div>'
+      + '<div class="no-swaps-sub">No swaps proposed for ' + cap(cur) + ' — schedule is already great.</div>'
+      + '</div>';
+    updateLucide();
+    return;
+  }
+
+  rowsContainer.style.display = 'flex';
+  emptyState.style.display = 'none';
+
+  // Partition the list: swaps for you vs swaps with you
+  const swapsForYou = list.filter(sw => sw.delta >= sw.partnerDelta);
+  const swapsWithYou = list.filter(sw => sw.delta < sw.partnerDelta);
+
+  document.getElementById('swaps-for-you-count').textContent = swapsForYou.length;
+  document.getElementById('swaps-with-you-count').textContent = swapsWithYou.length;
+
+  const renderGrid = (gridEl, subList) => {
+    if (!subList.length) {
+      gridEl.innerHTML = '<div style="color: var(--md-sys-color-on-surface-variant); font-style: italic; padding: 16px; background: var(--md-sys-color-surface-container-low); border-radius: var(--md-sys-shape-corner-medium); border: 1px dashed var(--md-sys-color-outline-variant); grid-column: 1 / -1; text-align: center;">No swaps in this category.</div>';
+      return;
+    }
+
+    gridEl.innerHTML = subList.map((sw, i) => {
+      const pct = (sw.delta * 100).toFixed(1);
+      const partnerPct = (sw.partnerDelta * 100).toFixed(1);
+      
+      const isPos = sw.delta > 0.0001;
+      const isNeg = sw.delta < -0.0001;
+      const deltaLabel = isPos ? '+' + pct + '% (You)' : isNeg ? pct + '% (You)' : 'Neutral (You)';
+      const dpClass = isPos ? 'pos' : isNeg ? 'neg' : 'neu';
+
+      const isPartnerPos = sw.partnerDelta > 0.0001;
+      const isPartnerNeg = sw.partnerDelta < -0.0001;
+      const partnerDeltaLabel = isPartnerPos ? '+' + partnerPct + '% (' + cap(sw.swapWith) + ')' : isPartnerNeg ? partnerPct + '% (' + cap(sw.swapWith) + ')' : 'Neutral (' + cap(sw.swapWith) + ')';
+      const partnerDpClass = isPartnerPos ? 'pos' : isPartnerNeg ? 'neg' : 'neu';
+
+      const cardClass = isPos ? 'pos-card' : isNeg ? 'neg-card' : 'neu-card';
+      const hdrClass = isPos ? 'pos' : isNeg ? 'neg' : 'neu';
+      const partnerName = sw.swapWith ? cap(sw.swapWith) : 'Partner';
+
+      return '<div class="swap-card ' + cardClass + '">'
+        + '<div class="swap-card-hdr ' + hdrClass + '">'
+        + '<div class="card-hdr-left" style="display:flex; flex-direction:column; gap:4px;">'
+        + '<div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--md-sys-color-on-surface-variant)">Swap ' + (i+1) + '</div>'
+        + '<div class="swap-with-badge"><i data-lucide="arrow-left-right" style="width:14px; height:14px;"></i>with <span class="partner-name partner-chip">' + partnerName + '</span></div>'
+        + '</div>'
+        + '<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">'
+        + '<span class="delta-pill ' + dpClass + '">' 
+        + (isPos ? '<i data-lucide="trending-up" style="width:14px; height:14px;"></i>' : isNeg ? '<i data-lucide="trending-down" style="width:14px; height:14px;"></i>' : '')
+        + deltaLabel + '</span>'
+        + '<span class="delta-pill ' + partnerDpClass + '">' 
+        + (isPartnerPos ? '<i data-lucide="trending-up" style="width:14px; height:14px;"></i>' : isPartnerNeg ? '<i data-lucide="trending-down" style="width:14px; height:14px;"></i>' : '')
+        + partnerDeltaLabel + '</span>'
+        + '</div>'
+        + '</div>'
+        + '<div class="card-body">'
+        + blk(sw, 'give')
+        + '<div class="arrow-col"><div class="arrow-btn"><i data-lucide="arrow-right" style="width:20px; height:20px;"></i></div></div>'
+        + blk(sw, 'recv')
+        + '</div></div>';
+    }).join('');
+  };
+
+  renderGrid(document.getElementById('swaps-for-you-grid'), swapsForYou);
+  renderGrid(document.getElementById('swaps-with-you-grid'), swapsWithYou);
+  updateLucide();
+}
+
+function blk(sw, side) {
+  const p = side === 'give' ? 'give' : 'recv';
+  const label = side === 'give' ? 'Giving Away' : 'Receiving';
+  const icon = side === 'give' ? 'arrow-up' : 'arrow-down';
+  const loc = sw[p + 'Loc'];
+  const type = sw[p + 'Type'];
+  
+  const isMgh = loc === 'MGH';
+  const isBwh = loc === 'BWH';
+  const lcls = isMgh ? 'lt-mgh' : isBwh ? 'lt-bwh' : 'lt-none';
+  const lbl = loc || 'Jeopardy';
+  
+  return '<div class="shift-blk ' + side + '">'
+    + '<div class="blk-lbl"><i data-lucide="' + icon + '" style="width:12px; height:12px;"></i>' + label + '</div>'
+    + '<div class="blk-summary">' + sw[p + 'Summary'] + '</div>'
+    + '<div class="blk-meta">'
+    + '<div><i data-lucide="calendar" style="width:12px; height:12px; vertical-align:middle; margin-right:4px;"></i>' + fmtShort(sw[p + 'Date']) + '</div>'
+    + '<div><i data-lucide="clock" style="width:12px; height:12px; vertical-align:middle; margin-right:4px;"></i>' + sw[p + 'Start'] + ' &ndash; ' + sw[p + 'End'] + '</div>'
+    + '</div>'
+    + '<span class="loc-tag ' + lcls + '">' + lbl + (type ? ' &middot; ' + type : '') + '</span>'
+    + '</div>';
+}
+
+init();
+</script>
+</body>
+</html>
