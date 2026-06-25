@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShiftMaxxer &mdash; Swap Report</title>
+<title>Shift Swap Report</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -786,7 +786,7 @@ body {
   background: var(--md-sys-color-surface-container-low);
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-medium);
-  overflow: hidden;
+  position: relative;
   transition: transform 0.2s var(--md-sys-motion-easing-emphasized),
               box-shadow 0.2s var(--md-sys-motion-easing-emphasized),
               border-color 0.2s;
@@ -802,12 +802,58 @@ body {
 .swap-card.neg-card { border-top: 4px solid var(--md-sys-color-error); }
 .swap-card.neu-card { border-top: 4px solid var(--md-sys-color-outline); }
 
+/* Rejected/Excluded Swaps Styling */
+.swap-card.rejected-card {
+  opacity: 0.45;
+  filter: grayscale(60%);
+  border-top-color: var(--md-sys-color-outline-variant) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+.swap-card.rejected-card .delta-pill {
+  background: var(--md-sys-color-surface-container-high) !important;
+  color: var(--md-sys-color-on-surface-variant) !important;
+  border-color: var(--md-sys-color-outline-variant) !important;
+}
+.reject-swap-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 32px;
+  height: 32px;
+  background: var(--md-sys-color-surface-container-high);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--md-sys-elevation-shadow-1);
+  transition: background-color 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+  z-index: 10;
+}
+.reject-swap-btn:hover {
+  background-color: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+  transform: scale(1.1);
+  box-shadow: var(--md-sys-elevation-shadow-2);
+}
+.reject-swap-btn.restore:hover {
+  background-color: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+  transform: scale(1.1);
+  box-shadow: var(--md-sys-elevation-shadow-2);
+}
+
 .swap-card-hdr {
   padding: 12px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  border-top-left-radius: calc(var(--md-sys-shape-corner-medium) - 1px);
+  border-top-right-radius: calc(var(--md-sys-shape-corner-medium) - 1px);
 }
 .swap-card-hdr.pos { background: linear-gradient(90deg, rgba(45, 212, 191, 0.08), transparent); }
 .swap-card-hdr.neg { background: linear-gradient(90deg, rgba(239, 68, 68, 0.08), transparent); }
@@ -1148,12 +1194,8 @@ svg.lucide {
 <body>
 <header class="hdr">
   <div style="display: flex; align-items: center; gap: 16px;">
-    <div class="logo-mark">
-      <i data-lucide="calendar-range" style="width: 24px; height: 24px;"></i>
-    </div>
     <div>
-      <div class="logo">ShiftMaxxer</div>
-      <div class="logo-sub">Swap Optimizer Report</div>
+      <div class="logo">Shift Optimizer</div>
     </div>
   </div>
 
@@ -1257,13 +1299,16 @@ const DATA = {
         "2026-06-05",
         "2027-06-03"
       ],
+      "locWeight": 0.5333333333333333,
+      "typeWeight": 0.4666666666666667,
+      "origHours": 116.0,
       "loc": {
         "orig": 58,
-        "opt": 92
+        "opt": 67
       },
       "type": {
         "orig": 50,
-        "opt": 58
+        "opt": 92
       },
       "streak": {
         "orig": 1.6,
@@ -1271,11 +1316,11 @@ const DATA = {
       },
       "hours": {
         "orig": 116.0,
-        "opt": 111.0
+        "opt": 114.0
       },
       "happiness": {
         "orig": 54,
-        "opt": 76
+        "opt": 82
       }
     },
     "brian song": {
@@ -1285,13 +1330,16 @@ const DATA = {
       "daysPref": 5,
       "daysWeight": 0.0,
       "daysOff": [],
+      "locWeight": 0.5,
+      "typeWeight": 0.5,
+      "origHours": 119.0,
       "loc": {
         "orig": 46,
-        "opt": 69
+        "opt": 62
       },
       "type": {
         "orig": 31,
-        "opt": 69
+        "opt": 54
       },
       "streak": {
         "orig": 1.7,
@@ -1299,11 +1347,11 @@ const DATA = {
       },
       "hours": {
         "orig": 119.0,
-        "opt": 115.0
+        "opt": 118.0
       },
       "happiness": {
         "orig": 38,
-        "opt": 69
+        "opt": 60
       }
     },
     "cliff danza": {
@@ -1313,13 +1361,16 @@ const DATA = {
       "daysPref": 5,
       "daysWeight": 0.23809523809523808,
       "daysOff": [],
+      "locWeight": 0.42857142857142855,
+      "typeWeight": 0.3333333333333333,
+      "origHours": 122.0,
       "loc": {
         "orig": 54,
-        "opt": 62
+        "opt": 54
       },
       "type": {
         "orig": 54,
-        "opt": 62
+        "opt": 85
       },
       "streak": {
         "orig": 2.1,
@@ -1331,23 +1382,26 @@ const DATA = {
       },
       "happiness": {
         "orig": 50,
-        "opt": 56
+        "opt": 58
       }
     },
     "roshan lodha": {
       "name": "roshan lodha",
       "locPref": "MGH",
-      "typePref": "ANY",
+      "typePref": "Morning",
       "daysPref": 5,
-      "daysWeight": 0.6666666666666666,
+      "daysWeight": 0.5,
       "daysOff": [],
+      "locWeight": 0.25,
+      "typeWeight": 0.25,
+      "origHours": 121.0,
       "loc": {
         "orig": 54,
-        "opt": 54
+        "opt": 46
       },
       "type": {
-        "orig": 100,
-        "opt": 100
+        "orig": 31,
+        "opt": 46
       },
       "streak": {
         "orig": 1.7,
@@ -1355,11 +1409,11 @@ const DATA = {
       },
       "hours": {
         "orig": 121.0,
-        "opt": 122.0
+        "opt": 120.0
       },
       "happiness": {
-        "orig": 37,
-        "opt": 40
+        "orig": 36,
+        "opt": 41
       }
     },
     "justin yang": {
@@ -1369,9 +1423,12 @@ const DATA = {
       "daysPref": 5,
       "daysWeight": 0.37037037037037035,
       "daysOff": [],
+      "locWeight": 0.37037037037037035,
+      "typeWeight": 0.25925925925925924,
+      "origHours": 122.0,
       "loc": {
         "orig": 62,
-        "opt": 54
+        "opt": 62
       },
       "type": {
         "orig": 46,
@@ -1379,15 +1436,15 @@ const DATA = {
       },
       "streak": {
         "orig": 1.9,
-        "opt": 2.5
+        "opt": 1.7
       },
       "hours": {
         "orig": 122.0,
-        "opt": 129.0
+        "opt": 122.0
       },
       "happiness": {
         "orig": 47,
-        "opt": 52
+        "opt": 49
       }
     },
     "sara locke": {
@@ -1399,13 +1456,16 @@ const DATA = {
       "daysOff": [
         "2026-06-30"
       ],
+      "locWeight": 0.391304347826087,
+      "typeWeight": 0.391304347826087,
+      "origHours": 122.0,
       "loc": {
         "orig": 54,
-        "opt": 62
+        "opt": 54
       },
       "type": {
         "orig": 54,
-        "opt": 62
+        "opt": 54
       },
       "streak": {
         "orig": 1.7,
@@ -1413,11 +1473,11 @@ const DATA = {
       },
       "hours": {
         "orig": 122.0,
-        "opt": 121.0
+        "opt": 122.0
       },
       "happiness": {
         "orig": 49,
-        "opt": 55
+        "opt": 49
       }
     },
     "andrea shehaj": {
@@ -1427,6 +1487,9 @@ const DATA = {
       "daysPref": 5,
       "daysWeight": 0.2916666666666667,
       "daysOff": [],
+      "locWeight": 0.2916666666666667,
+      "typeWeight": 0.4166666666666667,
+      "origHours": 120.0,
       "loc": {
         "orig": 62,
         "opt": 62
@@ -1437,7 +1500,7 @@ const DATA = {
       },
       "streak": {
         "orig": 1.5,
-        "opt": 1.5
+        "opt": 1.7
       },
       "hours": {
         "orig": 120.0,
@@ -1445,7 +1508,102 @@ const DATA = {
       },
       "happiness": {
         "orig": 54,
-        "opt": 58
+        "opt": 56
+      }
+    },
+    "mauranda men": {
+      "name": "mauranda men",
+      "locPref": "MGH",
+      "typePref": "ANY",
+      "daysPref": 5,
+      "daysWeight": 0.0,
+      "daysOff": [],
+      "locWeight": 1.0,
+      "typeWeight": 0.0,
+      "origHours": 119.0,
+      "loc": {
+        "orig": 69,
+        "opt": 85
+      },
+      "type": {
+        "orig": 100,
+        "opt": 100
+      },
+      "streak": {
+        "orig": 1.5,
+        "opt": 1.7
+      },
+      "hours": {
+        "orig": 119.0,
+        "opt": 121.0
+      },
+      "happiness": {
+        "orig": 69,
+        "opt": 81
+      }
+    },
+    "emily prentice": {
+      "name": "emily prentice",
+      "locPref": "MGH",
+      "typePref": "ANY",
+      "daysPref": 5,
+      "daysWeight": 0.5333333333333333,
+      "daysOff": [
+        "2026-06-30"
+      ],
+      "locWeight": 0.4666666666666667,
+      "typeWeight": 0.0,
+      "origHours": 119.0,
+      "loc": {
+        "orig": 62,
+        "opt": 62
+      },
+      "type": {
+        "orig": 100,
+        "opt": 100
+      },
+      "streak": {
+        "orig": 1.7,
+        "opt": 1.9
+      },
+      "hours": {
+        "orig": 119.0,
+        "opt": 119.0
+      },
+      "happiness": {
+        "orig": 44,
+        "opt": 46
+      }
+    },
+    "ashleigh suppinger": {
+      "name": "ashleigh suppinger",
+      "locPref": "MGH",
+      "typePref": "Morning",
+      "daysPref": 5,
+      "daysWeight": 0.0,
+      "daysOff": [],
+      "locWeight": 0.42857142857142855,
+      "typeWeight": 0.5714285714285714,
+      "origHours": 118.0,
+      "loc": {
+        "orig": 54,
+        "opt": 54
+      },
+      "type": {
+        "orig": 54,
+        "opt": 92
+      },
+      "streak": {
+        "orig": 1.5,
+        "opt": 1.5
+      },
+      "hours": {
+        "orig": 118.0,
+        "opt": 118.0
+      },
+      "happiness": {
+        "orig": 54,
+        "opt": 76
       }
     }
   },
@@ -1918,6 +2076,162 @@ const DATA = {
       "startHour": 12.0,
       "endHour": 24.0
     },
+    "24093ff1-02ee-421f-947b-776295c8e980": {
+      "uid": "24093ff1-02ee-421f-947b-776295c8e980",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-11",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "812b49f6-62b6-48d9-a8ce-2295a050d209": {
+      "uid": "812b49f6-62b6-48d9-a8ce-2295a050d209",
+      "summary": "MGH Jr. - AC PGY1 1p-11p",
+      "startFmt": "1:00 PM",
+      "endFmt": "11:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-17",
+      "isJeopardy": false,
+      "startHour": 13.0,
+      "endHour": 23.0
+    },
+    "aceee59e-8769-4247-ac2a-16bc5420a4d0": {
+      "uid": "aceee59e-8769-4247-ac2a-16bc5420a4d0",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-14",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "c4a4a54d-1275-4da6-b025-d7926972f298": {
+      "uid": "c4a4a54d-1275-4da6-b025-d7926972f298",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-26",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "ea42ef6c-d31a-4b7a-98bf-acfd01d3aa03": {
+      "uid": "ea42ef6c-d31a-4b7a-98bf-acfd01d3aa03",
+      "summary": "MGH Jr. - AC PGY1 1p-11p",
+      "startFmt": "1:00 PM",
+      "endFmt": "11:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-06-30",
+      "isJeopardy": false,
+      "startHour": 13.0,
+      "endHour": 23.0
+    },
+    "6aa851bd-dce6-4deb-a7c4-c25ad5a41be3": {
+      "uid": "6aa851bd-dce6-4deb-a7c4-c25ad5a41be3",
+      "summary": "MGH Jr. - AC PGY1 1p-11p",
+      "startFmt": "1:00 PM",
+      "endFmt": "11:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-16",
+      "isJeopardy": false,
+      "startHour": 13.0,
+      "endHour": 23.0
+    },
+    "a6575518-68e4-4bc7-9597-b7dba0265039": {
+      "uid": "a6575518-68e4-4bc7-9597-b7dba0265039",
+      "summary": "MGH Jr. - AC PGY2 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-25",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "7288430c-886f-4724-a254-8bbc3e2b6fff": {
+      "uid": "7288430c-886f-4724-a254-8bbc3e2b6fff",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-03",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "d2e44092-7807-4c34-a1d1-1727c58a9aca": {
+      "uid": "d2e44092-7807-4c34-a1d1-1727c58a9aca",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-19",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "94e4e8c5-4dc0-4627-aa5b-f4ca8a396cc5": {
+      "uid": "94e4e8c5-4dc0-4627-aa5b-f4ca8a396cc5",
+      "summary": "BWH Jr.  - FF Jr 8a-4p",
+      "startFmt": "8:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-24",
+      "isJeopardy": false,
+      "startHour": 8.0,
+      "endHour": 16.0
+    },
+    "ea92a3e9-a060-4a1b-8334-ec4db334d60c": {
+      "uid": "ea92a3e9-a060-4a1b-8334-ec4db334d60c",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-21",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "a05f79e8-4845-4606-92a8-33bcb24ac6ea": {
+      "uid": "a05f79e8-4845-4606-92a8-33bcb24ac6ea",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-10",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "e933ebfc-3af6-46d6-a2cd-dca4e78676fe": {
+      "uid": "e933ebfc-3af6-46d6-a2cd-dca4e78676fe",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-07",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
     "2f729d3a-eb8f-452e-87b4-ca3de977499e": {
       "uid": "2f729d3a-eb8f-452e-87b4-ca3de977499e",
       "summary": "MGH Jr. - AC PGY2 7a-4p",
@@ -2073,6 +2387,162 @@ const DATA = {
       "isJeopardy": false,
       "startHour": 13.0,
       "endHour": 23.0
+    },
+    "51a3b61d-8a43-4ea1-8bd8-30dee43a0507": {
+      "uid": "51a3b61d-8a43-4ea1-8bd8-30dee43a0507",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-02",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "692ecbe2-766b-4453-a037-fe8c14b72e3e": {
+      "uid": "692ecbe2-766b-4453-a037-fe8c14b72e3e",
+      "summary": "BWH Jr.  - FF Jr 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-12",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "807816b1-d1bf-467a-bfba-6f1d47f7d2c3": {
+      "uid": "807816b1-d1bf-467a-bfba-6f1d47f7d2c3",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-17",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "02aa0a7d-ef6d-4dab-80ff-d8144c402ee8": {
+      "uid": "02aa0a7d-ef6d-4dab-80ff-d8144c402ee8",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-10",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "cefacb32-07ec-4a44-bf2e-1872adfb1fb8": {
+      "uid": "cefacb32-07ec-4a44-bf2e-1872adfb1fb8",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-14",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "45905a9d-93b9-40b4-8bf1-ff6627c22816": {
+      "uid": "45905a9d-93b9-40b4-8bf1-ff6627c22816",
+      "summary": "MGH Jr. - AC PGY1 1p-11p",
+      "startFmt": "1:00 PM",
+      "endFmt": "11:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-19",
+      "isJeopardy": false,
+      "startHour": 13.0,
+      "endHour": 23.0
+    },
+    "c87c3c57-eb62-4607-a6c4-e66f7f7ab46a": {
+      "uid": "c87c3c57-eb62-4607-a6c4-e66f7f7ab46a",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-23",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "78ed6be9-a0c9-4be8-a969-c7ee14267cb0": {
+      "uid": "78ed6be9-a0c9-4be8-a969-c7ee14267cb0",
+      "summary": "BWH Jr.  - FF Jr 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-11",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "0f8a2025-f9b6-4716-bfee-6da12cafa222": {
+      "uid": "0f8a2025-f9b6-4716-bfee-6da12cafa222",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-06-30",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "fcdd3169-30e1-4f53-bc54-e2888939bd84": {
+      "uid": "fcdd3169-30e1-4f53-bc54-e2888939bd84",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-03",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "f952fb82-d164-4ef4-8b82-f2eedcfb699f": {
+      "uid": "f952fb82-d164-4ef4-8b82-f2eedcfb699f",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-16",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "9bd2f191-a434-4283-b1fe-00a3a82cd839": {
+      "uid": "9bd2f191-a434-4283-b1fe-00a3a82cd839",
+      "summary": "MGH Jr. - AC PGY1 1p-11p",
+      "startFmt": "1:00 PM",
+      "endFmt": "11:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-21",
+      "isJeopardy": false,
+      "startHour": 13.0,
+      "endHour": 23.0
+    },
+    "878faf15-7e3b-4ec3-8e2e-22c47cef6d1d": {
+      "uid": "878faf15-7e3b-4ec3-8e2e-22c47cef6d1d",
+      "summary": "MGH Jr. - AC PGY2 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-25",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
     },
     "b04090a2-6ba3-4b02-8571-c9f8d9d6cd0c": {
       "uid": "b04090a2-6ba3-4b02-8571-c9f8d9d6cd0c",
@@ -2529,223 +2999,470 @@ const DATA = {
       "isJeopardy": false,
       "startHour": 12.0,
       "endHour": 24.0
+    },
+    "67837c39-be3f-405d-81bc-7db5266641bf": {
+      "uid": "67837c39-be3f-405d-81bc-7db5266641bf",
+      "summary": "BWH Jr.  - FF Jr 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-19",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "a6b78b91-d641-4d46-9163-866b24d45a9a": {
+      "uid": "a6b78b91-d641-4d46-9163-866b24d45a9a",
+      "summary": "BWH Jr.  - FF Jr 8a-4p",
+      "startFmt": "8:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-24",
+      "isJeopardy": false,
+      "startHour": 8.0,
+      "endHour": 16.0
+    },
+    "39bab4ac-b2f0-4d31-b737-82cea13375ef": {
+      "uid": "39bab4ac-b2f0-4d31-b737-82cea13375ef",
+      "summary": "BWH Jr.  - Exe Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-16",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "a138720c-3eed-437d-9a58-bf17493ac538": {
+      "uid": "a138720c-3eed-437d-9a58-bf17493ac538",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-02",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "78860bec-db0d-4a2d-add0-745100731952": {
+      "uid": "78860bec-db0d-4a2d-add0-745100731952",
+      "summary": "MGH Jr. - FT 11a-8p",
+      "startFmt": "11:00 AM",
+      "endFmt": "8:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-04",
+      "isJeopardy": false,
+      "startHour": 11.0,
+      "endHour": 20.0
+    },
+    "4e6438f0-36bc-4c3c-b919-b1026081e4be": {
+      "uid": "4e6438f0-36bc-4c3c-b919-b1026081e4be",
+      "summary": "MGH Jr. - East Jr 11p-7a",
+      "startFmt": "11:00 PM",
+      "endFmt": "7:00 AM",
+      "loc": "MGH",
+      "type": "Overnight",
+      "workDate": "2026-07-17",
+      "isJeopardy": false,
+      "startHour": 23.0,
+      "endHour": 7.0
+    },
+    "4298efbf-2c2b-4ede-ae86-bac1e0c813e2": {
+      "uid": "4298efbf-2c2b-4ede-ae86-bac1e0c813e2",
+      "summary": "BWH Jr.  - FF Jr 8a-4p",
+      "startFmt": "8:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-06-30",
+      "isJeopardy": false,
+      "startHour": 8.0,
+      "endHour": 16.0
+    },
+    "0591b10e-e360-423f-a5c0-1e60940091ad": {
+      "uid": "0591b10e-e360-423f-a5c0-1e60940091ad",
+      "summary": "BWH Jr.  - FF Jr 3p-12a",
+      "startFmt": "3:00 PM",
+      "endFmt": "12:00 AM",
+      "loc": "BWH",
+      "type": "Swing",
+      "workDate": "2026-07-07",
+      "isJeopardy": false,
+      "startHour": 15.0,
+      "endHour": 24.0
+    },
+    "37ed56de-de75-4406-af6d-a33b86e4d442": {
+      "uid": "37ed56de-de75-4406-af6d-a33b86e4d442",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-09",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "1bcb0a42-32bf-45e0-b6b7-1a39faa9a614": {
+      "uid": "1bcb0a42-32bf-45e0-b6b7-1a39faa9a614",
+      "summary": "BWH Jr.  - FF Jr 7a-4p",
+      "startFmt": "7:00 AM",
+      "endFmt": "4:00 PM",
+      "loc": "BWH",
+      "type": "Morning",
+      "workDate": "2026-07-11",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 16.0
+    },
+    "d5dc89a6-51a8-40d4-8903-d7e4c99e7efc": {
+      "uid": "d5dc89a6-51a8-40d4-8903-d7e4c99e7efc",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-10",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "093449f8-57eb-4726-91c6-64476b090b8d": {
+      "uid": "093449f8-57eb-4726-91c6-64476b090b8d",
+      "summary": "MGH Jr. - AC PGY1 7a-5p",
+      "startFmt": "7:00 AM",
+      "endFmt": "5:00 PM",
+      "loc": "MGH",
+      "type": "Morning",
+      "workDate": "2026-07-21",
+      "isJeopardy": false,
+      "startHour": 7.0,
+      "endHour": 17.0
+    },
+    "b006252f-37cc-4a03-a8c7-c90aa29709a5": {
+      "uid": "b006252f-37cc-4a03-a8c7-c90aa29709a5",
+      "summary": "MGH Jr. - AC PGY1 1p-11p",
+      "startFmt": "1:00 PM",
+      "endFmt": "11:00 PM",
+      "loc": "MGH",
+      "type": "Swing",
+      "workDate": "2026-07-26",
+      "isJeopardy": false,
+      "startHour": 13.0,
+      "endHour": 23.0
     }
   },
   "originalAssignment": {
     "wendy memishian": [
-      "245cdee2-ea04-4b57-85ad-3ab6b4a82e88",
+      "e84b98e1-d18b-44e7-ae34-ad43519e72ab",
+      "aeb53546-a50f-405c-ae60-765d58500d6b",
       "834ee2ad-24a4-45df-b988-23e0bcb3f293",
       "13d72997-d7fd-4877-b746-4dd195535f99",
-      "02489bec-cd48-45e0-b570-6c21ca527864",
-      "eee43676-e445-43d8-bcc7-47f3af582c43",
-      "aeb53546-a50f-405c-ae60-765d58500d6b",
-      "0c1bbee2-3829-447d-9ec2-0fb0f12a6f81",
       "966617ee-1e63-43b2-8873-5a15a054367e",
-      "ee656061-4e54-4e32-999d-59a45be44cae",
-      "e84b98e1-d18b-44e7-ae34-ad43519e72ab",
       "636e5e57-dbc5-452b-aad6-60649246cecf",
-      "6b856c0c-67e7-453c-a350-1beb3d3ab13b"
+      "6b856c0c-67e7-453c-a350-1beb3d3ab13b",
+      "0c1bbee2-3829-447d-9ec2-0fb0f12a6f81",
+      "02489bec-cd48-45e0-b570-6c21ca527864",
+      "ee656061-4e54-4e32-999d-59a45be44cae",
+      "eee43676-e445-43d8-bcc7-47f3af582c43",
+      "245cdee2-ea04-4b57-85ad-3ab6b4a82e88"
     ],
     "brian song": [
-      "737a8e0d-0a63-4984-be03-757de143b5f9",
-      "a62e273a-e91d-4fbe-bd0f-2b60a30938ff",
-      "9a5c6df8-c4c9-4d19-b053-628c642b8c12",
-      "2668ae46-0bac-49b6-9891-3367dc1666bf",
-      "de088fac-2659-4e3b-9c69-3b5b46618244",
-      "296e81c9-c9e4-4d4a-9bdd-6e8c0a59e6a5",
+      "a06a4d2e-c549-4416-8332-abd6ae839bbd",
       "cde6dbc2-2d7f-481b-a572-fe817c00c122",
-      "d55881dd-d265-4f45-a76d-898f860bc411",
+      "a62e273a-e91d-4fbe-bd0f-2b60a30938ff",
+      "737a8e0d-0a63-4984-be03-757de143b5f9",
       "84e99799-5c76-46fc-b159-41213dd39591",
+      "de088fac-2659-4e3b-9c69-3b5b46618244",
       "bb239480-d6cf-4503-b96b-797cd73c5a8e",
+      "d55881dd-d265-4f45-a76d-898f860bc411",
+      "9a5c6df8-c4c9-4d19-b053-628c642b8c12",
       "73048cf3-ec0a-48cc-933b-598134e736cf",
-      "ee96ec6d-e5e9-4041-80b2-469be910dffb",
-      "a06a4d2e-c549-4416-8332-abd6ae839bbd"
+      "2668ae46-0bac-49b6-9891-3367dc1666bf",
+      "296e81c9-c9e4-4d4a-9bdd-6e8c0a59e6a5",
+      "ee96ec6d-e5e9-4041-80b2-469be910dffb"
     ],
     "cliff danza": [
-      "8a7e679c-9dff-4bfb-a087-2f93597063ee",
-      "b2fb5026-fc51-4f85-a88e-40d6baf8df01",
       "70007c4e-f27a-444b-865b-dd345489375a",
-      "7c91f296-d43d-4f07-9721-a203d9816c52",
-      "badcd664-0f20-43c8-989a-8acf9e61c8ed",
-      "147ffb19-4c9f-478b-a749-bbf710740112",
-      "c4a775f8-33cd-4dc0-a184-75cb3f0f02a2",
-      "dc140904-559e-4297-a814-af554593b132",
-      "a1a3266a-445c-407a-9a55-4bf62601f7f9",
       "d6e41086-0042-4ab7-9bd4-58b90a10fb85",
+      "badcd664-0f20-43c8-989a-8acf9e61c8ed",
+      "c4a775f8-33cd-4dc0-a184-75cb3f0f02a2",
+      "7c91f296-d43d-4f07-9721-a203d9816c52",
+      "dc140904-559e-4297-a814-af554593b132",
+      "065b0412-2719-426b-8df7-ed27b625a604",
       "34ecd5e1-5e38-4264-a0e7-12823370947d",
+      "a1a3266a-445c-407a-9a55-4bf62601f7f9",
       "7a0b7f4e-3da9-4f4b-a894-0482e81d536b",
-      "065b0412-2719-426b-8df7-ed27b625a604"
+      "b2fb5026-fc51-4f85-a88e-40d6baf8df01",
+      "8a7e679c-9dff-4bfb-a087-2f93597063ee",
+      "147ffb19-4c9f-478b-a749-bbf710740112"
     ],
     "roshan lodha": [
+      "adbe7f96-80fb-401f-bf31-a0411ceb12c8",
+      "b1b0203e-a974-4cc1-aee5-102d35d09f67",
+      "a6661004-baca-4ddd-99be-1065353d2543",
       "812ea479-1d9d-4b91-b27c-394f49831b5e",
-      "d5882e55-abd9-4148-a536-c0287b521cd6",
-      "243551b6-9359-4185-9aa8-6f8a42d4c63e",
+      "9e8f53c6-1ed7-40ed-92cf-3c23682f963c",
+      "b04090a2-6ba3-4b02-8571-c9f8d9d6cd0c",
+      "c9ad842c-dad0-4c64-b5e6-19f8a36fe9b0",
+      "76e63094-d2e5-4db1-bafb-265ca4f7e85e",
       "6d067d23-9ffc-44f6-812d-0987596827d1",
       "2583d041-c479-46b0-b1c3-e12f5e21e57d",
-      "76e63094-d2e5-4db1-bafb-265ca4f7e85e",
-      "adbe7f96-80fb-401f-bf31-a0411ceb12c8",
-      "c9ad842c-dad0-4c64-b5e6-19f8a36fe9b0",
-      "b1b0203e-a974-4cc1-aee5-102d35d09f67",
-      "9e8f53c6-1ed7-40ed-92cf-3c23682f963c",
-      "a7f08738-553b-41fd-85a6-49601899911d",
-      "b04090a2-6ba3-4b02-8571-c9f8d9d6cd0c",
-      "a6661004-baca-4ddd-99be-1065353d2543"
+      "243551b6-9359-4185-9aa8-6f8a42d4c63e",
+      "d5882e55-abd9-4148-a536-c0287b521cd6",
+      "a7f08738-553b-41fd-85a6-49601899911d"
     ],
     "justin yang": [
-      "3969970a-7307-4d92-85c0-d238b54d1487",
-      "2b1d5046-ef8e-4ab3-8120-52bde9de922a",
-      "722a5ba7-5b76-4b1a-ac2d-5b7bf1289883",
-      "60f3eb32-6eae-4818-822d-1f630ffa7f62",
-      "57eecf92-db87-4d6b-97a6-d0cc99277d4f",
-      "b355f06c-b3db-4945-b2ae-f80b9caf0c4c",
-      "c1d9f90f-e8d5-4e3b-a7b0-cd161fd74baf",
-      "2ce732a0-1ab1-4df8-810f-989dc3f2155f",
-      "2f729d3a-eb8f-452e-87b4-ca3de977499e",
-      "36bd30b8-3ebb-416b-9ee5-8cbf46685b6a",
       "08db6d94-dcac-41af-8002-6dba2503457f",
+      "60f3eb32-6eae-4818-822d-1f630ffa7f62",
+      "36bd30b8-3ebb-416b-9ee5-8cbf46685b6a",
+      "b355f06c-b3db-4945-b2ae-f80b9caf0c4c",
+      "2b1d5046-ef8e-4ab3-8120-52bde9de922a",
+      "c6bbfaf3-ce16-4df9-b7b6-935a3513d35d",
+      "c1d9f90f-e8d5-4e3b-a7b0-cd161fd74baf",
+      "2f729d3a-eb8f-452e-87b4-ca3de977499e",
+      "2ce732a0-1ab1-4df8-810f-989dc3f2155f",
+      "3969970a-7307-4d92-85c0-d238b54d1487",
+      "722a5ba7-5b76-4b1a-ac2d-5b7bf1289883",
       "94916423-42e6-4487-ada0-c7d7fd034cce",
-      "c6bbfaf3-ce16-4df9-b7b6-935a3513d35d"
+      "57eecf92-db87-4d6b-97a6-d0cc99277d4f"
     ],
     "sara locke": [
-      "4afd2caf-ed8a-4115-8bb5-58259b6a863a",
+      "0b742ace-4d55-411a-86d9-e578a12b2422",
+      "b7b6cb77-cfe5-4f64-ab0f-96aa738e5daf",
       "23434e26-5486-4ac9-bd6c-88631c48129e",
-      "f1b10f25-1064-486b-a292-e39a1202ba1f",
+      "a355b29e-0874-4277-83af-e9f8e3ab4690",
+      "c7d1ab07-f633-44d0-a1f0-60c431315d93",
+      "0058bd3f-127c-4ee8-be5f-e48522644e2f",
       "74955872-ce7f-4394-ae1a-2592df9db995",
+      "3c2368ed-45a6-4f1d-9930-00fe7a4a0420",
+      "5472c047-7757-4c75-b6d7-e139a0a75a52",
+      "f1b10f25-1064-486b-a292-e39a1202ba1f",
       "17d961bc-b144-4c44-afe5-a0d1981762d4",
       "ad5adf3b-2c66-40c8-b40f-76c704fc5ba6",
-      "3c2368ed-45a6-4f1d-9930-00fe7a4a0420",
-      "0b742ace-4d55-411a-86d9-e578a12b2422",
-      "0058bd3f-127c-4ee8-be5f-e48522644e2f",
-      "c7d1ab07-f633-44d0-a1f0-60c431315d93",
-      "a355b29e-0874-4277-83af-e9f8e3ab4690",
-      "b7b6cb77-cfe5-4f64-ab0f-96aa738e5daf",
-      "5472c047-7757-4c75-b6d7-e139a0a75a52"
+      "4afd2caf-ed8a-4115-8bb5-58259b6a863a"
     ],
     "andrea shehaj": [
-      "b4dbc9c9-7a4c-4cc2-acfa-18f63d0bd341",
       "99f3aed3-e122-4112-87e5-8765d36056ad",
-      "8120b940-3954-4ae6-8d8f-5dec24463ef4",
-      "f932d7fe-db9f-4204-8312-9291922dcad2",
-      "15a8394c-11b1-43b7-81f9-6d9e134ebd0b",
-      "37b24e9e-a0d7-4440-aa8b-e0a564012def",
-      "e727c632-f2c7-4041-8419-9172bbcf92b6",
-      "494ffc84-c425-4227-b89c-3c27ee370ff4",
-      "401e39e9-9e47-4d29-bedc-023e6f761b7d",
-      "8276e130-5a9c-4d4d-9762-7e8015fa327f",
       "c29ee8e5-8166-4312-bb43-e8c2832b91a1",
       "90e63cfd-4f7a-409b-b549-74b7b3441c7a",
-      "17c3a534-5ff1-4b8b-b3e5-6705baa97134"
+      "b4dbc9c9-7a4c-4cc2-acfa-18f63d0bd341",
+      "401e39e9-9e47-4d29-bedc-023e6f761b7d",
+      "17c3a534-5ff1-4b8b-b3e5-6705baa97134",
+      "f932d7fe-db9f-4204-8312-9291922dcad2",
+      "494ffc84-c425-4227-b89c-3c27ee370ff4",
+      "e727c632-f2c7-4041-8419-9172bbcf92b6",
+      "8276e130-5a9c-4d4d-9762-7e8015fa327f",
+      "8120b940-3954-4ae6-8d8f-5dec24463ef4",
+      "15a8394c-11b1-43b7-81f9-6d9e134ebd0b",
+      "37b24e9e-a0d7-4440-aa8b-e0a564012def"
+    ],
+    "mauranda men": [
+      "fcdd3169-30e1-4f53-bc54-e2888939bd84",
+      "9bd2f191-a434-4283-b1fe-00a3a82cd839",
+      "45905a9d-93b9-40b4-8bf1-ff6627c22816",
+      "f952fb82-d164-4ef4-8b82-f2eedcfb699f",
+      "51a3b61d-8a43-4ea1-8bd8-30dee43a0507",
+      "78ed6be9-a0c9-4be8-a969-c7ee14267cb0",
+      "807816b1-d1bf-467a-bfba-6f1d47f7d2c3",
+      "cefacb32-07ec-4a44-bf2e-1872adfb1fb8",
+      "02aa0a7d-ef6d-4dab-80ff-d8144c402ee8",
+      "692ecbe2-766b-4453-a037-fe8c14b72e3e",
+      "878faf15-7e3b-4ec3-8e2e-22c47cef6d1d",
+      "c87c3c57-eb62-4607-a6c4-e66f7f7ab46a",
+      "0f8a2025-f9b6-4716-bfee-6da12cafa222"
+    ],
+    "emily prentice": [
+      "d2e44092-7807-4c34-a1d1-1727c58a9aca",
+      "6aa851bd-dce6-4deb-a7c4-c25ad5a41be3",
+      "a05f79e8-4845-4606-92a8-33bcb24ac6ea",
+      "ea42ef6c-d31a-4b7a-98bf-acfd01d3aa03",
+      "ea92a3e9-a060-4a1b-8334-ec4db334d60c",
+      "a6575518-68e4-4bc7-9597-b7dba0265039",
+      "812b49f6-62b6-48d9-a8ce-2295a050d209",
+      "24093ff1-02ee-421f-947b-776295c8e980",
+      "7288430c-886f-4724-a254-8bbc3e2b6fff",
+      "94e4e8c5-4dc0-4627-aa5b-f4ca8a396cc5",
+      "e933ebfc-3af6-46d6-a2cd-dca4e78676fe",
+      "aceee59e-8769-4247-ac2a-16bc5420a4d0",
+      "c4a4a54d-1275-4da6-b025-d7926972f298"
+    ],
+    "ashleigh suppinger": [
+      "4e6438f0-36bc-4c3c-b919-b1026081e4be",
+      "a6b78b91-d641-4d46-9163-866b24d45a9a",
+      "0591b10e-e360-423f-a5c0-1e60940091ad",
+      "37ed56de-de75-4406-af6d-a33b86e4d442",
+      "b006252f-37cc-4a03-a8c7-c90aa29709a5",
+      "67837c39-be3f-405d-81bc-7db5266641bf",
+      "a138720c-3eed-437d-9a58-bf17493ac538",
+      "093449f8-57eb-4726-91c6-64476b090b8d",
+      "1bcb0a42-32bf-45e0-b6b7-1a39faa9a614",
+      "d5dc89a6-51a8-40d4-8903-d7e4c99e7efc",
+      "39bab4ac-b2f0-4d31-b737-82cea13375ef",
+      "78860bec-db0d-4a2d-add0-745100731952",
+      "4298efbf-2c2b-4ede-ae86-bac1e0c813e2"
     ]
   },
   "finalAssignment": {
     "wendy memishian": [
+      "834ee2ad-24a4-45df-b988-23e0bcb3f293",
       "13d72997-d7fd-4877-b746-4dd195535f99",
-      "9a5c6df8-c4c9-4d19-b053-628c642b8c12",
-      "02489bec-cd48-45e0-b570-6c21ca527864",
-      "aeb53546-a50f-405c-ae60-765d58500d6b",
-      "d55881dd-d265-4f45-a76d-898f860bc411",
-      "2f729d3a-eb8f-452e-87b4-ca3de977499e",
-      "0c1bbee2-3829-447d-9ec2-0fb0f12a6f81",
-      "ee96ec6d-e5e9-4041-80b2-469be910dffb",
       "966617ee-1e63-43b2-8873-5a15a054367e",
-      "0b742ace-4d55-411a-86d9-e578a12b2422",
+      "636e5e57-dbc5-452b-aad6-60649246cecf",
+      "6b856c0c-67e7-453c-a350-1beb3d3ab13b",
       "adbe7f96-80fb-401f-bf31-a0411ceb12c8",
-      "636e5e57-dbc5-452b-aad6-60649246cecf"
+      "02489bec-cd48-45e0-b570-6c21ca527864",
+      "245cdee2-ea04-4b57-85ad-3ab6b4a82e88",
+      "a138720c-3eed-437d-9a58-bf17493ac538",
+      "ee96ec6d-e5e9-4041-80b2-469be910dffb",
+      "9bd2f191-a434-4283-b1fe-00a3a82cd839",
+      "78860bec-db0d-4a2d-add0-745100731952"
     ],
     "brian song": [
-      "737a8e0d-0a63-4984-be03-757de143b5f9",
-      "3969970a-7307-4d92-85c0-d238b54d1487",
+      "a06a4d2e-c549-4416-8332-abd6ae839bbd",
+      "cde6dbc2-2d7f-481b-a572-fe817c00c122",
       "a62e273a-e91d-4fbe-bd0f-2b60a30938ff",
-      "245cdee2-ea04-4b57-85ad-3ab6b4a82e88",
-      "de088fac-2659-4e3b-9c69-3b5b46618244",
-      "296e81c9-c9e4-4d4a-9bdd-6e8c0a59e6a5",
-      "84e99799-5c76-46fc-b159-41213dd39591",
-      "494ffc84-c425-4227-b89c-3c27ee370ff4",
-      "73048cf3-ec0a-48cc-933b-598134e736cf",
-      "a1a3266a-445c-407a-9a55-4bf62601f7f9",
       "ee656061-4e54-4e32-999d-59a45be44cae",
-      "e84b98e1-d18b-44e7-ae34-ad43519e72ab",
-      "a06a4d2e-c549-4416-8332-abd6ae839bbd"
+      "737a8e0d-0a63-4984-be03-757de143b5f9",
+      "84e99799-5c76-46fc-b159-41213dd39591",
+      "de088fac-2659-4e3b-9c69-3b5b46618244",
+      "bb239480-d6cf-4503-b96b-797cd73c5a8e",
+      "d55881dd-d265-4f45-a76d-898f860bc411",
+      "a1a3266a-445c-407a-9a55-4bf62601f7f9",
+      "73048cf3-ec0a-48cc-933b-598134e736cf",
+      "60f3eb32-6eae-4818-822d-1f630ffa7f62",
+      "296e81c9-c9e4-4d4a-9bdd-6e8c0a59e6a5"
     ],
     "cliff danza": [
-      "8a7e679c-9dff-4bfb-a087-2f93597063ee",
-      "b2fb5026-fc51-4f85-a88e-40d6baf8df01",
-      "2668ae46-0bac-49b6-9891-3367dc1666bf",
       "70007c4e-f27a-444b-865b-dd345489375a",
-      "7c91f296-d43d-4f07-9721-a203d9816c52",
-      "badcd664-0f20-43c8-989a-8acf9e61c8ed",
-      "147ffb19-4c9f-478b-a749-bbf710740112",
-      "c4a775f8-33cd-4dc0-a184-75cb3f0f02a2",
-      "dc140904-559e-4297-a814-af554593b132",
       "d6e41086-0042-4ab7-9bd4-58b90a10fb85",
+      "badcd664-0f20-43c8-989a-8acf9e61c8ed",
+      "c4a775f8-33cd-4dc0-a184-75cb3f0f02a2",
+      "7c91f296-d43d-4f07-9721-a203d9816c52",
+      "dc140904-559e-4297-a814-af554593b132",
+      "51a3b61d-8a43-4ea1-8bd8-30dee43a0507",
+      "0591b10e-e360-423f-a5c0-1e60940091ad",
       "34ecd5e1-5e38-4264-a0e7-12823370947d",
-      "7a0b7f4e-3da9-4f4b-a894-0482e81d536b",
-      "065b0412-2719-426b-8df7-ed27b625a604"
+      "2668ae46-0bac-49b6-9891-3367dc1666bf",
+      "8a7e679c-9dff-4bfb-a087-2f93597063ee",
+      "d5882e55-abd9-4148-a536-c0287b521cd6",
+      "147ffb19-4c9f-478b-a749-bbf710740112"
     ],
     "roshan lodha": [
+      "b1b0203e-a974-4cc1-aee5-102d35d09f67",
+      "a6661004-baca-4ddd-99be-1065353d2543",
       "812ea479-1d9d-4b91-b27c-394f49831b5e",
-      "d5882e55-abd9-4148-a536-c0287b521cd6",
-      "243551b6-9359-4185-9aa8-6f8a42d4c63e",
+      "9e8f53c6-1ed7-40ed-92cf-3c23682f963c",
+      "b04090a2-6ba3-4b02-8571-c9f8d9d6cd0c",
+      "c9ad842c-dad0-4c64-b5e6-19f8a36fe9b0",
       "eee43676-e445-43d8-bcc7-47f3af582c43",
+      "76e63094-d2e5-4db1-bafb-265ca4f7e85e",
       "6d067d23-9ffc-44f6-812d-0987596827d1",
       "2583d041-c479-46b0-b1c3-e12f5e21e57d",
-      "76e63094-d2e5-4db1-bafb-265ca4f7e85e",
-      "c9ad842c-dad0-4c64-b5e6-19f8a36fe9b0",
-      "b1b0203e-a974-4cc1-aee5-102d35d09f67",
-      "9e8f53c6-1ed7-40ed-92cf-3c23682f963c",
-      "a7f08738-553b-41fd-85a6-49601899911d",
-      "b04090a2-6ba3-4b02-8571-c9f8d9d6cd0c",
-      "a6661004-baca-4ddd-99be-1065353d2543"
+      "7a0b7f4e-3da9-4f4b-a894-0482e81d536b",
+      "243551b6-9359-4185-9aa8-6f8a42d4c63e",
+      "a7f08738-553b-41fd-85a6-49601899911d"
     ],
     "justin yang": [
-      "2b1d5046-ef8e-4ab3-8120-52bde9de922a",
-      "722a5ba7-5b76-4b1a-ac2d-5b7bf1289883",
-      "60f3eb32-6eae-4818-822d-1f630ffa7f62",
-      "57eecf92-db87-4d6b-97a6-d0cc99277d4f",
-      "b355f06c-b3db-4945-b2ae-f80b9caf0c4c",
-      "c1d9f90f-e8d5-4e3b-a7b0-cd161fd74baf",
-      "bb239480-d6cf-4503-b96b-797cd73c5a8e",
-      "f932d7fe-db9f-4204-8312-9291922dcad2",
-      "36bd30b8-3ebb-416b-9ee5-8cbf46685b6a",
       "08db6d94-dcac-41af-8002-6dba2503457f",
+      "36bd30b8-3ebb-416b-9ee5-8cbf46685b6a",
+      "b355f06c-b3db-4945-b2ae-f80b9caf0c4c",
+      "2b1d5046-ef8e-4ab3-8120-52bde9de922a",
+      "c6bbfaf3-ce16-4df9-b7b6-935a3513d35d",
+      "ea42ef6c-d31a-4b7a-98bf-acfd01d3aa03",
+      "f932d7fe-db9f-4204-8312-9291922dcad2",
+      "c1d9f90f-e8d5-4e3b-a7b0-cd161fd74baf",
+      "2f729d3a-eb8f-452e-87b4-ca3de977499e",
+      "9a5c6df8-c4c9-4d19-b053-628c642b8c12",
+      "3969970a-7307-4d92-85c0-d238b54d1487",
       "94916423-42e6-4487-ada0-c7d7fd034cce",
-      "6b856c0c-67e7-453c-a350-1beb3d3ab13b",
-      "c6bbfaf3-ce16-4df9-b7b6-935a3513d35d"
+      "57eecf92-db87-4d6b-97a6-d0cc99277d4f"
     ],
     "sara locke": [
-      "4afd2caf-ed8a-4115-8bb5-58259b6a863a",
+      "0b742ace-4d55-411a-86d9-e578a12b2422",
+      "b7b6cb77-cfe5-4f64-ab0f-96aa738e5daf",
       "23434e26-5486-4ac9-bd6c-88631c48129e",
-      "f1b10f25-1064-486b-a292-e39a1202ba1f",
-      "834ee2ad-24a4-45df-b988-23e0bcb3f293",
+      "a355b29e-0874-4277-83af-e9f8e3ab4690",
+      "c7d1ab07-f633-44d0-a1f0-60c431315d93",
+      "0058bd3f-127c-4ee8-be5f-e48522644e2f",
       "74955872-ce7f-4394-ae1a-2592df9db995",
+      "3c2368ed-45a6-4f1d-9930-00fe7a4a0420",
+      "5472c047-7757-4c75-b6d7-e139a0a75a52",
+      "f1b10f25-1064-486b-a292-e39a1202ba1f",
       "17d961bc-b144-4c44-afe5-a0d1981762d4",
       "ad5adf3b-2c66-40c8-b40f-76c704fc5ba6",
-      "3c2368ed-45a6-4f1d-9930-00fe7a4a0420",
-      "0058bd3f-127c-4ee8-be5f-e48522644e2f",
-      "c7d1ab07-f633-44d0-a1f0-60c431315d93",
-      "a355b29e-0874-4277-83af-e9f8e3ab4690",
-      "b7b6cb77-cfe5-4f64-ab0f-96aa738e5daf",
-      "5472c047-7757-4c75-b6d7-e139a0a75a52"
+      "4afd2caf-ed8a-4115-8bb5-58259b6a863a"
     ],
     "andrea shehaj": [
-      "b4dbc9c9-7a4c-4cc2-acfa-18f63d0bd341",
       "99f3aed3-e122-4112-87e5-8765d36056ad",
-      "2ce732a0-1ab1-4df8-810f-989dc3f2155f",
-      "8120b940-3954-4ae6-8d8f-5dec24463ef4",
-      "15a8394c-11b1-43b7-81f9-6d9e134ebd0b",
-      "37b24e9e-a0d7-4440-aa8b-e0a564012def",
-      "e727c632-f2c7-4041-8419-9172bbcf92b6",
-      "cde6dbc2-2d7f-481b-a572-fe817c00c122",
-      "401e39e9-9e47-4d29-bedc-023e6f761b7d",
-      "8276e130-5a9c-4d4d-9762-7e8015fa327f",
       "c29ee8e5-8166-4312-bb43-e8c2832b91a1",
       "90e63cfd-4f7a-409b-b549-74b7b3441c7a",
-      "17c3a534-5ff1-4b8b-b3e5-6705baa97134"
+      "b4dbc9c9-7a4c-4cc2-acfa-18f63d0bd341",
+      "401e39e9-9e47-4d29-bedc-023e6f761b7d",
+      "17c3a534-5ff1-4b8b-b3e5-6705baa97134",
+      "39bab4ac-b2f0-4d31-b737-82cea13375ef",
+      "2ce732a0-1ab1-4df8-810f-989dc3f2155f",
+      "e727c632-f2c7-4041-8419-9172bbcf92b6",
+      "8276e130-5a9c-4d4d-9762-7e8015fa327f",
+      "8120b940-3954-4ae6-8d8f-5dec24463ef4",
+      "15a8394c-11b1-43b7-81f9-6d9e134ebd0b",
+      "37b24e9e-a0d7-4440-aa8b-e0a564012def"
+    ],
+    "mauranda men": [
+      "aeb53546-a50f-405c-ae60-765d58500d6b",
+      "fcdd3169-30e1-4f53-bc54-e2888939bd84",
+      "45905a9d-93b9-40b4-8bf1-ff6627c22816",
+      "f952fb82-d164-4ef4-8b82-f2eedcfb699f",
+      "78ed6be9-a0c9-4be8-a969-c7ee14267cb0",
+      "807816b1-d1bf-467a-bfba-6f1d47f7d2c3",
+      "cefacb32-07ec-4a44-bf2e-1872adfb1fb8",
+      "02aa0a7d-ef6d-4dab-80ff-d8144c402ee8",
+      "b006252f-37cc-4a03-a8c7-c90aa29709a5",
+      "b2fb5026-fc51-4f85-a88e-40d6baf8df01",
+      "878faf15-7e3b-4ec3-8e2e-22c47cef6d1d",
+      "c87c3c57-eb62-4607-a6c4-e66f7f7ab46a",
+      "0f8a2025-f9b6-4716-bfee-6da12cafa222"
+    ],
+    "emily prentice": [
+      "d2e44092-7807-4c34-a1d1-1727c58a9aca",
+      "6aa851bd-dce6-4deb-a7c4-c25ad5a41be3",
+      "a05f79e8-4845-4606-92a8-33bcb24ac6ea",
+      "ea92a3e9-a060-4a1b-8334-ec4db334d60c",
+      "a6575518-68e4-4bc7-9597-b7dba0265039",
+      "812b49f6-62b6-48d9-a8ce-2295a050d209",
+      "24093ff1-02ee-421f-947b-776295c8e980",
+      "7288430c-886f-4724-a254-8bbc3e2b6fff",
+      "94e4e8c5-4dc0-4627-aa5b-f4ca8a396cc5",
+      "722a5ba7-5b76-4b1a-ac2d-5b7bf1289883",
+      "e933ebfc-3af6-46d6-a2cd-dca4e78676fe",
+      "aceee59e-8769-4247-ac2a-16bc5420a4d0",
+      "c4a4a54d-1275-4da6-b025-d7926972f298"
+    ],
+    "ashleigh suppinger": [
+      "4e6438f0-36bc-4c3c-b919-b1026081e4be",
+      "e84b98e1-d18b-44e7-ae34-ad43519e72ab",
+      "a6b78b91-d641-4d46-9163-866b24d45a9a",
+      "0c1bbee2-3829-447d-9ec2-0fb0f12a6f81",
+      "37ed56de-de75-4406-af6d-a33b86e4d442",
+      "065b0412-2719-426b-8df7-ed27b625a604",
+      "494ffc84-c425-4227-b89c-3c27ee370ff4",
+      "67837c39-be3f-405d-81bc-7db5266641bf",
+      "093449f8-57eb-4726-91c6-64476b090b8d",
+      "692ecbe2-766b-4453-a037-fe8c14b72e3e",
+      "1bcb0a42-32bf-45e0-b6b7-1a39faa9a614",
+      "d5dc89a6-51a8-40d4-8903-d7e4c99e7efc",
+      "4298efbf-2c2b-4ede-ae86-bac1e0c813e2"
     ]
   },
   "swaps": {
     "wendy memishian": [
       {
+        "cycleId": 0,
         "giveUid": "ee656061-4e54-4e32-999d-59a45be44cae",
         "giveSummary": "BWH Jr.  - FF Jr 7a-4p",
         "giveDate": "2026-07-19",
@@ -2765,63 +3482,27 @@ const DATA = {
         "partnerDelta": 0.0769
       },
       {
-        "giveUid": "834ee2ad-24a4-45df-b988-23e0bcb3f293",
-        "giveSummary": "BWH Jr.  - FF Jr 3p-12a",
-        "giveDate": "2026-07-16",
-        "giveLoc": "BWH",
-        "giveType": "Swing",
-        "giveStart": "3:00 PM",
-        "giveEnd": "12:00 AM",
-        "recvUid": "0b742ace-4d55-411a-86d9-e578a12b2422",
-        "recvSummary": "MGH Jr. - AC PGY1 7a-5p",
-        "recvDate": "2026-06-30",
-        "recvLoc": "MGH",
-        "recvType": "Morning",
-        "recvStart": "7:00 AM",
-        "recvEnd": "5:00 PM",
-        "delta": 0.0056,
-        "swapWith": "sara locke",
-        "partnerDelta": 0.0602
-      },
-      {
-        "giveUid": "245cdee2-ea04-4b57-85ad-3ab6b4a82e88",
-        "giveSummary": "BWH Jr.  - Exe Jr 12p-12a",
-        "giveDate": "2026-07-09",
-        "giveLoc": "BWH",
-        "giveType": "Swing",
-        "giveStart": "12:00 PM",
-        "giveEnd": "12:00 AM",
-        "recvUid": "9a5c6df8-c4c9-4d19-b053-628c642b8c12",
-        "recvSummary": "MGH Jr. - AC PGY1 1p-11p",
-        "recvDate": "2026-07-14",
-        "recvLoc": "MGH",
-        "recvType": "Swing",
-        "recvStart": "1:00 PM",
-        "recvEnd": "11:00 PM",
-        "delta": 0.0444,
-        "swapWith": "brian song",
-        "partnerDelta": 0.0385
-      },
-      {
-        "giveUid": "e84b98e1-d18b-44e7-ae34-ad43519e72ab",
-        "giveSummary": "MGH Jr. - AC PGY2 7a-4p",
-        "giveDate": "2026-07-04",
+        "cycleId": 4,
+        "giveUid": "0c1bbee2-3829-447d-9ec2-0fb0f12a6f81",
+        "giveSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "giveDate": "2026-07-02",
         "giveLoc": "MGH",
         "giveType": "Morning",
         "giveStart": "7:00 AM",
-        "giveEnd": "4:00 PM",
-        "recvUid": "d55881dd-d265-4f45-a76d-898f860bc411",
+        "giveEnd": "5:00 PM",
+        "recvUid": "a138720c-3eed-437d-9a58-bf17493ac538",
         "recvSummary": "MGH Jr. - FT 11a-8p",
-        "recvDate": "2026-07-04",
+        "recvDate": "2026-07-02",
         "recvLoc": "MGH",
         "recvType": "Swing",
         "recvStart": "11:00 AM",
         "recvEnd": "8:00 PM",
-        "delta": 0.0389,
-        "swapWith": "brian song",
-        "partnerDelta": 0.0385
+        "delta": 0.0589,
+        "swapWith": "ashleigh suppinger",
+        "partnerDelta": 0.024
       },
       {
+        "cycleId": 5,
         "giveUid": "eee43676-e445-43d8-bcc7-47f3af582c43",
         "giveSummary": "MGH Jr. - AC PGY1 7a-5p",
         "giveDate": "2026-07-24",
@@ -2836,32 +3517,74 @@ const DATA = {
         "recvType": "Swing",
         "recvStart": "11:00 AM",
         "recvEnd": "8:00 PM",
-        "delta": 0.0389,
+        "delta": 0.0589,
         "swapWith": "roshan lodha",
-        "partnerDelta": 0.0241
+        "partnerDelta": 0.0173
       },
       {
-        "giveUid": "6b856c0c-67e7-453c-a350-1beb3d3ab13b",
-        "giveSummary": "BWH Jr.  - Exe Jr 12p-12a",
-        "giveDate": "2026-07-25",
-        "giveLoc": "BWH",
-        "giveType": "Swing",
-        "giveStart": "12:00 PM",
-        "giveEnd": "12:00 AM",
-        "recvUid": "2f729d3a-eb8f-452e-87b4-ca3de977499e",
-        "recvSummary": "MGH Jr. - AC PGY2 7a-4p",
-        "recvDate": "2026-07-11",
+        "cycleId": 3,
+        "giveUid": "e84b98e1-d18b-44e7-ae34-ad43519e72ab",
+        "giveSummary": "MGH Jr. - AC PGY2 7a-4p",
+        "giveDate": "2026-07-04",
+        "giveLoc": "MGH",
+        "giveType": "Morning",
+        "giveStart": "7:00 AM",
+        "giveEnd": "4:00 PM",
+        "recvUid": "78860bec-db0d-4a2d-add0-745100731952",
+        "recvSummary": "MGH Jr. - FT 11a-8p",
+        "recvDate": "2026-07-04",
         "recvLoc": "MGH",
-        "recvType": "Morning",
-        "recvStart": "7:00 AM",
-        "recvEnd": "4:00 PM",
-        "delta": 0.0056,
-        "swapWith": "justin yang",
-        "partnerDelta": 0.0316
+        "recvType": "Swing",
+        "recvStart": "11:00 AM",
+        "recvEnd": "8:00 PM",
+        "delta": 0.0389,
+        "swapWith": "ashleigh suppinger",
+        "partnerDelta": 0.044
+      },
+      {
+        "cycleId": 11,
+        "giveUid": "aeb53546-a50f-405c-ae60-765d58500d6b",
+        "giveSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "giveDate": "2026-07-21",
+        "giveLoc": "MGH",
+        "giveType": "Morning",
+        "giveStart": "7:00 AM",
+        "giveEnd": "5:00 PM",
+        "recvUid": "9bd2f191-a434-4283-b1fe-00a3a82cd839",
+        "recvSummary": "MGH Jr. - AC PGY1 1p-11p",
+        "recvDate": "2026-07-21",
+        "recvLoc": "MGH",
+        "recvType": "Swing",
+        "recvStart": "1:00 PM",
+        "recvEnd": "11:00 PM",
+        "delta": 0.0389,
+        "swapWith": "mauranda men",
+        "partnerDelta": 0.0
       }
     ],
     "brian song": [
       {
+        "cycleId": 1,
+        "giveUid": "2668ae46-0bac-49b6-9891-3367dc1666bf",
+        "giveSummary": "MGH Jr. - AC PGY1 1p-11p",
+        "giveDate": "2026-06-30",
+        "giveLoc": "MGH",
+        "giveType": "Swing",
+        "giveStart": "1:00 PM",
+        "giveEnd": "11:00 PM",
+        "recvUid": "a1a3266a-445c-407a-9a55-4bf62601f7f9",
+        "recvSummary": "BWH Jr.  - FF Jr 7a-4p",
+        "recvDate": "2026-07-26",
+        "recvLoc": "BWH",
+        "recvType": "Morning",
+        "recvStart": "7:00 AM",
+        "recvEnd": "4:00 PM",
+        "delta": 0.0969,
+        "swapWith": "cliff danza",
+        "partnerDelta": 0.0386
+      },
+      {
+        "cycleId": 0,
         "giveUid": "ee96ec6d-e5e9-4041-80b2-469be910dffb",
         "giveSummary": "MGH Jr. - FT 11a-8p",
         "giveDate": "2026-07-19",
@@ -2881,25 +3604,7 @@ const DATA = {
         "partnerDelta": 0.0833
       },
       {
-        "giveUid": "2668ae46-0bac-49b6-9891-3367dc1666bf",
-        "giveSummary": "MGH Jr. - AC PGY1 1p-11p",
-        "giveDate": "2026-06-30",
-        "giveLoc": "MGH",
-        "giveType": "Swing",
-        "giveStart": "1:00 PM",
-        "giveEnd": "11:00 PM",
-        "recvUid": "a1a3266a-445c-407a-9a55-4bf62601f7f9",
-        "recvSummary": "BWH Jr.  - FF Jr 7a-4p",
-        "recvDate": "2026-07-26",
-        "recvLoc": "BWH",
-        "recvType": "Morning",
-        "recvStart": "7:00 AM",
-        "recvEnd": "4:00 PM",
-        "delta": 0.0769,
-        "swapWith": "cliff danza",
-        "partnerDelta": 0.0586
-      },
-      {
+        "cycleId": 10,
         "giveUid": "9a5c6df8-c4c9-4d19-b053-628c642b8c12",
         "giveSummary": "MGH Jr. - AC PGY1 1p-11p",
         "giveDate": "2026-07-14",
@@ -2907,77 +3612,21 @@ const DATA = {
         "giveType": "Swing",
         "giveStart": "1:00 PM",
         "giveEnd": "11:00 PM",
-        "recvUid": "245cdee2-ea04-4b57-85ad-3ab6b4a82e88",
-        "recvSummary": "BWH Jr.  - Exe Jr 12p-12a",
-        "recvDate": "2026-07-09",
-        "recvLoc": "BWH",
-        "recvType": "Swing",
-        "recvStart": "12:00 PM",
-        "recvEnd": "12:00 AM",
-        "delta": 0.0385,
-        "swapWith": "wendy memishian",
-        "partnerDelta": 0.0444
-      },
-      {
-        "giveUid": "d55881dd-d265-4f45-a76d-898f860bc411",
-        "giveSummary": "MGH Jr. - FT 11a-8p",
-        "giveDate": "2026-07-04",
-        "giveLoc": "MGH",
-        "giveType": "Swing",
-        "giveStart": "11:00 AM",
-        "giveEnd": "8:00 PM",
-        "recvUid": "e84b98e1-d18b-44e7-ae34-ad43519e72ab",
-        "recvSummary": "MGH Jr. - AC PGY2 7a-4p",
-        "recvDate": "2026-07-04",
+        "recvUid": "60f3eb32-6eae-4818-822d-1f630ffa7f62",
+        "recvSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "recvDate": "2026-07-16",
         "recvLoc": "MGH",
         "recvType": "Morning",
         "recvStart": "7:00 AM",
-        "recvEnd": "4:00 PM",
-        "delta": 0.0385,
-        "swapWith": "wendy memishian",
-        "partnerDelta": 0.0389
-      },
-      {
-        "giveUid": "cde6dbc2-2d7f-481b-a572-fe817c00c122",
-        "giveSummary": "BWH Jr.  - Exe Jr 3p-12a",
-        "giveDate": "2026-07-05",
-        "giveLoc": "BWH",
-        "giveType": "Swing",
-        "giveStart": "3:00 PM",
-        "giveEnd": "12:00 AM",
-        "recvUid": "494ffc84-c425-4227-b89c-3c27ee370ff4",
-        "recvSummary": "BWH Jr.  - Exe Jr 8a-4p",
-        "recvDate": "2026-07-16",
-        "recvLoc": "BWH",
-        "recvType": "Morning",
-        "recvStart": "8:00 AM",
-        "recvEnd": "4:00 PM",
-        "delta": 0.0385,
-        "swapWith": "andrea shehaj",
-        "partnerDelta": 0.0252
-      },
-      {
-        "giveUid": "bb239480-d6cf-4503-b96b-797cd73c5a8e",
-        "giveSummary": "BWH Jr.  - Exe Jr 12p-12a",
-        "giveDate": "2026-07-07",
-        "giveLoc": "BWH",
-        "giveType": "Swing",
-        "giveStart": "12:00 PM",
-        "giveEnd": "12:00 AM",
-        "recvUid": "3969970a-7307-4d92-85c0-d238b54d1487",
-        "recvSummary": "BWH Jr.  - FF Jr 8a-4p",
-        "recvDate": "2026-07-07",
-        "recvLoc": "BWH",
-        "recvType": "Morning",
-        "recvStart": "8:00 AM",
-        "recvEnd": "4:00 PM",
+        "recvEnd": "5:00 PM",
         "delta": 0.0385,
         "swapWith": "justin yang",
-        "partnerDelta": 0.0199
+        "partnerDelta": 0.0066
       }
     ],
     "cliff danza": [
       {
+        "cycleId": 1,
         "giveUid": "a1a3266a-445c-407a-9a55-4bf62601f7f9",
         "giveSummary": "BWH Jr.  - FF Jr 7a-4p",
         "giveDate": "2026-07-26",
@@ -2992,13 +3641,74 @@ const DATA = {
         "recvType": "Swing",
         "recvStart": "1:00 PM",
         "recvEnd": "11:00 PM",
-        "delta": 0.0586,
+        "delta": 0.0386,
         "swapWith": "brian song",
-        "partnerDelta": 0.0769
+        "partnerDelta": 0.0969
+      },
+      {
+        "cycleId": 7,
+        "giveUid": "b2fb5026-fc51-4f85-a88e-40d6baf8df01",
+        "giveSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "giveDate": "2026-07-02",
+        "giveLoc": "MGH",
+        "giveType": "Morning",
+        "giveStart": "7:00 AM",
+        "giveEnd": "5:00 PM",
+        "recvUid": "51a3b61d-8a43-4ea1-8bd8-30dee43a0507",
+        "recvSummary": "BWH Jr.  - Exe Jr 3p-12a",
+        "recvDate": "2026-07-02",
+        "recvLoc": "BWH",
+        "recvType": "Swing",
+        "recvStart": "3:00 PM",
+        "recvEnd": "12:00 AM",
+        "delta": 0.0127,
+        "swapWith": "mauranda men",
+        "partnerDelta": 0.0569
+      },
+      {
+        "cycleId": 8,
+        "giveUid": "065b0412-2719-426b-8df7-ed27b625a604",
+        "giveSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "giveDate": "2026-07-07",
+        "giveLoc": "MGH",
+        "giveType": "Morning",
+        "giveStart": "7:00 AM",
+        "giveEnd": "5:00 PM",
+        "recvUid": "0591b10e-e360-423f-a5c0-1e60940091ad",
+        "recvSummary": "BWH Jr.  - FF Jr 3p-12a",
+        "recvDate": "2026-07-07",
+        "recvLoc": "BWH",
+        "recvType": "Swing",
+        "recvStart": "3:00 PM",
+        "recvEnd": "12:00 AM",
+        "delta": 0.0127,
+        "swapWith": "ashleigh suppinger",
+        "partnerDelta": 0.0569
+      },
+      {
+        "cycleId": 9,
+        "giveUid": "7a0b7f4e-3da9-4f4b-a894-0482e81d536b",
+        "giveSummary": "BWH Jr.  - Exe Jr 8a-4p",
+        "giveDate": "2026-07-16",
+        "giveLoc": "BWH",
+        "giveType": "Morning",
+        "giveStart": "8:00 AM",
+        "giveEnd": "4:00 PM",
+        "recvUid": "d5882e55-abd9-4148-a536-c0287b521cd6",
+        "recvSummary": "MGH Jr. - AC PGY1 1p-11p",
+        "recvDate": "2026-07-16",
+        "recvLoc": "MGH",
+        "recvType": "Swing",
+        "recvStart": "1:00 PM",
+        "recvEnd": "11:00 PM",
+        "delta": 0.0186,
+        "swapWith": "roshan lodha",
+        "partnerDelta": 0.04
       }
     ],
     "roshan lodha": [
       {
+        "cycleId": 5,
         "giveUid": "adbe7f96-80fb-401f-bf31-a0411ceb12c8",
         "giveSummary": "MGH Jr. - FT 11a-8p",
         "giveDate": "2026-07-23",
@@ -3013,51 +3723,74 @@ const DATA = {
         "recvType": "Morning",
         "recvStart": "7:00 AM",
         "recvEnd": "5:00 PM",
-        "delta": 0.0241,
+        "delta": 0.0173,
         "swapWith": "wendy memishian",
-        "partnerDelta": 0.0389
+        "partnerDelta": 0.0589
+      },
+      {
+        "cycleId": 9,
+        "giveUid": "d5882e55-abd9-4148-a536-c0287b521cd6",
+        "giveSummary": "MGH Jr. - AC PGY1 1p-11p",
+        "giveDate": "2026-07-16",
+        "giveLoc": "MGH",
+        "giveType": "Swing",
+        "giveStart": "1:00 PM",
+        "giveEnd": "11:00 PM",
+        "recvUid": "7a0b7f4e-3da9-4f4b-a894-0482e81d536b",
+        "recvSummary": "BWH Jr.  - Exe Jr 8a-4p",
+        "recvDate": "2026-07-16",
+        "recvLoc": "BWH",
+        "recvType": "Morning",
+        "recvStart": "8:00 AM",
+        "recvEnd": "4:00 PM",
+        "delta": 0.04,
+        "swapWith": "cliff danza",
+        "partnerDelta": 0.0186
       }
     ],
     "justin yang": [
       {
-        "giveUid": "3969970a-7307-4d92-85c0-d238b54d1487",
-        "giveSummary": "BWH Jr.  - FF Jr 8a-4p",
-        "giveDate": "2026-07-07",
-        "giveLoc": "BWH",
+        "cycleId": 10,
+        "giveUid": "60f3eb32-6eae-4818-822d-1f630ffa7f62",
+        "giveSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "giveDate": "2026-07-16",
+        "giveLoc": "MGH",
         "giveType": "Morning",
-        "giveStart": "8:00 AM",
-        "giveEnd": "4:00 PM",
-        "recvUid": "bb239480-d6cf-4503-b96b-797cd73c5a8e",
-        "recvSummary": "BWH Jr.  - Exe Jr 12p-12a",
-        "recvDate": "2026-07-07",
-        "recvLoc": "BWH",
+        "giveStart": "7:00 AM",
+        "giveEnd": "5:00 PM",
+        "recvUid": "9a5c6df8-c4c9-4d19-b053-628c642b8c12",
+        "recvSummary": "MGH Jr. - AC PGY1 1p-11p",
+        "recvDate": "2026-07-14",
+        "recvLoc": "MGH",
         "recvType": "Swing",
-        "recvStart": "12:00 PM",
-        "recvEnd": "12:00 AM",
-        "delta": 0.0199,
+        "recvStart": "1:00 PM",
+        "recvEnd": "11:00 PM",
+        "delta": 0.0066,
         "swapWith": "brian song",
         "partnerDelta": 0.0385
       },
       {
-        "giveUid": "2f729d3a-eb8f-452e-87b4-ca3de977499e",
-        "giveSummary": "MGH Jr. - AC PGY2 7a-4p",
-        "giveDate": "2026-07-11",
+        "cycleId": 12,
+        "giveUid": "722a5ba7-5b76-4b1a-ac2d-5b7bf1289883",
+        "giveSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "giveDate": "2026-07-23",
         "giveLoc": "MGH",
         "giveType": "Morning",
         "giveStart": "7:00 AM",
-        "giveEnd": "4:00 PM",
-        "recvUid": "6b856c0c-67e7-453c-a350-1beb3d3ab13b",
-        "recvSummary": "BWH Jr.  - Exe Jr 12p-12a",
-        "recvDate": "2026-07-25",
-        "recvLoc": "BWH",
+        "giveEnd": "5:00 PM",
+        "recvUid": "ea42ef6c-d31a-4b7a-98bf-acfd01d3aa03",
+        "recvSummary": "MGH Jr. - AC PGY1 1p-11p",
+        "recvDate": "2026-06-30",
+        "recvLoc": "MGH",
         "recvType": "Swing",
-        "recvStart": "12:00 PM",
-        "recvEnd": "12:00 AM",
-        "delta": 0.0316,
-        "swapWith": "wendy memishian",
-        "partnerDelta": 0.0056
+        "recvStart": "1:00 PM",
+        "recvEnd": "11:00 PM",
+        "delta": 0.0066,
+        "swapWith": "emily prentice",
+        "partnerDelta": 0.0193
       },
       {
+        "cycleId": 13,
         "giveUid": "2ce732a0-1ab1-4df8-810f-989dc3f2155f",
         "giveSummary": "MGH Jr. - FT 11a-8p",
         "giveDate": "2026-07-09",
@@ -3077,29 +3810,10 @@ const DATA = {
         "partnerDelta": 0.0084
       }
     ],
-    "sara locke": [
-      {
-        "giveUid": "0b742ace-4d55-411a-86d9-e578a12b2422",
-        "giveSummary": "MGH Jr. - AC PGY1 7a-5p",
-        "giveDate": "2026-06-30",
-        "giveLoc": "MGH",
-        "giveType": "Morning",
-        "giveStart": "7:00 AM",
-        "giveEnd": "5:00 PM",
-        "recvUid": "834ee2ad-24a4-45df-b988-23e0bcb3f293",
-        "recvSummary": "BWH Jr.  - FF Jr 3p-12a",
-        "recvDate": "2026-07-16",
-        "recvLoc": "BWH",
-        "recvType": "Swing",
-        "recvStart": "3:00 PM",
-        "recvEnd": "12:00 AM",
-        "delta": 0.0602,
-        "swapWith": "wendy memishian",
-        "partnerDelta": 0.0056
-      }
-    ],
+    "sara locke": [],
     "andrea shehaj": [
       {
+        "cycleId": 6,
         "giveUid": "494ffc84-c425-4227-b89c-3c27ee370ff4",
         "giveSummary": "BWH Jr.  - Exe Jr 8a-4p",
         "giveDate": "2026-07-16",
@@ -3107,18 +3821,19 @@ const DATA = {
         "giveType": "Morning",
         "giveStart": "8:00 AM",
         "giveEnd": "4:00 PM",
-        "recvUid": "cde6dbc2-2d7f-481b-a572-fe817c00c122",
+        "recvUid": "39bab4ac-b2f0-4d31-b737-82cea13375ef",
         "recvSummary": "BWH Jr.  - Exe Jr 3p-12a",
-        "recvDate": "2026-07-05",
+        "recvDate": "2026-07-16",
         "recvLoc": "BWH",
         "recvType": "Swing",
         "recvStart": "3:00 PM",
         "recvEnd": "12:00 AM",
-        "delta": 0.0252,
-        "swapWith": "brian song",
-        "partnerDelta": 0.0385
+        "delta": 0.0121,
+        "swapWith": "ashleigh suppinger",
+        "partnerDelta": 0.064
       },
       {
+        "cycleId": 13,
         "giveUid": "f932d7fe-db9f-4204-8312-9291922dcad2",
         "giveSummary": "MGH Jr. - FT 11a-8p",
         "giveDate": "2026-07-12",
@@ -3137,7 +3852,197 @@ const DATA = {
         "swapWith": "justin yang",
         "partnerDelta": 0.0172
       }
+    ],
+    "mauranda men": [
+      {
+        "cycleId": 2,
+        "giveUid": "692ecbe2-766b-4453-a037-fe8c14b72e3e",
+        "giveSummary": "BWH Jr.  - FF Jr 7a-4p",
+        "giveDate": "2026-07-12",
+        "giveLoc": "BWH",
+        "giveType": "Morning",
+        "giveStart": "7:00 AM",
+        "giveEnd": "4:00 PM",
+        "recvUid": "b006252f-37cc-4a03-a8c7-c90aa29709a5",
+        "recvSummary": "MGH Jr. - AC PGY1 1p-11p",
+        "recvDate": "2026-07-26",
+        "recvLoc": "MGH",
+        "recvType": "Swing",
+        "recvStart": "1:00 PM",
+        "recvEnd": "11:00 PM",
+        "delta": 0.0569,
+        "swapWith": "ashleigh suppinger",
+        "partnerDelta": 0.031
+      },
+      {
+        "cycleId": 7,
+        "giveUid": "51a3b61d-8a43-4ea1-8bd8-30dee43a0507",
+        "giveSummary": "BWH Jr.  - Exe Jr 3p-12a",
+        "giveDate": "2026-07-02",
+        "giveLoc": "BWH",
+        "giveType": "Swing",
+        "giveStart": "3:00 PM",
+        "giveEnd": "12:00 AM",
+        "recvUid": "b2fb5026-fc51-4f85-a88e-40d6baf8df01",
+        "recvSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "recvDate": "2026-07-02",
+        "recvLoc": "MGH",
+        "recvType": "Morning",
+        "recvStart": "7:00 AM",
+        "recvEnd": "5:00 PM",
+        "delta": 0.0569,
+        "swapWith": "cliff danza",
+        "partnerDelta": 0.0127
+      },
+      {
+        "cycleId": 11,
+        "giveUid": "9bd2f191-a434-4283-b1fe-00a3a82cd839",
+        "giveSummary": "MGH Jr. - AC PGY1 1p-11p",
+        "giveDate": "2026-07-21",
+        "giveLoc": "MGH",
+        "giveType": "Swing",
+        "giveStart": "1:00 PM",
+        "giveEnd": "11:00 PM",
+        "recvUid": "aeb53546-a50f-405c-ae60-765d58500d6b",
+        "recvSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "recvDate": "2026-07-21",
+        "recvLoc": "MGH",
+        "recvType": "Morning",
+        "recvStart": "7:00 AM",
+        "recvEnd": "5:00 PM",
+        "delta": 0.0,
+        "swapWith": "wendy memishian",
+        "partnerDelta": 0.0389
+      }
+    ],
+    "emily prentice": [
+      {
+        "cycleId": 12,
+        "giveUid": "ea42ef6c-d31a-4b7a-98bf-acfd01d3aa03",
+        "giveSummary": "MGH Jr. - AC PGY1 1p-11p",
+        "giveDate": "2026-06-30",
+        "giveLoc": "MGH",
+        "giveType": "Swing",
+        "giveStart": "1:00 PM",
+        "giveEnd": "11:00 PM",
+        "recvUid": "722a5ba7-5b76-4b1a-ac2d-5b7bf1289883",
+        "recvSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "recvDate": "2026-07-23",
+        "recvLoc": "MGH",
+        "recvType": "Morning",
+        "recvStart": "7:00 AM",
+        "recvEnd": "5:00 PM",
+        "delta": 0.0193,
+        "swapWith": "justin yang",
+        "partnerDelta": 0.0066
+      }
+    ],
+    "ashleigh suppinger": [
+      {
+        "cycleId": 6,
+        "giveUid": "39bab4ac-b2f0-4d31-b737-82cea13375ef",
+        "giveSummary": "BWH Jr.  - Exe Jr 3p-12a",
+        "giveDate": "2026-07-16",
+        "giveLoc": "BWH",
+        "giveType": "Swing",
+        "giveStart": "3:00 PM",
+        "giveEnd": "12:00 AM",
+        "recvUid": "494ffc84-c425-4227-b89c-3c27ee370ff4",
+        "recvSummary": "BWH Jr.  - Exe Jr 8a-4p",
+        "recvDate": "2026-07-16",
+        "recvLoc": "BWH",
+        "recvType": "Morning",
+        "recvStart": "8:00 AM",
+        "recvEnd": "4:00 PM",
+        "delta": 0.064,
+        "swapWith": "andrea shehaj",
+        "partnerDelta": 0.0121
+      },
+      {
+        "cycleId": 4,
+        "giveUid": "a138720c-3eed-437d-9a58-bf17493ac538",
+        "giveSummary": "MGH Jr. - FT 11a-8p",
+        "giveDate": "2026-07-02",
+        "giveLoc": "MGH",
+        "giveType": "Swing",
+        "giveStart": "11:00 AM",
+        "giveEnd": "8:00 PM",
+        "recvUid": "0c1bbee2-3829-447d-9ec2-0fb0f12a6f81",
+        "recvSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "recvDate": "2026-07-02",
+        "recvLoc": "MGH",
+        "recvType": "Morning",
+        "recvStart": "7:00 AM",
+        "recvEnd": "5:00 PM",
+        "delta": 0.024,
+        "swapWith": "wendy memishian",
+        "partnerDelta": 0.0589
+      },
+      {
+        "cycleId": 2,
+        "giveUid": "b006252f-37cc-4a03-a8c7-c90aa29709a5",
+        "giveSummary": "MGH Jr. - AC PGY1 1p-11p",
+        "giveDate": "2026-07-26",
+        "giveLoc": "MGH",
+        "giveType": "Swing",
+        "giveStart": "1:00 PM",
+        "giveEnd": "11:00 PM",
+        "recvUid": "692ecbe2-766b-4453-a037-fe8c14b72e3e",
+        "recvSummary": "BWH Jr.  - FF Jr 7a-4p",
+        "recvDate": "2026-07-12",
+        "recvLoc": "BWH",
+        "recvType": "Morning",
+        "recvStart": "7:00 AM",
+        "recvEnd": "4:00 PM",
+        "delta": 0.031,
+        "swapWith": "mauranda men",
+        "partnerDelta": 0.0569
+      },
+      {
+        "cycleId": 8,
+        "giveUid": "0591b10e-e360-423f-a5c0-1e60940091ad",
+        "giveSummary": "BWH Jr.  - FF Jr 3p-12a",
+        "giveDate": "2026-07-07",
+        "giveLoc": "BWH",
+        "giveType": "Swing",
+        "giveStart": "3:00 PM",
+        "giveEnd": "12:00 AM",
+        "recvUid": "065b0412-2719-426b-8df7-ed27b625a604",
+        "recvSummary": "MGH Jr. - AC PGY1 7a-5p",
+        "recvDate": "2026-07-07",
+        "recvLoc": "MGH",
+        "recvType": "Morning",
+        "recvStart": "7:00 AM",
+        "recvEnd": "5:00 PM",
+        "delta": 0.0569,
+        "swapWith": "cliff danza",
+        "partnerDelta": 0.0127
+      },
+      {
+        "cycleId": 3,
+        "giveUid": "78860bec-db0d-4a2d-add0-745100731952",
+        "giveSummary": "MGH Jr. - FT 11a-8p",
+        "giveDate": "2026-07-04",
+        "giveLoc": "MGH",
+        "giveType": "Swing",
+        "giveStart": "11:00 AM",
+        "giveEnd": "8:00 PM",
+        "recvUid": "e84b98e1-d18b-44e7-ae34-ad43519e72ab",
+        "recvSummary": "MGH Jr. - AC PGY2 7a-4p",
+        "recvDate": "2026-07-04",
+        "recvLoc": "MGH",
+        "recvType": "Morning",
+        "recvStart": "7:00 AM",
+        "recvEnd": "4:00 PM",
+        "delta": 0.044,
+        "swapWith": "wendy memishian",
+        "partnerDelta": 0.0389
+      }
     ]
+  },
+  "config": {
+    "STREAK_BETA": 5.0,
+    "TIME_DIFF_WEIGHT": 0.02
   }
 };
 
@@ -3150,6 +4055,145 @@ let cur = null;
 let weekOffset = 0; // weeks from the "anchor" week (first week with any shift)
 let anchorMonday = null; // Date object for Monday of anchor week
 let viewMode = 'optimal'; // 'optimal' or 'original'
+
+const rejectedCycleIds = new Set();
+
+function getTimeline() {
+  const dates = Object.values(DATA.shifts).map(s => s.workDate).sort();
+  if (dates.length === 0) return [];
+  const start = new Date(dates[0] + 'T00:00:00');
+  const end = new Date(dates[dates.length - 1] + 'T00:00:00');
+  const timeline = [];
+  let curr = new Date(start);
+  while (curr <= end) {
+    timeline.push(dateToIso(curr));
+    curr.setDate(curr.getDate() + 1);
+  }
+  return timeline;
+}
+
+function getOffStreaks(timeline, workedDates) {
+  const runs = [];
+  let currentRun = 0;
+  for (const d of timeline) {
+    if (!workedDates.has(d)) {
+      currentRun++;
+    } else {
+      if (currentRun > 0) {
+        runs.push(currentRun);
+        currentRun = 0;
+      }
+    }
+  }
+  if (currentRun > 0) {
+    runs.push(currentRun);
+  }
+  return runs;
+}
+
+function getWorkStreaks(workDates) {
+  if (workDates.size === 0) return [];
+  const ordered = Array.from(workDates).sort();
+  const lengths = [];
+  let run = 1;
+  for (let i = 0; i < ordered.length - 1; i++) {
+    const prev = new Date(ordered[i] + 'T00:00:00');
+    const cur = new Date(ordered[i+1] + 'T00:00:00');
+    const diffDays = Math.round((cur - prev) / (1000 * 60 * 60 * 24));
+    if (diffDays === 1) {
+      run++;
+    } else {
+      lengths.push(run);
+      run = 1;
+    }
+  }
+  lengths.push(run);
+  return lengths;
+}
+
+function recomputeAllMetrics() {
+  const currentAssignment = {};
+  for (const name in DATA.residents) {
+    currentAssignment[name] = new Set(DATA.originalAssignment[name] || []);
+  }
+  for (const name in DATA.swaps) {
+    DATA.swaps[name].forEach(sw => {
+      if (!rejectedCycleIds.has(sw.cycleId)) {
+        currentAssignment[name].delete(sw.giveUid);
+        currentAssignment[name].add(sw.recvUid);
+      }
+    });
+  }
+  window.currentAssignment = currentAssignment;
+
+  const timeline = getTimeline();
+
+  for (const name in DATA.residents) {
+    const r = DATA.residents[name];
+    const uids = currentAssignment[name];
+    const shiftsList = Array.from(uids).map(uid => DATA.shifts[uid]).filter(Boolean);
+
+    const located = shiftsList.filter(s => s.loc !== null && s.loc !== undefined);
+    let locOpt = 1.0;
+    if (r.locPref !== "ANY" && located.length > 0) {
+      locOpt = located.filter(s => s.loc === r.locPref).length / located.length;
+    }
+    r.loc.opt = Math.round(locOpt * 100);
+
+    const typed = shiftsList.filter(s => s.type !== null && s.type !== undefined);
+    let typeOpt = 1.0;
+    if (r.typePref !== "ANY" && typed.length > 0) {
+      typeOpt = typed.filter(s => s.type === r.typePref).length / typed.length;
+    }
+    r.type.opt = Math.round(typeOpt * 100);
+
+    const workedDates = new Set(shiftsList.map(s => s.workDate));
+    const runs = getOffStreaks(timeline, workedDates);
+    const avgOff = runs.length ? runs.reduce((a, b) => a + b, 0) / runs.length : 0.0;
+    r.streak.opt = Math.round(avgOff * 10) / 10;
+
+    let hoursOpt = 0;
+    shiftsList.forEach(s => {
+      let duration = 0;
+      if (s.endHour >= s.startHour) {
+        duration = s.endHour - s.startHour;
+      } else {
+        duration = (s.endHour + 24) - s.startHour;
+      }
+      hoursOpt += duration;
+    });
+    r.hours.opt = Math.round(hoursOpt * 10) / 10;
+
+    const workRuns = getWorkStreaks(workedDates);
+    let phiStrVal = 1.0;
+    if (workRuns.length > 0) {
+      let sumDev = 0;
+      workRuns.forEach(L => {
+        sumDev += Math.abs(L - r.daysPref);
+      });
+      const meanDev = sumDev / workRuns.length;
+      const streakBeta = DATA.config.STREAK_BETA;
+      phiStrVal = Math.max(0.0, 1.0 - meanDev / streakBeta);
+    }
+
+    const baseUtility = r.locWeight * locOpt + r.typeWeight * typeOpt + r.daysWeight * phiStrVal;
+    let finalUtility = baseUtility;
+    if (DATA.config.TIME_DIFF_WEIGHT !== 0.0) {
+      const additionalShiftTime = hoursOpt - r.origHours;
+      finalUtility = baseUtility - (DATA.config.TIME_DIFF_WEIGHT * additionalShiftTime);
+    }
+    r.happiness.opt = Math.round(finalUtility * 100);
+  }
+}
+
+function toggleRejectSwap(cycleId) {
+  if (rejectedCycleIds.has(cycleId)) {
+    rejectedCycleIds.delete(cycleId);
+  } else {
+    rejectedCycleIds.add(cycleId);
+  }
+  render();
+}
 
 function isoToDate(iso) {
   const [y, m, d] = iso.split('-').map(Number);
@@ -3224,6 +4268,7 @@ function init() {
 }
 
 function render() {
+  recomputeAllMetrics();
   renderHappiness();
   renderPrefs();
   renderWeek();
@@ -3426,11 +4471,12 @@ function renderPrefs() {
 /* ── Week View ── */
 function renderWeek() {
   const orig = new Set(DATA.originalAssignment[cur] || []);
-  const final = new Set(DATA.finalAssignment[cur] || []);
-  const gives = new Set((DATA.swaps[cur] || []).map(s => s.giveUid));
-  const recvs = new Set((DATA.swaps[cur] || []).map(s => s.recvUid));
+  const current = window.currentAssignment ? (window.currentAssignment[cur] || new Set()) : new Set(DATA.finalAssignment[cur] || []);
+  const activeSwaps = (DATA.swaps[cur] || []).filter(s => !rejectedCycleIds.has(s.cycleId));
+  const gives = new Set(activeSwaps.map(s => s.giveUid));
+  const recvs = new Set(activeSwaps.map(s => s.recvUid));
   
-  const visibleUids = viewMode === 'optimal' ? final : (viewMode === 'original' ? orig : new Set([...orig, ...final]));
+  const visibleUids = viewMode === 'optimal' ? current : (viewMode === 'original' ? orig : new Set([...orig, ...current]));
 
   const dm = {};
   visibleUids.forEach(uid => {
@@ -3654,16 +4700,25 @@ function renderSwaps() {
       const partnerDeltaLabel = isPartnerPos ? '+' + partnerPct + '% (' + cap(sw.swapWith) + ')' : isPartnerNeg ? partnerPct + '% (' + cap(sw.swapWith) + ')' : 'Neutral (' + cap(sw.swapWith) + ')';
       const partnerDpClass = isPartnerPos ? 'pos' : isPartnerNeg ? 'neg' : 'neu';
 
-      const cardClass = isPos ? 'pos-card' : isNeg ? 'neg-card' : 'neu-card';
-      const hdrClass = isPos ? 'pos' : isNeg ? 'neg' : 'neu';
+      const isRejected = rejectedCycleIds.has(sw.cycleId);
+      const cardClass = isRejected ? 'rejected-card' : (isPos ? 'pos-card' : isNeg ? 'neg-card' : 'neu-card');
+      const hdrClass = isRejected ? 'neu' : (isPos ? 'pos' : isNeg ? 'neg' : 'neu');
       const partnerName = sw.swapWith ? cap(sw.swapWith) : 'Partner';
+
+      const btnIcon = isRejected ? 'rotate-ccw' : 'x';
+      const btnTitle = isRejected ? 'Restore Swap' : 'Reject Swap';
+      const btnClass = isRejected ? 'reject-swap-btn restore' : 'reject-swap-btn';
 
       return '<div class="swap-card ' + cardClass + '">'
         + '<div class="swap-card-hdr ' + hdrClass + '">'
         + '<div class="card-hdr-left" style="display:flex; flex-direction:column; gap:4px;">'
+        + '<div style="display: flex; align-items: center; gap: 8px;">'
         + '<div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--md-sys-color-on-surface-variant)">Swap ' + (i+1) + '</div>'
+        + (isRejected ? '<span class="sb-badge badge-recv" style="background:var(--md-sys-color-error-container); color:var(--md-sys-color-on-error-container); font-size:0.65rem; padding: 1px 6px;">Rejected</span>' : '')
+        + '</div>'
         + '<div class="swap-with-badge"><i data-lucide="arrow-left-right" style="width:14px; height:14px;"></i>with <span class="partner-name partner-chip">' + partnerName + '</span></div>'
         + '</div>'
+        + '<div style="display: flex; align-items: center; gap: 12px;">'
         + '<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">'
         + '<span class="delta-pill ' + dpClass + '">' 
         + (isPos ? '<i data-lucide="trending-up" style="width:14px; height:14px;"></i>' : isNeg ? '<i data-lucide="trending-down" style="width:14px; height:14px;"></i>' : '')
@@ -3671,6 +4726,10 @@ function renderSwaps() {
         + '<span class="delta-pill ' + partnerDpClass + '">' 
         + (isPartnerPos ? '<i data-lucide="trending-up" style="width:14px; height:14px;"></i>' : isPartnerNeg ? '<i data-lucide="trending-down" style="width:14px; height:14px;"></i>' : '')
         + partnerDeltaLabel + '</span>'
+        + '</div>'
+        + '<button class="' + btnClass + '" title="' + btnTitle + '" onclick="toggleRejectSwap(' + sw.cycleId + ')">'
+        + '<i data-lucide="' + btnIcon + '" style="width:18px; height:18px;"></i>'
+        + '</button>'
         + '</div>'
         + '</div>'
         + '<div class="card-body">'
