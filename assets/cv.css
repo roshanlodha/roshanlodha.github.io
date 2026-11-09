@@ -36,6 +36,10 @@ a {
   text-decoration: none;
 }
 
+a:hover {
+  text-decoration: underline;
+}
+
 p {
   margin-top: 0;
   margin-bottom: 3px;
@@ -48,6 +52,38 @@ ul {
 
 li {
   margin-bottom: 1px;
+}
+
+/* Publications - Clean Editorial Formatting */
+.publications-section ul li {
+  margin-bottom: 6px;
+  line-height: 1.45;
+}
+
+.pub-title {
+  font-size: 12px;
+  font-weight: normal;
+  color: #111111;
+}
+
+.pub-authors {
+  font-size: 10.5px;
+  color: #555e68;
+}
+
+.pub-authors b {
+  color: #111111;
+  font-weight: bold;
+}
+
+.pub-venue {
+  font-size: 10.5px;
+  font-variant: small-caps;
+  color: #555e68;
+}
+
+.pub-venue i {
+  font-style: italic;
 }
 
 /* Remove bullets from main list items */
