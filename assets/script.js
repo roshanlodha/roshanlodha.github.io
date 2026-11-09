@@ -1,4 +1,4 @@
-const bioText = "medical student, computer scientist :)";
+const bioText = "physician, computer scientist :)";
 const delay = 50;
 let i = 0;
 
